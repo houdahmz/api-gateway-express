@@ -1,4 +1,4 @@
-# express-gateway-with-plugin
+# express-gateway
 
 ### Getting Started : 
 
