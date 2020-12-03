@@ -1,9 +1,9 @@
 # Core
 db:
   redis:
-    emulate: true
-    namespace: EG
-
+    host: localhost
+    port: 6379
+    namespace: khallasli-users
 #plugins:
   # express-gateway-plugin-example:
   #   param1: 'param from system.config' 
