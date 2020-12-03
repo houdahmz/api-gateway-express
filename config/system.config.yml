@@ -39,3 +39,7 @@ refreshTokens:
 authorizationCodes:
   timeToExpiry: 300000
 
+  
+plugins:      
+  wallet:
+    package: "../../../plugins/wallet/manifest.js"

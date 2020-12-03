@@ -22,6 +22,7 @@ policies:
   - log
   - proxy
   - key-auth
+  - wallet
 pipelines:
   profile:
     apiEndpoints:
