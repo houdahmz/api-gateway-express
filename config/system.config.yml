@@ -42,3 +42,5 @@ authorizationCodes:
 plugins:      
   wallet:
     package: "../../../plugins/wallet/manifest.js"
+  register:
+    package: "../../../plugins/register/manifest.js"
