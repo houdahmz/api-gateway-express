@@ -8,7 +8,7 @@ module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.use(bodyParser.json())
 
 
-  gatewayExpressApp.post('/register', async (req, res, next) => {
+  gatewayExpressApp.post('/api/register', async (req, res, next) => {
     try {
         console.log("*********************************",req.body)
         return res.status(200).json(req.body)
