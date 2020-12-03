@@ -16,8 +16,8 @@
       "format": "email"
     },
     "phone": {
-      "type": "string",
-      "format": "email"
+      "type": "string"
+    
     },
     "redirectUri": {
       "type": "string",
@@ -27,6 +27,8 @@
   "required": [
     "username",
     "firstname",
-    "lastname"
+    "lastname" ,
+    "email", 
+    "phone"
   ]
 }
