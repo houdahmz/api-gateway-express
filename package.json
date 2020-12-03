@@ -6,6 +6,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
-    "express-gateway": "^1.16.10"
+    "express-gateway": "^1.16.10",
+    "nodemailer": "^6.4.16"
   }
 }
