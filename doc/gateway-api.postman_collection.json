@@ -1,0 +1,1096 @@
+{
+	"info": {
+		"_postman_id": "90e0f282-aa20-4361-9df5-463558e389e5",
+		"name": "gateway-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "get all users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one user by id or username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:9876/users/hamza77",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9876",
+							"path": [
+								"users",
+								"hamza77"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"hamza7784877\",   \n  \"firstname\": \"sghaier\", \n  \"lastname\": \"125\", \n  \"email\": \"hamza@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:9876/users",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9876",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"hamza77\",   \n  \"firstname\": \"sghaier\", \n  \"lastname\": \"hamza\"\n  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/hamza77",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"hamza77"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activate/disactivate",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": false  \n}  ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/hamza77/status",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"hamza77",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "apps",
+			"item": [
+				{
+					"name": "get all apps",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/apps",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"apps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get One apps",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/apps",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"apps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add app",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"hamza\",\n  \"name\": \"khallasli-web\",\n  \"redirectUri\": \"https://www.khallasli.com/\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:9876/apps",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9876",
+							"path": [
+								"apps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activate/disactivate",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": false  \n}  ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/hamza77/status",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"hamza77",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update apps info",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"my-ap\",\n  \"redirectUri\": \"http://example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/apps/76ee532f-0e8f-4e7a-8042-11f8b3dc5bb3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"apps",
+								"76ee532f-0e8f-4e7a-8042-11f8b3dc5bb3"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Credentials",
+			"item": [
+				{
+					"name": "get All credentials",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credentials",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get One credential by userid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credentials/cb2d8b23-ccce-4efd-a387-41b0ce77f562",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credentials",
+								"cb2d8b23-ccce-4efd-a387-41b0ce77f562"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get One credential info by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credentials/cb2d8b23-ccce-4efd-a387-41b0ce77f562",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credentials",
+								"cb2d8b23-ccce-4efd-a387-41b0ce77f562"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add one credential",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"credential\": { \n    \"scopes\": [\n      \"super admin\"\n    ]\n  },\n  \"consumerId\": \"535414f7-3173-4e2b-8f01-9554c4c0009e\",\n  \"type\": \"key-auth\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/credentials",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credentials"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "scopes",
+			"item": [
+				{
+					"name": "add new scope",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scopes\": [\n    \"user\"\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/scopes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"scopes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all scopes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/scopes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"scopes"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "shemas",
+			"item": [
+				{
+					"name": "add new scope",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scopes\": [\n    \"user\"\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/scopes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"scopes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all shemas",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/scopes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"scopes"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "fd7e2fd1-af0d-4407-9239-6939fc2a2911",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "172f1c55-2a5f-49bc-bbfd-e6b2708d3a72",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "policies",
+			"item": [
+				{
+					"name": "Enables policie",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/policies/oauth2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"policies",
+								"oauth2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Disable policie",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/policies/oauth2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"policies",
+								"oauth2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all policies",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/scopes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"scopes"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "abd22e22-63a3-4312-90e1-736185926466",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "10b558a7-2a39-414e-881e-23a5b2e3ca13",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "services-endpoints",
+			"item": [
+				{
+					"name": "get all services-endpoints",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/service-endpoints",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"service-endpoints"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create or update service-endpoint",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/service-endpoints/voucher",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"service-endpoints",
+								"voucher"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete service-endpoint",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/service-endpoints/voucher",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"service-endpoints",
+								"voucher"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "api-endpoints",
+			"item": [
+				{
+					"name": "get all api-endpoints",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api-endpoints",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api-endpoints"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one api-endpoint",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api-endpoints",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api-endpoints"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create or update service-endpoint",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/service-endpoints/voucher",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"service-endpoints",
+								"voucher"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete service-endpoint",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/service-endpoints/voucher",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"service-endpoints",
+								"voucher"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "pipelines",
+			"item": [
+				{
+					"name": "get all pipeline",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/pipelines",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pipelines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one pipeline",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/pipelines",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pipelines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create or update pipeline",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/service-endpoints/voucher",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"service-endpoints",
+								"voucher"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete pipeline",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/pipelines/voucher",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pipelines",
+								"voucher"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "get user profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "c94f4434c2e84ec497151ca3d575693e%7Cc1160f638be0469a89e1d92c171c60eb",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/api/profile",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "test autorize oauth2.0",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/oauth2/authorize?response_type=token&client_id=803b1da9-879d-44b5-8d77-5199c4e11fba&redirect_uri=http://localhost:8080/ip",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"oauth2",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "response_type",
+							"value": "token"
+						},
+						{
+							"key": "client_id",
+							"value": "803b1da9-879d-44b5-8d77-5199c4e11fba"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://localhost:8080/ip"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recharge topup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/api/topup",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"topup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get liste facial",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/voucher/facial",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"voucher",
+						"facial"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check wallet",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/hello",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"hello"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "012fdf38-34d1-4c55-a5cf-7938ee43131c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b6377956-c7cf-4273-b5e6-91bf759ce173",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "d581ba1a-b5fc-4825-ad0a-f0f6869e79c5",
+			"key": "host",
+			"value": "http://localhost"
+		},
+		{
+			"id": "9f7f2040-6aee-4026-9831-15354449d5df",
+			"key": "port",
+			"value": "8080"
+		},
+		{
+			"id": "1f57a219-bdb3-4fe6-91ab-8edeb4a68bac",
+			"key": "url",
+			"value": "localhost:9876"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
