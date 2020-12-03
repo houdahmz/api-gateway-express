@@ -24,7 +24,6 @@ pipelines:
     apiEndpoints:
       - profile
     policies:
-      - oauth2:
       - proxy:
           - action:
               serviceEndpoint: profile

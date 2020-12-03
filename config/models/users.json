@@ -15,6 +15,10 @@
       "type": "string",
       "format": "email"
     },
+    "phone": {
+      "type": "string",
+      "format": "email"
+    },
     "redirectUri": {
       "type": "string",
       "format": "uri"
