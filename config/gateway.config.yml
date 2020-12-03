@@ -1,43 +1,63 @@
 http:
   port: 8080
-# admin:
-#   port: 9876
-#   host: localhost
+admin:
+  port: 9876
+  host: localhost
 apiEndpoints:
-  adminAPI:
-    host: 'localhost:8081' # 
   profile:
     host: localhost
     paths: /api/profile
+  topup:
+    host: localhost
+    paths: /api/topup
     methods:
       - PUT
       - POST
       - PATCH
       - DELETE
       - GET
+  voucher:
+    host: localhost
+    paths: /api/voucher/wallet
 serviceEndpoints:
   profile:
     url: 'http://localhost:5000'
+  topup:
+    url: 'http://localhost:3000'
+  voucher:
+    url: 'http://localhost:3001'
 policies:
-  - log
-  - proxy
   - key-auth
+  - log 
+  - proxy
   - wallet
+  - oauth2
 pipelines:
   profile:
     apiEndpoints:
       - profile
     policies:
+      - oauth2:
       - proxy:
           - action:
               serviceEndpoint: profile
               changeOrigin: true
-  adminAPI:
+  voucher:
     apiEndpoints:
-      - adminAPI
+      - voucher
     policies:
-      - key-auth:
       - proxy:
           - action:
-              serviceEndpoint: adminAPI
+              serviceEndpoint: voucher
+              changeOrigin: true
+  topup:
+    apiEndpoints:
+      - topup
+    policies:
+      - wallet:
+          - action:
+              amount: req.user
+      - proxy:
+          - action:
+              serviceEndpoint: topup
               changeOrigin: true
