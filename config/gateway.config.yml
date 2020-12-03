@@ -1,9 +1,11 @@
 http:
   port: 8080
-admin:
-  port: 9876
-  host: localhost
+# admin:
+#   port: 9876
+#   host: localhost
 apiEndpoints:
+  adminAPI:
+    host: 'localhost:8081' # 
   profile:
     host: localhost
     paths: /api/profile
@@ -19,6 +21,7 @@ serviceEndpoints:
 policies:
   - log
   - proxy
+  - key-auth
 pipelines:
   profile:
     apiEndpoints:
@@ -27,4 +30,13 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: profile
+              changeOrigin: true
+  adminAPI:
+    apiEndpoints:
+      - adminAPI
+    policies:
+      - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: adminAPI
               changeOrigin: true
