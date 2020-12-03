@@ -12,13 +12,12 @@ module.exports = function (gatewayExpressApp) {
     try {
         console.log("*********************************",req.body)
 
-  
         const {  firstname, lastname, email , phone , password, password_confirmation } = req.body
         if (password != password_confirmation) {
           throw new Error('password does not much')
         }
 
-        myUser = await services.user.insert({
+        myUser = await services.user.insert({ 
           isActive: false,
           firstname: firstname,
           lastname: lastname,
@@ -28,13 +27,19 @@ module.exports = function (gatewayExpressApp) {
           redirectUri: 'https://www.khallasli.com',
         })
   
-        crd_b = await services.credential.insertCredential(myUser.id, 'basic-auth', {
+        crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
           autoGeneratePassword: false,
           password: password,
-          scopes: []
+          scopes: []  
         })
 
-        
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2')
+       
+        myProfile = await services.application.insert({
+          name: "complete_profile",
+          redirectUri: 'http://localhost:5000/api/profile'
+        },myUser.id,)
+
         return res.status(200).json(req.body)
 
     } catch (err) {
