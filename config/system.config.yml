@@ -8,14 +8,28 @@ db:
   # express-gateway-plugin-example:
   #   param1: 'param from system.config' 
 
+
+  # Express gateway does not store passwords in plain text. It converts hashes them. This section controlls how passwords are converted.
 crypto:
-  cipherKey: sensitiveKey
+  cipherKey: sensitiveKey 
   algorithm: aes256
   saltRounds: 10
 
+# Express Gateway does not need session to work. The only part that requires it is Authorization Code flow of OAuth 2.0 built in server.
 # OAuth2 Settings
+# This section controls Lifetime of Access Tokens issued by built in OAuth 2.0 server at during one of authorization flows as well as the type of token to be issued.
+
+# accessTokens:
+#   timeToExpiry: 7200000
+#   tokenType: 'jwt'
+#   issuer: 'express-gateway'
+#   audience: 'something'
+#   subject: 'somebody'
+#   secretOrPrivateKey: 'ssssst'
+
+
 session:
-  secret: keyboard cat
+  secret: khallsli-paypos
   resave: false
   saveUninitialized: false
 accessTokens:
@@ -24,3 +38,4 @@ refreshTokens:
   timeToExpiry: 7200000
 authorizationCodes:
   timeToExpiry: 300000
+
