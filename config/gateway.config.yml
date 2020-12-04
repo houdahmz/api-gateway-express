@@ -18,7 +18,7 @@ apiEndpoints:
       - GET
   voucher:
     host: localhost
-    paths: /api/voucher/wallet
+    paths: /api/facial
 serviceEndpoints:
   profile:
     url: 'http://localhost:5000'
@@ -46,6 +46,7 @@ pipelines:
     apiEndpoints:
       - voucher
     policies:
+      - oauth2:
       - proxy:
           - action:
               serviceEndpoint: voucher
