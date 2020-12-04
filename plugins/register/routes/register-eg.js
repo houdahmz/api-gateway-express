@@ -26,19 +26,23 @@ module.exports = function (gatewayExpressApp) {
           phone: phone,
           redirectUri: 'https://www.khallasli.com',
         })
+        const getType = async (code) => {
+          try {
+            return await axios.get('http://localhost:5000/api/type_user/by_code/'+code)
+          } catch (error) {
+            console.error(error)
+          }
+        }
+        
+        const dataType =  await getType("10");
         const creteProfile = async (myUser) => {
-          console.log("in create profile "+myUser.id)
-          console.log("in create profile "+myUser.firstname)
-          console.log("in create profile "+myUser.lastname)
-          console.log("in create profile "+myUser.phone)
-
           try {
             return await axios.post('http://localhost:5000/api/profile', {
               id_user:  myUser.id,
               first_name: myUser.firstname,
               last_name: myUser.lastname,
               phone: myUser.phone,
-              typeId: "1425d882-a03e-4ffc-b996-101233874443"
+              typeId: dataType.data.data.id
             })
           } catch (error) {
             console.error(error)
@@ -52,17 +56,19 @@ module.exports = function (gatewayExpressApp) {
 
         crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2')
         const userProfile =  await creteProfile(myUser);
-        console.log("eeeeeeeeeeeeeeee",userProfile);
+
+          if(userProfile.data.status == "error"){
+        return res.status(200).json(userProfile.data);
+          }
 
         myProfile = await services.application.insert({
           name: "complete_profile"+myUser.id,
           redirectUri: 'http://localhost:5000/api/profile/'+userProfile.data.data.id
         },myUser.id)
 
-        console.log("éazertt",userProfile.data)
         const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id="+myProfile.id+"&"+"redirect_uri="+myProfile.redirectUri  ;
         console.log("url confirm : "+ confirm_uri);
-        mail.send_email("confirmation","confirmer votre profile ssvp \n "+ confirm_uri);
+        mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
 
    
 
