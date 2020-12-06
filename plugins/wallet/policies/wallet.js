@@ -19,7 +19,6 @@ module.exports = {
       return (req, res, next) => {
         // your custom logic
         //const amount = req.body.amount;
-
         const checkWallet = async (amount) => {
           try {
             return await axios.post('http://localhost:8080/api/voucher/wallet', {

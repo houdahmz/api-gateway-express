@@ -7,7 +7,7 @@ module.exports = {
       type: 'object',
       properties: {
         url: {
-          type: 'string',
+          type: 'string', 
           //format: 'url',
           default: ''
         }
