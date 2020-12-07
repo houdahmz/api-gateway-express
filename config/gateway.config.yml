@@ -4,9 +4,39 @@ admin:
   port: 9876
   host: localhost
 apiEndpoints:
+  
+  # regist:
+  #   host: localhost
+  #   paths: /api/profile/agent
+  #   methods:
+  #     - PUT
+  #     - POST
+  #     - PATCH
+  #     - DELETE
+  #     - GET
+  #   scopes:
+  #     - 'admin'
+  # get:
+  #   host: localhost
+  #   paths: /api/profile/test
+    # Only users with the 'admin' scope will be able to access
+    # this endpoint
+    # scopes:
+    #   - 'admin'
+
+  # profile:
+  #   - host: localhost
+  #     paths: ['/profile', '/profile/:id']
+  #     methods: ["GET"]
+
+  #   - host: localhost
+  #     paths: ['/profile', '/profile/:id']
+  #     methods: ["PUT", "POST", "DELETE"]
+    
   profile:
     host: localhost
-    paths: /api/profile
+    paths: /api/profile*
+
   topup:
     host: localhost
     paths: /api/topup
@@ -27,6 +57,7 @@ serviceEndpoints:
   voucher:
     url: 'http://localhost:3001'
 policies:
+  - basic-auth
   - key-auth
   - log 
   - proxy
@@ -37,7 +68,11 @@ pipelines:
     apiEndpoints:
       - profile
     policies:
-      - oauth2:
+      - key-auth:
+        # - action : 
+        #             apiKeyHeader: Authorization
+        #   disableHeadersScheme: false
+      # - oauth2:
       - proxy:
           - action:
               serviceEndpoint: profile
@@ -62,3 +97,22 @@ pipelines:
           - action:
               serviceEndpoint: topup
               changeOrigin: true
+  # get:
+  #   apiEndpoints:
+  #     - get
+  #   policies:
+  #     - oauth2:
+  #     - proxy:
+  #         - action:
+  #             serviceEndpoint: get
+  #             changeOrigin: true
+    
+# regist:
+#     apiEndpoints:
+#       - regist
+#     policies:
+#       - oauth2:
+#       - proxy:
+#         - action:
+#             serviceEndpoint: profile
+#             changeOrigin: true
