@@ -36,6 +36,8 @@ apiEndpoints:
   profile:
     host: localhost
     paths: /api/profile*
+    scopes:
+      - 'admin'
 
   topup:
     host: localhost
@@ -69,9 +71,9 @@ pipelines:
       - profile
     policies:
       - key-auth:
-        # - action : 
-        #             apiKeyHeader: Authorization
-        #   disableHeadersScheme: false
+          - action : 
+              apiKeyHeader: Authorization
+              disableHeadersScheme: false
       # - oauth2:
       - proxy:
           - action:
