@@ -24,20 +24,41 @@ apiEndpoints:
     # scopes:
     #   - 'admin'
 
-  # profile:
-  #   - host: localhost
-  #     paths: ['/profile', '/profile/:id']
-  #     methods: ["GET"]
-
-  #   - host: localhost
-  #     paths: ['/profile', '/profile/:id']
-  #     methods: ["PUT", "POST", "DELETE"]
-    
   profile:
-    host: localhost
-    paths: /api/profile*
-    scopes:
-      - 'admin'
+    - host: localhost
+      paths: ['/api/profile/agent']
+      methods: ["POST"]
+      scopes:
+        - 'admin'
+
+    - host: localhost
+      paths: ['/api/profile', '/api/profile/:id']
+      methods: ["GET"]
+
+    - host: localhost
+      paths: ['/api/profile', '/api/profile/:id']
+      methods: ["PATCH", "PUT", "POST", "DELETE"]
+
+    - host: localhost
+      paths: /api/type_user*
+      methods:
+        - PUT
+        - POST
+        - PATCH
+        - DELETE
+        - GET
+
+  # profile:
+  #   host: localhost
+  #   paths: /api/profile*
+  #   methods:
+  #     - PUT
+  #     - POST
+  #     - PATCH
+  #     - DELETE
+  #     - GET
+  #   scopes:
+  #     - 'admin'
 
   topup:
     host: localhost
@@ -65,11 +86,27 @@ policies:
   - proxy
   - wallet
   - oauth2
+  - bodyParser
+  - request-transformer
 pipelines:
   profile:
     apiEndpoints:
       - profile
     policies:
+      # - bodyParser:
+      #     - action:  # everything under the action will be actionParams
+      #         baseUrl: 'https://example.com'
+      # - log:
+      #     - condition:
+      #         name: expression
+      #         expression: "req.body.start > 5"
+      #     - action:
+      #         message: '"Current user is approaching limits"'
+      # - request-transformer:
+      #     - action:
+      #       body:
+      #         add:
+      #           authUser: req.egContext.authUser
       - key-auth:
           - action : 
               apiKeyHeader: Authorization
@@ -79,6 +116,9 @@ pipelines:
           - action:
               serviceEndpoint: profile
               changeOrigin: true
+
+      - bodyParser:
+      
   voucher:
     apiEndpoints:
       - voucher

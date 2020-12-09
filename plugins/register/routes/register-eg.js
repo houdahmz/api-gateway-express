@@ -1,13 +1,16 @@
 const services = require('express-gateway/lib/services/')
-var bodyParser = require('body-parser')
 const superagent = require('superagent');
 const axios = require('axios');
 const mail = require("./mailer.config");
 const { user } = require('express-gateway/lib/services/');
 const CircularJSON = require('circular-json');
+const bodyParser = require("body-parser");
+
 
 module.exports = function (gatewayExpressApp) {
-  gatewayExpressApp.use(bodyParser.json())
+  // gatewayExpressApp.use(bodyParser.json())
+  gatewayExpressApp.use(bodyParser.json({limit: '50mb', extended: true}));
+  gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb',extended: true }));
 
   gatewayExpressApp.post('/api/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
     try {
@@ -81,95 +84,35 @@ module.exports = function (gatewayExpressApp) {
     }
   });
 
-  // gatewayExpressApp.post('/api/completed-register', async (req, res, next) => { // code=10 for pdv created by admin
-  //   try {
-
-  //       const {  firstname, lastname, email , phone , password, password_confirmation,typeId,commercial,city,zip_code,adresse,id_commercial,activity } = req.body
-  //       if (password != password_confirmation) {
-  //         throw new Error('password does not much')
-  //       }
-
-  //       myUser = await services.user.insert({ 
-  //         isActive: true, 
-  //         firstname: firstname,
-  //         lastname: lastname, 
-  //         username: email,
-  //         email: email,
-  //         phone: phone,
-  //         redirectUri: 'https://www.khallasli.com',
-  //       })
-  //       const creteProfile = async (myUser) => {
-          
-  //                 try {
-  //           return await axios.post('http://localhost:5000/api/profile', {
-  //             id_user:  myUser.id,
-  //             first_name: myUser.firstname,
-  //             last_name: myUser.lastname,
-  //             phone: myUser.phone,
-  //             typeId : typeId ,
-  //             commercial : commercial,
-  //             city : city ,
-  //             zip_code : zip_code ,
-  //             adresse : adresse , 
-  //             id_commercial: id_commercial,
-  //             activity : activity 
-  //           })
-  //         } catch (error) {
-  //           console.error(error)
-  //         }
-  //       }
-  //       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
-  //         autoGeneratePassword: false,
-  //         password: password,
-  //         scopes: ["admin"]  
-  //       })
-  //       //crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2')
-  //       const userProfile =  await creteProfile(myUser);
-      
-  //       // myProfile = await services.application.insert({
-  //       //   name: "complete_profile"+myUser.id,
-  //       //   redirectUri: 'http://localhost:5000/api/profile/'+userProfile.data.data.id
-  //       // },myUser.id)
-
-  //       const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id="+myProfile.id+"&"+"redirect_uri="+myProfile.redirectUri  ;
-  //       console.log("url confirm : "+ confirm_uri);
-  //       // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
-  //       return res.status(201).json({user : myUser  , "profile" : userProfile});
-        
-  //   } catch (err) {
-  //     return res.status(422).json({ error: err.message })
-  //   }
-
-
-  // });
 
   
   gatewayExpressApp.post('/api/agent-register', async (req, res, next) => { // code=20 for agent created by admin
     try {
-
         const { firstname, lastname, email , phone } = req.body
 
-        // const getType1 = async () => {
-        //   let config = {
-        //     headers: { 'Authorization': `Bearer ${req.header('authorization')}` }
-        //   }
-        //   try {
-        //     return await axios.post('http://localhost:8080/api/profile/agent',{
-        //       id_user: "4cca2787-ccfe-4238-8941-b587e2c55a21",
-        //       first_name: "string",
-        //       last_name: "string",
-        //       phone: "78456145",
-        //       typeId: "9f71bd06-2fa1-4666-9bec-e2832ea9f913"
-        //     },config)
-        //   } catch (error) {
-        //     console.error(error)
-        //   }
-        // }        
-        // const dataType1 =  await getType1("20");
-
-        // // console.log("randomPassword",dataType1)
-        // return res.status(200).json(dataType1);
+        const getType1 = async () => {
+          let config = {
+            headers: { 'Authorization': `apiKey ${req.header('authorization')}` }
+          }
+          try {
+            return await axios.post('http://localhost:8080/api/profile/agent',{
+              id_user: "4cca2787-ccfe-4238-8941-b587e2c55a21",
+              first_name: "string",
+              last_name: "string",
+              phone: "78456145",
+              typeId: "9f71bd06-2fa1-4666-9bec-e2832ea9f913"
+            },config)
+          } catch (error) {
+            console.error(error)
+          }
+        }        
+        const dataType1 =  await getType1();
+        console.log("ddddddd"+dataType1)
+        return res.status(200).json(dataType1.data);
   
+        return res.status(200).json("enter");
+
+
         // /////////////////////////
         agentUser = await services.user.insert({ 
           isActive: true, 
@@ -239,8 +182,6 @@ module.exports = function (gatewayExpressApp) {
   });
 
 
-
-
   gatewayExpressApp.get('/api/test', async (req, res, next) => { // code=20 for agent created by admin
     try {
         const createAgentProfile = async () => {
@@ -265,7 +206,7 @@ module.exports = function (gatewayExpressApp) {
     }
   });
 
-  gatewayExpressApp.post('/api/register-admin', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
+  gatewayExpressApp.post('/api/admin-register', async (req, res, next) => { 
     try {
         const {  firstname, lastname, email , phone , password, password_confirmation } = req.body
         if (password != password_confirmation) {
@@ -285,10 +226,19 @@ module.exports = function (gatewayExpressApp) {
         crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
           autoGeneratePassword: false,
           password: password,
-          scopes: ['admin']  
+          scopes: ["admin"]  
         })
 
+        crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', {scopes: ['admin']})
+
         crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', {scopes: ['admin']})
+
+        adminProfile = await services.application.insert({
+          name: "complete_profile"+myUser.id,
+          redirectUri: 'http://localhost:5000/api/profile/'+myUser.id
+        },myUser.id)
+        const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id="+adminProfile.id+"&"+"redirect_uri="+adminProfile.redirectUri  ;
+        console.log("url confirm : "+ confirm_uri);
   
         return res.status(201).json({message:"Admin has been successfuly created : "+myUser.email});
 
@@ -298,7 +248,21 @@ module.exports = function (gatewayExpressApp) {
   });
 
 
+  function verifyApiKey(req, res, next) {
 
+    const bearerHeader = req.headers['authorization'];
+    if (bearerHeader) {
+      // const bearer = bearerHeader.split(' ');
+      // const bearerToken = bearer[1];
+      // req.token = bearerToken;
+      req.Value = bearerHeader;
+      req.Key = "Authorization";
+      next();
+    } else {
+      // Forbidden
+      res.sendStatus(403);
+    }
+  }
 
 
 };
