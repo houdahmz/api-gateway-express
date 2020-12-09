@@ -17,6 +17,8 @@ module.exports = {
       const that = this;
       this.actionParams = express.json()
       return (req, res, next) => {
+        // your custom logic
+        //const amount = req.body.amount;
 
 
         console.log("inside register policy: ",req.query)

@@ -1,501 +1,17 @@
 {
 	"info": {
-		"_postman_id": "90e0f282-aa20-4361-9df5-463558e389e5",
+		"_postman_id": "8852a8cd-6e88-4657-9f50-449d488ffc8b",
 		"name": "gateway-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "users",
+			"name": "others",
 			"item": [
 				{
-					"name": "get all users",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/users",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get one user by id or username",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "127.0.0.1:9876/users/hamza77",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "9876",
-							"path": [
-								"users",
-								"hamza77"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "add user",
+					"name": "recharge topup",
 					"request": {
 						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"username\": \"hamza7784877\",   \n  \"firstname\": \"sghaier\", \n  \"lastname\": \"125\", \n  \"email\": \"hamza@gmail.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "127.0.0.1:9876/users",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "9876",
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update user",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"username\": \"hamza77\",   \n  \"firstname\": \"sghaier\", \n  \"lastname\": \"hamza\"\n  \n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/users/hamza77",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"hamza77"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "activate/disactivate",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"status\": false  \n}  ",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/users/hamza77/status",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"hamza77",
-								"status"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "apps",
-			"item": [
-				{
-					"name": "get all apps",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/apps",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"apps"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get One apps",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/apps",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"apps"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "add app",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"userId\": \"hamza\",\n  \"name\": \"khallasli-web\",\n  \"redirectUri\": \"https://www.khallasli.com/\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "127.0.0.1:9876/apps",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "9876",
-							"path": [
-								"apps"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "activate/disactivate",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"status\": false  \n}  ",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/users/hamza77/status",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"hamza77",
-								"status"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update apps info",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"my-ap\",\n  \"redirectUri\": \"http://example.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/apps/76ee532f-0e8f-4e7a-8042-11f8b3dc5bb3",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"apps",
-								"76ee532f-0e8f-4e7a-8042-11f8b3dc5bb3"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Credentials",
-			"item": [
-				{
-					"name": "get All credentials",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/credentials",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"credentials"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get One credential by userid",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/credentials/cb2d8b23-ccce-4efd-a387-41b0ce77f562",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"credentials",
-								"cb2d8b23-ccce-4efd-a387-41b0ce77f562"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get One credential info by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/credentials/cb2d8b23-ccce-4efd-a387-41b0ce77f562",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"credentials",
-								"cb2d8b23-ccce-4efd-a387-41b0ce77f562"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "add one credential",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"credential\": { \n    \"scopes\": [\n      \"super admin\"\n    ]\n  },\n  \"consumerId\": \"535414f7-3173-4e2b-8f01-9554c4c0009e\",\n  \"type\": \"key-auth\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/credentials",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"credentials"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "scopes",
-			"item": [
-				{
-					"name": "add new scope",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"scopes\": [\n    \"user\"\n  ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/scopes",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"scopes"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get all scopes",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/scopes",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"scopes"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "shemas",
-			"item": [
-				{
-					"name": "add new scope",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"scopes\": [\n    \"user\"\n  ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/scopes",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"scopes"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get all shemas",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/scopes",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"scopes"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "fd7e2fd1-af0d-4407-9239-6939fc2a2911",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "172f1c55-2a5f-49bc-bbfd-e6b2708d3a72",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "policies",
-			"item": [
-				{
-					"name": "Enables policie",
-					"request": {
-						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -507,22 +23,51 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/policies/oauth2",
+							"raw": "{{host}}:{{port}}/api/topup",
 							"host": [
-								"{{url}}"
+								"{{host}}"
 							],
+							"port": "{{port}}",
 							"path": [
-								"policies",
-								"oauth2"
+								"api",
+								"topup"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Disable policie",
+					"name": "post user profile",
 					"request": {
-						"method": "PUT",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_user\": \"1425d882-a03e-4ffc-b996-101233874482\",\n  \"first_name\": \"string\",\n  \"last_name\": \"string\",\n  \"phone\": \"87654331\",\n  \"cin\": [\n    \"data:image/jpeg;base64,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\"\n  ],\n  \"typeId\": \"1425d882-a03e-4ffc-b996-101233874443\",\n  \"activity\": [\n    \"b1a236eb-097f-4fea-b252-669383dd2eed\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/api/profile",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user profile",
+					"request": {
+						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -534,139 +79,28 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/policies/oauth2",
+							"raw": "{{host}}:{{port}}/api/profile/71c4db36-8167-486a-8164-ef548c524155",
 							"host": [
-								"{{url}}"
+								"{{host}}"
 							],
+							"port": "{{port}}",
 							"path": [
-								"policies",
-								"oauth2"
+								"api",
+								"profile",
+								"71c4db36-8167-486a-8164-ef548c524155"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "get all policies",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/scopes",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"scopes"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "abd22e22-63a3-4312-90e1-736185926466",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "10b558a7-2a39-414e-881e-23a5b2e3ca13",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "services-endpoints",
-			"item": [
-				{
-					"name": "get all services-endpoints",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/service-endpoints",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"service-endpoints"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create or update service-endpoint",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/service-endpoints/voucher",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"service-endpoints",
-								"voucher"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete service-endpoint",
+					"name": "Delete user profile Copy",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -674,13 +108,52 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/service-endpoints/voucher",
+							"raw": "{{host}}:{{port}}/api/profile/71c4db36-8167-486a-8164-ef548c524155",
 							"host": [
-								"{{url}}"
+								"{{host}}"
 							],
+							"port": "{{port}}",
 							"path": [
-								"service-endpoints",
-								"voucher"
+								"api",
+								"profile",
+								"71c4db36-8167-486a-8164-ef548c524155"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get liste facial",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/voucher/facial",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"voucher",
+								"facial"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check wallet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/hello",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"hello"
 							]
 						}
 					},
@@ -690,374 +163,2027 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "api-endpoints",
+			"name": "gateway",
 			"item": [
 				{
-					"name": "get all api-endpoints",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "apps",
+					"item": [
+						{
+							"name": "get all apps",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/apps",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"apps"
+									],
+									"query": [
+										{
+											"key": "77da24cd-11c5-4b1b-bd0a-6ab1a989e7f3",
+											"value": null,
+											"disabled": true
+										}
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/api-endpoints",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api-endpoints"
-							]
+						{
+							"name": "get One apps",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/apps/7a0c97ee-e204-4c66-9f86-3ad63f1ee021",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"apps",
+										"7a0c97ee-e204-4c66-9f86-3ad63f1ee021"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add app",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"userId\": \"hamza\",\n  \"name\": \"khallasli-web\",\n  \"redirectUri\": \"https://www.khallasli.com/\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:9876/apps",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9876",
+									"path": [
+										"apps"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "activate/disactivate",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": false  \n}  ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/users/hamza77/status",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"hamza77",
+										"status"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update apps info",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"my-ap\",\n  \"redirectUri\": \"http://example.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/apps/76ee532f-0e8f-4e7a-8042-11f8b3dc5bb3",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"apps",
+										"76ee532f-0e8f-4e7a-8042-11f8b3dc5bb3"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				},
 				{
-					"name": "get one api-endpoint",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "pipelines",
+					"item": [
+						{
+							"name": "get all pipeline",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/pipelines",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"pipelines"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/api-endpoints",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api-endpoints"
-							]
+						{
+							"name": "get one pipeline",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/pipelines",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"pipelines"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create or update pipeline",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/service-endpoints/voucher",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"service-endpoints",
+										"voucher"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete pipeline",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/pipelines/voucher",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"pipelines",
+										"voucher"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				},
 				{
-					"name": "create or update service-endpoint",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "api-endpoints",
+					"item": [
+						{
+							"name": "get all api-endpoints",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api-endpoints",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api-endpoints"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/service-endpoints/voucher",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"service-endpoints",
-								"voucher"
-							]
+						{
+							"name": "get one api-endpoint",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/api-endpoints",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api-endpoints"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create or update service-endpoint",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/service-endpoints/voucher",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"service-endpoints",
+										"voucher"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete service-endpoint",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/service-endpoints/voucher",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"service-endpoints",
+										"voucher"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				},
 				{
-					"name": "Delete service-endpoint",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "services-endpoints",
+					"item": [
+						{
+							"name": "get all services-endpoints",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/service-endpoints",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"service-endpoints"
+									]
 								}
+							},
+							"response": []
+						},
+						{
+							"name": "create or update service-endpoint",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/service-endpoints/voucher",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"service-endpoints",
+										"voucher"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete service-endpoint",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/service-endpoints/voucher",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"service-endpoints",
+										"voucher"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "policies",
+					"item": [
+						{
+							"name": "Enables policie",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/policies/oauth2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"policies",
+										"oauth2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Disable policie",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/policies/oauth2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"policies",
+										"oauth2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all policies",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/scopes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"scopes"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3567669c-d6f4-40e8-9709-d3b6f8ad70fe",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
 							}
 						},
-						"url": {
-							"raw": "{{url}}/service-endpoints/voucher",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"service-endpoints",
-								"voucher"
-							]
+						{
+							"listen": "test",
+							"script": {
+								"id": "f263e0cc-5118-4bd9-b5d8-35b4eec58934",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
 						}
-					},
-					"response": []
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "shemas",
+					"item": [
+						{
+							"name": "get by id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"scopes\": [\n    \"user\"\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/schemas/http%3A%2F%2Fexpress-gateway.io%2Fschemas%2Fpolicies%2Fexample-policy.json",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"schemas",
+										"http%3A%2F%2Fexpress-gateway.io%2Fschemas%2Fpolicies%2Fexample-policy.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all shemas",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/schemas",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"schemas"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "plugin",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "fa1e5175-1d3a-4f32-88d2-5cf9cd5f7e70",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "457a5610-ba0c-4788-8f4c-e5926a85f6ff",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "scopes",
+					"item": [
+						{
+							"name": "add new scope",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"scopes\": [\n    \"user\"\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/scopes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"scopes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all scopes",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/scopes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"scopes"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Credentials",
+					"item": [
+						{
+							"name": "get All credentials",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/credentials",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"credentials"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get One credential by userid",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/credentials/admin5@gmail.com",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"credentials",
+										"admin5@gmail.com"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add one credential",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"credential\": { \n    \"scopes\": [\n      \"admin\"\n    ]\n  },\n  \"consumerId\": \"57d0ed66-2c14-4e82-aed3-14d7cdbb4015\",\n  \"type\": \"key-auth\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/credentials",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"credentials"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "get all users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get one user by id or username",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "127.0.0.1:9876/users/admin2@gmail.com",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9876",
+									"path": [
+										"users",
+										"admin2@gmail.com"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"henidi2\",   \n  \"firstname\": \"sghaier\", \n  \"lastname\": \"125\", \n  \"email\": \"henidi2@gmail.com\",\n  \"phone\": \"78456137\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:9876/users",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9876",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"hamza77\",   \n  \"firstname\": \"sghaier\", \n  \"lastname\": \"hamza\"\n  \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/users/hamza77",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"hamza77"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "activate/disactivate",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"status\": true  \n}  ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/users/monta@gmail.com/status",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users",
+										"monta@gmail.com",
+										"status"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				}
 			],
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "pipelines",
+			"name": "user-management",
 			"item": [
 				{
-					"name": "get all pipeline",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "register",
+					"item": [
+						{
+							"name": "basic user register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstname\": \"hamza\",\n    \"lastname\": \"sghaier\",\n    \"email\": \"hh@gmail.com\",\n    \"phone\": \"2626054\",\n    \"password\": \"test\",\n    \"password_confirmation\": \"test\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/register",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"register"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/pipelines",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"pipelines"
-							]
+						{
+							"name": "post user profile",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"firstname\": \"salah\",\n          \"lastname\": \"bensalah\",\n          \"username\": \"email\",\n          \"email\": \"salah283@gmail.com\",\n          \"phone\": \"11111112\",\n          \"password\":\"test\",\"password_confirmation\":\"test\"\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/register",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post agent profile by admin",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "apiKey 4iY9TOo4koatmwZCBVWgka:3fHlcadkcQbUQreaBmieEg",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "*/*",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"firstname\": \"lastname\",\n          \"lastname\": \"lastname\",\n          \"username\": \"email\",\n          \"email\": \"hassine1255@gmail.com\",\n          \"phone\": \"55872879\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/agent-register",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"agent-register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add an admin",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"firstname\": \"admin\",\n          \"lastname\": \"admin\",\n          \"username\": \"email\",\n          \"email\": \"admin6@gmail.com\",\n          \"phone\": \"55872895\",\n          \"password\":\"test\",\"password_confirmation\":\"test\"\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/admin-register",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"admin-register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get profile",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "4fb1248464e1498da91e56192742c2b8|0b821c3d3bfa4c1ca15681be34711534",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/test/eeb15433-925e-4461-a1fe-7c05b24d51e0",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"test",
+										"eeb15433-925e-4461-a1fe-7c05b24d51e0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "test autorize oauth2.0",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}:{{port}}/oauth2/authorize?response_type=token&client_id=c743b397-d6b1-4bea-868f-ae71a7dc297f&redirect_uri=http://localhost:5000/api/profile",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"oauth2",
+										"authorize"
+									],
+									"query": [
+										{
+											"key": "response_type",
+											"value": "token"
+										},
+										{
+											"key": "client_id",
+											"value": "c743b397-d6b1-4bea-868f-ae71a7dc297f"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://localhost:5000/api/profile"
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				},
 				{
-					"name": "get one pipeline",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Profile",
+					"item": [
+						{
+							"name": "get all profile",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "apiKey 4iY9TOo4koatmwZCBVWgka:3fHlcadkcQbUQreaBmieEg",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/profile",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"profile"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "5",
+											"disabled": true
+										},
+										{
+											"key": "idCompany",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "idTypeUser",
+											"value": null,
+											"disabled": true
+										}
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/pipelines",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"pipelines"
-							]
+						{
+							"name": "add profile",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "apiKey 4Vi2LmJJshPva1FsXlANOv:3V5i0LzwgIkTTM4Uh5nwO4",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "*/*",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id_user\": \"4cca2787-ccfe-4238-8941-b587e2c55a20\",\n  \"first_name\": \"string\",\n  \"last_name\": \"string\",\n  \"phone\": \"78456135\",\n  \"typeId\": \"1425d882-a03e-4ffc-b996-101233874443\",\n  \"commercial_register\": \"string\",\n  \"city\": \"string\",\n  \"zip_code\": \"string\",\n  \"adresse\": \"string\",\n  \"id_commercial\": \"7ee2ebf5-7bf0-4cce-9c51-b3426fb8433d\",\n  \"activity\": [\n    \"4cca2787-ccfe-4238-8941-b587e2c55a1b\",\"7ee2ebf5-7bf0-4cce-9c51-b3426fb8433d\"\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/profile/",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"profile",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add profile agent copy",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "apiKey 4Vi2LmJJshPva1FsXlANOv:3V5i0LzwgIkTTM4Uh5nwO4",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id_user\": \"4cca2787-ccfe-4238-8941-b587e2c55a21\",\n  \"first_name\": \"string\",\n  \"last_name\": \"string\",\n  \"phone\": \"78456145\",\n  \"typeId\": \"9f71bd06-2fa1-4666-9bec-e2832ea9f913\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/profile/agent",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"profile",
+										"agent"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add profile agent",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "apiKey 4iY9TOo4koatmwZCBVWgka:3fHlcadkcQbUQreaBmieEg",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id_user\": \"4cca2787-ccfe-4238-8941-b587e2c55a21\",\n  \"first_name\": \"string\",\n  \"last_name\": \"string\",\n  \"phone\": \"78456145\",\n  \"typeId\": \"9f71bd06-2fa1-4666-9bec-e2832ea9f913\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/profile/agent",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"profile",
+										"agent"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get One profile",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "apiKey 4Vi2LmJJshPva1FsXlANOv:3V5i0LzwgIkTTM4Uh5nwO4",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/profile/71c4db36-8167-486a-8164-ef548c524155",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"profile",
+										"71c4db36-8167-486a-8164-ef548c524155"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "5",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete profile",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "apiKey 4iY9TOo4koatmwZCBVWgka:3fHlcadkcQbUQreaBmieEg",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/profile/23316fe1-51bd-4365-9784-6529ae804deb",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"profile",
+										"23316fe1-51bd-4365-9784-6529ae804deb"
+									],
+									"query": [
+										{
+											"key": "size",
+											"value": "10",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "put profile",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept-encoding": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "apiKey 4iY9TOo4koatmwZCBVWgka:3fHlcadkcQbUQreaBmieEg",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "*/*",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phone\": \"12346512\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/profile/83f7bd5f-5439-4b7a-b6f1-c30561a9acd0",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"profile",
+										"83f7bd5f-5439-4b7a-b6f1-c30561a9acd0"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "patch profile",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"content-type": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "apiKey 4iY9TOo4koatmwZCBVWgka:3fHlcadkcQbUQreaBmieEg",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"first_name\": \"azeuiyzaeui\",\n  \"last_name\": \"strinazelazueklzaeg\",\n  \"phone\": \"32165498\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/profile/0500e312-83e8-4940-b0b4-a4ae530d0090",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"profile",
+										"0500e312-83e8-4940-b0b4-a4ae530d0090"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post user profile",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"firstname\": \"lastname\",\n          \"lastname\": \"lastname\",\n          \"username\": \"email\",\n          \"email\": \"hassine@gmail.com\",\n          \"phone\": \"phone\",\n          \"password\":\"test\",\"password_confirmation\":\"test\"\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/register",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				},
 				{
-					"name": "create or update pipeline",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "type_user",
+					"item": [
+						{
+							"name": "get all type_user",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/type_user",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"type_user"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "5",
+											"disabled": true
+										},
+										{
+											"key": "idCompany",
+											"value": null,
+											"disabled": true
+										}
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/service-endpoints/voucher",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"service-endpoints",
-								"voucher"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete pipeline",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n        \"url\": \"http://localhost:3002\"\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "add type_user",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"content-type": true
 								}
-							}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "apiKey 4iY9TOo4koatmwZCBVWgka:3fHlcadkcQbUQreaBmieEg",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "*/*",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"type\": \"string\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/type_user",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"type_user"
+									]
+								}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}/pipelines/voucher",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"pipelines",
-								"voucher"
-							]
+						{
+							"name": "get One type_user",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/type_user",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"type_user"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "5",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get One type_user by code",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/type_user/by_code/10",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"type_user",
+										"by_code",
+										"10"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "5",
+											"disabled": true
+										},
+										{
+											"key": "code",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete type_user",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/activity?id=23316fe1-51bd-4365-9784-6529ae804deb",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"activity"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "23316fe1-51bd-4365-9784-6529ae804deb"
+										},
+										{
+											"key": "size",
+											"value": "10",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "put type_user",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"label\": \"string\",\n  \"image\": \"string\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/activity?id",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"activity"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "patch type_user",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"label\": \"string\",\n  \"image\": \"string\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}:{{port}}/api/activity?id",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"activity"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				}
 			],
 			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "get user profile",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "c94f4434c2e84ec497151ca3d575693e%7Cc1160f638be0469a89e1d92c171c60eb",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}:{{port}}/api/profile",
-					"host": [
-						"{{host}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"api",
-						"profile"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "test autorize oauth2.0",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}:{{port}}/oauth2/authorize?response_type=token&client_id=803b1da9-879d-44b5-8d77-5199c4e11fba&redirect_uri=http://localhost:8080/ip",
-					"host": [
-						"{{host}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"oauth2",
-						"authorize"
-					],
-					"query": [
-						{
-							"key": "response_type",
-							"value": "token"
-						},
-						{
-							"key": "client_id",
-							"value": "803b1da9-879d-44b5-8d77-5199c4e11fba"
-						},
-						{
-							"key": "redirect_uri",
-							"value": "http://localhost:8080/ip"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "recharge topup",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}:{{port}}/api/topup",
-					"host": [
-						"{{host}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"api",
-						"topup"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get liste facial",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}:{{port}}/voucher/facial",
-					"host": [
-						"{{host}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"voucher",
-						"facial"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "check wallet",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}:{{port}}/hello",
-					"host": [
-						"{{host}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"hello"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "012fdf38-34d1-4c55-a5cf-7938ee43131c",
+				"id": "90b5bbd2-595f-4b5a-9e87-424d341e01d0",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1067,7 +2193,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "b6377956-c7cf-4273-b5e6-91bf759ce173",
+				"id": "b9b28315-7194-40b4-850f-4ec1a4ce6846",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1077,17 +2203,17 @@
 	],
 	"variable": [
 		{
-			"id": "d581ba1a-b5fc-4825-ad0a-f0f6869e79c5",
+			"id": "3d8131b2-7be8-4b5d-97cf-300758a2b941",
 			"key": "host",
 			"value": "http://localhost"
 		},
 		{
-			"id": "9f7f2040-6aee-4026-9831-15354449d5df",
+			"id": "820bf15f-1cfc-4c4c-8c79-0fdfac1dc988",
 			"key": "port",
 			"value": "8080"
 		},
 		{
-			"id": "1f57a219-bdb3-4fe6-91ab-8edeb4a68bac",
+			"id": "3c42fde9-34bc-4c2f-8d80-aa1b0b19f58e",
 			"key": "url",
 			"value": "localhost:9876"
 		}

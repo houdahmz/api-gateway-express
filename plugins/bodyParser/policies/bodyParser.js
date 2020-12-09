@@ -38,6 +38,10 @@ const { PassThrough } = require("stream");
 const bodyParser = require("body-parser");
 const app = express();
 
+require("body-parser").urlencoded({ limit: "50mb", extended: true }),
+require("body-parser").json({ limit: "50mb", extended: true }),
+require("express").json({ limit: "50mb", extended: true }), //-- use express.json
+require("express").urlencoded({ limit: "50mb", extended: true }), //-- use express.urlencoded
 
 module.exports = {
    name: 'bodyParser',
@@ -45,7 +49,11 @@ module.exports = {
       $id: 'http://express-gateway.io/schemas/policies/example-policy.json',
       type: 'object',
       properties: {
-
+      //   url: {
+      //     type: 'string',
+      //     //format: 'url',
+      //     default: ''
+      //   }
       }
     },
    policy: () => {
