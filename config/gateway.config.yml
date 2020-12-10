@@ -24,41 +24,40 @@ apiEndpoints:
     # scopes:
     #   - 'admin'
 
-  profile:
-    - host: localhost
-      paths: ['/api/profile/agent']
-      methods: ["POST"]
-      scopes:
-        - 'admin'
-
-    - host: localhost
-      paths: ['/api/profile', '/api/profile/:id']
-      methods: ["GET"]
-
-    - host: localhost
-      paths: ['/api/profile', '/api/profile/:id']
-      methods: ["PATCH", "PUT", "POST", "DELETE"]
-
-    - host: localhost
-      paths: /api/type_user*
-      methods:
-        - PUT
-        - POST
-        - PATCH
-        - DELETE
-        - GET
-
   # profile:
-  #   host: localhost
-  #   paths: /api/profile*
-  #   methods:
-  #     - PUT
-  #     - POST
-  #     - PATCH
-  #     - DELETE
-  #     - GET
-  #   scopes:
-  #     - 'admin'
+    # - host: localhost
+    #   paths: ['/api/profile', '/api/profile/:id']
+    #   methods: ["GET"]
+
+    # - host: localhost
+    #   paths: ['/api/profile', '/api/profile/:id']
+    #   methods: ["PATCH", "PUT", "POST", "DELETE"]
+
+    # - host: localhost
+    #   paths: ['/api/profile/agent']
+    #   methods: ["POST"]
+    #   scopes:
+    #     - 'admin'
+
+    # - host: localhost
+    #   paths: /api/type_user*
+    #   methods:
+    #     - PUT
+    #     - POST
+    #     - PATCH
+    #     - DELETE
+    #     - GET
+
+  profile:
+    host: localhost
+    paths: /api/profile*
+    methods:
+      - PUT
+      - POST
+      - PATCH
+      - DELETE
+      - GET
+
 
   topup:
     host: localhost
@@ -89,36 +88,14 @@ policies:
   - bodyParser
   - request-transformer
 pipelines:
-  profile:
+  default:
     apiEndpoints:
       - profile
     policies:
-      # - bodyParser:
-      #     - action:  # everything under the action will be actionParams
-      #         baseUrl: 'https://example.com'
-      # - log:
-      #     - condition:
-      #         name: expression
-      #         expression: "req.body.start > 5"
-      #     - action:
-      #         message: '"Current user is approaching limits"'
-      # - request-transformer:
-      #     - action:
-      #       body:
-      #         add:
-      #           authUser: req.egContext.authUser
-      - key-auth:
-          - action : 
-              apiKeyHeader: Authorization
-              disableHeadersScheme: false
-      # - oauth2:
       - proxy:
           - action:
               serviceEndpoint: profile
               changeOrigin: true
-
-      - bodyParser:
-      
   voucher:
     apiEndpoints:
       - voucher
@@ -139,22 +116,4 @@ pipelines:
           - action:
               serviceEndpoint: topup
               changeOrigin: true
-  # get:
-  #   apiEndpoints:
-  #     - get
-  #   policies:
-  #     - oauth2:
-  #     - proxy:
-  #         - action:
-  #             serviceEndpoint: get
-  #             changeOrigin: true
-    
-# regist:
-#     apiEndpoints:
-#       - regist
-#     policies:
-#       - oauth2:
-#       - proxy:
-#         - action:
-#             serviceEndpoint: profile
-#             changeOrigin: true
+
