@@ -44,10 +44,12 @@ authorizationCodes:
   timeToExpiry: 300000
 
 
-plugins:      
-  wallet:
-    package: "../../../plugins/wallet/manifest.js"
-  register:
-    package: "../../../plugins/register/manifest.js"
-  bodyParser:
-    package: "../../../plugins/bodyParser/manifest.js"
+# plugins:      
+#   wallet:
+#     package: "../../../plugins/wallet/manifest.js"
+#   register:
+#     package: "../../../plugins/register/manifest.js"
+#   voucher:
+#     package: "../../../plugins/voucher/manifest.js"
+#   bodyParser:
+#     package: "../../../plugins/bodyParser/manifest.js"
