@@ -21,10 +21,7 @@ module.exports = {
         //const amount = req.body.amount;
         const checkWallet = async (amount) => {
           try {
-            return await axios.post('http://localhost:8080/api/voucher/wallet', {
-              userID : "54875-98563-56987-457" ,
-              amount : amount
-            })
+            return await axios.get('http://localhost:8080/api/type_user')
           } catch (error) {
             console.error(error)
           }
@@ -35,15 +32,18 @@ module.exports = {
         console.log("action params  ",actionParams.amount);
         //console.log("w++++++++++ wallet result ",mywallet)
         let mywallet =  checkWallet(req.query.amount).then(result => {
-         console.log("++++++++++ wallet data ",result.data)
+         console.log("++++++++++ wallet data ",result.data.response)
           if (result.data.status == 'error') {
             return res.status(400).json(result.data);
           }
-            next();
+            
         }) ;
         // rcheck the amount is available from in user wallet 
         //if (amount>5)
-      
+        console.log("++++++++++ wallet data ++++++++")
+
+        next();
+
       };
     }
   };

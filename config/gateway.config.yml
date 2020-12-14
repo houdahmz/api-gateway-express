@@ -4,7 +4,50 @@ admin:
   port: 9876
   host: localhost
 apiEndpoints:
-  
+
+  # regist:
+  #   host: localhost
+  #   paths: /api/profile/agent
+  #   methods:
+  #     - PUT
+  #     - POST
+  #     - PATCH
+  #     - DELETE
+  #     - GET
+  #   scopes:
+  #     - 'admin'
+  # get:
+  #   host: localhost
+  #   paths: /api/profile/test
+    # Only users with the 'admin' scope will be able to access
+    # this endpoint
+    # scopes:
+    #   - 'admin'
+
+  # profile:
+    # - host: localhost
+    #   paths: ['/api/profile', '/api/profile/:id']
+    #   methods: ["GET"]
+
+    # - host: localhost
+    #   paths: ['/api/profile', '/api/profile/:id']
+    #   methods: ["PATCH", "PUT", "POST", "DELETE"]
+
+    # - host: localhost
+    #   paths: ['/api/profile/agent']
+    #   methods: ["POST"]
+    #   scopes:
+    #     - 'admin'
+
+    # - host: localhost
+    #   paths: /api/type_user*
+    #   methods:
+    #     - PUT
+    #     - POST
+    #     - PATCH
+    #     - DELETE
+    #     - GET
+
   profile:
     - host: localhost
       paths: /api/profile*
@@ -14,6 +57,9 @@ apiEndpoints:
         - PATCH
         - DELETE
         - GET
+      scopes:
+        - 'admin'
+
     - host: localhost
       paths: /api/image*
 
@@ -25,25 +71,23 @@ apiEndpoints:
 
     - host: localhost
       paths: /api/category*
-      
+
     - host: localhost
       paths: /api/document*
 
     - host: localhost
       paths: /api/company*
-    
+
     - host: localhost
       paths: /api/activity-company*
 
   topup:
     host: localhost
-    paths: /api/topup
+    paths: /api/facial
     methods:
-      - PUT
       - POST
-      - PATCH
-      - DELETE
-      - GET
+
+
   voucher:
     - host: localhost
       paths: /api/facial*
@@ -60,9 +104,13 @@ apiEndpoints:
     - host: localhost
       paths: /api/document*
 
+  # test:
+  #   - host: localhost
+  #     paths: /api/facial*
+
   paymee:
     - host: localhost
-      paths: /api/cashin ['/api/profile', '/api/profile/:id']
+      paths: /api/cashin
       methods: ["POST"]
 
     - host: localhost
@@ -71,6 +119,10 @@ apiEndpoints:
 
     - host: localhost
       paths: /api/transactions
+
+  wallet:
+    - host: localhost
+      paths: /api/wallet
 
 serviceEndpoints:
   profile:
@@ -81,14 +133,15 @@ serviceEndpoints:
     url: 'http://localhost:5001'
   paymee:
     url: 'http://localhost:5002'
+  wallet:
+    url: 'http://localhost:5003'
 policies:
   - basic-auth
   - key-auth
-  - log 
+  - log
   - proxy
   # - wallet
   - oauth2
-  # - bodyParser
   - request-transformer
 pipelines:
   default:
@@ -110,10 +163,14 @@ pipelines:
       #         add:
       #           authUser: req.egContext.authUser
       # - key-auth:
-      #     - action : 
+      #     - action :
       #         apiKeyHeader: Authorization
       #         disableHeadersScheme: false
       # - oauth2:
+      # - wallet:
+      #     - action:
+      #         amount: req.user
+
       - proxy:
           - action:
               serviceEndpoint: profile
@@ -125,6 +182,9 @@ pipelines:
       - voucher
     policies:
       # - oauth2:
+      # - wallet:
+      #     - action:
+      #         amount: req.user
       - proxy:
           - action:
               serviceEndpoint: voucher

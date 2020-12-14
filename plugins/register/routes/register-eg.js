@@ -6,12 +6,13 @@ const { user } = require('express-gateway/lib/services/');
 const CircularJSON = require('circular-json');
 const bodyParser = require("body-parser");
 
+
 module.exports = function (gatewayExpressApp) {
   // gatewayExpressApp.use(bodyParser.json())
   gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
   gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-  gatewayExpressApp.post('/api/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
+  gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
     try {
       console.log("*********************************", req.body)
       console.log("/api/register")
@@ -86,7 +87,7 @@ module.exports = function (gatewayExpressApp) {
 
 
 
-  gatewayExpressApp.post('/api/agent-register', async (req, res, next) => { // code=20 for agent created by admin
+  gatewayExpressApp.post('/agent-register', async (req, res, next) => { // code=20 for agent created by admin
     try {
       const { firstname, lastname, email, phone } = req.body
       console.log("/api/agent-register")
@@ -158,7 +159,7 @@ module.exports = function (gatewayExpressApp) {
   });
 
 
-  gatewayExpressApp.get('/api/test', async (req, res, next) => { // code=20 for agent created by admin
+  gatewayExpressApp.get('/test', async (req, res, next) => { // code=20 for agent created by admin
     try {
       const createAgentProfile = async () => {
         try {
@@ -182,7 +183,7 @@ module.exports = function (gatewayExpressApp) {
     }
   });
 
-  gatewayExpressApp.post('/api/admin-register', async (req, res, next) => {
+  gatewayExpressApp.post('/admin-register', async (req, res, next) => {
     try {
       console.log("/api/admin-register")
 
@@ -242,7 +243,45 @@ module.exports = function (gatewayExpressApp) {
     }
   }
 
+  gatewayExpressApp.get('/api/login', async (req, res, next) => { // code=20 for agent created by admin
+    console.log("*********************************", req.body)
+    console.log("/api/login")
 
+    const {username, password} = req.body
+
+    myUser = await services.user.find(username,password)
+      // const userProfile = await createAgentProfile();
+      // const json = CircularJSON.stringify(userProfile);
+      // JSON.stringify(userProfile)
+
+      // myUserKeyAuth = await services.auth.authenticateCredential(myUser.id ,password ,"key-auth" )
+      // if(myUserKeyAuth == false){ //user has not key-auth credential
+      // // return res.status(200).json(myUserKeyAuth);
+      // console.log("myUser Keyauth ",myUserKeyAuth)
+
+      // }
+
+      // myUserJwt = await services.auth.authenticateCredential(myUser.id ,password ,"jwt" )
+      // myUserJwt = await services.token.createJWT(req.body)
+
+      // console.log("myUser jwt ",myUserJwt)
+      // if(myUserJwt == false){ //user has not oauth2 credential
+      //   // return res.status(200).json(myUserJwt);
+      // console.log("myUser jwt ",myUserJwt)
+
+      //   }
+if(myUser == false){
+  return res.status(200).json({ error: "username does not exist" });
+
+}
+      let name = "complete_profile"+myUser.id
+      userApp = await services.application.find(name)
+      const login_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + userApp.id + "&" + "redirect_uri=" + userApp.redirectUri;
+
+  
+      return res.status(200).json(login_uri);
+
+  });
 };
 
 
