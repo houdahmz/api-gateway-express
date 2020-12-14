@@ -8,6 +8,6 @@
   "dependencies": {
     "circular-json": "^0.5.9",
     "express-gateway": "^1.16.10",
-    "nodemailer": "^6.4.16"
+    "nodemailer": "^6.4.17"
   }
 }
