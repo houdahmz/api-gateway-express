@@ -49,3 +49,7 @@ plugins:
     package: "../../../plugins/wallet/manifest.js"
   register:
     package: "../../../plugins/register/manifest.js"
+  voucher:
+    package: "../../../plugins/voucher/manifest.js"
+  bodyParser:
+    package: "../../../plugins/bodyParser/manifest.js"

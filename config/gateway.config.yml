@@ -4,7 +4,7 @@ admin:
   port: 9876
   host: localhost
 apiEndpoints:
-  
+
   # regist:
   #   host: localhost
   #   paths: /api/profile/agent
@@ -25,63 +25,166 @@ apiEndpoints:
     #   - 'admin'
 
   # profile:
-  #   - host: localhost
-  #     paths: ['/profile', '/profile/:id']
-  #     methods: ["GET"]
+    # - host: localhost
+    #   paths: ['/api/profile', '/api/profile/:id']
+    #   methods: ["GET"]
 
-  #   - host: localhost
-  #     paths: ['/profile', '/profile/:id']
-  #     methods: ["PUT", "POST", "DELETE"]
-    
+    # - host: localhost
+    #   paths: ['/api/profile', '/api/profile/:id']
+    #   methods: ["PATCH", "PUT", "POST", "DELETE"]
+
+    # - host: localhost
+    #   paths: ['/api/profile/agent']
+    #   methods: ["POST"]
+    #   scopes:
+    #     - 'admin'
+
+    # - host: localhost
+    #   paths: /api/type_user*
+    #   methods:
+    #     - PUT
+    #     - POST
+    #     - PATCH
+    #     - DELETE
+    #     - GET
+
   profile:
-    host: localhost
-    paths: /api/profile*
+    - host: localhost
+      paths: /api/profile*
+      methods:
+        - PUT
+        - POST
+        - PATCH
+        - DELETE
+        - GET
+      scopes:
+        - 'admin'
+
+    - host: localhost
+      paths: /api/image*
+
+    - host: localhost
+      paths: /api/activity*
+
+    - host: localhost
+      paths: /api/type-user*
+
+    - host: localhost
+      paths: /api/category*
+
+    - host: localhost
+      paths: /api/document*
+
+    - host: localhost
+      paths: /api/company*
+
+    - host: localhost
+      paths: /api/activity-company*
 
   topup:
     host: localhost
-    paths: /api/topup
-    methods:
-      - PUT
-      - POST
-      - PATCH
-      - DELETE
-      - GET
-  voucher:
-    host: localhost
     paths: /api/facial
+    methods:
+      - POST
+
+
+  voucher:
+    - host: localhost
+      paths: /api/facial*
+
+    - host: localhost
+      paths: /api/voucher*
+
+    - host: localhost
+      paths: /api/transaction*
+
+    - host: localhost
+      paths: /api/operator*
+
+    - host: localhost
+      paths: /api/document*
+
+  # test:
+  #   - host: localhost
+  #     paths: /api/facial*
+
+  paymee:
+    - host: localhost
+      paths: /api/cashin
+      methods: ["POST"]
+
+    - host: localhost
+      paths:  ['/api/accountname/:id']
+      methods: ["GET"]
+
+    - host: localhost
+      paths: /api/transactions
+
+  wallet:
+    - host: localhost
+      paths: /api/wallet
+
 serviceEndpoints:
   profile:
     url: 'http://localhost:5000'
   topup:
     url: 'http://localhost:3000'
   voucher:
-    url: 'http://localhost:3001'
+    url: 'http://localhost:5001'
+  paymee:
+    url: 'http://localhost:5002'
+  wallet:
+    url: 'http://localhost:5003'
 policies:
   - basic-auth
   - key-auth
-  - log 
+  - log
   - proxy
-  - wallet
+  # - wallet
   - oauth2
+  - request-transformer
 pipelines:
-  profile:
+  default:
     apiEndpoints:
       - profile
     policies:
-      - key-auth:
-        # - action : 
-        #             apiKeyHeader: Authorization
-        #   disableHeadersScheme: false
+      # - bodyParser:
+      #     - action:  # everything under the action will be actionParams
+      #         baseUrl: 'https://example.com'
+      # - log:
+      #     - condition:
+      #         name: expression
+      #         expression: "req.body.start > 5"
+      #     - action:
+      #         message: '"Current user is approaching limits"'
+      # - request-transformer:
+      #     - action:
+      #       body:
+      #         add:
+      #           authUser: req.egContext.authUser
+      # - key-auth:
+      #     - action :
+      #         apiKeyHeader: Authorization
+      #         disableHeadersScheme: false
       # - oauth2:
+      # - wallet:
+      #     - action:
+      #         amount: req.user
+
       - proxy:
           - action:
               serviceEndpoint: profile
               changeOrigin: true
+
+      # - bodyParser:
   voucher:
     apiEndpoints:
       - voucher
     policies:
-      - oauth2:
+      # - oauth2:
+      # - wallet:
+      #     - action:
+      #         amount: req.user
       - proxy:
           - action:
               serviceEndpoint: voucher
@@ -90,29 +193,19 @@ pipelines:
     apiEndpoints:
       - topup
     policies:
-      - wallet:
-          - action:
-              amount: req.user
+      # - wallet:
+      #     - action:
+      #         amount: req.user
       - proxy:
           - action:
               serviceEndpoint: topup
               changeOrigin: true
-  # get:
-  #   apiEndpoints:
-  #     - get
-  #   policies:
-  #     - oauth2:
-  #     - proxy:
-  #         - action:
-  #             serviceEndpoint: get
-  #             changeOrigin: true
-    
-# regist:
-#     apiEndpoints:
-#       - regist
-#     policies:
-#       - oauth2:
-#       - proxy:
-#         - action:
-#             serviceEndpoint: profile
-#             changeOrigin: true
+
+  paymee:
+    apiEndpoints:
+      - paymee
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: paymee
+              changeOrigin: true
