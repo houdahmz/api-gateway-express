@@ -74,17 +74,15 @@ module.exports = function (gatewayExpressApp) {
         password: password,
         scopes: []
       })
-      console.log("crd_basiiiiiiiiiiic",crd_basic)
+      // console.log("crd_basiiiiiiiiiiic",crd_basic)
 
-      crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt', { scopes: ['user'] })
-      console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
+      // crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt', { scopes: ['user'] })
+      // console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
 
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2')
       console.log("crd_oauth222222222222",crd_oauth2)
 
-      // const token = getToken(email,password,crd_oauth2.id,crd_oauth2.secret)
       
-// console.log("aaaaaaa token", token)
 
       // crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['user','admin'] })
       // console.log("keyyyyyyyyyyyyyAkuuuuuth",crd_keyAuth)
@@ -95,15 +93,17 @@ module.exports = function (gatewayExpressApp) {
         return res.status(200).json(userProfile.data);
       }
 
-      myProfile = await services.application.insert({
-        name: "complete_profile" + myUser.id,
-        redirectUri: 'http://localhost:5000/api/profile/'
-      }, myUser.id)
+      // myProfile = await services.application.insert({
+      //   name: "complete_profile" + myUser.id,
+      //   redirectUri: 'http://localhost:5000/api/profile/'
+      // }, myUser.id)
 
-      const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
-      console.log("url confirm : " + confirm_uri);
+      // const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
+      // console.log("url confirm : " + confirm_uri);
       // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
 
+      const token = getToken(email,password,crd_oauth2.id,crd_oauth2.secret)
+      console.log("aaaaaaa token", token)
 
       return res.status(201).json({ message: "Check your email : " + myUser.email + " confirmation Here your email and password : \n" + "Click on this link to change your password \n " + confirm_uri });
       // return res.status(201).json({ apiKey: "apiKey " + crd_keyAuth.keyId + ":" + crd_keyAuth.keySecret });
