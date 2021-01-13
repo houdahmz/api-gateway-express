@@ -77,9 +77,22 @@ module.exports = function (gatewayExpressApp) {
       const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
       console.log("url confirm : " + confirm_uri);
       // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
+console.log("email",email)
+console.log("password",password)
+
+console.log("crd_oauth2.id",crd_oauth2.id)
+console.log("crd_oauth2.secret",crd_oauth2.secret)
+try {
+  const token = getToken(email,password,crd_oauth2.id,crd_oauth2.secret)
+  console.log("aaaaaaa token", token.response)
+  return res.status(201).json({ message: token.response });
 
 
-      return res.status(201).json({ message: "Check your email : " + myUser.email + " confirmation Here your email and password : \n" + "Click on this link to change your password \n " + confirm_uri });
+} catch (error) {
+  return res.status(201).json({ message: error });
+
+}
+
 
       // return res.status(201).json({message:"Check your email : "+myUser.email});
 
@@ -252,12 +265,13 @@ module.exports = function (gatewayExpressApp) {
 
     const {username, password} = req.body
     console.log(utils.decrypt(utils.encrypt("test")))
-    myUser = await services.user.find(username,password)
+    myUser = await services.user.find(username)
+    myCredOauth = await services.credential.getCredential(myUser.id,'oauth2')
       // const userProfile = await createAgentProfile();
       // const json = CircularJSON.stringify(userProfile);
       // JSON.stringify(userProfile)
 
-      // myUserKeyAuth = await services.auth.authenticateCredential(myUser.id ,password ,"key-auth" )-
+      //myUserKeyAuth = await services.auth.authenticateCredential(myUser.id ,password ,"key-auth" )-
       // if(myUserKeyAuth == false){ //user has not key-auth credential
       // // return res.status(200).json(myUserKeyAuth);
       // console.log("myUser Keyauth ",myUserKeyAuth)
