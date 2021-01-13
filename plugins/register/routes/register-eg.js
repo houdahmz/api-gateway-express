@@ -257,7 +257,7 @@ module.exports = function (gatewayExpressApp) {
       // const json = CircularJSON.stringify(userProfile);
       // JSON.stringify(userProfile)
 
-      // myUserKeyAuth = await services.auth.authenticateCredential(myUser.id ,password ,"key-auth" )
+      // myUserKeyAuth = await services.auth.authenticateCredential(myUser.id ,password ,"key-auth" )-
       // if(myUserKeyAuth == false){ //user has not key-auth credential
       // // return res.status(200).json(myUserKeyAuth);
       // console.log("myUser Keyauth ",myUserKeyAuth)

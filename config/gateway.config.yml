@@ -59,6 +59,8 @@ apiEndpoints:
         - GET
       scopes:
         - 'admin'
+      # scopes:
+      #   - ['admin']
 
     - host: localhost
       paths: /api/image*
@@ -170,7 +172,21 @@ pipelines:
       # - wallet:
       #     - action:
       #         amount: req.user
+<<<<<<< HEAD
        
+=======
+      - log:
+          - action:
+              message: "header===> ${req.headers.authorization}"
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+>>>>>>> 5370159b68d967316837cee50e47700a8cdd2f0b
       - proxy:
           - action:
               serviceEndpoint: profile
@@ -209,3 +225,14 @@ pipelines:
           - action:
               serviceEndpoint: paymee
               changeOrigin: true
+
+
+# this is with pass credentials
+#       - oauth2:
+#           - action:
+#               jwt:
+#                 issuer: express-gateway
+#                 audience: something
+#                 subject: test
+#                 secretOrPublicKey: secret
+#                 checkCredentialExistence: false

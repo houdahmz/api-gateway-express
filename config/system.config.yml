@@ -28,8 +28,8 @@ crypto:
 #   tokenType: 'jwt'
 #   issuer: 'express-gateway'
 #   audience: 'something'
-#   subject: 'somebody'
-#   secretOrPrivateKey: 'ssssst'
+#   subject: 'test'
+#   secretOrPrivateKey: 'secret'
 
 
 session:
@@ -38,11 +38,48 @@ session:
   saveUninitialized: false
 accessTokens:
   timeToExpiry: 7200000
+  tokenType: 'jwt'
+  issuer: 'express-gateway'
+  audience: 'something'
+  subject: '3pXQjeklS3cFf8OCJw9B22'
+  secretOrPrivateKey: '54v3WJGBcFPh3TFgZSzovw'
 refreshTokens:
   timeToExpiry: 7200000
 authorizationCodes:
   timeToExpiry: 300000
 
+# session:
+#   secret: khallsli-paypos
+#   resave: false
+#   saveUninitialized: false
+# accessTokens:
+#   timeToExpiry: 7200000
+#   tokenType: 'jwt'
+#   issuer: 'express-gateway'
+#   audience: 'something'
+#   subject: 'test'
+#   secretOrPublicKeyFile: config/public.pem
+# refreshTokens:
+#   timeToExpiry: 7200000
+# authorizationCodes:
+#   timeToExpiry: 300000
+
+# this is with pass credentials
+# session:
+#   secret: khallsli-paypos
+#   resave: false
+#   saveUninitialized: false
+# accessTokens:
+#   timeToExpiry: 7200000
+#   tokenType: 'jwt'
+#   issuer: 'express-gateway'
+#   audience: 'something'
+#   subject: 'test'
+#   secretOrPrivateKey: 'secret'
+# refreshTokens:
+#   timeToExpiry: 7200000
+# authorizationCodes:
+#   timeToExpiry: 300000
 
 plugins:      
   wallet:
