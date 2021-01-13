@@ -5,7 +5,7 @@ module.exports = {
     //    let policy = require('./../voucher/policies/voucher')
 
       
-      //  pluginContext.registerGatewayRoute(require('./../voucher/routes/voucher-eg'));
+       pluginContext.registerGatewayRoute(require('./../voucher/routes/voucher-eg'));
     //    pluginContext.registerPolicy(policy)
        pluginContext.eventBus.on('hot-reload', function ({ type, newConfig }) {
         console.log('hot-reload', type, newConfig);
