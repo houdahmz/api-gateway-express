@@ -101,11 +101,23 @@ module.exports = function (gatewayExpressApp) {
       // const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
       // console.log("url confirm : " + confirm_uri);
       // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
+console.log("email",email)
+console.log("password",password)
 
-      const token = getToken(email,password,crd_oauth2.id,crd_oauth2.secret)
-      console.log("aaaaaaa token", token)
+console.log("crd_oauth2.id",crd_oauth2.id)
+console.log("crd_oauth2.secret",crd_oauth2.secret)
+try {
+  const token = getToken(email,password,crd_oauth2.id,crd_oauth2.secret)
+  console.log("aaaaaaa token", token.response)
+  return res.status(201).json({ message: token.response });
 
-      return res.status(201).json({ message: "Check your email : " + myUser.email + " confirmation Here your email and password : \n" + "Click on this link to change your password \n " + confirm_uri });
+
+} catch (error) {
+  return res.status(201).json({ message: error });
+
+}
+
+
       // return res.status(201).json({ apiKey: "apiKey " + crd_keyAuth.keyId + ":" + crd_keyAuth.keySecret });
 
       // return res.status(201).json({message:"Check your email : "+myUser.email});
