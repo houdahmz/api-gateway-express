@@ -65,7 +65,9 @@ module.exports = function (gatewayExpressApp) {
             client_secret: client_secret
           })
         } catch (error) {
-          console.error(error)
+          console.error("111111111111111111111")
+  return res.status(400).json(error.response);
+
         }
       }
  
@@ -74,7 +76,7 @@ module.exports = function (gatewayExpressApp) {
         password: password,
         scopes: []
       })
-      // console.log("crd_basiiiiiiiiiiic",crd_basic)
+      console.log("crd_basiiiiiiiiiiic",crd_basic)
 
       // crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt', { scopes: ['user'] })
       // console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
