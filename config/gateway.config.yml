@@ -140,7 +140,7 @@ policies:
   - key-auth
   - log
   - proxy
-  # - wallet
+  - jwt
   - oauth2
   - request-transformer
 pipelines:
@@ -170,7 +170,7 @@ pipelines:
       # - wallet:
       #     - action:
       #         amount: req.user
-
+       
       - proxy:
           - action:
               serviceEndpoint: profile

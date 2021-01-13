@@ -5,7 +5,6 @@ const mail = require("./mailer.config");
 const { user } = require('express-gateway/lib/services/');
 const CircularJSON = require('circular-json');
 const bodyParser = require("body-parser");
-const utils=require("express-gateway/lib/services/utils.js")
 
 
 module.exports = function (gatewayExpressApp) {
@@ -13,17 +12,16 @@ module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
   gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-  gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
+  gatewayExpressApp.post('/service', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
     try {
       console.log("*********************************", req.body)
-      console.log("/api/register")
+      console.log("/api/service")
 
       const { firstname, lastname, email, phone, password, password_confirmation } = req.body
       if (password != password_confirmation) {
         throw new Error('password does not much')
       }
-
-      myUser = await services.user.insert({
+      myService = await services.user.insert({
         isActive: true,
         firstname: firstname,
         lastname: lastname,
@@ -62,9 +60,7 @@ module.exports = function (gatewayExpressApp) {
 
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2')
       const userProfile = await creteProfile(myUser);
-      console.log(userProfile)
-      
-      
+
       if (userProfile.data.status == "error") {
         return res.status(200).json(userProfile.data);
       }
@@ -251,7 +247,7 @@ module.exports = function (gatewayExpressApp) {
     console.log("/api/login")
 
     const {username, password} = req.body
-    console.log(utils.decrypt(utils.encrypt("test")))
+
     myUser = await services.user.find(username,password)
       // const userProfile = await createAgentProfile();
       // const json = CircularJSON.stringify(userProfile);
@@ -285,7 +281,6 @@ if(myUser == false){
       return res.status(200).json(login_uri);
 
   });
- 
 };
 
 
