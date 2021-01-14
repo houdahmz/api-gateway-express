@@ -57,8 +57,7 @@ apiEndpoints:
         - PATCH
         - DELETE
         - GET
-      scopes:
-        - 'admin'
+      scopes: ['admin']
       # scopes:
       #   - ['admin']
 
@@ -181,7 +180,7 @@ pipelines:
                 issuer: express-gateway
                 audience: something
                 subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: secret
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
                 checkCredentialExistence: false
       - proxy:
           - action:

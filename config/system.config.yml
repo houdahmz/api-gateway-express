@@ -42,12 +42,17 @@ accessTokens:
   issuer: 'express-gateway'
   audience: 'something'
   subject: '3pXQjeklS3cFf8OCJw9B22'
-  secretOrPrivateKey: 'secret'
+  secretOrPrivateKey: '54v3WJGBcFPh3TFgZSzovw'
 refreshTokens:
-  timeToExpiry: 7200000
+  timeToExpiry: 7200000         
 authorizationCodes:
   timeToExpiry: 300000
 
+  # timeToExpiry: 7200000   en seconde cad 83jrs
+  # timeToExpiry: 7200   en seconde cad 2jrs
+
+
+  
 # session:
 #   secret: khallsli-paypos
 #   resave: false
