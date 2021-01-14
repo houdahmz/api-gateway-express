@@ -1,12 +1,12 @@
 const services = require('express-gateway/lib/services/')
+const utils = require('express-gateway/lib/services/utils')
+
 const superagent = require('superagent');
 const axios = require('axios');
 const mail = require("./mailer.config");
 const { user } = require('express-gateway/lib/services/');
 const CircularJSON = require('circular-json');
 const bodyParser = require("body-parser");
-const utils=require("express-gateway/lib/services/utils.js")
-
 
 module.exports = function (gatewayExpressApp) {
   // gatewayExpressApp.use(bodyParser.json())
@@ -67,7 +67,7 @@ module.exports = function (gatewayExpressApp) {
           })
         } catch (error) {
           console.error("111111111111111111111")
-  return res.status(400).json(error.response);
+  return res.status(400).json("error",error);
 
         }
       }
@@ -79,11 +79,20 @@ module.exports = function (gatewayExpressApp) {
       })
       console.log("crd_basiiiiiiiiiiic",crd_basic)
 
-      // crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt', { scopes: ['user'] })
-      // console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
+      crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt')
+      console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
 
 
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2')
+      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['user'] })
+      console.log("crd_oauth222222222222",crd_oauth2)
+
+      
+
+      // crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['user','admin'] })
+      // console.log("keyyyyyyyyyyyyyAkuuuuuth",crd_keyAuth)
+
+
+      //crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2')
       const userProfile = await creteProfile(myUser);
       console.log(userProfile)
       
@@ -106,13 +115,13 @@ console.log("password",password)
 console.log("crd_oauth2.id",crd_oauth2.id)
 console.log("crd_oauth2.secret",crd_oauth2.secret)
 try {
-  const token = getToken(email,password,crd_oauth2.id,crd_oauth2.secret)
-  console.log("aaaaaaa token", token.response)
-  return res.status(201).json({ message: token.response });
+  const token = await getToken(email,password,crd_oauth2.id,crd_oauth2.secret)
+  console.log("Token ", token.data)
+  return res.status(201).json(token.data);
 
 
 } catch (error) {
-  return res.status(201).json({ message: error });
+  return res.status(400).json({ message: error });
 
 }
 
@@ -124,6 +133,41 @@ try {
     }
   });
 
+
+  gatewayExpressApp.patch('/complete_profile/:id', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
+    try {
+      console.log("*********************************", req.body)
+      console.log("/api/complete_profile")
+
+      const { commercial_register, city, zip_code, adresse, activity } = req.body
+
+      const updaterofile = async () => {
+        try {
+          return await axios.patch('http://localhost:5000/api/company/' + req.params.id, {
+            commercial_register: commercial_register,
+            city: city,
+            zip_code: zip_code,
+            adresse: adresse,
+            activity: activity
+          })
+        } catch (error) {
+          console.error(error)
+        }
+      }
+      const userProfile = await updaterofile();
+
+
+      // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
+
+
+      return res.status(201).json({ message: userProfile.data });
+
+      // return res.status(201).json({message:"Check your email : "+myUser.email});
+
+    } catch (err) {
+      return res.status(422).json({ error: err.message })
+    }
+  });
 
 
   gatewayExpressApp.post('/agent-register', async (req, res, next) => { // code=20 for agent created by admin
@@ -222,7 +266,29 @@ try {
     }
   });
 
-  gatewayExpressApp.post('/admin-register', async (req, res, next) => {
+//  gatewayExpressApp.post('/admin-register', async (req, res, next) => {
+
+  gatewayExpressApp.patch('/activate/:id', async (req, res, next) => {
+    const { code } = req.body // code = 10 desactive , 11 active
+
+    if ( code == 10) {
+      myUser = await services.user.deactivate(req.params.id)
+      if (myUser == true){
+        return res.status(200).json({message : "The user has been desactivated"});
+      }
+
+    } else if ( code == 11) {
+      myUser = await services.user.activate(req.params.id)
+      if (myUser == true){
+        return res.status(200).json({message : "The user has been activated"});
+      }
+    }
+
+  });
+
+
+  gatewayExpressApp.post('/admin-register', async (req, res, next) => { 
+
     try {
       console.log("/api/admin-register")
 
@@ -289,6 +355,7 @@ try {
     const {username, password} = req.body
     // console.log(utils.decrypt(utils.encrypt("test")))
     myUser = await services.user.find(username)
+
     myCredBasic = await services.credential.getCredential(myUser.id,'basic-auth')
     console.log("myCredBasic",myCredBasic)
     myCredOauth = await services.credential.getCredential(myUser.id,'oauth2')
@@ -307,8 +374,87 @@ try {
 
       // }
 
-      // myUserJwt = await services.auth.authenticateCredential(myUser.id ,password ,"jwt" )
-      // myUserJwt = await services.token.createJWT(req.body)
+    // myUserUpdte = await services.user.update(myUser.id,"firstname")
+
+    if(myUser == false){
+      return res.status(200).json({ error: "username does not exist" });
+    
+    }
+    myCredBasic = await services.credential.getCredential(myUser.id,'basic-auth')
+
+    console.log("myCredBasic ",myCredBasic)
+    const passBooleanTrue = await utils.compareSaltAndHashed(password,myCredBasic.password)
+    if(!passBooleanTrue){
+      return res.status(200).json({ error: "Wrong password" });
+
+    }
+      // const userProfile = await createAgentProfile();
+      // const json = CircularJSON.stringify(userProfile);
+      // JSON.stringify(userProfile)
+      // console.log("myUser myUser ",myUser)
+      // console.log("myUserUpdte myUserUpdte ",myUserUpdte)
+
+      // myCred = await services.credential.getCredentials(myUser.id,{ includePassword: true }) //work
+
+
+
+
+      // myCreds = await services.credential.getCredential(myUser.id,'key-auth')
+
+
+
+      
+      // console.log("myCred utils.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaencrypt(myCred.secret) ",utils.decrypt("$2a$10$HnyZHd9mhqTMJ6slBwzKTuXBPwbH.v3mZ1e4q10d1mZx02wawM5q2"))
+      // console.log("myCred utils.decrypt(myCred.secret) ",utils.decrypt(utils.encrypt("test")))
+
+      // console.log("iciiiiiiiiiii ",utils.compareSaltAndHashed("test","$2a$10$HnyZHd9mhqTMJ6slBwzKTuXBPwbH.v3mZ1e4q10d1mZx02wawM5q2"))
+
+
+      // console.log("myCredssss ",myCreds)
+      myCredOauth = await services.credential.getCredential(myUser.id,'oauth2')
+      myCredOauth = await services.credential.removeCredential(myCredOauth.id,'oauth2')
+      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2')
+      console.log("crd_oauth2 ",crd_oauth2)
+
+
+      const getToken = async (username,password,client_id,client_secret) => {
+        try {
+          return await axios.post('http://localhost:8080/oauth2/token',{
+            grant_type: "password",
+            username: username,
+            password: password,
+            client_id: client_id,
+            client_secret: client_secret
+          })
+        } catch (error) {
+          console.error(error)
+        }
+      }
+ // here should get the token and applique invoke before generating a new one
+      const token = await getToken(username,password,crd_oauth2.id,crd_oauth2.secret) 
+          
+      // myUserKeyAuth = await services.auth.authenticateCredential(myUser.id ,password ,"key-auth" )
+      // if(myUserKeyAuth == false){ //user has not key-auth credential
+      // // return res.status(200).json(myUserKeyAuth);
+      // console.log("myUser Keyauth ",myUserKeyAuth)
+
+      // }
+      // console.log("myUser Keyauth ",myUserKeyAuth)
+
+      // // myUserJwt = await services.auth.authenticateCredential(myUser.id ,password ,"jwt" )
+      // // myUserJwt = await services.token.createJWT(req.body)
+
+      // myUserJwt = await services.auth.authenticateCredential(myUser.id ,password ,"oauth2" )
+      // // myUserJwt = await services.token.createJWT(req.body)
+      // console.log("myUserJwt",myUserJwt)
+      // // console.log("myUser jwt ",myUserJwt)
+      // // if(myUserJwt == false){ //user has not oauth2 credential
+      // //   // return res.status(200).json(myUserJwt);
+      // // console.log("myUser jwt ",myUserJwt)
+
+
+      // //   }
+
 
       // console.log("myUser jwt ",myUserJwt)
       // if(myUserJwt == false){ //user has not oauth2 credential
@@ -359,6 +505,56 @@ return res.status(400).json(error.response);
 
   });
  
+
+      // let name = "complete_profile"+myUser.id
+      // userApp = await services.application.find(name)
+      // const login_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + userApp.id + "&" + "redirect_uri=" + userApp.redirectUri;
+
+      // console.log("dataaaaaaaaaaaaa",token.data)
+      // console.log("responsezzzeeeeeeeeeee",token.response)
+      // console.log("myUserJwttttttttttttt",token.status)
+
+
+
+     // return res.status(token.status).json(token.data);
+
+// myUserT = await services.user.find(username,password)
+
+// console.log("id",myUserT)
+// // myUser = await services.token.createJWT({username: req.body.username, password: req.body.password,sub:'1e4cGO1lbBroJNJoapHCmo'})
+
+// myUser = await services.token.createJWT({username: 'hh10@gmail.com', password: 'test',sub:'1e4cGO1lbBroJNJoapHCmo'})
+// // myUser = await services.auth.authenticateCredential('3m1IH3vnrswtN7OWHjtp5a','4VCrWbGAIfpcMKHY0tOl5M','key-auth')
+
+// // myUser = await services.auth.authenticateCredential('3m1IH3vnrswtN7OWHjtp5a','4VCrWbGAIfpcMKHY0tOl5M','key-auth')
+
+//     // myUser = await services.token.getTokensByConsumer(myUserT.id)
+//       return res.status(200).json(myUser);
+
+
+  //});
+
+  gatewayExpressApp.get('/api/logout', async (req, res, next) => { // still incomplete
+  console.log('heere',req.headers.authorization)
+    const test = await services.token.getTokenObject(req.headers.authorization)
+  
+    return res.status(200).json(test);
+ 
+  });
+
+  gatewayExpressApp.post('/api/refreshToken', async (req, res, next) => { // still incomplete
+    const refresh_token = req.body.refresh_token
+    const test = await services.token.getTokenObject(refresh_token)
+    console.log("test",test)
+    return res.status(200).json(test);
+  
+ 
+  });
+
+  gatewayExpressApp.post('/api/reset_password', async (req, res, next) => { // still 
+ 
+  });
+
 };
 
 
