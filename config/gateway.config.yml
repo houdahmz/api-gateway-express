@@ -172,9 +172,6 @@ pipelines:
       # - wallet:
       #     - action:
       #         amount: req.user
-<<<<<<< HEAD
-       
-=======
       - log:
           - action:
               message: "header===> ${req.headers.authorization}"
@@ -184,9 +181,9 @@ pipelines:
                 issuer: express-gateway
                 audience: something
                 subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                secretOrPublicKey: secret
                 checkCredentialExistence: false
->>>>>>> 5370159b68d967316837cee50e47700a8cdd2f0b
+
       - proxy:
           - action:
               serviceEndpoint: profile

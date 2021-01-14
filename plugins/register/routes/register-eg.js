@@ -54,11 +54,34 @@ module.exports = function (gatewayExpressApp) {
           console.error(error)
         }
       }
+
+
+      const getToken = async (username,password,client_id,client_secret) => {
+        try {
+          return await axios.post('http://localhost:8080/oauth2/token',{
+            grant_type: "password",
+            username: username,
+            password: password,
+            client_id: client_id,
+            client_secret: client_secret
+          })
+        } catch (error) {
+          console.error("111111111111111111111")
+  return res.status(400).json(error.response);
+
+        }
+      }
+
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: password,
         scopes: []
       })
+      console.log("crd_basiiiiiiiiiiic",crd_basic)
+
+      // crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt', { scopes: ['user'] })
+      // console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
+
 
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2')
       const userProfile = await creteProfile(myUser);
@@ -264,9 +287,15 @@ try {
     console.log("/api/login")
 
     const {username, password} = req.body
-    console.log(utils.decrypt(utils.encrypt("test")))
+    // console.log(utils.decrypt(utils.encrypt("test")))
     myUser = await services.user.find(username)
+    myCredBasic = await services.credential.getCredential(myUser.id,'basic-auth')
+    console.log("myCredBasic",myCredBasic)
     myCredOauth = await services.credential.getCredential(myUser.id,'oauth2')
+    
+    mypassword=myCredBasic.password
+    console.log("mypassword",mypassword)
+  
       // const userProfile = await createAgentProfile();
       // const json = CircularJSON.stringify(userProfile);
       // JSON.stringify(userProfile)
@@ -289,14 +318,44 @@ try {
       //   }
 if(myUser == false){
   return res.status(200).json({ error: "username does not exist" });
-
 }
+if(mypassword!=password){
+  return res.status(200).json({ error: "wrong password" });
+}
+const getToken = async (username,password,client_id,client_secret) => {
+  try {
+    return await axios.post('http://localhost:8080/oauth2/token',{
+      grant_type: "password",
+      username: username,
+      password: password,
+      client_id: client_id,
+      client_secret: client_secret
+    })
+  } catch (error) {
+    console.error("111111111111111111111")
+return res.status(400).json(error.response);
+
+  }
+}
+
       let name = "complete_profile"+myUser.id
       userApp = await services.application.find(name)
       const login_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + userApp.id + "&" + "redirect_uri=" + userApp.redirectUri;
 
+      console.log("crd_oauth2.id",myCredOauth.id)
+      console.log("crd_oauth2.secret",myCredOauth.secret)
+      try {
+        const token = getToken(email,password,myCredOauth.id,myCredOauth.secret)
+        console.log("aaaaaaa token", token.response)
+        return res.status(201).json({ message: token.response });
+      
+      
+      } catch (error) {
+        return res.status(201).json({ message: error });
+      
+      }
   
-      return res.status(200).json(login_uri);
+      // return res.status(200).json(login_uri);
 
   });
  
