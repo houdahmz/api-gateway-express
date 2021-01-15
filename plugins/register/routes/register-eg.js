@@ -8,6 +8,16 @@ const { user } = require('express-gateway/lib/services/');
 const CircularJSON = require('circular-json');
 const bodyParser = require("body-parser");
 
+// const oauth2orize = require('oauth2orize');
+// const passport = require('passport');
+// const login = require('connect-ensure-login');
+// const path = require('path');
+
+const config = require('express-gateway/lib/config/');
+const tokenService = services.token;
+const authService = services.auth;
+
+const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
 
 module.exports = function (gatewayExpressApp) {
   // gatewayExpressApp.use(bodyParser.json())
@@ -75,20 +85,19 @@ module.exports = function (gatewayExpressApp) {
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: password,
-        scopes: []
+        scopes: ['admin']
       })
       console.log("crd_basiiiiiiiiiiic",crd_basic)
 
-      crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt')
+      crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt',{ scopes: ['admin'] })
       console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
 
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['user'] })
+      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['admin'] })
       console.log("crd_oauth222222222222",crd_oauth2)
 
       
-
-      // crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['user','admin'] })
-      // console.log("keyyyyyyyyyyyyyAkuuuuuth",crd_keyAuth)
+      crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['admin'] })
+      console.log("keyyyyyyyyyyyyyAkuuuuuth",crd_keyAuth)
 
       const userProfile = await creteProfile(myUser);
 
@@ -110,6 +119,8 @@ console.log("password",password)
 console.log("crd_oauth2.id",crd_oauth2.id)
 console.log("crd_oauth2.secret",crd_oauth2.secret)
 try {
+console.log("email iciiiiiiiiiii")
+
   const token = await getToken(email,password,crd_oauth2.id,crd_oauth2.secret)
   console.log("Token ", token.data)
   return res.status(201).json(token.data);
@@ -429,13 +440,17 @@ try {
 
       // //   }
 
-      // let name = "complete_profile"+myUser.id
-      // userApp = await services.application.find(name)
-      // const login_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + userApp.id + "&" + "redirect_uri=" + userApp.redirectUri;
+      let name = "complete_profile"+myUser.id
+      userApp = await services.application.find(name)
+      const login_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + userApp.id + "&" + "redirect_uri=" + userApp.redirectUri;
 
-      // console.log("dataaaaaaaaaaaaa",token.data)
+      console.log("dataaaaaaaaaaaaa",login_uri)
       // console.log("responsezzzeeeeeeeeeee",token.response)
       // console.log("myUserJwttttttttttttt",token.status)
+
+      myUserJwt = await services.token.createJWT(req.body)
+      
+
 
 
 
@@ -477,6 +492,109 @@ try {
   gatewayExpressApp.post('/api/reset_password', async (req, res, next) => { // still 
  
   });
+
+
+  gatewayExpressApp.post('/api/test_password', async (req, res, done) => { // still 
+
+    const validateConsumer = await  authService.validateConsumer(req.body.consumerId) ;
+    const user = await authService.authenticateCredential(req.body.username, req.body.password, 'basic-auth');
+    const createJWT = await tokenService.createJWT({ consumerId: req.body.consumerId, scopes:req.body.scopes })
+    const saveJWT = await tokenService.save({ consumerId: req.body.consumerId, scopes:req.body.scopes }, { refreshTokenOnly: true })
+    const tokenCriteria = {
+        consumerId: req.body.consumerId,
+        authenticatedUser: user.id
+      };
+    const token = await tokenService.findOrSave(tokenCriteria, { includeRefreshToken: true })
+
+console.log("validateConsumer",validateConsumer)
+console.log("user",user)
+console.log("createJWT",createJWT)
+console.log("saveJWT",saveJWT)
+console.log("findOrSaveJWT",token)
+console.log("findOrSaveJWT",token)
+// config.systemConfig.accessTokens.tokenType
+
+
+return res.status(200).json("token");
+
+
+  //  return authService.validateConsumer(req.body.consumerId)
+  //   .then(consumer => {
+  //     console.log('111111111111',consumer)
+  //     if (!consumer) return done(null, false);
+
+  //     return authService.authenticateCredential(req.body.username, req.body.password, 'basic-auth');
+  //   })
+  //   .then(user => {
+  //     console.log('222222222222',user)
+
+  //     if (!user) return done(null, false);
+
+  //     return Promise.all([user, req.body.scopes ? authService.authorizeCredential(req.body.consumerId, 'oauth2', req.body.scopes) : true]);
+  //   })
+  //   .then(([user, authorized]) => {
+  //     if (!authorized) return done(null, false);
+
+  //     const tokenCriteria = {
+  //       consumerId: req.body.consumerId,
+  //       authenticatedUser: user.id
+  //     };
+
+  //     if (req.body.scopes) tokenCriteria.scopes = req.body.scopes;
+
+  //     if (config.systemConfig.accessTokens.tokenType === 'jwt') {
+  //       return tokenService
+  //         .createJWT({ consumerId: req.body.consumerId, scopes:req.body.scopes })
+  //         .then(res => Promise.all([res, tokenService.save({ consumerId: req.body.consumerId, scopes:req.body.scopes }, { refreshTokenOnly: true })]))
+  //         .then(([res, token]) => done(null, res, token.refresh_token, { expires_in: expiresIn }))
+  //         .catch(done);
+  //     }
+
+  //     return tokenService.findOrSave(tokenCriteria, { includeRefreshToken: true })
+  //       .then(token => done(null, token.access_token, token.refresh_token, { expires_in: expiresIn }));
+  //   })
+  //   .catch(done);
+
+ 
+  });
+
+  // server.exchange(oauth2orize.exchange.password((consumer, username, password, scopes, done) => {
+  //   // Validate the consumer
+  //   return authService.validateConsumer(consumer.id)
+  //     .then(consumer => {
+  //       console.log('222222222222')
+  //       if (!consumer) return done(null, false);
+  
+  //       return authService.authenticateCredential(username, password, 'basic-auth');
+  //     })
+  //     .then(user => {
+  //       if (!user) return done(null, false);
+  
+  //       return Promise.all([user, scopes ? authService.authorizeCredential(consumer.id, 'oauth2', scopes) : true]);
+  //     })
+  //     .then(([user, authorized]) => {
+  //       if (!authorized) return done(null, false);
+  
+  //       const tokenCriteria = {
+  //         consumerId: consumer.id,
+  //         authenticatedUser: user.id
+  //       };
+  
+  //       if (scopes) tokenCriteria.scopes = scopes;
+  
+  //       if (config.systemConfig.accessTokens.tokenType === 'jwt') {
+  //         return tokenService
+  //           .createJWT({ consumerId: consumer.id, scopes })
+  //           .then(res => Promise.all([res, tokenService.save({ consumerId: consumer.id, scopes }, { refreshTokenOnly: true })]))
+  //           .then(([res, token]) => done(null, res, token.refresh_token, { expires_in: expiresIn }))
+  //           .catch(done);
+  //       }
+  
+  //       return tokenService.findOrSave(tokenCriteria, { includeRefreshToken: true })
+  //         .then(token => done(null, token.access_token, token.refresh_token, { expires_in: expiresIn }));
+  //     })
+  //     .catch(done);
+  // }));
 
 };
 

@@ -57,7 +57,7 @@ apiEndpoints:
         - PATCH
         - DELETE
         - GET
-      scopes: ['admin']
+      scopes: ['agent']
       # scopes:
       #   - ['admin']
 
@@ -143,7 +143,9 @@ policies:
   - proxy
   # - wallet
   - oauth2
+  - jwt
   - request-transformer
+  - validate-user
 pipelines:
   default:
     apiEndpoints:
@@ -171,17 +173,38 @@ pipelines:
       # - wallet:
       #     - action:
       #         amount: req.user
+        # - rate-limit:
+        #   - action:
+        #       max: 10 # max 10 request
+        #       windowMs: 120000   # per 120 seconds
+        #       rateLimitBy: "${req.hostname}"
       - log:
           - action:
               message: "header===> ${req.headers.authorization}"
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
+      # - oauth2:
+      #     - action:
+      #         jwt:
+      #           issuer: express-gateway
+      #           audience: something
+      #           subject: 3pXQjeklS3cFf8OCJw9B22
+      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+      #           checkCredentialExistence: false
+      # - jwt:
+      #     - action:
+      #         issuer: express-gateway
+      #         audience: something
+      #         subject: 3pXQjeklS3cFf8OCJw9B22
+      #         secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+      #         checkCredentialExistence: false
+      - validate-user:
+      # - request-transformer:
+      #     action:
+      #       body:
+      #         add:
+      #           user: req.user
+      # - log:
+      #     - action:
+      #         message: "header===> ${req.headers.authorization} ------- ${req.user}"
       - proxy:
           - action:
               serviceEndpoint: profile
@@ -231,3 +254,13 @@ pipelines:
 #                 subject: test
 #                 secretOrPublicKey: secret
 #                 checkCredentialExistence: false
+
+
+      # - oauth2:
+      #     - action:
+      #         jwt:
+      #           issuer: express-gateway
+      #           audience: something
+      #           subject: 3pXQjeklS3cFf8OCJw9B22
+      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+      #           checkCredentialExistence: false

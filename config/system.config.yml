@@ -95,3 +95,5 @@ plugins:
     package: "../../../plugins/voucher/manifest.js"
   bodyParser:
     package: "../../../plugins/bodyParser/manifest.js"
+  validate-user:
+    package: "../../../plugins/validate-user.js"
