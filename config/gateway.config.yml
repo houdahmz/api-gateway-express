@@ -58,8 +58,8 @@ apiEndpoints:
         - DELETE
         - GET
       permissions: 
-        - 'read:profile'
-        - 'write:profile'
+        - 'read:user'
+        - 'write:user'
       # scopes: ['agent']
       # scopes:
       #   - ['admin']
@@ -184,19 +184,24 @@ pipelines:
         #       rateLimitBy: "${req.hostname}"
       - log:
           - action:
-              message: "header===> ${req.headers.authorization}"
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
+              message: "header===> ${req.headers.authorization} ---${req}"
+      # - oauth2:
+      #     - action:
+      #         jwt:
+      #           issuer: express-gateway
+      #           audience: something
+      #           subject: 3pXQjeklS3cFf8OCJw9B22
+      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+      #           checkCredentialExistence: false
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
       - jwt-permissions:
           - action:
-                requestProperty: 'profile'
-                permissionsProperty: 'permissions'
+                requestProperty: 'user'
+                permissionsProperty: 'scopes'
       # - jwt:
       #     - action:
       #         issuer: express-gateway
@@ -212,7 +217,7 @@ pipelines:
       #           user: req.user
       # - log:
       #     - action:
-      #         message: "header===> ${req.headers.authorization} ------- ${req.user}"
+      #         message: "header===> ${req.headers.authorization} ------- ${req.user}---${req}"
       - proxy:
           - action:
               serviceEndpoint: profile
