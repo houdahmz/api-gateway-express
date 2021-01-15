@@ -141,7 +141,7 @@ policies:
   - key-auth
   - log
   - proxy
-  - jwt
+  # - wallet
   - oauth2
   - request-transformer
 pipelines:
@@ -182,7 +182,6 @@ pipelines:
                 subject: 3pXQjeklS3cFf8OCJw9B22
                 secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
                 checkCredentialExistence: false
-
       - proxy:
           - action:
               serviceEndpoint: profile
@@ -221,14 +220,3 @@ pipelines:
           - action:
               serviceEndpoint: paymee
               changeOrigin: true
-
-
-# this is with pass credentials
-#       - oauth2:
-#           - action:
-#               jwt:
-#                 issuer: express-gateway
-#                 audience: something
-#                 subject: test
-#                 secretOrPublicKey: secret
-#                 checkCredentialExistence: false

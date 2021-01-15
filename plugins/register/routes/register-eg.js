@@ -342,7 +342,7 @@ try {
     }
   }
 
-  gatewayExpressApp.get('/api/login', async (req, res, next) => { // code=20 for agent created by admin
+  gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
     console.log("*********************************", req.body)
     console.log("/api/login")
 
