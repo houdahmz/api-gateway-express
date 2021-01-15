@@ -10,12 +10,12 @@ db:
     namespace: EG
 #plugins:
   # express-gateway-plugin-example:
-  #   param1: 'param from system.config' 
+  #   param1: 'param from system.config'
 
 
   # Express gateway does not store passwords in plain text. It converts hashes them. This section controlls how passwords are converted.
 crypto:
-  cipherKey: sensitiveKey 
+  cipherKey: sensitiveKey
   algorithm: aes256
   saltRounds: 10
 
@@ -44,7 +44,7 @@ accessTokens:
   subject: '3pXQjeklS3cFf8OCJw9B22'
   secretOrPrivateKey: '54v3WJGBcFPh3TFgZSzovw'
 refreshTokens:
-  timeToExpiry: 7200000         
+  timeToExpiry: 7200000
 authorizationCodes:
   timeToExpiry: 300000
 
@@ -52,7 +52,7 @@ authorizationCodes:
   # timeToExpiry: 7200   en seconde cad 2jrs
 
 
-  
+
 # session:
 #   secret: khallsli-paypos
 #   resave: false
@@ -86,7 +86,7 @@ authorizationCodes:
 # authorizationCodes:
 #   timeToExpiry: 300000
 
-plugins:      
+plugins:
   wallet:
     package: "../../../plugins/wallet/manifest.js"
   register:
@@ -97,3 +97,5 @@ plugins:
     package: "../../../plugins/bodyParser/manifest.js"
   validate-user:
     package: "../../../plugins/validate-user.js"
+  jwt-permissions:
+    package: express-gateway-plugin-jwt-permissions

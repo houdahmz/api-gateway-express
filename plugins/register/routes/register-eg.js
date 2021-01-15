@@ -105,10 +105,10 @@ module.exports = function (gatewayExpressApp) {
         return res.status(200).json(userProfile.data);
       }
 
-      // myProfile = await services.application.insert({
-      //   name: "complete_profile" + myUser.id,
-      //   redirectUri: 'http://localhost:5000/api/profile/'
-      // }, myUser.id)
+      myProfile = await services.application.insert({
+        name: "complete_profile" + myUser.id,
+        redirectUri: 'http://localhost:5000/api/profile/'
+      }, myUser.id)
 
       // const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
       // console.log("url confirm : " + confirm_uri);
@@ -119,8 +119,6 @@ console.log("password",password)
 console.log("crd_oauth2.id",crd_oauth2.id)
 console.log("crd_oauth2.secret",crd_oauth2.secret)
 try {
-console.log("email iciiiiiiiiiii")
-
   const token = await getToken(email,password,crd_oauth2.id,crd_oauth2.secret)
   console.log("Token ", token.data)
   return res.status(201).json(token.data);
@@ -481,7 +479,30 @@ console.log("email iciiiiiiiiiii")
   });
 
   gatewayExpressApp.post('/api/refreshToken', async (req, res, next) => { // still incomplete
-    const refresh_token = req.body.refresh_token
+    const { client_id, refresh_token } = req.body
+
+    myCredOauth = await services.credential.getCredential(client_id,'oauth2')
+    myCredOauth = await services.credential.removeCredential(myCredOauth.id,'oauth2')
+    crd_oauth2 = await services.credential.insertCredential(client_id, 'oauth2')
+    console.log("crd_oauth2 ",crd_oauth2)
+
+    const getRefreshToken = async (client_id, client_secret, refresh_token) => {
+      try {
+        return await axios.post('http://localhost:8080/oauth2/token',{
+          grant_type: "refresh_token",
+          refresh_token: refresh_token,
+          client_id: client_id,
+          client_secret: client_secret
+        })
+      } catch (error) {
+        console.error("error")
+return res.status(400).json("error",error);
+
+      }
+    }
+    // const refresh_token = getRefreshToken(client_id,crd_oauth2.secret,refresh_token)
+
+    // const refresh_token = req.body.refresh_token
     const test = await services.token.getTokenObject(refresh_token)
     console.log("test",test)
     return res.status(200).json(test);
