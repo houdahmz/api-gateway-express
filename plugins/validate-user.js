@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path')
+const services = require('express-gateway/lib/services/')
+
 const validateUserPlugin = {
     schema: { $id: "./../config/models/schema.js" },
     version: '1.0.0',
@@ -21,27 +23,30 @@ const validateUserPlugin = {
         //     const secret = fs.readFileSync(filePath, 'utf8');
         //   console.log("secret",secret)
 
-    let decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw',{ algorithms: ['HS256'] });
-// try {
-//     console.log("decode",decoded)
-//     console.log("decode",decoded.scopes)
+    let decoded ;
+try {
+  decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw',{ algorithms: ['HS256'] });
+    console.log("decode",decoded)
 
-// } catch (error) {
-//     console.log("error",error)
-//     res.status(403).send(error);
+} catch (error) {
+    console.log("error",error)
+    res.status(403).send(error);
+}
 
-    
-// }
-              if(decoded.scopes){
-                if(decoded.scopes == 'admin'){
-                  next();
-                }
-                else {
-                    let errorObject = {message: 'Unauthorized Token.'}
-                    console.log(errorObject);
-                    res.status(403).send(errorObject);
-                }
-              }
+const myCredOauth = await services.credential.getCredential(decoded.consumerId,'oauth2')
+
+console.log("myCredOauth",myCredOauth)
+
+              // if(decoded.scopes){
+              //   if(decoded.scopes == 'admin'){
+              //     next();
+              //   }
+              //   else {
+              //       let errorObject = {message: 'Unauthorized Token.'}
+              //       console.log(errorObject);
+              //       res.status(403).send(errorObject);
+              //   }
+              // }
             //   else{
             //     if(decoded.profile.company_entity_id==requestedId){
             //       next();
@@ -52,7 +57,7 @@ const validateUserPlugin = {
             //         res.status(403).send(errorObject);
             //     }
             //   }
-            
+            next()
             }           
           catch(error){
             let errorObject = {message: 'Unauthorized Token.',reason: error.name}

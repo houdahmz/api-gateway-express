@@ -193,15 +193,15 @@ pipelines:
       #           subject: 3pXQjeklS3cFf8OCJw9B22
       #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
       #           checkCredentialExistence: false
-      - request-transformer:
-          action:
-            body:
-              add:
-                user: req.user
-      - jwt-permissions:
-          - action:
-                requestProperty: 'user'
-                permissionsProperty: 'scopes'
+      # - request-transformer:
+      #     action:
+      #       body:
+      #         add:
+      #           user: req.user
+      # - jwt-permissions:
+      #     - action:
+      #           requestProperty: 'user'
+      #           permissionsProperty: 'scopes'
       # - jwt:
       #     - action:
       #         issuer: express-gateway
@@ -209,7 +209,7 @@ pipelines:
       #         subject: 3pXQjeklS3cFf8OCJw9B22
       #         secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
       #         checkCredentialExistence: false
-      # - validate-user:
+      - validate-user:
       # - request-transformer:
       #     action:
       #       body:
@@ -257,7 +257,6 @@ pipelines:
               serviceEndpoint: paymee
               changeOrigin: true
 
-
 # this is with pass credentials
 #       - oauth2:
 #           - action:
@@ -277,3 +276,4 @@ pipelines:
       #           subject: 3pXQjeklS3cFf8OCJw9B22
       #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
       #           checkCredentialExistence: false
+
