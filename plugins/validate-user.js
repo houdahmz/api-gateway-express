@@ -35,18 +35,24 @@ try {
 
 const myCredOauth = await services.credential.getCredential(decoded.consumerId,'oauth2')
 
-console.log("myCredOauth",myCredOauth)
+console.log("myCredOauth",myCredOauth.scopes)
 
-              // if(decoded.scopes){
-              //   if(decoded.scopes == 'admin'){
-              //     next();
-              //   }
-              //   else {
-              //       let errorObject = {message: 'Unauthorized Token.'}
-              //       console.log(errorObject);
-              //       res.status(403).send(errorObject);
-              //   }
-              // }
+let endpointScopes;
+if (req.egContext.apiEndpoint && req.egContext.apiEndpoint.scopes) {
+  endpointScopes = req.egContext.apiEndpoint.scopes;
+}
+console.log('endpointScopes',endpointScopes)
+
+              if(myCredOauth.scopes){
+                if(myCredOauth.scopes[0] == endpointScopes[0]){
+                  next();
+                }
+                else {
+                    let errorObject = {message: 'Unauthorized Token. cannot'}
+                    console.log(errorObject);
+                    res.status(403).send(errorObject);
+                }
+              }
             //   else{
             //     if(decoded.profile.company_entity_id==requestedId){
             //       next();
@@ -57,7 +63,7 @@ console.log("myCredOauth",myCredOauth)
             //         res.status(403).send(errorObject);
             //     }
             //   }
-            next()
+            // next()
             }           
           catch(error){
             let errorObject = {message: 'Unauthorized Token.',reason: error.name}

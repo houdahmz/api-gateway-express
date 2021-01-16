@@ -85,19 +85,19 @@ module.exports = function (gatewayExpressApp) {
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: password,
-        scopes: ['admin']
+        scopes: ['']
       })
       console.log("crd_basiiiiiiiiiiic",crd_basic)
 
-      crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt',{ scopes: ['admin'] })
-      console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
+      // crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt',{ scopes: ['admin'] })
+      // console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
 
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['admin'] })
+      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['user'] })
       console.log("crd_oauth222222222222",crd_oauth2)
 
       
-      crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['admin'] })
-      console.log("keyyyyyyyyyyyyyAkuuuuuth",crd_keyAuth)
+      // crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['admin'] })
+      // console.log("keyyyyyyyyyyyyyAkuuuuuth",crd_keyAuth)
 
       const userProfile = await creteProfile(myUser);
 
@@ -115,7 +115,6 @@ module.exports = function (gatewayExpressApp) {
       // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
 console.log("email",email)
 console.log("password",password)
-
 console.log("crd_oauth2.id",crd_oauth2.id)
 console.log("crd_oauth2.secret",crd_oauth2.secret)
 try {
@@ -217,11 +216,16 @@ try {
       crd_basic = await services.credential.insertCredential(agentUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: randomPassword,
-        scopes: ["agent"]
+        scopes: []
       })
-      crd_oauth2 = await services.credential.insertCredential(agentUser.id, 'oauth2')
-      crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['agent'] })
 
+      crd_oauth2 = await services.credential.insertCredential(agentUser.id, 'oauth2',{ scopes: ['agent'] })
+      // crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['agent'] })
+      console.log("email",email)
+      console.log("password",randomPassword)
+      console.log("crd_oauth2.id",crd_oauth2.id)
+      console.log("crd_oauth2.secret",crd_oauth2.secret)
+      
       const userProfile = await createAgentProfile(agentUser);
       console.log("randomPassword", userProfile.response)
 
@@ -233,11 +237,39 @@ try {
         name: "complete_profile" + agentUser.id,
         redirectUri: 'http://localhost:5000/api/profile/' + userProfile.data.data.id
       }, agentUser.id)
-      const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
-      console.log("url confirm : " + confirm_uri);
+
+      const getToken = async (username,password,client_id,client_secret) => {
+        try {
+          return await axios.post('http://localhost:8080/oauth2/token',{
+            grant_type: "password",
+            username: username,
+            password: password,
+            client_id: client_id,
+            client_secret: client_secret
+          })
+        } catch (error) {
+          console.error("111111111111111111111")
+  return res.status(400).json("error",error);
+
+        }
+      }
+      // const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
+      // console.log("url confirm : " + confirm_uri);
       // mail.send_email("confirmation","Here your email and password : "+randomPassword+"\n"+"Click on this link to change your password \n "+ confirm_uri);
 
-      return res.status(201).json({ message: "Check your email : " + agentUser.email + " confirmation Here your email and password : " + randomPassword + "\n" + "Click on this link to change your password \n " + confirm_uri });
+      // return res.status(201).json({ message: "Check your email : " + agentUser.email + " confirmation Here your email and password : " + randomPassword + "\n" + "Click on this link to change your password \n " + confirm_uri });
+
+try {
+  const token = await getToken(email,randomPassword,crd_oauth2.id,crd_oauth2.secret)
+  console.log("Token ", token.data)
+  // mail.send_email("confirmation","Here your email and password : "+randomPassword+"\n"+"Click on this link to change your password \n "+ confirm_uri);
+  return res.status(201).json({ message: "Check your email : " + agentUser.email + " to set a new password " ,token:token.data });
+
+
+} catch (error) {
+  return res.status(400).json({ message: error });
+
+}
 
 
     } catch (err) {

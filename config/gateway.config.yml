@@ -57,10 +57,10 @@ apiEndpoints:
         - PATCH
         - DELETE
         - GET
-      permissions: 
-        - 'read:user'
-        - 'write:user'
-      # scopes: ['agent']
+      # permissions: 
+      #   - 'read:user'
+      #   - 'write:user'
+      scopes: ['agent']
       # scopes:
       #   - ['admin']
 
@@ -124,9 +124,10 @@ apiEndpoints:
     - host: localhost
       paths: /api/transactions
 
-  wallet:
+  agent-register:
     - host: localhost
-      paths: /api/wallet
+      paths: /api/agent-register/profile/agent
+      methods: ["POST"]
 
 serviceEndpoints:
   profile:
@@ -150,6 +151,9 @@ policies:
   - request-transformer
   - validate-user
   - jwt-permissions
+  - jwtScopes
+  - agent-register
+  - rewrite
 pipelines:
   default:
     apiEndpoints:
@@ -185,14 +189,14 @@ pipelines:
       - log:
           - action:
               message: "header===> ${req.headers.authorization} ---${req}"
-      # - oauth2:
-      #     - action:
-      #         jwt:
-      #           issuer: express-gateway
-      #           audience: something
-      #           subject: 3pXQjeklS3cFf8OCJw9B22
-      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-      #           checkCredentialExistence: false
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
       # - request-transformer:
       #     action:
       #       body:
@@ -210,6 +214,7 @@ pipelines:
       #         secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
       #         checkCredentialExistence: false
       - validate-user:
+      # - jwtScopes:
       # - request-transformer:
       #     action:
       #       body:
@@ -257,6 +262,56 @@ pipelines:
               serviceEndpoint: paymee
               changeOrigin: true
 
+  agentRegister:
+    apiEndpoints:
+      - agent-register
+    policies:
+      - request-transformer:
+          action:
+            body:
+              add:
+                lastname: req.body.lastname
+      - log:
+          - action:
+              message: "transformer===>"
+      - agent-register:
+      - request-transformer:
+          action:
+            body:
+              add:
+                lastname: req.body.lastname
+      # - rewrite:            # rewrite - delete /test
+      #     - condition:
+      #         name: regexpmatch
+      #         match: ^/agent-register/?(.*)$
+            # action:
+            #   rewrite: /$2 
+      - rewrite:
+        -
+          condition:
+            name: pathmatch
+            match: /api/agent-register/profile/agent # Express Path
+          action:
+            rewrite: /api/profile/agent
+      - log:
+          - action:
+              message: "rewrite===>"
+            # redirect: 302
+        # -
+        #   condition:
+        #     name: regexpmatch
+        #     match: ^/js/(.*)$
+        #   action:
+        #     rewrite: /src/js/$1
+      - proxy:
+          - action:
+              serviceEndpoint: profile
+              changeOrigin: true
+      - log:
+          - action:
+              message: "afterr ===>"
+      - agent-register:
+
 # this is with pass credentials
 #       - oauth2:
 #           - action:
@@ -276,4 +331,3 @@ pipelines:
       #           subject: 3pXQjeklS3cFf8OCJw9B22
       #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
       #           checkCredentialExistence: false
-

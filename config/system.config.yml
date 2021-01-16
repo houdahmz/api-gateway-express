@@ -99,3 +99,9 @@ plugins:
     package: "../../../plugins/validate-user.js"
   jwt-permissions:
     package: express-gateway-plugin-jwt-permissions
+  jwtScopes:
+    package: "../../../plugins/jwtScopes.js"
+  agent-register:
+    package: "../../../plugins/agent-register.js"
+  rewrite:
+    package: express-gateway-plugin-rewrite

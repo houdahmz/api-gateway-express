@@ -5,7 +5,7 @@ module.exports = {
        let policy = require('./../register/policies/register')
 
       
-       pluginContext.registerGatewayRoute(require('./../register/routes/register-eg'));
+      //  pluginContext.registerGatewayRoute(require('./../register/routes/register-eg'));
        pluginContext.registerPolicy(policy)
        pluginContext.eventBus.on('hot-reload', function ({ type, newConfig }) {
         console.log('hot-reload', type, newConfig);
