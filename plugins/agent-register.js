@@ -77,12 +77,16 @@ const agentRegisterPlugin = {
                 console.log("crd_oauth2.id",crd_oauth2.id)
                 console.log("crd_oauth2.secret",crd_oauth2.secret)
                 const body = {
-                    id_user: agentUser.id,
-                    first_name: agentUser.firstname,
-                    last_name: agentUser.lastname,
-                    phone: agentUser.phone,
-                    typeId: dataType.data.data.id
-                  }
+                  id_user: agentUser.id,
+                  first_name: agentUser.firstname,
+                  last_name: agentUser.lastname,
+                  phone: agentUser.phone,
+                  typeId: dataType.data.data.id,
+                  username: email,
+                            password: randomPassword,
+                            client_id: crd_oauth2.id,
+                            client_secret: crd_oauth2.secret
+                }
             // return res.status(201).json(body);
             req.body = body
  next()

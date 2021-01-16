@@ -19,100 +19,30 @@ const tokenReg = {
     policies: ['plugin'],
     init: function (pluginContext) {
       pluginContext.registerPolicy({
-        name: 'agent-register',
+        name: 'tokenReg',
         policy: (params) => 
         async function(req,res,next){
             try {
                 console.log("iciiiiiiiiii")
                 console.log("iciiiireq.bodyiiiiii",req.body)
 
-                const { firstname, lastname, email, phone } = req.body
-                console.log("/api/agent-register")
-                agentUser = await services.user.insert({
-                  isActive: true,
-                  firstname: firstname,
-                  lastname: lastname,
-                  username: email,
-                  email: email,
-                  phone: phone,
-                  redirectUri: 'https://www.khallasli.com',
-                })
-                //////////////
-                const getType = async (code) => {
+                const { username, password, client_id, client_secret } = req.body
+             
+                const getToken = async (username,password,client_id,client_secret) => {
                   try {
-                    return await axios.get('http://localhost:5000/api/type_user/by_code/' + code)
+                    return await axios.post('http://localhost:8080/oauth2/token',{
+                      grant_type: "password",
+                      username: username,
+                      password: password,
+                      client_id: client_id,
+                      client_secret: client_secret
+                    })
                   } catch (error) {
-                    console.error(error)
+                    console.error("111111111111111111111")
+            return res.status(400).json("error",error);
+          
                   }
                 }
-                const dataType = await getType("20");
-                /////////////
-          
-                // const createAgentProfile = async (agentUser) => {
-          
-                //   try {
-                //     return await axios.post('http://localhost:5000/api/profile/agent', {
-                //       id_user: agentUser.id,
-                //       first_name: agentUser.firstname,
-                //       last_name: agentUser.lastname,
-                //       phone: agentUser.phone,
-                //       typeId: dataType.data.data.id
-                //     })
-                //   } catch (error) {
-                //     console.error(error)
-                //   }
-                // }
-                var randomPassword = Math.random().toString(36).slice(-8);
-                console.log("randomPassword", randomPassword)
-                crd_basic = await services.credential.insertCredential(agentUser.id, 'basic-auth', {
-                  autoGeneratePassword: false,
-                  password: randomPassword,
-                  scopes: []
-                })
-          
-                crd_oauth2 = await services.credential.insertCredential(agentUser.id, 'oauth2',{ scopes: ['agent'] })
-                // crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['agent'] })
-                console.log("email",email)
-                console.log("password",randomPassword)
-                console.log("crd_oauth2.id",crd_oauth2.id)
-                console.log("crd_oauth2.secret",crd_oauth2.secret)
-                const body = {
-                    id_user: agentUser.id,
-                    first_name: agentUser.firstname,
-                    last_name: agentUser.lastname,
-                    phone: agentUser.phone,
-                    typeId: dataType.data.data.id
-                  }
-            // return res.status(201).json(body);
-            req.body = body
- next()
-                // const userProfile = await createAgentProfile(agentUser);
-                // console.log("randomPassword", userProfile.response)
-          
-                // if (userProfile.data.status == "error") {
-                //   return res.status(200).json(userProfile.data);
-                // }
-          
-                // myProfile = await services.application.insert({
-                //   name: "complete_profile" + agentUser.id,
-                //   redirectUri: 'http://localhost:5000/api/profile/' + userProfile.data.data.id
-                // }, agentUser.id)
-          
-            //     const getToken = async (username,password,client_id,client_secret) => {
-            //       try {
-            //         return await axios.post('http://localhost:8080/oauth2/token',{
-            //           grant_type: "password",
-            //           username: username,
-            //           password: password,
-            //           client_id: client_id,
-            //           client_secret: client_secret
-            //         })
-            //       } catch (error) {
-            //         console.error("111111111111111111111")
-            // return res.status(400).json("error",error);
-          
-            //       }
-            //     }
 
 
                 // const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
@@ -121,17 +51,24 @@ const tokenReg = {
           
                 // return res.status(201).json({ message: "Check your email : " + agentUser.email + " confirmation Here your email and password : " + randomPassword + "\n" + "Click on this link to change your password \n " + confirm_uri });
           
-        //   try {
-        //     const token = await getToken(email,randomPassword,crd_oauth2.id,crd_oauth2.secret)
-        //     console.log("Token ", token.data)
-        //     // mail.send_email("confirmation","Here your email and password : "+randomPassword+"\n"+"Click on this link to change your password \n "+ confirm_uri);
-        //     return res.status(201).json({ message: "Check your email : " + agentUser.email + " to set a new password " ,token:token.data });
+          try {
+            const token = await getToken(username,password,client_id,client_secret)
+            console.log("Token ", token.data)
+            // mail.send_email("confirmation","Here your email and password : "+randomPassword+"\n"+"Click on this link to change your password \n "+ confirm_uri);
+            // return res.status(201).json({ message: "Check your email : " + agentUser.email + " to set a new password " ,token:token.data });
+          req.body = { 
+            id_user: req.body.id_user,
+            first_name: req.body.firstname,
+            last_name: req.body.lastname,
+            phone: req.body.phone,
+            typeId: req.body.typeId,
+            token:token.data
+          }
+          next()
+          } catch (error) {
+            return res.status(400).json({ message: error });
           
-          
-        //   } catch (error) {
-        //     return res.status(400).json({ message: error });
-          
-        //   }
+          }
           
           
               } catch (err) {

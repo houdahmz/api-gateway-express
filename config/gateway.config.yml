@@ -128,6 +128,8 @@ apiEndpoints:
     - host: localhost
       paths: /api/agent-register/profile/agent
       methods: ["POST"]
+      scopes: ['agent']
+
 
 serviceEndpoints:
   profile:
@@ -154,6 +156,7 @@ policies:
   - jwtScopes
   - agent-register
   - rewrite
+  - tokenReg
 pipelines:
   default:
     apiEndpoints:
@@ -266,6 +269,15 @@ pipelines:
     apiEndpoints:
       - agent-register
     policies:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
       - request-transformer:
           action:
             body:
@@ -286,6 +298,12 @@ pipelines:
       #         match: ^/agent-register/?(.*)$
             # action:
             #   rewrite: /$2 
+      - tokenReg:
+      - request-transformer:
+          action:
+            body:
+              add:
+                lastname: req.body.lastname
       - rewrite:
         -
           condition:
@@ -307,10 +325,9 @@ pipelines:
           - action:
               serviceEndpoint: profile
               changeOrigin: true
-      - log:
-          - action:
-              message: "afterr ===>"
-      - agent-register:
+      # - log:
+      #     - action:
+      #         message: "transformer===>"
 
 # this is with pass credentials
 #       - oauth2:
