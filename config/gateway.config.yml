@@ -129,6 +129,11 @@ apiEndpoints:
       paths: /api/agent-register/profile/agent
       methods: ["POST"]
       scopes: ['agent']
+  # login:
+  #   - host: localhost
+  #     paths: api/profile/login
+  #     methods: ["POST"]
+
 
 
 serviceEndpoints:
@@ -157,6 +162,7 @@ policies:
   - agent-register
   - rewrite
   - tokenReg
+  - login
 pipelines:
   default:
     apiEndpoints:
@@ -264,6 +270,26 @@ pipelines:
           - action:
               serviceEndpoint: paymee
               changeOrigin: true
+
+  # login:
+  #   apiEndpoints:
+  #     - login
+  #   policies:
+  #     - request-transformer:
+  #         action:
+  #           body:
+  #             add:
+  #               lastname: req.body.lastname
+  #     - login:
+  #     - request-transformer:
+  #         action:
+  #           body:
+  #             add:
+  #               lastname: req.body.lastname
+  #     - proxy:
+  #         - action:
+  #             serviceEndpoint: profile
+  #             changeOrigin: true
 
   agentRegister:
     apiEndpoints:

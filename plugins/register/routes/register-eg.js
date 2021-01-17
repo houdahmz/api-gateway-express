@@ -6,7 +6,7 @@ const axios = require('axios');
 const mail = require("./mailer.config");
 const { user } = require('express-gateway/lib/services/');
 const CircularJSON = require('circular-json');
-const bodyParser = require("body-parser");
+
 
 // const oauth2orize = require('oauth2orize');
 // const passport = require('passport');
@@ -18,11 +18,24 @@ const tokenService = services.token;
 const authService = services.auth;
 
 const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
+// const bodyParser = require("body-parser");
+const express = require('express');
+const jsonParser = require('express').json();
+const urlEncodedParser = require("express").urlencoded({ extended: true });
+const { PassThrough } = require("stream");
+
+const bodyParser = require("body-parser");
+const app = express();
+
+require("body-parser").urlencoded({ limit: "50mb", extended: true }),
+require("body-parser").json({ limit: "50mb", extended: true }),
+require("express").json({ limit: "50mb", extended: true }), //-- use express.json
+require("express").urlencoded({ limit: "50mb", extended: true }), //-- use express.urlencoded
 
 module.exports = function (gatewayExpressApp) {
   // gatewayExpressApp.use(bodyParser.json())
-  gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
-  gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+  // gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
+  // gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
   gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
     try {

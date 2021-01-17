@@ -107,3 +107,9 @@ plugins:
     package: express-gateway-plugin-rewrite
   tokenReg:
     package: "../../../plugins/tokenReg.js"
+  login:
+    package: "../../../plugins/login.js"
+  # example:
+  #   package: example
+  hello:
+    package: "../../../plugins/hello/manifest.js"

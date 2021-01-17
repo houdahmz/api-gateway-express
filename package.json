@@ -8,6 +8,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "circular-json": "^0.5.9",
+    "example": "0.0.0",
     "express-gateway": "^1.16.10",
     "express-gateway-authentication-plugin": "file:express-gateway-authentication-plugin",
     "express-gateway-plugin-jwt-permissions": "^1.0.2",
