@@ -47,15 +47,31 @@ module.exports = function (gatewayExpressApp) {
       if (password != password_confirmation) {
         throw new Error('password does not much')
       }
+     const myUserJwt=await
+          jwt.sign({username:"montassar",password:"password"},  '54v3WJGBcFPh3TFgZSzovw', {
+            issuer: 'express-gateway',
+            audience: 'something',
+            expiresIn: 30,
+            subject: '3pXQjeklS3cFf8OCJw9B22',
+            algorithm: 'HS256' 
+          });
+       
+     
 
+
+ 
+      console.log("myUserJwt",myUserJwt)
+
+      // const confirm_token = Math.random().toString(36).substring(2, 40) + Math.random().toString(36).substring(2, 40);
       myUser = await services.user.insert({
-        isActive: true,
+        isActive: false,
         firstname: firstname,
         lastname: lastname,
         username: username,
         email: email,
         phone: phone,
         redirectUri: 'https://www.khallasli.com',
+        confirm_token: myUserJwt
       })
       const getType = async (code) => {
         try {
@@ -64,7 +80,8 @@ module.exports = function (gatewayExpressApp) {
           console.error(error)
         }
       }
-
+      console.log("myUser",myUser)
+      
       const dataType = await getType("10");
       const creteProfile = async (myUser) => {
         try {
@@ -80,21 +97,23 @@ module.exports = function (gatewayExpressApp) {
         }
       }
 
-      const getToken = async (username,password,client_id,client_secret) => {
-        try {
-          return await axios.post('http://localhost:8080/oauth2/token',{
-            grant_type: "password",
-            username: username,
-            password: password,
-            client_id: client_id,
-            client_secret: client_secret
-          })
-        } catch (error) {
-          console.error("111111111111111111111")
-          return res.status(400).json("error",error);
+      // const getToken = async (username,password,client_id,client_secret) => {
+      //   try {
+      //     return await axios.post('http://localhost:8080/oauth2/token',{
+      //       grant_type: "password",
+      //       username: username,
+      //       password: password,
+      //       client_id: client_id,
+      //       client_secret: client_secret
+      //     })
+      //   } catch (error) {
+      //     console.error("111111111111111111111")
+      //     console.error(error)
 
-        }
-      }
+      //     return res.status(400).json("error",error);
+
+      //   }
+      // }
  
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
@@ -127,30 +146,63 @@ module.exports = function (gatewayExpressApp) {
       // const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
       // console.log("url confirm : " + confirm_uri);
       // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
-console.log("email",email)
+console.log("email",username)
 console.log("password",password)
 console.log("crd_oauth2.id",crd_oauth2.id)
 console.log("crd_oauth2.secret",crd_oauth2.secret)
-try {
-  const token = await getToken(username,password,crd_oauth2.id,crd_oauth2.secret)
-  console.log("Token ", token.data)
-  return res.status(201).json(token.data);
 
+// let confirm_token;
+// try {
+//   confirm_token = await getToken(username,password,crd_oauth2.id,crd_oauth2.secret)
+//   console.log("Token ", confirm_token)
+//   myUser = await services.user.update({confirm_token: confirm_token.data})
+//   const confirm_uri = "http://localhost:8080/registration_confirm?email=" + email + "&" + "confirm_token=" + confirm_token.data;
 
-} catch (error) {
-  return res.status(400).json({ message: error });
+//   console.log("confirm_uri",confirm_uri)
+//         // return res.status(201).json({ apiKey: "apiKey " + crd_keyAuth.keyId + ":" + crd_keyAuth.keySecret });
+  
+//         return res.status(201).json({etat: "Success",message:"Check your email : "+email});
+  
+// } catch (error) {
+//   return res.status(400).json({ message: error });
 
-}
+// }
 
-
-      // return res.status(201).json({ apiKey: "apiKey " + crd_keyAuth.keyId + ":" + crd_keyAuth.keySecret });
-
-      // return res.status(201).json({message:"Check your email : "+myUser.email});
 
     } catch (err) {
       return res.status(422).json({ error: err.message })
     }
   });
+
+  gatewayExpressApp.post('/registration_confirm', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
+    try {
+      console.log(req.query.confirm_token)
+      decoded = await jwt.verify(req.query.confirm_token, '54v3WJGBcFPh3TFgZSzovw', { algorithms: ['HS256'] });
+      console.log("decode", decoded)
+
+      // console.log("/registration_confirm")
+      // const { email, confirm_token } = req.query
+      // user = await services.user.findByUsernameOrId(email)
+      // console.debug('confirmation', user, req.query, confirm_token, email)
+
+      // if (user.confirm_token !== confirm_token) {
+      //   console.debug('wrong confirmation token', user.confirm_token, confirm_token)
+      //   throw new Error('wrong confirmation token')
+      // }
+      // user_res = await services.user.activate(user.id)
+      // console.log("")
+      // user = await services.user.findByUsernameOrId(email)
+      // if (user == false) {
+      //   console.debug('wrong confirmation token')
+      //   throw new Error('wrong confirmation token')
+      // }
+      // res.redirect(process.env.FRONTEND_URL + '/signup/activated')
+
+    } catch (err) {
+      return res.status(422).json({ error: err.message })
+    }
+  });
+
 
   gatewayExpressApp.patch('/complete_profile/:id', verifyTokenUser, async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
     try {
@@ -202,6 +254,8 @@ if(!req.params.id){
     try {
       const { firstname, username, lastname, email, phone } = req.body
       console.log("/api/agent-register")
+
+ 
       agentUser = await services.user.insert({
         isActive: true,
         firstname: firstname,
