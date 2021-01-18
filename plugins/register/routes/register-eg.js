@@ -321,7 +321,7 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
     }
   });
 
-  gatewayExpressApp.patch('/activate/:id', async (req, res, next) => {
+  gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin,async (req, res, next) => {
     const { code } = req.body // code = 10 desactive , 11 active
 
     if ( code == 10) {
@@ -340,11 +340,11 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
   });
 
 
-  gatewayExpressApp.post('/admin-register', async (req, res, next) => { 
+  gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin, async (req, res, next) => { 
     try {
       console.log("/api/admin-register")
 
-      const { firstname, lastname, email, phone, password, password_confirmation } = req.body
+      const { firstname,username, lastname, email, phone, password, password_confirmation } = req.body
       if (password != password_confirmation) {
         throw new Error('password does not much')
       }
@@ -353,7 +353,7 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
         isActive: true,
         firstname: firstname,
         lastname: lastname,
-        username: email,
+        username: username,
         email: email,
         phone: phone,
         redirectUri: 'https://www.khallasli.com',
@@ -364,19 +364,53 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
         password: password,
         scopes: []
       })
+      console.log("crd_basiiiiiiiiiiic",crd_basic)
 
-      // crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['admin'] })
+      // crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt',{ scopes: ['admin'] })
+      // console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
 
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['admin'] })
+      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['admin'] })
+      console.log("crd_oauth222222222222",crd_oauth2)
 
-      adminProfile = await services.application.insert({
-        name: "complete_profile" + myUser.id,
-        redirectUri: 'http://localhost:5000/api/profile/' + myUser.id
-      }, myUser.id)
-      const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + adminProfile.id + "&" + "redirect_uri=" + adminProfile.redirectUri;
-      console.log("url confirm : " + confirm_uri);
+      const getToken = async (username,password,client_id,client_secret) => {
+        try {
+          return await axios.post('http://localhost:8080/oauth2/token',{
+            grant_type: "password",
+            username: username,
+            password: password,
+            client_id: client_id,
+            client_secret: client_secret
+          })
+        } catch (error) {
+          console.error("111111111111111111111")
+          return res.status(400).json("error",error);
 
-      return res.status(201).json({ message: "Admin has been successfuly created : " + myUser.email });
+        }
+      }
+      // adminProfile = await services.application.insert({
+      //   name: "complete_profile" + myUser.id,
+      //   redirectUri: 'http://localhost:5000/api/profile/' + myUser.id
+      // }, myUser.id)
+      // const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + adminProfile.id + "&" + "redirect_uri=" + adminProfile.redirectUri;
+      // console.log("url confirm : " + confirm_uri);
+
+
+      console.log("email",email)
+      console.log("password",password)
+      console.log("crd_oauth2.id",crd_oauth2.id)
+      console.log("crd_oauth2.secret",crd_oauth2.secret)
+      try {
+        const token = await getToken(username,password,crd_oauth2.id,crd_oauth2.secret)
+        console.log("Token ", token.data)
+        // return res.status(201).json(token.data);
+        return res.status(201).json({ message: "Admin has been successfuly created : " + myUser.email , token: token.data });
+      
+      
+      } catch (error) {
+        return res.status(400).json({ message: error });
+      
+      }
+
 
     } catch (err) {
       return res.status(422).json({ error: err.message })
@@ -385,25 +419,9 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
 
 
   async function verifyTokenAdmin(req, res, next) {
-    // const bearerHeader = req.headers['authorization'];
-    // if (bearerHeader) {
-    //   // const bearer = bearerHeader.split(' ');
-    //   // const bearerToken = bearer[1];
-    //   // req.token = bearerToken;
-    //   req.Value = bearerHeader;
-    //   req.Key = "Authorization";
-    //   next();
-    // } else {
-    //   // Forbidden
-    //   res.sendStatus(403);
-    // }
-
-
-    // if(!token) {   }
     const bearerHeader = req.headers['authorization'];
 
 if(bearerHeader) {   
-  console.log("aaa")
 
   try{
     let token = (req.headers.authorization).replace("Bearer ", "");
@@ -449,10 +467,112 @@ let endpointScopes = "admin";
   
   }else {
           // Forbidden
-          console.log("aaa")
-          let errorObject = {message: 'Unauthorized'}
-          console.log(errorObject);
-      res.sendStatus(403).send("Unauthorized");;
+      res.sendStatus(403)
+  }
+
+
+  }
+
+  async function verifyTokenSuperAdmin(req, res, next) {
+    const bearerHeader = req.headers['authorization'];
+
+if(bearerHeader) {   
+
+  try{
+    let token = (req.headers.authorization).replace("Bearer ", "");
+    let decoded;
+try {
+  decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw',{ algorithms: ['HS256'] });
+console.log("decode",decoded.consumerId)
+
+} catch (error) {
+console.log("error",error)
+res.status(403).send(error);
+}
+let myCredOauth;
+try {
+myCredOauth = await services.credential.getCredential(decoded.consumerId,'oauth2')
+} catch (error) {
+console.log("error",error)
+  
+}
+
+console.log("myCredOauth",myCredOauth.scopes)
+
+let endpointScopes = "super_admin";
+
+        if(myCredOauth.scopes){
+          if(myCredOauth.scopes[0] == endpointScopes){
+            next();
+          }
+          else {
+              let errorObject = {message: 'Unauthorized Token. cannot'}
+              console.log(errorObject);
+              res.status(403).send(errorObject);
+          }
+        }
+      }           
+    catch(error){
+      let errorObject = {message: 'Unauthorized Token.',reason: error.name}
+      console.log(errorObject);
+      res.status(403).send(errorObject);
+    } 
+  
+  }else {
+          // Forbidden
+      res.sendStatus(403)
+  }
+
+
+  }
+
+  async function verifyTokenSuperAdminOrAdmin(req, res, next) {
+    const bearerHeader = req.headers['authorization'];
+
+if(bearerHeader) {   
+
+  try{
+    let token = (req.headers.authorization).replace("Bearer ", "");
+    let decoded;
+try {
+  decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw',{ algorithms: ['HS256'] });
+console.log("decode",decoded.consumerId)
+
+} catch (error) {
+console.log("error",error)
+res.status(403).send(error);
+}
+let myCredOauth;
+try {
+myCredOauth = await services.credential.getCredential(decoded.consumerId,'oauth2')
+} catch (error) {
+console.log("error",error)
+  
+}
+
+console.log("myCredOauth",myCredOauth.scopes)
+
+
+        if(myCredOauth.scopes){
+          if(myCredOauth.scopes[0] == "super_admin" || myCredOauth.scopes[0] == "admin"){
+            next();
+          }
+          else {
+              let errorObject = {message: 'Unauthorized Token. cannot'}
+              console.log(errorObject);
+              res.status(403).send(errorObject);
+          }
+        }
+      }           
+    catch(error){
+      let errorObject = {message: 'Unauthorized Token.',reason: error.name}
+      console.log(errorObject);
+      res.status(403).send(errorObject);
+    } 
+  
+  }else {
+          // Forbidden
+      res.sendStatus(403)
   }
 
 
