@@ -21,15 +21,17 @@ const { PassThrough } = require('stream');
 
 
 module.exports = function (gatewayExpressApp) {
-    // gatewayExpressApp.use(bodyParser.json())
+    gatewayExpressApp.use(bodyParser.json())
   // gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
   // gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
     gatewayExpressApp.get('/hello', (req, res) => {
       res.json({hello: 'Express-Gateway'});
     });
-    gatewayExpressApp.post('/hello', (req, res) => {
-      let contentType = 'application/x-www-form-urlencoded';
+    gatewayExpressApp.post('/hello/:id', (req, res) => {
+      // let contentType = 'application/x-www-form-urlencoded';
+      
+      console.log("enter /hello post",req.params.id)
 
 
       // jsonParser(req, res, (err) => {
@@ -52,14 +54,13 @@ module.exports = function (gatewayExpressApp) {
 
       //   });
       // });
-      req.headers['content-length'] = Buffer.byteLength(req.body);
-      req.headers['content-type'] = contentType;
+      // req.headers['content-length'] = Buffer.byteLength(req.body);
+      // req.headers['content-type'] = contentType;
 
-      req.egContext.requestStream = new PassThrough();
-      req.egContext.requestStream.write(req.body);
+      // req.egContext.requestStream = new PassThrough();
+      // req.egContext.requestStream.write(req.body);
 
 
-      console.log("body",req.body)
         res.json({hello: 'Express-Gateway'});
       }
       

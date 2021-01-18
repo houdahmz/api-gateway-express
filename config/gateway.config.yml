@@ -52,17 +52,34 @@ apiEndpoints:
     - host: localhost
       paths: /api/profile*
       methods:
-        - PUT
-        - POST
-        - PATCH
-        - DELETE
         - GET
       # permissions: 
       #   - 'read:user'
       #   - 'write:user'
-      scopes: ['agent']
+      scopes: ['user']
       # scopes:
       #   - ['admin']
+    - host: localhost
+      paths: /api/profile*
+      methods:
+        - POST
+      # permissions: 
+      #   - 'read:user'
+      #   - 'write:user'
+      scopes: ['agent']
+
+    # - host: localhost
+    #   paths: /api/profile*
+    #   methods:
+    #     - PUT
+    #     - POST
+    #     - PATCH
+    #     - DELETE
+    #     - GET
+    #   # permissions: 
+    #   #   - 'read:user'
+    #   #   - 'write:user'
+    #   scopes: ['agent']
 
     - host: localhost
       paths: /api/image*
@@ -136,6 +153,7 @@ apiEndpoints:
 
 
 
+
 serviceEndpoints:
   profile:
     url: 'http://localhost:5000'
@@ -147,6 +165,8 @@ serviceEndpoints:
     url: 'http://localhost:5002'
   wallet:
     url: 'http://localhost:5003'
+  gateway:
+    url: 'http://localhost:8080'
 policies:
   - basic-auth
   - key-auth
@@ -224,14 +244,14 @@ pipelines:
       #         checkCredentialExistence: false
       - validate-user:
       # - jwtScopes:
-      # - request-transformer:
-      #     action:
-      #       body:
-      #         add:
-      #           user: req.user
-      # - log:
-      #     - action:
-      #         message: "header===> ${req.headers.authorization} ------- ${req.user}---${req}"
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "iciiiiiiii S===> ------- ${req.body.user}---  ${req.user}-"
       - proxy:
           - action:
               serviceEndpoint: profile

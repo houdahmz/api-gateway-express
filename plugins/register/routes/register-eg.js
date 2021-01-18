@@ -7,6 +7,7 @@ const mail = require("./mailer.config");
 const { user } = require('express-gateway/lib/services/');
 const CircularJSON = require('circular-json');
 
+const jwt = require('jsonwebtoken');
 
 // const oauth2orize = require('oauth2orize');
 // const passport = require('passport');
@@ -34,15 +35,15 @@ require("express").urlencoded({ limit: "50mb", extended: true }), //-- use expre
 
 module.exports = function (gatewayExpressApp) {
   // gatewayExpressApp.use(bodyParser.json())
-  // gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
-  // gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+  gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
+  gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
   gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
     try {
       console.log("*********************************", req.body)
       console.log("/register")
 
-      const { firstname, lastname, email, phone, password, password_confirmation } = req.body
+      const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
       if (password != password_confirmation) {
         throw new Error('password does not much')
       }
@@ -51,7 +52,7 @@ module.exports = function (gatewayExpressApp) {
         isActive: true,
         firstname: firstname,
         lastname: lastname,
-        username: email,
+        username: username,
         email: email,
         phone: phone,
         redirectUri: 'https://www.khallasli.com',
@@ -90,7 +91,7 @@ module.exports = function (gatewayExpressApp) {
           })
         } catch (error) {
           console.error("111111111111111111111")
-  return res.status(400).json("error",error);
+          return res.status(400).json("error",error);
 
         }
       }
@@ -98,7 +99,7 @@ module.exports = function (gatewayExpressApp) {
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: password,
-        scopes: ['']
+        scopes: []
       })
       console.log("crd_basiiiiiiiiiiic",crd_basic)
 
@@ -158,7 +159,7 @@ try {
 
       const { commercial_register, city, zip_code, adresse, activity } = req.body
 
-      const updaterofile = async () => {
+      const updateprofile = async () => {
         try {
           return await axios.patch('http://localhost:5000/api/company/' + req.params.id, {
             commercial_register: commercial_register,
@@ -171,13 +172,13 @@ try {
           console.error(error)
         }
       }
-      const userProfile = await updaterofile();
+      const userProfile = await updateprofile();
 
 
       // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
 
 
-      return res.status(201).json({ message: userProfile.data });
+      return res.status(200).json({ message: userProfile.data });
 
       // return res.status(201).json({message:"Check your email : "+myUser.email});
 
@@ -186,15 +187,16 @@ try {
     }
   });
 
-  gatewayExpressApp.post('/agent-register', async (req, res, next) => { // code=20 for agent created by admin
+  gatewayExpressApp.post('/agent_register',async (req, res, next) => { // incomplete {add send mail} {add verification of token and role}
+
     try {
-      const { firstname, lastname, email, phone } = req.body
+      const { firstname, username, lastname, email, phone } = req.body
       console.log("/api/agent-register")
       agentUser = await services.user.insert({
         isActive: true,
         firstname: firstname,
         lastname: lastname,
-        username: email,
+        username: username,
         email: email,
         phone: phone,
         redirectUri: 'https://www.khallasli.com',
@@ -240,49 +242,52 @@ try {
       console.log("crd_oauth2.secret",crd_oauth2.secret)
       
       const userProfile = await createAgentProfile(agentUser);
-      console.log("randomPassword", userProfile.response)
 
       if (userProfile.data.status == "error") {
         return res.status(200).json(userProfile.data);
       }
 
-      myProfile = await services.application.insert({
-        name: "complete_profile" + agentUser.id,
-        redirectUri: 'http://localhost:5000/api/profile/' + userProfile.data.data.id
-      }, agentUser.id)
+      // myProfile = await services.application.insert({
+      //   name: "complete_profile" + agentUser.id,
+      //   redirectUri: 'http://localhost:5000/api/profile/' + userProfile.data.data.id
+      // }, agentUser.id)
 
-      const getToken = async (username,password,client_id,client_secret) => {
-        try {
-          return await axios.post('http://localhost:8080/oauth2/token',{
-            grant_type: "password",
-            username: username,
-            password: password,
-            client_id: client_id,
-            client_secret: client_secret
-          })
-        } catch (error) {
-          console.error("111111111111111111111")
-  return res.status(400).json("error",error);
 
-        }
-      }
       // const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
       // console.log("url confirm : " + confirm_uri);
       // mail.send_email("confirmation","Here your email and password : "+randomPassword+"\n"+"Click on this link to change your password \n "+ confirm_uri);
 
       // return res.status(201).json({ message: "Check your email : " + agentUser.email + " confirmation Here your email and password : " + randomPassword + "\n" + "Click on this link to change your password \n " + confirm_uri });
 
-try {
-  const token = await getToken(email,randomPassword,crd_oauth2.id,crd_oauth2.secret)
-  console.log("Token ", token.data)
-  // mail.send_email("confirmation","Here your email and password : "+randomPassword+"\n"+"Click on this link to change your password \n "+ confirm_uri);
-  return res.status(201).json({ message: "Check your email : " + agentUser.email + " to set a new password " ,token:token.data });
+
+//// token      
+//       const getToken = async (username,password,client_id,client_secret) => {
+//         try {
+//           return await axios.post('http://localhost:8080/oauth2/token',{
+//             grant_type: "password",
+//             username: username,
+//             password: password,
+//             client_id: client_id,
+//             client_secret: client_secret
+//           })
+//         } catch (error) {
+//           console.error("111111111111111111111")
+//   return res.status(400).json("error",error);
+
+//         }
+//       }
+// try {
+//   const token = await getToken(username,randomPassword,crd_oauth2.id,crd_oauth2.secret)
+//   console.log("Token ", token.data)
+//   // mail.send_email("confirmation","Here your email and password : "+randomPassword+"\n"+"Click on this link to change your password \n "+ confirm_uri);
+//   return res.status(201).json({ message: "Check your email : " + agentUser.email + " to set a new password " ,token: token.data });
 
 
-} catch (error) {
-  return res.status(400).json({ message: error });
+// } catch (error) {
+//   return res.status(400).json({ message: error });
 
-}
+// }
+return res.status(201).json({ etat: "Success",message: "We have sent an email to " + agentUser.email + " to set a new password" });
 
 
     } catch (err) {
@@ -382,6 +387,7 @@ try {
 
   function verifyApiKey(req, res, next) {
 
+    console.log("aaa")
     const bearerHeader = req.headers['authorization'];
     if (bearerHeader) {
       // const bearer = bearerHeader.split(' ');
