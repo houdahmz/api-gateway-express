@@ -132,7 +132,7 @@ console.log("password",password)
 console.log("crd_oauth2.id",crd_oauth2.id)
 console.log("crd_oauth2.secret",crd_oauth2.secret)
 try {
-  const token = await getToken(email,password,crd_oauth2.id,crd_oauth2.secret)
+  const token = await getToken(username,password,crd_oauth2.id,crd_oauth2.secret)
   console.log("Token ", token.data)
   return res.status(201).json(token.data);
 
@@ -187,8 +187,7 @@ try {
     }
   });
 
-  gatewayExpressApp.post('/agent_register',async (req, res, next) => { // incomplete {add send mail} {add verification of token and role}
-
+  gatewayExpressApp.post('/agent_register', verifyTokenAdmin,async (req, res, next) => { // incomplete {add send mail} {add verification of token and role}
     try {
       const { firstname, username, lastname, email, phone } = req.body
       console.log("/api/agent-register")
@@ -363,10 +362,10 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: password,
-        scopes: ["admin"]
+        scopes: []
       })
 
-      crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['admin'] })
+      // crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['admin'] })
 
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['admin'] })
 
@@ -385,21 +384,78 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
   });
 
 
-  function verifyApiKey(req, res, next) {
+  async function verifyTokenAdmin(req, res, next) {
+    // const bearerHeader = req.headers['authorization'];
+    // if (bearerHeader) {
+    //   // const bearer = bearerHeader.split(' ');
+    //   // const bearerToken = bearer[1];
+    //   // req.token = bearerToken;
+    //   req.Value = bearerHeader;
+    //   req.Key = "Authorization";
+    //   next();
+    // } else {
+    //   // Forbidden
+    //   res.sendStatus(403);
+    // }
 
-    console.log("aaa")
+
+    // if(!token) {   }
     const bearerHeader = req.headers['authorization'];
-    if (bearerHeader) {
-      // const bearer = bearerHeader.split(' ');
-      // const bearerToken = bearer[1];
-      // req.token = bearerToken;
-      req.Value = bearerHeader;
-      req.Key = "Authorization";
-      next();
-    } else {
-      // Forbidden
-      res.sendStatus(403);
-    }
+
+if(bearerHeader) {   
+  console.log("aaa")
+
+  try{
+    let token = (req.headers.authorization).replace("Bearer ", "");
+    let decoded;
+try {
+  decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw',{ algorithms: ['HS256'] });
+console.log("decode",decoded.consumerId)
+
+} catch (error) {
+console.log("error",error)
+res.status(403).send(error);
+}
+let myCredOauth;
+try {
+myCredOauth = await services.credential.getCredential(decoded.consumerId,'oauth2')
+console.log("myCredOauth",myCredOauth)
+  
+} catch (error) {
+console.log("error",error)
+  
+}
+
+console.log("myCredOauth",myCredOauth.scopes)
+
+let endpointScopes = "admin";
+
+        if(myCredOauth.scopes){
+          if(myCredOauth.scopes[0] == endpointScopes){
+            next();
+          }
+          else {
+              let errorObject = {message: 'Unauthorized Token. cannot'}
+              console.log(errorObject);
+              res.status(403).send(errorObject);
+          }
+        }
+      }           
+    catch(error){
+      let errorObject = {message: 'Unauthorized Token.',reason: error.name}
+      console.log(errorObject);
+      res.status(403).send(errorObject);
+    } 
+  
+  }else {
+          // Forbidden
+          console.log("aaa")
+          let errorObject = {message: 'Unauthorized'}
+          console.log(errorObject);
+      res.sendStatus(403).send("Unauthorized");;
+  }
+
+
   }
 
   gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
