@@ -154,9 +154,20 @@ try {
 
   gatewayExpressApp.patch('/complete_profile/:id', verifyTokenUser, async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
     try {
-      console.log("*********************************", req.body)
       console.log("/api/complete_profile")
+if(!req.params.id){
+  console.log("*********************************", req.body)
 
+}
+    myUser = await services.user.get(req.params.id)
+
+      if(myUser == false){
+        return res.status(200).json({ error: "id does not exist" });
+      
+      }else if (myUser.isActive == false){
+        return res.status(200).json({ error: "user is desactivated" });
+  
+      }
       const { commercial_register, city, zip_code, adresse, activity } = req.body
 
       const updateprofile = async () => {
@@ -187,7 +198,7 @@ try {
     }
   });
 
-  gatewayExpressApp.post('/agent_register', verifyTokenAdmin,async (req, res, next) => { // incomplete {add send mail} {add verification of token and role}
+  gatewayExpressApp.post('/agent_register', verifyTokenAdmin,async (req, res, next) => { // incomplete {add send mail} 
     try {
       const { firstname, username, lastname, email, phone } = req.body
       console.log("/api/agent-register")
@@ -649,6 +660,9 @@ console.log("myCredOauth",myCredOauth.scopes)
     if(myUser == false){
       return res.status(200).json({ error: "username does not exist" });
     
+    }else if (myUser.isActive == false){
+      return res.status(200).json({ error: "user is desactivated" });
+
     }
     myCredBasic = await services.credential.getCredential(myUser.id,'basic-auth')
 
