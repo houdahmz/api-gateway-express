@@ -152,7 +152,7 @@ try {
     }
   });
 
-  gatewayExpressApp.patch('/complete_profile/:id', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
+  gatewayExpressApp.patch('/complete_profile/:id', verifyTokenUser, async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
     try {
       console.log("*********************************", req.body)
       console.log("/api/complete_profile")
@@ -321,9 +321,12 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
     }
   });
 
-  gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin,async (req, res, next) => {
+  gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => {
     const { code } = req.body // code = 10 desactive , 11 active
+    if (!code){
+      return res.status(200).json({error : "Code can not be empty (set 10 to desactivate or 11 to activate a user"});
 
+    }
     if ( code == 10) {
       myUser = await services.user.deactivate(req.params.id)
       if (myUser == true){
@@ -417,6 +420,61 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
     }
   });
 
+  async function verifyTokenUser(req, res, next) {
+ 
+    const bearerHeader = req.headers['authorization'];
+
+if(bearerHeader) {   
+
+  try{
+    let token = (req.headers.authorization).replace("Bearer ", "");
+    let decoded;
+try {
+  decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw',{ algorithms: ['HS256'] });
+console.log("decode",decoded.consumerId)
+
+} catch (error) {
+console.log("error",error)
+res.status(403).send(error);
+}
+let myCredOauth;
+try {
+myCredOauth = await services.credential.getCredential(decoded.consumerId,'oauth2')
+console.log("myCredOauth",myCredOauth)
+  
+} catch (error) {
+console.log("error",error)
+  
+}
+
+console.log("myCredOauth",myCredOauth.scopes)
+
+let endpointScopes = "user";
+
+        if(myCredOauth.scopes){
+          if(myCredOauth.scopes[0] == endpointScopes){
+            next();
+          }
+          else {
+              let errorObject = {message: 'Unauthorized Token. cannot'}
+              console.log(errorObject);
+              res.status(403).send(errorObject);
+          }
+        }
+      }           
+    catch(error){
+      let errorObject = {message: 'Unauthorized Token.',reason: error.name}
+      console.log(errorObject);
+      res.status(403).send(errorObject);
+    } 
+  
+  }else {
+          // Forbidden
+      res.sendStatus(403)
+  }
+
+
+  }
 
   async function verifyTokenAdmin(req, res, next) {
     const bearerHeader = req.headers['authorization'];
@@ -527,6 +585,7 @@ let endpointScopes = "super_admin";
   }
 
   async function verifyTokenSuperAdminOrAdmin(req, res, next) {
+
     const bearerHeader = req.headers['authorization'];
 
 if(bearerHeader) {   
@@ -552,8 +611,8 @@ console.log("error",error)
 
 console.log("myCredOauth",myCredOauth.scopes)
 
-
         if(myCredOauth.scopes){
+
           if(myCredOauth.scopes[0] == "super_admin" || myCredOauth.scopes[0] == "admin"){
             next();
           }
