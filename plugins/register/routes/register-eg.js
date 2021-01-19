@@ -895,10 +895,116 @@ return res.status(400).json("error",error);
  
   });
 
-  gatewayExpressApp.post('/api/reset_password', async (req, res, next) => { // still 
- 
+  gatewayExpressApp.post('/forgot', async (req, res, next) => { // still //get email from user change to email
+    const username = req.body.username
+    const user = await services.user.findByUsernameOrId(username)
+    console.log("user", user)
+    console.debug('confirmation', user, username)
+    if (user == false) { // username does not exist
+      console.debug('Username does not exist')
+      return res.status(200).json({ error: "Username does not exist" });
+    }
+
+    const myUserJwt = await jwt.sign({username:username},  '54v3WJGBcFPh3TFgZSzovw', {
+      issuer: 'express-gateway',
+      audience: 'something',
+      expiresIn: 18000,
+      subject: '3pXQjeklS3cFf8OCJw9B22',
+      algorithm: 'HS256' 
+    });
+    console.log("aaa",myUserJwt)
+
+    const confirm_uri = "http://localhost:8080/reset?username=" + username + "&" + "token=" + myUserJwt;
+    console.log("confirm_uri",confirm_uri)
+    //here je vais envoyer un mail
+  
+     mail.send_email("Reset password","Veuillez cliquer sur lien pour changer le mot de passe "+ confirm_uri +" \n Link valable pour 5 heures");
+  
+    return res.status(201).json({etat: "Success",message:"Check your email : " + user.email});
+  
+
+
   });
 
+  gatewayExpressApp.post('/reset', async (req, res, done) => {  
+
+    try {
+      console.log("/reset")
+      const { username, token } = req.query
+      const { password, password_confirmation } = req.body
+console.log("dddd",password)
+      const user = await services.user.findByUsernameOrId(username)
+      console.log("user", user)
+
+      console.debug('confirmation', user, req.query, token, username)
+      if (user == false) { // username does not exist
+        console.debug('wrong confirmation token')
+        return res.status(200).json({ error: "wrong confirmation token" });
+      }
+
+    let myCredBasicA = await services.credential.getCredential(user.id,'basic-auth')
+    console.log("myCredBasicssssssss", myCredBasicA)
+
+      let decoded;
+      try {
+        decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw', { algorithms: ['HS256'] });
+        console.log("decoded", decoded)
+
+        if(!decoded){
+          console.debug('wrong confirmation token')
+          return res.status(200).json({ error: "wrong confirmation token" });
+
+        }else{
+          if(user.username != decoded.username){
+            console.debug('wrong confirmation token')
+            return res.status(200).json({ error: "wrong confirmation token" });
+
+            }
+
+            if (password != password_confirmation) {
+            return res.status(200).json({ error: "password does not much" });
+            }
+
+            console.log("ddd")
+        }
+      } catch (error) {
+        console.log("error", error)
+        // res.status(403).send(error);
+        return res.status(400).json({ error: error });
+
+      }
+
+     let myCredBasic = await services.credential.removeCredential(user.id,'basic-auth')
+         myCredBasic = await services.credential.getCredential(user.id,'basic-auth')
+
+    const crd_basic = await services.credential.insertCredential(user.id, 'basic-auth', {
+      autoGeneratePassword: false,
+      password: password,
+      scopes: []
+    })
+
+      myCredBasic = await services.credential.getCredential(user.id,'basic-auth')
+      console.log("sssssssssssssss", myCredBasic)
+  
+      const passBooleanTrue = await utils.compareSaltAndHashed(password,myCredBasic.password)
+      if(!passBooleanTrue){
+        return res.status(200).json({ error: "wrong confirmation token" });
+      }
+
+
+      // const usert = await services.user.findByUsernameOrId(username)
+      // console.log("user",usert)
+
+      // user = await services.user.findByUsernameOrId(email)
+      return res.status(200).json({ etat: "Success" });
+
+      // res.redirect(process.env.FRONTEND_URL + '/signup/activated')
+
+    } catch (err) {
+      return res.status(422).json({ error: err.message })
+    }
+
+  });
 
   gatewayExpressApp.post('/api/test_password', async (req, res, done) => { // still 
 
