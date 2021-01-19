@@ -895,7 +895,7 @@ return res.status(400).json("error",error);
  
   });
 
-  gatewayExpressApp.post('/forgot', async (req, res, next) => { // still //get email from user change to email
+  gatewayExpressApp.post('/forgot', async (req, res, next) => { //get email from user change to email
     const username = req.body.username
     const user = await services.user.findByUsernameOrId(username)
     console.log("user", user)
