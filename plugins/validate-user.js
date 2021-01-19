@@ -35,7 +35,7 @@ const validateUserPlugin = {
 
             const myCredOauth = await services.credential.getCredential(decoded.consumerId, 'oauth2')
 
-            console.log("myCredOauth scopes", myCredOauth.scopes)
+            console.log("myCredOauth ", myCredOauth.scopes)
 
             let endpointScopes;
             if (req.egContext.apiEndpoint && req.egContext.apiEndpoint.scopes) {

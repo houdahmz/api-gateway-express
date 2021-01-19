@@ -47,19 +47,14 @@ module.exports = function (gatewayExpressApp) {
       if (password != password_confirmation) {
         throw new Error('password does not much')
       }
-     const myUserJwt=await
-          jwt.sign({username:"montassar",password:"password"},  '54v3WJGBcFPh3TFgZSzovw', {
+     const myUserJwt = await jwt.sign({username:username,password:password},  '54v3WJGBcFPh3TFgZSzovw', {
             issuer: 'express-gateway',
             audience: 'something',
-            expiresIn: 30,
+            expiresIn: 18000,
             subject: '3pXQjeklS3cFf8OCJw9B22',
             algorithm: 'HS256' 
           });
        
-     
-
-
- 
       console.log("myUserJwt",myUserJwt)
 
       // const confirm_token = Math.random().toString(36).substring(2, 40) + Math.random().toString(36).substring(2, 40);
@@ -168,7 +163,10 @@ console.log("crd_oauth2.secret",crd_oauth2.secret)
 
 // }
 
-
+  const confirm_uri = "http://localhost:8080/registration_confirm?username=" + username + "&" + "confirm_token=" + myUserJwt;
+  console.log("confirm_uri",confirm_uri)
+  //here je vais envoyer un mail
+  return res.status(201).json({etat: "Success",message:"Check your email : " + email});
     } catch (err) {
       return res.status(422).json({ error: err.message })
     }
@@ -176,26 +174,53 @@ console.log("crd_oauth2.secret",crd_oauth2.secret)
 
   gatewayExpressApp.post('/registration_confirm', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
     try {
-      console.log(req.query.confirm_token)
-      decoded = await jwt.verify(req.query.confirm_token, '54v3WJGBcFPh3TFgZSzovw', { algorithms: ['HS256'] });
-      console.log("decode", decoded)
+      console.log("/registration_confirm")
+      const { username, confirm_token } = req.query
+      const user = await services.user.findByUsernameOrId(username)
+      console.log("user", user)
 
-      // console.log("/registration_confirm")
-      // const { email, confirm_token } = req.query
-      // user = await services.user.findByUsernameOrId(email)
-      // console.debug('confirmation', user, req.query, confirm_token, email)
+      console.debug('confirmation', user, req.query, confirm_token, username)
+      if (user == false) { // username does not exist
+        console.debug('wrong confirmation token')
+        return res.status(200).json({ error: "wrong confirmation token" });
+      }
 
-      // if (user.confirm_token !== confirm_token) {
-      //   console.debug('wrong confirmation token', user.confirm_token, confirm_token)
-      //   throw new Error('wrong confirmation token')
-      // }
-      // user_res = await services.user.activate(user.id)
-      // console.log("")
+    myCredBasic = await services.credential.getCredential(user.id,'basic-auth')
+    console.log("myCredBasic", myCredBasic)
+
+      let decoded;
+      try {
+        decoded = await jwt.verify(confirm_token, '54v3WJGBcFPh3TFgZSzovw', { algorithms: ['HS256'] });
+        console.log("decoded", decoded)
+
+        if(!decoded){
+          console.debug('wrong confirmation token')
+          return res.status(200).json({ error: "wrong confirmation token" });
+
+        }else{
+          if(user.username != decoded.username){
+            console.debug('wrong confirmation token')
+            return res.status(200).json({ error: "wrong confirmation token" });
+
+            }
+          const passBooleanTrue = await utils.compareSaltAndHashed(decoded.password,myCredBasic.password)
+          if(!passBooleanTrue){
+            return res.status(200).json({ error: "wrong confirmation token" });
+      
+          }
+        }
+      } catch (error) {
+        console.log("error", error)
+        // res.status(403).send(error);
+        return res.status(400).json({ error: error });
+
+      }
+
+      user_res = await services.user.activate(user.id)
+      console.log("user_res",user_res)
       // user = await services.user.findByUsernameOrId(email)
-      // if (user == false) {
-      //   console.debug('wrong confirmation token')
-      //   throw new Error('wrong confirmation token')
-      // }
+      return res.status(200).json({ etat: "Success" });
+
       // res.redirect(process.env.FRONTEND_URL + '/signup/activated')
 
     } catch (err) {
