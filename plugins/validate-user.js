@@ -34,6 +34,7 @@ const validateUserPlugin = {
             }
 
             const myCredOauth = await services.credential.getCredential(decoded.consumerId, 'oauth2')
+            console.log("myCredOauth ", myCredOauth)
 
             console.log("myCredOauth ", myCredOauth.scopes)
 
@@ -42,31 +43,38 @@ const validateUserPlugin = {
               endpointScopes = req.egContext.apiEndpoint.scopes;
             }
             console.log('endpointScopes', endpointScopes)
+            console.log("myCredOauth.scopes[0] == endpointScopes[0]",myCredOauth.scopes[0] == endpointScopes[0])
+try {
+  
+  if (myCredOauth.scopes) {
+    if (myCredOauth.scopes[0] == endpointScopes[0]) {
+      next();
+    }
+    else {
+      let errorObject = { message: 'Unauthorized Token' }
+      console.log(errorObject);
+      res.status(403).send(errorObject);
+    }
+  }
+  //   else{
+  //     if(decoded.profile.company_entity_id==requestedId){
+  //       next();
+  //     }
+  //     else{
+  //         let errorObject = {message: 'Unauthorized Token.',reason: "Invalid company_Id."}
+  //         console.log(errorObject);
+  //         res.status(403).send(errorObject);
+  //     }
+  //   }
+  // next()
 
-            if (myCredOauth.scopes) {
-              if (myCredOauth.scopes[0] == endpointScopes[0]) {
-                next();
-              }
-              else {
-                let errorObject = { message: 'Unauthorized Token. cannot' }
-                console.log(errorObject);
-                res.status(403).send(errorObject);
-              }
-            }
-            //   else{
-            //     if(decoded.profile.company_entity_id==requestedId){
-            //       next();
-            //     }
-            //     else{
-            //         let errorObject = {message: 'Unauthorized Token.',reason: "Invalid company_Id."}
-            //         console.log(errorObject);
-            //         res.status(403).send(errorObject);
-            //     }
-            //   }
-            // next()
+} catch (error) {
+  res.status(403).send(error);
+  
+}           
           }
           catch (error) {
-            let errorObject = { message: 'Unauthorized Token.', reason: error.name }
+            let errorObject = { message: 'Unauthorized Token', reason: error.name }
             console.log(errorObject);
             res.status(403).send(errorObject);
           }

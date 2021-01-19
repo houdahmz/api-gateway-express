@@ -320,14 +320,22 @@ if(!req.params.id){
       }
       var randomPassword = Math.random().toString(36).slice(-8);
       console.log("randomPassword", randomPassword)
+      console.log("agentUser", agentUser)
+
       crd_basic = await services.credential.insertCredential(agentUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: randomPassword,
         scopes: []
       })
 
-      crd_oauth2 = await services.credential.insertCredential(agentUser.id, 'oauth2',{ scopes: ['agent'] })
+      // crd_oauth2 = await services.credential.insertCredential(agentUser.id, 'oauth2', { scopes: ['agent'] } )
+      // console.log("crd_oauth2",crd_oauth2)
       // crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['agent'] })
+
+      crd_oauth2 = await services.credential.insertCredential(agentUser.id, 'oauth2',{ scopes: ['agent'] })
+      console.log("crd_oauth222222222222",crd_oauth2)
+
+
       console.log("email",email)
       console.log("password",randomPassword)
       console.log("crd_oauth2.id",crd_oauth2.id)
@@ -781,8 +789,10 @@ console.log("myCredOauth",myCredOauth.scopes)
 
       // console.log("myCredssss ",myCreds)
       myCredOauth = await services.credential.getCredential(myUser.id,'oauth2')
+      let scope = myCredOauth.scopes;
+      console.log("scope",scope)
       myCredOauth = await services.credential.removeCredential(myCredOauth.id,'oauth2')
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2')
+      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: scope })
       console.log("crd_oauth2 ",crd_oauth2)
 
 
@@ -1069,43 +1079,5 @@ return res.status(200).json("token");
 
  
   });
-
-  // server.exchange(oauth2orize.exchange.password((consumer, username, password, scopes, done) => {
-  //   // Validate the consumer
-  //   return authService.validateConsumer(consumer.id)
-  //     .then(consumer => {
-  //       console.log('222222222222')
-  //       if (!consumer) return done(null, false);
-  
-  //       return authService.authenticateCredential(username, password, 'basic-auth');
-  //     })
-  //     .then(user => {
-  //       if (!user) return done(null, false);
-  
-  //       return Promise.all([user, scopes ? authService.authorizeCredential(consumer.id, 'oauth2', scopes) : true]);
-  //     })
-  //     .then(([user, authorized]) => {
-  //       if (!authorized) return done(null, false);
-  
-  //       const tokenCriteria = {
-  //         consumerId: consumer.id,
-  //         authenticatedUser: user.id
-  //       };
-  
-  //       if (scopes) tokenCriteria.scopes = scopes;
-  
-  //       if (config.systemConfig.accessTokens.tokenType === 'jwt') {
-  //         return tokenService
-  //           .createJWT({ consumerId: consumer.id, scopes })
-  //           .then(res => Promise.all([res, tokenService.save({ consumerId: consumer.id, scopes }, { refreshTokenOnly: true })]))
-  //           .then(([res, token]) => done(null, res, token.refresh_token, { expires_in: expiresIn }))
-  //           .catch(done);
-  //       }
-  
-  //       return tokenService.findOrSave(tokenCriteria, { includeRefreshToken: true })
-  //         .then(token => done(null, token.access_token, token.refresh_token, { expires_in: expiresIn }));
-  //     })
-  //     .catch(done);
-  // }));
 
 };
