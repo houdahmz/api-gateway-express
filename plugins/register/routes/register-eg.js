@@ -278,7 +278,7 @@ if(!req.params.id){
     }
   });
 
-  gatewayExpressApp.post('/agent_register', verifyTokenAdmin,async (req, res, next) => { // incomplete {add send mail} 
+  gatewayExpressApp.post('/agent_register', verifyTokenAdmin,async (req, res, next) => { // incomplete {add send mail with url /change_password} 
     try {
       const { firstname, username, lastname, email, phone } = req.body
       console.log("/api/agent-register")
