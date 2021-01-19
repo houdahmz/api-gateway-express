@@ -166,6 +166,9 @@ console.log("crd_oauth2.secret",crd_oauth2.secret)
   const confirm_uri = "http://localhost:8080/registration_confirm?username=" + username + "&" + "confirm_token=" + myUserJwt;
   console.log("confirm_uri",confirm_uri)
   //here je vais envoyer un mail
+
+   mail.send_email("confirmation","Veuillez cliquer sur lien pour activer votre compte \n "+ confirm_uri);
+
   return res.status(201).json({etat: "Success",message:"Check your email : " + email});
     } catch (err) {
       return res.status(422).json({ error: err.message })
@@ -376,6 +379,9 @@ if(!req.params.id){
 //   return res.status(400).json({ message: error });
 
 // }
+
+mail.send_email("Reset password","Veuillez cliquer sur lien pour changer le mot de passe (password: "+ randomPassword + " )");
+
 return res.status(201).json({ etat: "Success",message: "We have sent an email to " + agentUser.email + " to set a new password" });
 
 
