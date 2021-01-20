@@ -92,24 +92,7 @@ module.exports = function (gatewayExpressApp) {
         }
       }
 
-      // const getToken = async (username,password,client_id,client_secret) => {
-      //   try {
-      //     return await axios.post('http://localhost:8080/oauth2/token',{
-      //       grant_type: "password",
-      //       username: username,
-      //       password: password,
-      //       client_id: client_id,
-      //       client_secret: client_secret
-      //     })
-      //   } catch (error) {
-      //     console.error("111111111111111111111")
-      //     console.error(error)
 
-      //     return res.status(400).json("error",error);
-
-      //   }
-      // }
- 
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: password,
@@ -117,16 +100,10 @@ module.exports = function (gatewayExpressApp) {
       })
       console.log("crd_basiiiiiiiiiiic",crd_basic)
 
-      // crd_jwt = await services.credential.insertCredential(myUser.id, 'jwt',{ scopes: ['admin'] })
-      // console.log("jjjjjjjjjjjjjjjjjwtttttttttt",crd_jwt)
-
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['user'] })
       console.log("crd_oauth222222222222",crd_oauth2)
 
       
-      // crd_keyAuth = await services.credential.insertCredential(myUser.id, 'key-auth', { scopes: ['admin'] })
-      // console.log("keyyyyyyyyyyyyyAkuuuuuth",crd_keyAuth)
-
       const userProfile = await creteProfile(myUser);
 
       if (userProfile.data.status == "error") {
@@ -138,30 +115,10 @@ module.exports = function (gatewayExpressApp) {
         redirectUri: 'http://localhost:5000/api/profile/'
       }, myUser.id)
 
-      // const confirm_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + myProfile.id + "&" + "redirect_uri=" + myProfile.redirectUri;
-      // console.log("url confirm : " + confirm_uri);
-      // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
 console.log("email",username)
 console.log("password",password)
 console.log("crd_oauth2.id",crd_oauth2.id)
 console.log("crd_oauth2.secret",crd_oauth2.secret)
-
-// let confirm_token;
-// try {
-//   confirm_token = await getToken(username,password,crd_oauth2.id,crd_oauth2.secret)
-//   console.log("Token ", confirm_token)
-//   myUser = await services.user.update({confirm_token: confirm_token.data})
-//   const confirm_uri = "http://localhost:8080/registration_confirm?email=" + email + "&" + "confirm_token=" + confirm_token.data;
-
-//   console.log("confirm_uri",confirm_uri)
-//         // return res.status(201).json({ apiKey: "apiKey " + crd_keyAuth.keyId + ":" + crd_keyAuth.keySecret });
-  
-//         return res.status(201).json({etat: "Success",message:"Check your email : "+email});
-  
-// } catch (error) {
-//   return res.status(400).json({ message: error });
-
-// }
 
   const confirm_uri = "http://localhost:8080/registration_confirm?username=" + username + "&" + "confirm_token=" + myUserJwt;
   console.log("confirm_uri",confirm_uri)
@@ -216,15 +173,11 @@ console.log("crd_oauth2.secret",crd_oauth2.secret)
         console.log("error", error)
         // res.status(403).send(error);
         return res.status(400).json({ error: error });
-
       }
-
       user_res = await services.user.activate(user.id)
       console.log("user_res",user_res)
       // user = await services.user.findByUsernameOrId(email)
       return res.status(200).json({ etat: "Success" });
-
-      // res.redirect(process.env.FRONTEND_URL + '/signup/activated')
 
     } catch (err) {
       return res.status(422).json({ error: err.message })
@@ -453,9 +406,6 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
       console.log("/api/admin-register")
 
       const { firstname,username, lastname, email, phone } = req.body
-      // if (password != password_confirmation) {
-      //   throw new Error('password does not much')
-      // }
 
       myUser = await services.user.insert({
         isActive: true,
@@ -514,43 +464,11 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
 
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['admin'] })
       console.log("crd_oauth222222222222",crd_oauth2)
-// //////////
-//       const getToken = async (username,password,client_id,client_secret) => {
-//         try {
-//           return await axios.post('http://localhost:8080/oauth2/token',{
-//             grant_type: "password",
-//             username: username,
-//             password: password,
-//             client_id: client_id,
-//             client_secret: client_secret
-//           })
-//         } catch (error) {
-//           console.error("111111111111111111111")
-//           return res.status(400).json("error",error);
-
-//         }
-//       }
-// ///////////
       console.log("email",email)
       console.log("password",randomPassword)
       console.log("crd_oauth2.id",crd_oauth2.id)
       console.log("crd_oauth2.secret",crd_oauth2.secret)
-      // try {
-      //   const token = await getToken(username,randomPassword,crd_oauth2.id,crd_oauth2.secret)
-      //   console.log("Token ", token.data)
 
-      //   mail.send_email("Reset password","Veuillez cliquer sur lien pour changer le mot de passe (password: "+ randomPassword + " )");
-
-      //   return res.status(201).json({ etat: "Success",message: "Admin has been successfuly created, we have sent an email to " + email + " to set a new password" });
-        
-
-      //   // return res.status(201).json({ message: "Admin has been successfuly created : " + myUser.email , token: token.data });
-      
-      
-      // } catch (error) {
-      //   return res.status(400).json({ message: error });
-      
-      // }
       mail.send_email("Reset password","Veuillez cliquer sur lien pour changer le mot de passe (password: "+ randomPassword + " )");
 
       return res.status(201).json({ etat: "Success",message: "Admin has been successfuly created, we have sent an email to " + email + " to set a new password" });
@@ -802,29 +720,7 @@ console.log("myCredOauth",myCredOauth.scopes)
       return res.status(200).json({ error: "Wrong password" });
 
     }
-      // const userProfile = await createAgentProfile();
-      // const json = CircularJSON.stringify(userProfile);
-      // JSON.stringify(userProfile)
-      // console.log("myUser myUser ",myUser)
-      // console.log("myUserUpdte myUserUpdte ",myUserUpdte)
 
-      // myCred = await services.credential.getCredentials(myUser.id,{ includePassword: true }) //work
-
-
-
-
-      // myCreds = await services.credential.getCredential(myUser.id,'key-auth')
-
-
-
-      
-      // console.log("myCred utils.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaencrypt(myCred.secret) ",utils.decrypt("$2a$10$HnyZHd9mhqTMJ6slBwzKTuXBPwbH.v3mZ1e4q10d1mZx02wawM5q2"))
-      // console.log("myCred utils.decrypt(myCred.secret) ",utils.decrypt(utils.encrypt("test")))
-
-      // console.log("iciiiiiiiiiii ",utils.compareSaltAndHashed("test","$2a$10$HnyZHd9mhqTMJ6slBwzKTuXBPwbH.v3mZ1e4q10d1mZx02wawM5q2"))
-
-
-      // console.log("myCredssss ",myCreds)
       myCredOauth = await services.credential.getCredential(myUser.id,'oauth2')
       let scope = myCredOauth.scopes;
       console.log("scope",scope)
@@ -848,27 +744,17 @@ console.log("myCredOauth",myCredOauth.scopes)
       }
  // here should get the token and applique invoke before generating a new one
       const token = await getToken(username,password,crd_oauth2.id,crd_oauth2.secret) 
-          
-      // myUserKeyAuth = await services.auth.authenticateCredential(myUser.id ,password ,"key-auth" )
-      // if(myUserKeyAuth == false){ //user has not key-auth credential
-      // // return res.status(200).json(myUserKeyAuth);
-      // console.log("myUser Keyauth ",myUserKeyAuth)
 
-      // }
-      // console.log("myUser Keyauth ",myUserKeyAuth)
-
-      // // myUserJwt = await services.auth.authenticateCredential(myUser.id ,password ,"jwt" )
-      // // myUserJwt = await services.token.createJWT(req.body)
-
-      // myUserJwt = await services.auth.authenticateCredential(myUser.id ,password ,"oauth2" )
-      // // myUserJwt = await services.token.createJWT(req.body)
-      // console.log("myUserJwt",myUserJwt)
-      // // console.log("myUser jwt ",myUserJwt)
-      // // if(myUserJwt == false){ //user has not oauth2 credential
-      // //   // return res.status(200).json(myUserJwt);
-      // // console.log("myUser jwt ",myUserJwt)
-
-      // //   }
+          /////
+          const getProfile = async (id) => {
+            try {
+              return await axios.get('http://localhost:5000/api/profile/'+id)
+            } catch (error) {
+              console.error(error)
+            }
+          }
+          ///////////
+      const data = await getProfile(myUser.id) 
 
       let name = "complete_profile"+myUser.id
       userApp = await services.application.find(name)
@@ -881,7 +767,14 @@ console.log("myCredOauth",myCredOauth.scopes)
       myUserJwt = await services.token.createJWT(req.body)
       
 
+      // console.log("dataaaaaaaaaaaaa",data.status)
 
+      //     if(token.status == 200){
+      //       if(data.status == 200){
+      //         return res.status(token.status).json({token: token.data,data: data});
+      //       }
+
+      //     }
 
 
       return res.status(token.status).json(token.data);
