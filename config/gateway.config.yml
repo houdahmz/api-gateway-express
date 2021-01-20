@@ -183,6 +183,8 @@ policies:
   - rewrite
   - tokenReg
   - login
+  - response-transformer
+
 pipelines:
   default:
     apiEndpoints:
@@ -251,7 +253,14 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: "iciiiiiiii S===> ------- ${req.body.user}---  ${req.user}-"
+              message: "iciiiiiiii ===> ----"
+      # - response-transformer:
+      #   - action:
+      #       body:
+      #         add:
+      #           user: req.user
+                    # remove: ['user']
+
       - proxy:
           - action:
               serviceEndpoint: profile

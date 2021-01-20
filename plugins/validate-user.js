@@ -12,6 +12,7 @@ const validateUserPlugin = {
       name: 'validate-user',
       policy: (params) =>
         async function (req, res, next) {
+          console.log("in validate-user",req.body)
           const requestedId = req.params.companyId;
           console.log("requestedId", requestedId)
           try {
@@ -48,6 +49,8 @@ try {
   
   if (myCredOauth.scopes) {
     if (myCredOauth.scopes[0] == endpointScopes[0]) {
+      // req.body = {userId: decoded.consumerId}
+      // console.log("req.body",req.body)
       next();
     }
     else {
