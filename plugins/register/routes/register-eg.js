@@ -70,7 +70,7 @@ module.exports = function (gatewayExpressApp) {
       })
       const getType = async (code) => {
         try {
-          return await axios.get('http://localhost:5000/api/type_user/by_code/' + code)
+          return await axios.get('http://localhost:3000/api_management/user_management/type_user/by_code/' + code)
         } catch (error) {
           console.error(error)
         }
@@ -80,7 +80,7 @@ module.exports = function (gatewayExpressApp) {
       const dataType = await getType("10");
       const creteProfile = async (myUser) => {
         try {
-          return await axios.post('http://localhost:5000/api/profile', {
+          return await axios.post('http://localhost:3000/api_management/user_management/profile', {
             id_user: myUser.id,
             first_name: myUser.firstname,
             last_name: myUser.lastname,
@@ -105,7 +105,6 @@ module.exports = function (gatewayExpressApp) {
 
       
       const userProfile = await creteProfile(myUser);
-
       if (userProfile.data.status == "error") {
         return res.status(200).json(userProfile.data);
       }
@@ -190,22 +189,23 @@ console.log("crd_oauth2.secret",crd_oauth2.secret)
       console.log("/api/complete_profile")
 if(!req.params.id){
   console.log("*********************************", req.body)
+  return res.status(200).json({ error: "Id can not be empty" })
 
 }
-    myUser = await services.user.get(req.params.id)
+    // myUser = await services.user.get(req.params.id)
 
-      if(myUser == false){
-        return res.status(200).json({ error: "id does not exist" });
+    //   if(myUser == false){
+    //     return res.status(200).json({ error: "id does not exist" });
       
-      }else if (myUser.isActive == false){
-        return res.status(200).json({ error: "user is desactivated" });
+    //   }else if (myUser.isActive == false){
+    //     return res.status(200).json({ error: "user is desactivated" });
   
-      }
+    //   }
       const { commercial_register, city, zip_code, adresse, activity } = req.body
 
       const updateprofile = async () => {
         try {
-          return await axios.patch('http://localhost:5000/api/company/' + req.params.id, {
+          return await axios.patch('http://localhost:3000/api_management/user_management/company/' + req.params.id, {
             commercial_register: commercial_register,
             city: city,
             zip_code: zip_code,
@@ -231,7 +231,7 @@ if(!req.params.id){
     }
   });
 
-  gatewayExpressApp.post('/agent-register', verifyTokenUser,async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+  gatewayExpressApp.post('/agent_register', verifyTokenUser,async (req, res, next) => { // incomplete {add send mail with url /change_password} 
   try {
     const { firstname, username, lastname, email, phone } = req.body
     console.log("/api/agent-register")
@@ -249,7 +249,7 @@ if(!req.params.id){
     //////////////
     const getType = async (code) => {
       try {
-        return await axios.get('http://localhost:5000/api/type_user/by_code/' + code)
+        return await axios.get('http://localhost:3000/api_management/user_management/type_user/by_code/' + code)
       } catch (error) {
         console.error(error)
       }
@@ -260,7 +260,7 @@ if(!req.params.id){
     const createAgentProfile = async (agentUser) => {
 
       try {
-        return await axios.post('http://localhost:5000/api/profile/agent', {
+        return await axios.post('http://localhost:3000/api_management/user_management/profile/agent', {
           id_user: agentUser.id,
           first_name: agentUser.firstname,
           last_name: agentUser.lastname,
@@ -401,7 +401,7 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
   });
 
 
-  gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin, async (req, res, next) => { 
+  gatewayExpressApp.post('/admin_register', verifyTokenSuperAdmin, async (req, res, next) => { 
     try {
       console.log("/api/admin-register")
 
@@ -424,7 +424,7 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
       //////////////
       const getType = async (code) => {
         try {
-          return await axios.get('http://localhost:5000/api/type_user/by_code/' + code)
+          return await axios.get('http://localhost:3000/api_management/user_management/type_user/by_code/' + code)
         } catch (error) {
           console.error(error)
         }
@@ -435,7 +435,7 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
       const createAgentProfile = async (agentUser) => {
 
         try {
-          return await axios.post('http://localhost:5000/api/profile/agent', {
+          return await axios.post('http://localhost:3000/api_management/user_management/profile/agent', {
             id_user: agentUser.id,
             first_name: agentUser.firstname,
             last_name: agentUser.lastname,
@@ -745,17 +745,26 @@ console.log("myCredOauth",myCredOauth.scopes)
  // here should get the token and applique invoke before generating a new one
       const token = await getToken(username,password,crd_oauth2.id,crd_oauth2.secret) 
 
-          /////
+      ///////////
+
           const getProfile = async (id) => {
             try {
-              return await axios.get('http://localhost:5000/api/profile/'+id)
+              return await axios.get('http://localhost:3000/api_management/user_management/profile/by_userId/'+id)
             } catch (error) {
               console.error(error)
             }
           }
           ///////////
-      const data = await getProfile(myUser.id) 
+  // var data = await getProfile(myUser.id) 
+  // console.log("datassssssssssss",data)
 
+   var data ;
+try {
+   data = await getProfile(myUser.id) 
+  
+} catch (error) {
+  console.log("error",error)
+}
       let name = "complete_profile"+myUser.id
       userApp = await services.application.find(name)
       const login_uri = "http://localhost:8080/oauth2/authorize?response_type=token&client_id=" + userApp.id + "&" + "redirect_uri=" + userApp.redirectUri;
@@ -763,18 +772,17 @@ console.log("myCredOauth",myCredOauth.scopes)
       console.log("dataaaaaaaaaaaaa",login_uri)
       // console.log("responsezzzeeeeeeeeeee",token.response)
       // console.log("myUserJwttttttttttttt",token.status)
-
-      myUserJwt = await services.token.createJWT(req.body)
+      // myUserJwt = await services.token.createJWT(req.body)
       
 
       // console.log("dataaaaaaaaaaaaa",data.status)
 
-      //     if(token.status == 200){
-      //       if(data.status == 200){
-      //         return res.status(token.status).json({token: token.data,data: data});
-      //       }
+          if(token.status == 200){
+            if(data.status == 200){
+              return res.status(token.status).json({token: token.data,data: data.data.data});
+            }
 
-      //     }
+          }
 
 
       return res.status(token.status).json(token.data);
