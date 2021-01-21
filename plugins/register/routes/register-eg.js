@@ -60,6 +60,7 @@ module.exports = function (gatewayExpressApp) {
       // const confirm_token = Math.random().toString(36).substring(2, 40) + Math.random().toString(36).substring(2, 40);
       myUser = await services.user.insert({
         isActive: false,
+        confirmMail: false,
         firstname: firstname,
         lastname: lastname,
         username: username,
@@ -173,7 +174,11 @@ console.log("crd_oauth2.secret",crd_oauth2.secret)
         // res.status(403).send(error);
         return res.status(400).json({ error: error });
       }
-      user_res = await services.user.activate(user.id)
+      // user_res = await services.user.activate(user.id)
+      console.log("user_res")
+
+      user_res = await services.user.update(user.id,{confirmMail: 'true'})
+
       console.log("user_res",user_res)
       // user = await services.user.findByUsernameOrId(email)
       return res.status(200).json({ etat: "Success" });
@@ -703,8 +708,12 @@ console.log("myCredOauth",myCredOauth.scopes)
     const {username, password} = req.body
 
     myUser = await services.user.find(username)
+    console.log("myUser",myUser)
     // myUserUpdte = await services.user.update(myUser.id,"firstname")
-
+    if(myUser.confirmMail == 'false'){
+      return res.status(200).json({ error: "Confirm your email" });
+    
+    }
     if(myUser == false){
       return res.status(200).json({ error: "username does not exist" });
     

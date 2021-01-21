@@ -22,6 +22,10 @@
     "redirectUri": {
       "type": "string",
       "format": "uri"
+    },
+    "confirmMail": {
+      "type": "string"
+    
     }
   },
   "required": [
