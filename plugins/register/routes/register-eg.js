@@ -231,9 +231,9 @@ if(!req.params.id){
     }
   });
 
-  gatewayExpressApp.post('/agent_register', verifyTokenUser,async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+  gatewayExpressApp.post('/agent_register',verifyTokenUser,async (req, res, next) => { // incomplete {add send mail with url /change_password} 
   try {
-    const { firstname, username, lastname, email, phone } = req.body
+    const { firstname, username, lastname, email, phone,idOwner } = req.body
     console.log("/api/agent-register")
 
 
@@ -246,26 +246,26 @@ if(!req.params.id){
       phone: phone,
       redirectUri: 'https://www.khallasli.com',
     })
-    //////////////
-    const getType = async (code) => {
-      try {
-        return await axios.get('http://localhost:3000/api_management/user_management/type_user/by_code/' + code)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    const dataType = await getType("20");
-    /////////////
+    // //////////////
+    // const getType = async (code) => {
+    //   try {
+    //     return await axios.get('http://localhost:3000/api_management/user_management/type_user/by_code/' + code)
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // }
+    // const dataType = await getType("20");
+    // /////////////
 
     const createAgentProfile = async (agentUser) => {
 
       try {
-        return await axios.post('http://localhost:3000/api_management/user_management/profile/agent', {
+        return await axios.post('http://localhost:3000/api_management/user_management/company/profile-by-company', { ///profile-by-company
+          idOwner: idOwner,
           id_user: agentUser.id,
           first_name: agentUser.firstname,
           last_name: agentUser.lastname,
-          phone: agentUser.phone,
-          typeId: dataType.data.data.id
+          phone: agentUser.phone
         })
       } catch (error) {
         console.error(error)
@@ -295,7 +295,7 @@ if(!req.params.id){
     console.log("crd_oauth2.secret",crd_oauth2.secret)
     
     const userProfile = await createAgentProfile(agentUser);
-
+   console.log("zzz",userProfile.data)
     if (userProfile.data.status == "error") {
       return res.status(200).json(userProfile.data);
     }

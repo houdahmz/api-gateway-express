@@ -102,6 +102,9 @@ apiEndpoints:
     - host: localhost
       paths: /api/activity-company*
 
+    - host: localhost
+      paths: /api_management/user_management/profile
+      scopes: ['user']
   topup:
     host: localhost
     paths: /api/facial
@@ -158,15 +161,15 @@ serviceEndpoints:
   profile:
     url: 'http://localhost:5000'
   topup:
-    url: 'http://localhost:3000'
+    url: 'http://localhost:5004'
   voucher:
     url: 'http://localhost:5001'
   paymee:
     url: 'http://localhost:5002'
   wallet:
     url: 'http://localhost:5003'
-  gateway:
-    url: 'http://localhost:8080'
+  api_management:
+    url: 'http://localhost:3000'
 policies:
   - basic-auth
   - key-auth
@@ -291,13 +294,34 @@ pipelines:
               serviceEndpoint: topup
               changeOrigin: true
 
-  paymee:
+  profile:
     apiEndpoints:
-      - paymee
+      - profile
     policies:
+      - log:
+          - action:
+              message: "header===> ${req.headers.authorization} ---${req}"
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "iciiiiiiii ===> ----"
+
       - proxy:
           - action:
-              serviceEndpoint: paymee
+              serviceEndpoint: api_management
               changeOrigin: true
 
   # login:
