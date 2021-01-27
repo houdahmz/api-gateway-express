@@ -117,7 +117,7 @@ apiEndpoints:
       scopes: ['agent']
   api:
     host: '*'
-    scopes: ['super_admin']
+    scopes: ['super_admin','admin']
 
 serviceEndpoints:
   api_management:
