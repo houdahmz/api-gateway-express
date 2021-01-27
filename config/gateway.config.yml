@@ -1,5 +1,10 @@
 http:
   port: 8080
+
+admin: 
+  port: 9876
+  host: localhost 
+
 apiEndpoints:
   profile:
     - host: localhost
@@ -110,6 +115,9 @@ apiEndpoints:
       paths: /api/agent-register/profile/agent
       methods: ["POST"]
       scopes: ['agent']
+  api:
+    host: '*'
+    scopes: ['super_admin']
 
 serviceEndpoints:
   api_management:
@@ -158,12 +166,12 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: "iciiiiiiii ===> --${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+
       - proxy:
           - action:
-              serviceEndpoint: profile
+              serviceEndpoint: api_management
               changeOrigin: true
-
   voucher:
     apiEndpoints:
       - voucher
@@ -187,7 +195,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: "iciiiiiiii ===> ----"
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - proxy:
           - action:
               serviceEndpoint: api_management
@@ -196,12 +204,9 @@ pipelines:
     apiEndpoints:
       - topup
     policies:
-      # - wallet:
-      #     - action:
-      #         amount: req.user
       - proxy:
           - action:
-              serviceEndpoint: topup
+              serviceEndpoint: api_management
               changeOrigin: true
 
   profile:
@@ -227,7 +232,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: "iciiiiiiii ===> ----"
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
 
       - proxy:
           - action:
@@ -257,17 +262,36 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: "iciiiiiiii ===> ----"
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
 
       - proxy:
           - action:
               serviceEndpoint: api_management
               changeOrigin: true
-
   adminAPI:
     apiEndpoints:
       - api
     policies:
+      - log:
+          - action:
+              message: "header===> ${req.headers.authorization}"
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - proxy:
           - action:
               serviceEndpoint: backend
