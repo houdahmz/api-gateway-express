@@ -1,89 +1,17 @@
 http:
   port: 8080
-# admin:
-#   port: 9876
-#   host: localhost
 apiEndpoints:
-
-  # regist:
-  #   host: localhost
-  #   paths: /api/profile/agent
-  #   methods:
-  #     - PUT
-  #     - POST
-  #     - PATCH
-  #     - DELETE
-  #     - GET
-  #   scopes:
-  #     - 'admin'
-  # get:
-  #   host: localhost
-  #   paths: /api/profile/test
-    # Only users with the 'admin' scope will be able to access
-    # this endpoint
-    # scopes:
-    #   - 'admin'
-
-  # profile:
-    # - host: localhost
-    #   paths: ['/api/profile', '/api/profile/:id']
-    #   methods: ["GET"]
-
-    # - host: localhost
-    #   paths: ['/api/profile', '/api/profile/:id']
-    #   methods: ["PATCH", "PUT", "POST", "DELETE"]
-
-    # - host: localhost
-    #   paths: ['/api/profile/agent']
-    #   methods: ["POST"]
-    #   scopes:
-    #     - 'admin'
-
-    # - host: localhost
-    #   paths: /api/type_user*
-    #   methods:
-    #     - PUT
-    #     - POST
-    #     - PATCH
-    #     - DELETE
-    #     - GET
-
-
-  # backend:
-  #   # - url: 'http://localhost:9876'
-  #     port: 9876
-  #     host: localhost
-
   profile:
     - host: localhost
       paths: /api_management/user_management/profile*
       methods: ["GET","PUT","PATCH"]
-      # permissions: 
-      #   - 'read:user'
-      #   - 'write:user'
       scopes: ['user']
-      # scopes:
-      #   - ['admin']
+
     - host: localhost
       paths: /api_management/user_management/profile*
       methods: ["POST","DELETE"]
-      # permissions: 
-      #   - 'read:user'
-      #   - 'write:user'
       scopes: ['admin']
 
-    # - host: localhost
-    #   paths: /api/profile*
-    #   methods:
-    #     - PUT
-    #     - POST
-    #     - PATCH
-    #     - DELETE
-    #     - GET
-    #   # permissions: 
-    #   #   - 'read:user'
-    #   #   - 'write:user'
-    #   scopes: ['agent']
     - host: localhost
       paths: /api_management/user_management/profile/agent
       methods: ["GET"]
@@ -162,15 +90,6 @@ apiEndpoints:
       methods: ["POST"]
       scopes: ['user']
 
-    # - host: localhost
-    #   paths: /api_management/voucher/transaction
-    #   methods: ["GET"]
-    #   scopes: ['user']
-
-  # test:
-  #   - host: localhost
-  #     paths: /api/facial*
-
   paymee:
     - host: localhost
       paths: /api_management/paymee/cashin
@@ -191,36 +110,18 @@ apiEndpoints:
       paths: /api/agent-register/profile/agent
       methods: ["POST"]
       scopes: ['agent']
-  # login:
-  #   - host: localhost
-  #     paths: api/profile/login
-  #     methods: ["POST"]
-
-
-
 
 serviceEndpoints:
-  profile:
-    url: 'http://localhost:5000'
-  topup:
-    url: 'http://localhost:5004'
-  voucher:
-    url: 'http://localhost:5001'
-  paymee:
-    url: 'http://localhost:5002'
-  wallet:
-    url: 'http://localhost:5003'
   api_management:
     url: 'http://localhost:3000'
   backend:
-      url: 'http://localhost:9876' 
+    url: 'http://localhost:9876' 
 
 policies:
   - basic-auth
   - key-auth
   - log
   - proxy
-  # - wallet
   - oauth2
   - jwt
   - request-transformer
@@ -238,33 +139,6 @@ pipelines:
     apiEndpoints:
       - profile
     policies:
-      # - bodyParser:
-      #     - action:  # everything under the action will be actionParams
-      #         baseUrl: 'https://example.com'
-      # - log:
-      #     - condition:
-      #         name: expression
-      #         expression: "req.body.start > 5"
-      #     - action:
-      #         message: '"Current user is approaching limits"'
-      # - request-transformer:
-      #     - action:
-      #       body:
-      #         add:
-      #           authUser: req.egContext.authUser
-      # - key-auth:
-      #     - action :
-      #         apiKeyHeader: Authorization
-      #         disableHeadersScheme: false
-      # - oauth2:
-      # - wallet:
-      #     - action:
-      #         amount: req.user
-        # - rate-limit:
-        #   - action:
-        #       max: 10 # max 10 request
-        #       windowMs: 120000   # per 120 seconds
-        #       rateLimitBy: "${req.hostname}"
       - log:
           - action:
               message: "header===> ${req.headers.authorization} ---${req}"
@@ -276,24 +150,7 @@ pipelines:
                 subject: 3pXQjeklS3cFf8OCJw9B22
                 secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
                 checkCredentialExistence: false
-      # - request-transformer:
-      #     action:
-      #       body:
-      #         add:
-      #           user: req.user
-      # - jwt-permissions:
-      #     - action:
-      #           requestProperty: 'user'
-      #           permissionsProperty: 'scopes'
-      # - jwt:
-      #     - action:
-      #         issuer: express-gateway
-      #         audience: something
-      #         subject: 3pXQjeklS3cFf8OCJw9B22
-      #         secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-      #         checkCredentialExistence: false
       - validate-user:
-      # - jwtScopes:
       - request-transformer:
           action:
             body:
@@ -302,19 +159,11 @@ pipelines:
       - log:
           - action:
               message: "iciiiiiiii ===> --${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
-      # - response-transformer:
-      #   - action:
-      #       body:
-      #         add:
-      #           user: req.user
-                    # remove: ['user']
-
       - proxy:
           - action:
               serviceEndpoint: profile
               changeOrigin: true
 
-      # - bodyParser:
   voucher:
     apiEndpoints:
       - voucher
@@ -415,118 +264,12 @@ pipelines:
               serviceEndpoint: api_management
               changeOrigin: true
 
-  # login:
-  #   apiEndpoints:
-  #     - login
-  #   policies:
-  #     - request-transformer:
-  #         action:
-  #           body:
-  #             add:
-  #               lastname: req.body.lastname
-  #     - login:
-  #     - request-transformer:
-  #         action:
-  #           body:
-  #             add:
-  #               lastname: req.body.lastname
-  #     - proxy:
-  #         - action:
-  #             serviceEndpoint: profile
-  #             changeOrigin: true
-
   adminAPI:
     apiEndpoints:
       - api
     policies:
-      # - wallet:
-      #     - action:
-      #         amount: req.user
       - proxy:
           - action:
               serviceEndpoint: backend
               changeOrigin: true
 
-  agentRegister:
-    apiEndpoints:
-      - agent-register
-    policies:
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
-      - validate-user:
-      - request-transformer:
-          action:
-            body:
-              add:
-                lastname: req.body.lastname
-      - log:
-          - action:
-              message: "transformer===>"
-      - agent-register:
-      - request-transformer:
-          action:
-            body:
-              add:
-                lastname: req.body.lastname
-      # - rewrite:            # rewrite - delete /test
-      #     - condition:
-      #         name: regexpmatch
-      #         match: ^/agent-register/?(.*)$
-            # action:
-            #   rewrite: /$2 
-      - tokenReg:
-      - request-transformer:
-          action:
-            body:
-              add:
-                lastname: req.body.lastname
-      - rewrite:
-        -
-          condition:
-            name: pathmatch
-            match: /api/agent-register/profile/agent # Express Path
-          action:
-            rewrite: /api/profile/agent
-      - log:
-          - action:
-              message: "rewrite===>"
-            # redirect: 302
-        # -
-        #   condition:
-        #     name: regexpmatch
-        #     match: ^/js/(.*)$
-        #   action:
-        #     rewrite: /src/js/$1
-      - proxy:
-          - action:
-              serviceEndpoint: profile
-              changeOrigin: true
-      # - log:
-      #     - action:
-      #         message: "transformer===>"
-
-# this is with pass credentials
-#       - oauth2:
-#           - action:
-#               jwt:
-#                 issuer: express-gateway
-#                 audience: something
-#                 subject: test
-#                 secretOrPublicKey: secret
-#                 checkCredentialExistence: false
-
-
-      # - oauth2:
-      #     - action:
-      #         jwt:
-      #           issuer: express-gateway
-      #           audience: something
-      #           subject: 3pXQjeklS3cFf8OCJw9B22
-      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-      #           checkCredentialExistence: false
