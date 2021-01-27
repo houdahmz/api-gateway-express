@@ -46,18 +46,32 @@ const validateUserPlugin = {
             console.log('endpointScopes', endpointScopes)
             console.log("myCredOauth.scopes[0] == endpointScopes[0]",myCredOauth.scopes[0] == endpointScopes[0])
 try {
-  
+
   if (myCredOauth.scopes) {
-    if (myCredOauth.scopes[0] == endpointScopes[0]) {
-      // req.body = {userId: decoded.consumerId}
-      // console.log("req.body",req.body)
-      next();
+    for (let index = 0; index < endpointScopes.length; index++) {
+      const element = endpointScopes[index];
+      console.log("aaaaaa")
+      if (myCredOauth.scopes[0] == element ) {
+        // index = endpointScopes.length -1
+        next();
+      }
+  
     }
-    else {
-      let errorObject = { message: 'Unauthorized Token' }
-      console.log(errorObject);
-      res.status(403).send(errorObject);
-    }
+    let errorObject = { message: 'Unauthorized Token' }
+    console.log(errorObject);
+    res.status(403).send(errorObject);
+
+    // if (myCredOauth.scopes[0] == endpointScopes[0]) {
+    //   // req.body = {userId: decoded.consumerId}
+    //   // console.log("req.body",req.body)
+    //   next();
+    // }
+
+    // else {
+    //   let errorObject = { message: 'Unauthorized Token' }
+    //   console.log(errorObject);
+    //   res.status(403).send(errorObject);
+    // }
   }
   //   else{
   //     if(decoded.profile.company_entity_id==requestedId){

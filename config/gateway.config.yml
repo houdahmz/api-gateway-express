@@ -1,8 +1,8 @@
 http:
   port: 8080
-admin:
-  port: 9876
-  host: localhost
+# admin:
+#   port: 9876
+#   host: localhost
 apiEndpoints:
 
   # regist:
@@ -47,6 +47,12 @@ apiEndpoints:
     #     - PATCH
     #     - DELETE
     #     - GET
+
+
+  # backend:
+  #   # - url: 'http://localhost:9876'
+  #     port: 9876
+  #     host: localhost
 
   profile:
     - host: localhost
@@ -124,7 +130,6 @@ apiEndpoints:
     paths: /api/facial
     methods:
       - POST
-
 
   voucher:
     - host: localhost
@@ -207,6 +212,9 @@ serviceEndpoints:
     url: 'http://localhost:5003'
   api_management:
     url: 'http://localhost:3000'
+  backend:
+      url: 'http://localhost:9876' 
+
 policies:
   - basic-auth
   - key-auth
@@ -293,7 +301,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: "iciiiiiiii ===> ----"
+              message: "iciiiiiiii ===> --${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       # - response-transformer:
       #   - action:
       #       body:
@@ -426,6 +434,18 @@ pipelines:
   #         - action:
   #             serviceEndpoint: profile
   #             changeOrigin: true
+
+  adminAPI:
+    apiEndpoints:
+      - api
+    policies:
+      # - wallet:
+      #     - action:
+      #         amount: req.user
+      - proxy:
+          - action:
+              serviceEndpoint: backend
+              changeOrigin: true
 
   agentRegister:
     apiEndpoints:
