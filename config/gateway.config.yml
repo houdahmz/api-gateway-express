@@ -76,11 +76,6 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: localhost
-      paths: /api_management/voucher/transaction/
-      methods: ["GET"]
-      scopes: ['admin']
-
-    - host: localhost
       paths: /api_management/voucher/operator*
       methods: ["POST"]
       scopes: ['admin']
@@ -91,9 +86,24 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: localhost
-      paths: /api_management/voucher/transaction/
+      paths: '/api_management/voucher/transaction'
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: '/api_management/voucher/transaction'
       methods: ["POST"]
-      scopes: ['user']
+      scopes: ['admin']
+
+    - host: localhost
+      paths: '/api_management/voucher/transaction/by_user/:id'
+      methods: ["GET"]
+      # scopes: ['user']
+
+    # - host: localhost
+    #   paths: /api_management/voucher/transaction/
+    #   methods: ["GET"]
+    #   scopes: ['admin']
 
   paymee:
     - host: localhost
@@ -149,7 +159,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: "header===> ${req.headers.authorization} ---${req}"
+              message: "eeee header===> ${req.headers.authorization} ---${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - oauth2:
           - action:
               jwt:
@@ -178,7 +188,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: "header===> ${req.headers.authorization} ---${req}"
+              message: "aaa header===> ${req.headers.authorization} ---zzzzz${req}"
       - oauth2:
           - action:
               jwt:
@@ -215,7 +225,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: "header===> ${req.headers.authorization} ---${req}"
+              message: "aertt header===> ${req.headers.authorization} ---${req}"
       - oauth2:
           - action:
               jwt:
@@ -245,7 +255,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: "header===> ${req.headers.authorization} ---${req}"
+              message: "tttt header===> ${req.headers.authorization} ---${req}"
       - oauth2:
           - action:
               jwt:
@@ -274,7 +284,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: "header===> ${req.headers.authorization}"
+              message: "ttt eeee header===> ${req.headers.authorization} "
       - oauth2:
           - action:
               jwt:

@@ -105,7 +105,11 @@ const validateUserPlugin = {
       name: 'validate-user',
       policy: (params) =>
         async function (req, res, next) {
-          console.log("in validate-user",req.body)
+          // console.log("in validate-user",req)
+//           console.log("in headers-user",req.headers)
+//           console.log("in authorization",req.headers.authorization)
+
+// next()
           // const requestedId = req.params.companyId;
           // console.log("requestedId", requestedId)
           try {
