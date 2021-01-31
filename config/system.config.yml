@@ -6,7 +6,7 @@
 db:
   redis:
     host: localhost
-    port: 6379
+    port: ${HTTP_PORT_ADMIN:-6379}
     namespace: EG
 #plugins:
   # express-gateway-plugin-example:
@@ -42,7 +42,7 @@ accessTokens:
   issuer: 'express-gateway'
   audience: 'something'
   subject: '3pXQjeklS3cFf8OCJw9B22'
-  secretOrPrivateKey: '54v3WJGBcFPh3TFgZSzovw'
+  secretOrPrivateKey: ${JWT_SECRET}
 refreshTokens:
   timeToExpiry: 7200000
 authorizationCodes:
