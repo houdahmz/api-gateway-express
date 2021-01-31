@@ -175,7 +175,65 @@ apiEndpoints:
     - host: localhost
       paths: /paymee/transactions
       scopes: ['admin']
+  
+  poste:
+    - host: localhost
+      paths: /api-management/poste/affiliation*
+      methods: ["POST"]
+      scopes: ['user']
 
+    - host: localhost
+      paths: /api-management/poste/bill-payment*
+      methods: ["POST"]
+      scopes: ['user']
+
+    - host: localhost
+      paths: /api-management/poste/recharge-card*
+      methods: ["POST"]
+      scopes: ['user']
+
+    - host: localhost
+      paths: /api-management/poste/balance*
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /api-management/poste/unsubscribe*
+      methods: ["POST"]
+      scopes: ['user']
+
+    - host: localhost
+      paths: /api-management/poste//affiliation*
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /api-management/poste/recharge-card*
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /api-management/poste/bill-payment*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /api-management/poste/transaction*
+      methods: ["GET"]
+      scopes: ['admin'] 
+  topnet:
+    - host: localhost
+      paths: /api-management/topnet/payment*
+      methods: ["POST"]
+      scopes: ['user']
+
+    - host: localhost
+      paths:  /api-management/topnet/transaction/topnet*
+      methods: ["GET"]
+      scopes: ['user']
+
+    - host: localhost
+      paths: /api-management/topnet/bill
+      methods: ["GET"]
+      scopes: ['user']
+  
   agent-register:
     - host: localhost
       paths: /api/agent-register/profile/agent
@@ -321,7 +379,15 @@ pipelines:
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
-
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
+ 
+  topup:
+    apiEndpoints:
+      - topup
+    policies:
       - proxy:
           - action:
               serviceEndpoint: api_management
@@ -415,3 +481,61 @@ pipelines:
               serviceEndpoint: backend
               changeOrigin: true
 
+  poste:
+    apiEndpoints:
+      - poste
+    policies:
+      - log:
+          - action:
+              message: "header===> ${req.headers.authorization} ---${req}"
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
+
+  topnet:
+    apiEndpoints:
+      - topnet
+    policies:
+      - log:
+          - action:
+              message: "header===> ${req.headers.authorization} ---${req}"
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
+ 
