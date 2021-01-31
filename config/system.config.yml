@@ -42,7 +42,7 @@ accessTokens:
   issuer: 'express-gateway'
   audience: 'something'
   subject: '3pXQjeklS3cFf8OCJw9B22'
-  secretOrPrivateKey: ${JWT_SECRET}
+  secretOrPrivateKey: '54v3WJGBcFPh3TFgZSzovw'
 refreshTokens:
   timeToExpiry: 7200000
 authorizationCodes:
