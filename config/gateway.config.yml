@@ -6,118 +6,159 @@ admin:
   host: localhost 
 
 apiEndpoints:
-  profile:
-    - host: localhost
-      paths: /api_management/user_management/profile*
-      methods: ["GET","PUT","PATCH"]
-      scopes: ['user']
+  # profile:
+  #   - host: localhost
+  #     paths: /user_management/profile
+  #     methods: ["GET"]
+  #     scopes: ['admin']
 
-    - host: localhost
-      paths: /api_management/user_management/profile*
-      methods: ["POST","DELETE"]
-      scopes: ['admin']
+  #   - host: localhost
+  #     paths: /user_management/profile*
+  #     methods: ["POST","DELETE"]
+  #     scopes: ['admin']
 
-    - host: localhost
-      paths: /api_management/user_management/profile/agent
-      methods: ["GET"]
-      scopes: ['user']
+  #   - host: localhost
+  #     paths: /user_management/profile/agent
+  #     methods: ["GET"]
+  #     scopes: ['admin']
 
-    - host: localhost
-      paths: /api_management/user_management/image*
-      scopes: ['admin']
+  #   - host: localhost
+  #     paths: /user_management/image*
+  #     scopes: ['admin']
 
-    - host: localhost
-      paths: /api_management/user_management/activity*
-      scopes: ['admin']
+  #   - host: localhost
+  #     paths: /user_management/activity*
+  #     scopes: ['admin']
 
-    - host: localhost
-      paths: /api_management/user_management/type-user*
-      scopes: ['admin']
+  #   - host: localhost
+  #     paths: /user_management/type-user*
+  #     scopes: ['admin']
 
-    - host: localhost
-      paths: /api_management/user_management/category*
-      scopes: ['admin']
+  #   - host: localhost
+  #     paths: /user_management/category*
+  #     scopes: ['admin']
 
-    - host: localhost
-      paths: /api_management/user_management/document*
+  #   - host: localhost
+  #     paths: /user_management/document*
 
-    - host: localhost
-      paths: /api_management/user_management/company*
-      scopes: ['admin']
+  #   - host: localhost
+  #     paths: /user_management/company*
+  #     scopes: ['admin']
 
-    - host: localhost
-      paths: /api_management/user_management/activity-company*
-      scopes: ['admin']
+  #   - host: localhost
+  #     paths: /user_management/activity-company*
+  #     scopes: ['admin']
 
-    - host: localhost
-      paths: /api_management/user_management/profile
-      scopes: ['user']
+  #   - host: localhost
+  #     paths: /user_management/profile
+  #     scopes: ['admin']
 
-    - host: localhost
-      paths: /api_management/user_management/profile/agent
-      methods: ["POST"]
-      scopes: ['admin']
+  #   - host: localhost
+  #     paths: /user_management/profile/agent
+  #     methods: ["POST"]
+  #     scopes: ['admin']
 
   topup:
     host: localhost
     paths: /api/facial
     methods:
       - POST
+      
+  profile:
+    - host: localhost
+      paths: /user_management/profile/
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user_management/profile/
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user_management/company/profile-by-company
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user_management/profile/agent
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user_management/history/*
+      methods: ["GET"]
+      scopes: ['admin']
 
   voucher:
     - host: localhost
-      paths: /api_management/voucher/facial*
-      methods: ["POST"]
-      scopes: ['admin']
-
-    - host: localhost
-      paths: /api_management/voucher/voucher*
-      methods: ["POST"]
-      scopes: ['admin']
-
-    - host: localhost
-      paths: /api_management/voucher/operator*
-      methods: ["POST"]
-      scopes: ['admin']
-
-    - host: localhost
-      paths: /api_management/voucher/document
-      methods: ["POST"]
-      scopes: ['admin']
-
-    - host: localhost
-      paths: '/api_management/voucher/transaction'
+      paths: /voucher/
       methods: ["GET"]
       scopes: ['admin']
 
     - host: localhost
-      paths: '/api_management/voucher/transaction'
+      paths: /voucher/facial*
       methods: ["POST"]
       scopes: ['admin']
-
-    - host: localhost
-      paths: '/api_management/voucher/transaction/by_user/:id'
-      methods: ["GET"]
-      # scopes: ['user']
 
     # - host: localhost
-    #   paths: /api_management/voucher/transaction/
+    #   paths: /voucher/voucher*
+    #   methods: ["POST"]
+    #   scopes: ['admin']
+
+    - host: localhost
+      paths: /voucher/operator*
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /voucher/document
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: '/voucher/transaction'
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: '/voucher/transaction'
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: '/voucher/transaction/by_user/:id'
+      methods: ["GET"]
+      scopes: ['user']
+
+    - host: localhost
+      paths: '/voucher/transaction/status'
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: '/voucher/settings'
+      methods: ["POST"]
+      scopes: ['admin']
+
+    # - host: localhost
+    #   paths: /voucher/transaction/
     #   methods: ["GET"]
     #   scopes: ['admin']
 
   paymee:
     - host: localhost
-      paths: /api_management/paymee/cashin
+      paths: /paymee/cashin
       methods: ["POST"]
       scopes: ['user']
 
     - host: localhost
-      paths:  ['/api_management/paymee/accountname/:id']
+      paths:  ['/paymee/accountname/:id']
       methods: ["GET"]
       scopes: ['user']
 
     - host: localhost
-      paths: /api_management/paymee/transactions
+      paths: /paymee/transactions
       scopes: ['admin']
 
   agent-register:
@@ -125,13 +166,24 @@ apiEndpoints:
       paths: /api/agent-register/profile/agent
       methods: ["POST"]
       scopes: ['agent']
+
+  wallet:
+    - host: localhost
+      paths: /api/wallet
+      methods: ["GET"]
+      scopes: ['admin']
+
   api:
     host: '*'
     scopes: ['super_admin','admin']
 
-serviceEndpoints:
+    serviceEndpoints:
+  profile:
+    url: 'http://localhost:5000'
+  wallet:
+    url: 'http://localhost:5003'
   api_management:
-    url: 'http://localhost:3000'
+    url: 'http://localhost:3000/api_management'
   backend:
     url: 'http://localhost:9876' 
 
@@ -153,42 +205,52 @@ policies:
   - response-transformer
 
 pipelines:
-  default:
-    apiEndpoints:
-      - profile
-    policies:
-      - log:
-          - action:
-              message: "eeee header===> ${req.headers.authorization} ---${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
-      - validate-user:
-      - request-transformer:
-          action:
-            body:
-              add:
-                user: req.user
-      - log:
-          - action:
-              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+  # default:
+  #   apiEndpoints:
+  #     - profile
+  #   policies:
+  #     - log:
+  #         - action:
+  #             message: "profile eee header===> ${req.headers.authorization} ---${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+  #   # rewrite:
+  #   #   -
+  #   #     condition:
+  #   #       name: pathmatch
+  #   #       match: /:route*
+  #   #     action:
+  #   #       rewrite: /api_management/:route
+  #     - log:
+  #         - action:
+  #             message: "eeerrr header===> ${req.headers.authorization} ---${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+  #     - oauth2:
+  #         - action:
+  #             jwt:
+  #               issuer: express-gateway
+  #               audience: something
+  #               subject: 3pXQjeklS3cFf8OCJw9B22
+  #               secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+  #               checkCredentialExistence: false
+  #     - validate-user:
+  #     - request-transformer:
+  #         action:
+  #           body:
+  #             add:
+  #               user: req.user
+  #     - log:
+  #         - action:
+  #             message: "aaaa ${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
 
-      - proxy:
-          - action:
-              serviceEndpoint: api_management
-              changeOrigin: true
+  #     - proxy:
+  #         - action:
+  #             serviceEndpoint: api_management
+  #             changeOrigin: true
   voucher:
     apiEndpoints:
       - voucher
     policies:
       - log:
           - action:
-              message: "aaa header===> ${req.headers.authorization} ---zzzzz${req}"
+              message: "voucher header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
       - oauth2:
           - action:
               jwt:
@@ -225,7 +287,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: "aertt header===> ${req.headers.authorization} ---${req}"
+              message: "aerteet header===> ${req.headers.authorization} ---${req}"
       - oauth2:
           - action:
               jwt:
@@ -255,7 +317,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: "tttt header===> ${req.headers.authorization} ---${req}"
+              message: "paymee header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
       - oauth2:
           - action:
               jwt:
@@ -278,13 +340,13 @@ pipelines:
           - action:
               serviceEndpoint: api_management
               changeOrigin: true
-  adminAPI:
+  wallet:
     apiEndpoints:
-      - api
+      - wallet
     policies:
       - log:
           - action:
-              message: "ttt eeee header===> ${req.headers.authorization} "
+              message: "wallet header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
       - oauth2:
           - action:
               jwt:
@@ -294,6 +356,36 @@ pipelines:
                 secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
                 checkCredentialExistence: false
       - validate-user:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+
+      - proxy:
+          - action:
+              serviceEndpoint: wallet
+              changeOrigin: true
+
+  adminAPI:
+    apiEndpoints:
+      - api
+    policies:
+      - log:
+          - action:
+              message: "api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}"
+      # - oauth2:
+      #     - action:
+      #         jwt:
+      #           issuer: express-gateway
+      #           audience: something
+      #           subject: 3pXQjeklS3cFf8OCJw9B22
+      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+      #           checkCredentialExistence: false
+      # - validate-user:
       - request-transformer:
           action:
             body:
