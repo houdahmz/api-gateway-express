@@ -706,7 +706,7 @@ console.log("myCredOauth",myCredOauth.scopes)
     console.log("/api/login")
 
     const {username, password} = req.body
-
+  console.log("eeee",password)
     myUser = await services.user.find(username)
     console.log("myUser",myUser)
     // myUserUpdte = await services.user.update(myUser.id,"firstname")

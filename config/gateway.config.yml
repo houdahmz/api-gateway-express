@@ -76,6 +76,11 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: localhost
+      paths: /user_management/profile/by_userId/:id
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: localhost
       paths: /user_management/company/profile-by-company
       methods: ["POST"]
       scopes: ['admin']
@@ -87,6 +92,11 @@ apiEndpoints:
 
     - host: localhost
       paths: /user_management/history/*
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user_management/type_user*
       methods: ["GET"]
       scopes: ['admin']
 
@@ -175,9 +185,10 @@ apiEndpoints:
 
   api:
     host: '*'
-    scopes: ['super_admin','admin']
+    paths: ['/users*','/scopes*','/credentials*','/apps*']
+    scopes: ['super_admin']
 
-    serviceEndpoints:
+serviceEndpoints:
   profile:
     url: 'http://localhost:5000'
   wallet:
