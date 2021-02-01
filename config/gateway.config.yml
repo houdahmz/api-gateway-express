@@ -239,12 +239,11 @@ apiEndpoints:
       paths: /api/agent-register/profile/agent
       methods: ["POST"]
       scopes: ['agent']
-
   wallet:
     - host: localhost
-      paths: /api/wallet
-      methods: ["GET","POST","PUT","DELETE"]
-      scopes: ['admin']
+      paths: /api_management/wallet/supplier-service
+      methods: ["GET"]
+      scopes: ['user']
 
   api:
     host: '*'
@@ -253,10 +252,6 @@ apiEndpoints:
     scopes: ['super_admin']
 
 serviceEndpoints:
-  profile:
-    url: 'http://localhost:5000'
-  wallet:
-    url: 'http://localhost:5003'
   api_management:
     url: http://localhost:${HTTP_PORT_API_MANAGEMENT:-3000}/api_management
   backend:
@@ -347,14 +342,6 @@ pipelines:
           - action:
               serviceEndpoint: api_management
               changeOrigin: true
-  topup:
-    apiEndpoints:
-      - topup
-    policies:
-      - proxy:
-          - action:
-              serviceEndpoint: api_management
-              changeOrigin: true
 
   profile:
     apiEndpoints:
@@ -384,7 +371,43 @@ pipelines:
           - action:
               serviceEndpoint: api_management
               changeOrigin: true
- 
+  wallet:
+    apiEndpoints:
+      - wallet
+    policies:
+      - log:
+          - action:
+              message: "header===> ${req.headers.authorization} ---${req}"
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
+  topup:
+    apiEndpoints:
+      - topup
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
+
   paymee:
     apiEndpoints:
       - paymee
@@ -413,35 +436,6 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: api_management
-              changeOrigin: true
-  wallet:
-    apiEndpoints:
-      - wallet
-    policies:
-      - log:
-          - action:
-              message: "wallet header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
-      - validate-user:
-      - request-transformer:
-          action:
-            body:
-              add:
-                user: req.user
-      - log:
-          - action:
-              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
-
-      - proxy:
-          - action:
-              serviceEndpoint: wallet
               changeOrigin: true
 
   adminAPI:
