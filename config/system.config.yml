@@ -1,8 +1,7 @@
 #Core
 db:
   redis:
-    host: localhost
-    port: ${HTTP_PORT_ADMIN:-6379}
+    emulate: true
     namespace: EG
 # db:
 #   redis:
