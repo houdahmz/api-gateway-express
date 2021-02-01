@@ -8,7 +8,7 @@ const { user } = require('express-gateway/lib/services/');
 const CircularJSON = require('circular-json');
 
 const jwt = require('jsonwebtoken');
-const port = require("../../../config/env.config");
+const env = require("../../../config/env.config");
 
 // const oauth2orize = require('oauth2orize');
 // const passport = require('passport');
@@ -43,16 +43,13 @@ module.exports = function (gatewayExpressApp) {
     try {
       console.log("*********************************", req.body)
       console.log("/register")
-      console.log("/register",process.env['HTTP_PORT'])
-      console.log("/register",process.env.HTTP_PORT)
-      console.log("/register",process.env)
 
       const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
       if (password != password_confirmation) {
         throw new Error('password does not much')
       }
 
-     const myUserJwt = await jwt.sign({username:username,password:password},  `${port.JWT_SECRET}`, {
+     const myUserJwt = await jwt.sign({username:username,password:password},  `${env.JWT_SECRET}`, {
             issuer: 'express-gateway',
             audience: 'something',
             expiresIn: 18000,
@@ -76,7 +73,7 @@ module.exports = function (gatewayExpressApp) {
       })
       const getType = async (code) => {
         try {
-          return await axios.get(`http://localhost:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/type_user/by_code/` + code)
+          return await axios.get(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/type_user/by_code/` + code)
         } catch (error) {
           console.error(error)
         }
@@ -86,7 +83,7 @@ module.exports = function (gatewayExpressApp) {
       const dataType = await getType("10");
       const creteProfile = async (myUser) => {
         try {
-          return await axios.post(`http://localhost:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/profile`, {
+          return await axios.post(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/profile`, {
             id_user: myUser.id,
             first_name: myUser.firstname,
             last_name: myUser.lastname,
@@ -125,7 +122,7 @@ console.log("password",password)
 console.log("crd_oauth2.id",crd_oauth2.id)
 console.log("crd_oauth2.secret",crd_oauth2.secret)
 
-  const confirm_uri = `http://localhost:${port.HTTP_PORT}/registration_confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
+  const confirm_uri = `http://localhost:${env.HTTP_PORT}/registration_confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
   console.log("confirm_uri",confirm_uri)
   //here je vais envoyer un mail
 
@@ -215,7 +212,7 @@ if(!req.params.id){
 
       const updateprofile = async () => {
         try {
-          return await axios.patch(`http://localhost:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/company/` + req.params.id, {
+          return await axios.patch(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/company/` + req.params.id, {
             commercial_register: commercial_register,
             city: city,
             zip_code: zip_code,
@@ -270,7 +267,7 @@ if(!req.params.id){
     const createAgentProfile = async (agentUser) => {
 
       try {
-        return await axios.post(`http://localhost:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/company/profile-by-company`, { ///profile-by-company
+        return await axios.post(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/company/profile-by-company`, { ///profile-by-company
           idOwner: idOwner,
           id_user: agentUser.id,
           first_name: agentUser.firstname,
@@ -434,7 +431,7 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
       //////////////
       const getType = async (code) => {
         try {
-          return await axios.get(`http://localhost:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/type_user/by_code/` + code)
+          return await axios.get(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/type_user/by_code/` + code)
         } catch (error) {
           console.error(error)
         }
@@ -445,7 +442,7 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
       const createAgentProfile = async (agentUser) => {
 
         try {
-          return await axios.post(`http://localhost:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/profile/agent`, {
+          return await axios.post(`http://localhost:${port.HTTP_env_API_MANAGEMENT}/api_management/user_management/profile/agent`, {
             id_user: agentUser.id,
             first_name: agentUser.firstname,
             last_name: agentUser.lastname,
@@ -745,7 +742,7 @@ console.log("myCredOauth",myCredOauth.scopes)
 
       const getToken = async (username,password,client_id,client_secret) => {
         try {
-          return await axios.post(`http://localhost:${port.HTTP_PORT}/oauth2/token`,{
+          return await axios.post(`http://localhost:${env.HTTP_PORT}/oauth2/token`,{
             grant_type: "password",
             username: username,
             password: password,
@@ -763,7 +760,7 @@ console.log("myCredOauth",myCredOauth.scopes)
 
           const getProfile = async (id) => {
             try {
-              return await axios.get(`http://localhost:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/profile/by_userId/`+id)
+              return await axios.get(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/profile/by_userId/`+id)
             } catch (error) {
               console.error(error)
             }
@@ -835,7 +832,7 @@ try {
 
     const getRefreshToken = async (client_id, client_secret, refresh_token) => {
       try {
-        return await axios.post(`http://localhost:${port.HTTP_PORT}/oauth2/token`,{
+        return await axios.post(`http://localhost:${env.HTTP_PORT}/oauth2/token`,{
           grant_type: "refresh_token",
           refresh_token: refresh_token,
           client_id: client_id,
@@ -866,7 +863,7 @@ return res.status(400).json("error",error);
       console.debug('Username does not exist')
       return res.status(200).json({ error: "Username does not exist" });
     }
-    const myUserJwt = await jwt.sign({username:username},  `${port.JWT_SECRET}`, {
+    const myUserJwt = await jwt.sign({username:username},  `${env.JWT_SECRET}`, {
       issuer: 'express-gateway',
       audience: 'something',
       expiresIn: 18000,
@@ -875,7 +872,7 @@ return res.status(400).json("error",error);
     });
     console.log("aaa",myUserJwt)
 
-    const confirm_uri = `http://localhost:${port.HTTP_PORT}/reset?username=` + username + "&" + "token=" + myUserJwt;
+    const confirm_uri = `http://localhost:${env.HTTP_PORT}/reset?username=` + username + "&" + "token=" + myUserJwt;
     console.log("confirm_uri",confirm_uri)
     //here je vais envoyer un mail
   
