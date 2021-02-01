@@ -243,12 +243,13 @@ apiEndpoints:
   wallet:
     - host: localhost
       paths: /api/wallet
-      methods: ["GET"]
+      methods: ["GET","POST","PUT","DELETE"]
       scopes: ['admin']
 
   api:
     host: '*'
     paths: ['/users*','/scopes*','/credentials*','/apps*']
+    methods: ["GET","POST","PUT","DELETE"]
     scopes: ['super_admin']
 
 serviceEndpoints:
@@ -384,15 +385,6 @@ pipelines:
               serviceEndpoint: api_management
               changeOrigin: true
  
-  topup:
-    apiEndpoints:
-      - topup
-    policies:
-      - proxy:
-          - action:
-              serviceEndpoint: api_management
-              changeOrigin: true
-
   paymee:
     apiEndpoints:
       - paymee
@@ -459,15 +451,15 @@ pipelines:
       - log:
           - action:
               message: "api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}"
-      # - oauth2:
-      #     - action:
-      #         jwt:
-      #           issuer: express-gateway
-      #           audience: something
-      #           subject: 3pXQjeklS3cFf8OCJw9B22
-      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-      #           checkCredentialExistence: false
-      # - validate-user:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
       - request-transformer:
           action:
             body:

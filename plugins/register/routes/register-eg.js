@@ -43,6 +43,10 @@ module.exports = function (gatewayExpressApp) {
     try {
       console.log("*********************************", req.body)
       console.log("/register")
+      console.log("/register",process.env['HTTP_PORT'])
+      console.log("/register",process.env.HTTP_PORT)
+      console.log("/register",process.env)
+
       const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
       if (password != password_confirmation) {
         throw new Error('password does not much')
