@@ -178,59 +178,74 @@ apiEndpoints:
   
   poste:
     - host: localhost
-      paths: /api-management/poste/affiliation*
+      paths: /affiliation*
       methods: ["POST"]
       scopes: ['user']
 
     - host: localhost
-      paths: /api-management/poste/bill-payment*
+      paths: /bill-payment*
       methods: ["POST"]
       scopes: ['user']
 
     - host: localhost
-      paths: /api-management/poste/recharge-card*
+      paths: /recharge-card*
       methods: ["POST"]
       scopes: ['user']
 
     - host: localhost
-      paths: /api-management/poste/balance*
+      paths: /balance*
       methods: ["POST"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /api-management/poste/unsubscribe*
+      paths: /unsubscribe*
       methods: ["POST"]
       scopes: ['user']
 
     - host: localhost
-      paths: /api-management/poste//affiliation*
+      paths: /affiliation*
+      methods: ["GET"]
+      scopes: ['admin']
+     - host: localhost
+      paths: /affiliation/user*
       methods: ["GET"]
       scopes: ['user']
     - host: localhost
-      paths: /api-management/poste/recharge-card*
+      paths: /recharge-card*
+      methods: ["GET"]
+      scopes: ['admin']
+    - host: localhost
+      paths: /recharge-card/user*
       methods: ["GET"]
       scopes: ['user']
     - host: localhost
-      paths: /api-management/poste/bill-payment*
+      paths: /bill-payment*
       methods: ["GET"]
-      scopes: ['user']   
+      scopes: ['admin']  
     - host: localhost
-      paths: /api-management/poste/transaction*
+      paths: /bill-payment/user*
+      methods: ["GET"]
+      scopes: ['user']  
+    - host: localhost
+      paths: /poste/transaction
       methods: ["GET"]
       scopes: ['admin'] 
   topnet:
     - host: localhost
-      paths: /api-management/topnet/payment*
+      paths: /payment*
       methods: ["POST"]
       scopes: ['user']
 
     - host: localhost
-      paths:  /api-management/topnet/transaction/topnet*
+      paths:  /topnet/transaction/user*
       methods: ["GET"]
       scopes: ['user']
-
     - host: localhost
-      paths: /api-management/topnet/bill
+      paths:  /topnet/transaction
+      methods: ["GET"]
+      scopes: ['admin']
+    - host: localhost
+      paths: /bill
       methods: ["GET"]
       scopes: ['user']
   
@@ -253,7 +268,7 @@ apiEndpoints:
 
 serviceEndpoints:
   api_management:
-    url: http://localhost:${HTTP_PORT_API_MANAGEMENT:-3000}/api_management
+    url: http://localhost:${HTTP_PORT_API_MANAGEMENT:-3000}/api-management
   backend:
     url: http://localhost:${HTTP_PORT_ADMIN:-9876}
 
