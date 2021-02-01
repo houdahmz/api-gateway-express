@@ -96,6 +96,7 @@ const fs = require('fs');
 const path = require('path')
 const services = require('express-gateway/lib/services/')
 const env = require("../config/env.config");
+const PUB_KEY = fs.readFileSync("./config/public.pem", 'utf8');
 
 const validateUserPlugin = {
   schema: { $id: "./../config/models/schema.js" },

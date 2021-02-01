@@ -67,8 +67,8 @@ module.exports = function (gatewayExpressApp) {
 
       // const confirm_token = Math.random().toString(36).substring(2, 40) + Math.random().toString(36).substring(2, 40);
       myUser = await services.user.insert({
-        isActive: false,
-        confirmMail: false,
+        isActive: true,
+        confirmMail: true,
         firstname: firstname,
         lastname: lastname,
         username: username,
@@ -110,7 +110,7 @@ module.exports = function (gatewayExpressApp) {
       })
       console.log("crd_basiiiiiiiiiiic",crd_basic)
 
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['user'] })
+      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['admin'] })
       console.log("crd_oauth222222222222",crd_oauth2)
 
       
@@ -544,7 +544,7 @@ if(bearerHeader) {
     let token = (req.headers.authorization).replace("Bearer ", "");
     let decoded;
 try {
-  decoded = await jwt.verify(token, PUB_KEY ,{ algorithms: ['HS256'] });
+  decoded = await jwt.verify(token, `${env.JWT_SECRET}` ,{ algorithms: ['HS256'] });
 console.log("decode",decoded.consumerId)
 
 } catch (error) {
@@ -599,7 +599,7 @@ if(bearerHeader) {
     let token = (req.headers.authorization).replace("Bearer ", "");
     let decoded;
 try {
-  decoded = await jwt.verify(token, PUB_KEY ,{ algorithms: ['HS256'] });
+  decoded = await jwt.verify(token, `${env.JWT_SECRET}` ,{ algorithms: ['HS256'] });
 console.log("decode",decoded.consumerId)
 
 } catch (error) {
@@ -654,7 +654,7 @@ if(bearerHeader) {
     let token = (req.headers.authorization).replace("Bearer ", "");
     let decoded;
 try {
-  decoded = await jwt.verify(token, PUB_KEY,{ algorithms: ['HS256'] });
+  decoded = await jwt.verify(token, `${env.JWT_SECRET}`,{ algorithms: ['HS256'] });
 console.log("decode",decoded.consumerId)
 
 } catch (error) {
@@ -701,14 +701,14 @@ let endpointScopes = "super_admin";
   async function verifyTokenSuperAdminOrAdmin(req, res, next) {
 
     const bearerHeader = req.headers['authorization'];
-
+    
 if(bearerHeader) {   
 
   try{
     let token = (req.headers.authorization).replace("Bearer ", "");
     let decoded;
 try {
-  decoded = await jwt.verify(token, PUB_KEY,{ algorithms: ['HS256'] });
+  decoded = await jwt.verify(token, `${env.JWT_SECRET}`,{ algorithms: ['HS256'] });
 console.log("decode",decoded.consumerId)
 
 } catch (error) {
