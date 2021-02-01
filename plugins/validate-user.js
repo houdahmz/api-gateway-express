@@ -95,6 +95,7 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path')
 const services = require('express-gateway/lib/services/')
+const env = require("../config/env.config");
 
 const validateUserPlugin = {
   schema: { $id: "./../config/models/schema.js" },
@@ -123,7 +124,7 @@ const validateUserPlugin = {
 
             let decoded;
             try {
-              decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw', { algorithms: ['HS256'] });
+              decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
               // console.log("decode", decoded)
 
             } catch (error) {

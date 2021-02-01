@@ -327,7 +327,7 @@ pipelines:
                 issuer: express-gateway
                 audience: something
                 subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                secretOrPublicKey: config/public.pem
                 checkCredentialExistence: false
       - validate-user:
       - request-transformer:
@@ -356,7 +356,7 @@ pipelines:
                 issuer: express-gateway
                 audience: something
                 subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                secretOrPublicKey: config/public.pem
                 checkCredentialExistence: false
       - validate-user:
       - request-transformer:
@@ -384,7 +384,7 @@ pipelines:
                 issuer: express-gateway
                 audience: something
                 subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                secretOrPublicKey: config/public.pem
                 checkCredentialExistence: false
       - validate-user:
       - request-transformer:
@@ -421,7 +421,7 @@ pipelines:
                 issuer: express-gateway
                 audience: something
                 subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                secretOrPublicKey: config/public.pem
                 checkCredentialExistence: false
       - validate-user:
       - request-transformer:
@@ -451,7 +451,7 @@ pipelines:
                 issuer: express-gateway
                 audience: something
                 subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                secretOrPublicKey: config/public.pem
                 checkCredentialExistence: false
       - validate-user:
       - request-transformer:
@@ -480,7 +480,7 @@ pipelines:
                 issuer: express-gateway
                 audience: something
                 subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                secretOrPublicKey: config/public.pem
                 checkCredentialExistence: false
       - validate-user:
       - request-transformer:
@@ -509,7 +509,7 @@ pipelines:
                 issuer: express-gateway
                 audience: something
                 subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                secretOrPublicKey: config/public.pem
                 checkCredentialExistence: false
       - validate-user:
       - request-transformer:

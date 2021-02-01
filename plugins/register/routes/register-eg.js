@@ -20,6 +20,10 @@ const tokenService = services.token;
 const authService = services.auth;
 
 const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
+const secretOrPrivateKey = config.systemConfig.accessTokens.secretOrPrivateKey
+const fs = require('fs');
+const PUB_KEY = fs.readFileSync("./config/public.pem", 'utf8');
+
 // const bodyParser = require("body-parser");
 const express = require('express');
 const jsonParser = require('express').json();
@@ -43,6 +47,8 @@ module.exports = function (gatewayExpressApp) {
     try {
       console.log("*********************************", req.body)
       console.log("/register")
+// console.log("eeee",secretOrPrivateKey)
+// console.log("PUB_KEY",PUB_KEY)
 
       const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
       if (password != password_confirmation) {
@@ -61,8 +67,8 @@ module.exports = function (gatewayExpressApp) {
 
       // const confirm_token = Math.random().toString(36).substring(2, 40) + Math.random().toString(36).substring(2, 40);
       myUser = await services.user.insert({
-        isActive: false,
-        confirmMail: false,
+        isActive: true,
+        confirmMail: true,
         firstname: firstname,
         lastname: lastname,
         username: username,
@@ -71,6 +77,7 @@ module.exports = function (gatewayExpressApp) {
         redirectUri: 'https://www.khallasli.com',
         confirm_token: myUserJwt
       })
+
       const getType = async (code) => {
         try {
           return await axios.get(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/type_user/by_code/` + code)
@@ -152,7 +159,7 @@ console.log("crd_oauth2.secret",crd_oauth2.secret)
 
       let decoded;
       try {
-        decoded = await jwt.verify(confirm_token, '54v3WJGBcFPh3TFgZSzovw', { algorithms: ['HS256'] });
+        decoded = await jwt.verify(confirm_token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
         console.log("decoded", decoded)
 
         if(!decoded){
@@ -392,18 +399,53 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
       return res.status(200).json({error : "Code can not be empty (set 10 to desactivate or 11 to activate a user"});
 
     }
+    myUser = await services.user.find(req.params.id)
+    console.log("myUser myUser",myUser)
+
+if ( myUser == false) {
+    return res.status(200).json({message : "The user does not exist"});
+}
+
     if ( code == 10) {
+      console.log("zzzzz")
       myUser = await services.user.deactivate(req.params.id)
       if (myUser == true){
         return res.status(200).json({message : "The user has been desactivated"});
       }
 
     } else if ( code == 11) {
+      console.log("req.params.id",req.params.id)
+
       myUser = await services.user.activate(req.params.id)
       if (myUser == true){
+    aa = await services.user.find(req.params.id)
+
+        console.log("aaaaaaaa",aa)
         return res.status(200).json({message : "The user has been activated"});
       }
     }
+
+    // if ( code == 10) {
+    //   console.log("zzzzz")
+    //   user_res = await services.user.update(req.params.id,{isActive: false})
+    //   if (user_res.isActive == false){
+    //     return res.status(200).json({message : "The user has been desactivated"});
+    //   }
+
+    // } else if ( code == 11) {
+    //   console.log("eeee")
+
+    //   user_res = await services.user.update(req.params.id,{isActive: true})
+    //   console.log("aaaaaaaa",user_res)
+
+    //   if (user_res.isActive == true){
+    // myUser = await services.user.find(req.params.id)
+
+    //     console.log("aaaaaaaa",myUser)
+    //     return res.status(200).json({message : "The user has been activated"});
+    //   }
+    // }
+
 
   });
 
@@ -496,7 +538,7 @@ if(bearerHeader) {
     let token = (req.headers.authorization).replace("Bearer ", "");
     let decoded;
 try {
-  decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw',{ algorithms: ['HS256'] });
+  decoded = await jwt.verify(token, PUB_KEY ,{ algorithms: ['HS256'] });
 console.log("decode",decoded.consumerId)
 
 } catch (error) {
@@ -551,7 +593,7 @@ if(bearerHeader) {
     let token = (req.headers.authorization).replace("Bearer ", "");
     let decoded;
 try {
-  decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw',{ algorithms: ['HS256'] });
+  decoded = await jwt.verify(token, PUB_KEY ,{ algorithms: ['HS256'] });
 console.log("decode",decoded.consumerId)
 
 } catch (error) {
@@ -606,7 +648,7 @@ if(bearerHeader) {
     let token = (req.headers.authorization).replace("Bearer ", "");
     let decoded;
 try {
-  decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw',{ algorithms: ['HS256'] });
+  decoded = await jwt.verify(token, PUB_KEY,{ algorithms: ['HS256'] });
 console.log("decode",decoded.consumerId)
 
 } catch (error) {
@@ -660,7 +702,7 @@ if(bearerHeader) {
     let token = (req.headers.authorization).replace("Bearer ", "");
     let decoded;
 try {
-  decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw',{ algorithms: ['HS256'] });
+  decoded = await jwt.verify(token, PUB_KEY,{ algorithms: ['HS256'] });
 console.log("decode",decoded.consumerId)
 
 } catch (error) {
@@ -754,8 +796,14 @@ console.log("myCredOauth",myCredOauth.scopes)
         }
       }
  // here should get the token and applique invoke before generating a new one
-      const token = await getToken(username,password,crd_oauth2.id,crd_oauth2.secret) 
-
+      let token ;
+      try {
+       token = await getToken(username,password,crd_oauth2.id,crd_oauth2.secret) 
+       
+     } catch (error) {
+       console.log("Error",error)
+     }
+     
       ///////////
 
           const getProfile = async (id) => {
@@ -787,16 +835,16 @@ try {
       
 
       // console.log("dataaaaaaaaaaaaa",data.status)
-
-          if(token.status == 200){
+if(token) 
+{          if(token.status == 200){
             if(data.status == 200){
               return res.status(token.status).json({token: token.data,data: data.data.data});
             }
 
           }
+}
 
-
-      return res.status(token.status).json(token.data);
+      return res.status(token.status).json(token);
 
 // myUserT = await services.user.find(username,password)
 
@@ -905,7 +953,7 @@ console.log("dddd",password)
 
       let decoded;
       try {
-        decoded = await jwt.verify(token, '54v3WJGBcFPh3TFgZSzovw', { algorithms: ['HS256'] });
+        decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
         console.log("decoded", decoded)
 
         if(!decoded){
