@@ -7,7 +7,7 @@ var transporter = nodemailer.createTransport({
       pass: '6Sept1996!google'
     }
   });
-
+01
 
   exports.send_email = function send_email (subject , text){
     console.log("eeeeee")
