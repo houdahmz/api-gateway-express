@@ -67,8 +67,8 @@ module.exports = function (gatewayExpressApp) {
 
       // const confirm_token = Math.random().toString(36).substring(2, 40) + Math.random().toString(36).substring(2, 40);
       myUser = await services.user.insert({
-        isActive: true,
-        confirmMail: true,
+        isActive: false,
+        confirmMail: false,
         firstname: firstname,
         lastname: lastname,
         username: username,
@@ -408,7 +408,7 @@ if ( myUser == false) {
 
     if ( code == 10) {
       console.log("zzzzz")
-      myUser = await services.user.deactivate(req.params.id)
+      myUser = await services.user.deactivate(myUser.id)
       if (myUser == true){
         return res.status(200).json({message : "The user has been desactivated"});
       }
@@ -416,7 +416,7 @@ if ( myUser == false) {
     } else if ( code == 11) {
       console.log("req.params.id",req.params.id)
 
-      myUser = await services.user.activate(req.params.id)
+      myUser = await services.user.activate(myUser.id)
       if (myUser == true){
     aa = await services.user.find(req.params.id)
 
@@ -424,27 +424,33 @@ if ( myUser == false) {
         return res.status(200).json({message : "The user has been activated"});
       }
     }
+// const id = req.params.id;
+// console.log("id",id)
 
-    // if ( code == 10) {
-    //   console.log("zzzzz")
-    //   user_res = await services.user.update(req.params.id,{isActive: false})
-    //   if (user_res.isActive == false){
-    //     return res.status(200).json({message : "The user has been desactivated"});
-    //   }
+// console.log("myUser.id",myUser.id)
+//     if ( code == 10) {
+//       user_res = await services.user.update(myUser.id,{activate: 'false'})
+//       if (user_res == false){
+//         return res.status(200).json({message : "The user has been desactivated"});
+//       }
 
-    // } else if ( code == 11) {
-    //   console.log("eeee")
+//     } else if ( code == 11) {
+//       console.log("aaaaaaaabbbbbbb")
 
-    //   user_res = await services.user.update(req.params.id,{isActive: true})
-    //   console.log("aaaaaaaa",user_res)
+//       user_res = await services.user.update(myUser.id,{activate: 'true'})
+//       console.log("eeee",user_res)
+//       if (user_res == true){
+//         console.log("aaaaaaaaccccc")
+//       tt = await services.user.deactivate(myUser.id)
+// console.log("atttt",tt)
+//     myUser = await services.user.find(id)
 
-    //   if (user_res.isActive == true){
-    // myUser = await services.user.find(req.params.id)
+//         console.log("aaaaaaaa",myUser)
+//         console.log("aaaaaaaaFFFFFFFFF")
 
-    //     console.log("aaaaaaaa",myUser)
-    //     return res.status(200).json({message : "The user has been activated"});
-    //   }
-    // }
+//         return res.status(200).json({message : "The user has been activated"});
+//       }
+//     }
 
 
   });
