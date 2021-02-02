@@ -224,6 +224,506 @@
 			]
 		},
 		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "user register",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "grant_type",
+									"value": "password_credentials",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "55b7c157-25b1-4c71-80b3-eb6faf283e8f",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "hh4@gmail.com",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "bc049e28-d692-4f8b-bc85-2d819d08b1a8",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "test",
+									"type": "string"
+								},
+								{
+									"key": "useBrowser",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:8080/oauth2/token",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "queryParams",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"hamza\",\n    \"lastname\": \"sghaier\",\n    \"username\": \"ines65\",\n    \"email\": \"hh152@gmail.com\",\n    \"phone\": \"26273857\",\n    \"password\": \"test\",\n    \"password_confirmation\": \"test\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url8080}}/register",
+							"host": [
+								"{{url8080}}"
+							],
+							"path": [
+								"register"
+							],
+							"query": [
+								{
+									"key": "scope",
+									"value": "'admin",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"consumerId\": \"9100ea1c-3067-4e66-ae82-97409914aad3\",\n    \"username\": \"hh30@gmail.com\",\n    \"password\": \"test\",\n    \"scopes\": \"user\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/api/test_password",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"test_password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "complete_profile",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcklkIjoiZWQzZWVjNWMtM2Y2YS00NzI1LTlmNTMtODVlMDA0ZjA3YTJlIiwiaWF0IjoxNjEwOTczODQ2LCJleHAiOjE2MTgxNzM4NDYsImF1ZCI6InNvbWV0aGluZyIsImlzcyI6ImV4cHJlc3MtZ2F0ZXdheSIsInN1YiI6IjNwWFFqZWtsUzNjRmY4T0NKdzlCMjIifQ.7AWPukXT0CEH_asGq4n1Un-6eMxDfpYA2ANNZWBgsdE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"commercial_register\": \"iiiiiiiii\",\n  \"city\": \"tunis\",\n  \"zip_code\": \"string\",\n  \"adresse\": \"string\",\n  \"id_commercial\": \"50e209ca-e899-4201-b7c4-59c5cef44710\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/complete_profile/50e209ca-e899-4201-b7c4-59c5cef44711",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"complete_profile",
+								"50e209ca-e899-4201-b7c4-59c5cef44711"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add agent_profile by pdv",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcklkIjoiNTc5ZmU5MTEtMzY2My00M2FlLTk4NTMtMzI5MzUyZDdlMTM0IiwiaWF0IjoxNjExMjIwMTI1LCJleHAiOjE2MTg0MjAxMjUsImF1ZCI6InNvbWV0aGluZyIsImlzcyI6ImV4cHJlc3MtZ2F0ZXdheSIsInN1YiI6IjNwWFFqZWtsUzNjRmY4T0NKdzlCMjIifQ.JBDrE73XOf24rrtW87rurwLElQpjbupVfb6nCg5ukow",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "*/*",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"hamza\",\n    \"lastname\": \"sghaierrrrrrrrrr\",\n    \"username\": \"imen146\",\n    \"email\": \"hh12@gmail.com\",\n    \"phone\": \"90260692\",\n    \"idOwner\": \"83f7bd5f-5439-4b7a-b6f1-c30561a9acd0\"\n\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/agent_register",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"agent_register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activate/desactivate",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcklkIjoiYTUzNDczNzAtN2YwZC00OTlhLWExOGYtNjY0YjAwZjcwMTk0IiwiaWF0IjoxNjEwOTc1MDM0LCJleHAiOjE2MTgxNzUwMzQsImF1ZCI6InNvbWV0aGluZyIsImlzcyI6ImV4cHJlc3MtZ2F0ZXdheSIsInN1YiI6IjNwWFFqZWtsUzNjRmY4T0NKdzlCMjIifQ.iAO44r76Rtabs02Oe0jdarzEzVNBY9O8l2SmiCswJ3c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "*/*",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"code\": 11\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/activate/a10a5195-80e7-4cd0-b51a-cc6af4a20e7d",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"activate",
+								"a10a5195-80e7-4cd0-b51a-cc6af4a20e7d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add an admin",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcklkIjoiYTUzNDczNzAtN2YwZC00OTlhLWExOGYtNjY0YjAwZjcwMTk0IiwiaWF0IjoxNjEwOTc1MDM0LCJleHAiOjE2MTgxNzUwMzQsImF1ZCI6InNvbWV0aGluZyIsImlzcyI6ImV4cHJlc3MtZ2F0ZXdheSIsInN1YiI6IjNwWFFqZWtsUzNjRmY4T0NKdzlCMjIifQ.iAO44r76Rtabs02Oe0jdarzEzVNBY9O8l2SmiCswJ3c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n          \"firstname\": \"admin\",\n          \"lastname\": \"admin\",\n          \"username\": \"admin22\",\n          \"email\": \"admin21@gmail.com\",\n          \"phone\": \"55872915\",\n          \"password\":\"test\",\n          \"password_confirmation\":\"test\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/admin_register",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"admin_register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcklkIjoiNzI3NDRlYWMtZDk5MS00ZjRkLWJjMGMtOThmZjNiMGZjMTU0IiwiaWF0IjoxNjEwNTc5MDc0LCJleHAiOjE2MTc3NzkwNzQsImF1ZCI6InNvbWV0aGluZyIsImlzcyI6ImV4cHJlc3MtZ2F0ZXdheSIsInN1YiI6IjNwWFFqZWtsUzNjRmY4T0NKdzlCMjIifQ.tzSbjQMZiyo7MhsjGdPg2jALLOJR6X9rPARhb6IiRkE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n          \"username\": \"ines61\",\n          \"password\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/api/login",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"login"
+							],
+							"query": [
+								{
+									"key": "scope",
+									"value": "user",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registration_confirm",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "4fb1248464e1498da91e56192742c2b8|0b821c3d3bfa4c1ca15681be34711534",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n          \"username\": \"ines65\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/registration_confirm?username=ines65&confirm_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImluZXM2NSIsInBhc3N3b3JkIjoidGVzdCIsImlhdCI6MTYxMjEzMzkwNywiZXhwIjoxNjEyMTUxOTA3LCJhdWQiOiJzb21ldGhpbmciLCJpc3MiOiJleHByZXNzLWdhdGV3YXkiLCJzdWIiOiIzcFhRamVrbFMzY0ZmOE9DSnc5QjIyIn0.QF3182RZJQuxYxUizchX0_074zrrQyQEKm0dpNcDstY",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"registration_confirm"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "ines65"
+								},
+								{
+									"key": "confirm_token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImluZXM2NSIsInBhc3N3b3JkIjoidGVzdCIsImlhdCI6MTYxMjEzMzkwNywiZXhwIjoxNjEyMTUxOTA3LCJhdWQiOiJzb21ldGhpbmciLCJpc3MiOiJleHByZXNzLWdhdGV3YXkiLCJzdWIiOiIzcFhRamVrbFMzY0ZmOE9DSnc5QjIyIn0.QF3182RZJQuxYxUizchX0_074zrrQyQEKm0dpNcDstY"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n          \"username\": \"admin21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/forgot",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"forgot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n          \"username\": \"admin21\",\n              \"password\": \"admin\",\n    \"password_confirmation\": \"admin\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/reset?username=admin21&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMjEiLCJpYXQiOjE2MTE3Mzc4NjIsImV4cCI6MTYxMTc1NTg2MiwiYXVkIjoic29tZXRoaW5nIiwiaXNzIjoiZXhwcmVzcy1nYXRld2F5Iiwic3ViIjoiM3BYUWpla2xTM2NGZjhPQ0p3OUIyMiJ9.wOjlUyFa2AUoS5tmioQ5F-s4zYJwhWtUd3FjnfccSn4",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"reset"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin21"
+								},
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMjEiLCJpYXQiOjE2MTE3Mzc4NjIsImV4cCI6MTYxMTc1NTg2MiwiYXVkIjoic29tZXRoaW5nIiwiaXNzIjoiZXhwcmVzcy1nYXRld2F5Iiwic3ViIjoiM3BYUWpla2xTM2NGZjhPQ0p3OUIyMiJ9.wOjlUyFa2AUoS5tmioQ5F-s4zYJwhWtUd3FjnfccSn4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test autorize oauth2.0",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/oauth2/authorize?response_type=token&client_id=710fab94-9e09-46a1-ad9c-148b6c7cd929&redirect_uri=http://localhost:5000/api/profile/f6205213-e9c4-4658-b7d0-d153baacae17",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"oauth2",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "token"
+								},
+								{
+									"key": "client_id",
+									"value": "710fab94-9e09-46a1-ad9c-148b6c7cd929"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:5000/api/profile/f6205213-e9c4-4658-b7d0-d153baacae17"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "gateway",
 			"item": [
 				{
@@ -756,10 +1256,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/scopes",
+									"raw": "localhost:8080/scopes",
 									"host": [
-										"{{url}}"
+										"localhost"
 									],
+									"port": "8080",
 									"path": [
 										"scopes"
 									]
@@ -890,7 +1391,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"scopes\": [\n    \"admin\"\n  ]\n}\n",
+									"raw": "{\n  \"scopes\": [\n    \"tesdt\"\n  ]\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -915,6 +1416,16 @@
 								"disableBodyPruning": true
 							},
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcklkIjoiM2IyMWVhZWUtZjc4Yi00NTJiLWE0MjYtNzVmYTYyZDJmMDMzIiwiaWF0IjoxNjExNjc5OTA5LCJleHAiOjE2MTg4Nzk5MDksImF1ZCI6InNvbWV0aGluZyIsImlzcyI6ImV4cHJlc3MtZ2F0ZXdheSIsInN1YiI6IjNwWFFqZWtsUzNjRmY4T0NKdzlCMjIifQ.uLmdWreWEkEFrIvJMs-9TjkXWOUrPM587hAbMjbcCTY",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"body": {
@@ -1013,51 +1524,11 @@
 							"name": "get all users",
 							"request": {
 								"auth": {
-									"type": "oauth2",
-									"oauth2": [
+									"type": "bearer",
+									"bearer": [
 										{
-											"key": "grant_type",
-											"value": "password_credentials",
-											"type": "string"
-										},
-										{
-											"key": "scope",
-											"value": "",
-											"type": "string"
-										},
-										{
-											"key": "password",
-											"value": "test",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "monta2111@gmail.com",
-											"type": "string"
-										},
-										{
-											"key": "useBrowser",
-											"value": true,
-											"type": "boolean"
-										},
-										{
-											"key": "clientId",
-											"value": "6c215380-5bc7-4bf1-a319-7b53f3431b40",
-											"type": "string"
-										},
-										{
-											"key": "clientSecret",
-											"value": "afb5ae2d-cc6a-45bc-a1da-721565d89c85",
-											"type": "string"
-										},
-										{
-											"key": "accessTokenUrl",
-											"value": "http://localhost:8080/oauth2/token",
-											"type": "string"
-										},
-										{
-											"key": "addTokenTo",
-											"value": "queryParams",
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcklkIjoiM2IyMWVhZWUtZjc4Yi00NTJiLWE0MjYtNzVmYTYyZDJmMDMzIiwiaWF0IjoxNjExNjc5OTA5LCJleHAiOjE2MTg4Nzk5MDksImF1ZCI6InNvbWV0aGluZyIsImlzcyI6ImV4cHJlc3MtZ2F0ZXdheSIsInN1YiI6IjNwWFFqZWtsUzNjRmY4T0NKdzlCMjIifQ.uLmdWreWEkEFrIvJMs-9TjkXWOUrPM587hAbMjbcCTY",
 											"type": "string"
 										}
 									]
@@ -1082,17 +1553,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "127.0.0.1:9876/users/monta2111@gmail.com",
+									"raw": "{{url}}/users/ines61",
 									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
+										"{{url}}"
 									],
-									"port": "9876",
 									"path": [
 										"users",
-										"monta2111@gmail.com"
+										"ines61"
 									],
 									"query": [
 										{
@@ -1120,14 +1587,14 @@
 									}
 								},
 								"url": {
-									"raw": "127.0.0.1:9876/users",
+									"raw": "127.0.0.1:8080/users",
 									"host": [
 										"127",
 										"0",
 										"0",
 										"1"
 									],
-									"port": "9876",
+									"port": "8080",
 									"path": [
 										"users"
 									]
@@ -1142,7 +1609,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"username\": \"hamza77\",   \n  \"firstname\": \"sghaier\", \n  \"lastname\": \"hamza\"\n  \n}",
+									"raw": "{\n  \"username\": \"hamza77\",   \n  \"firstname\": \"sghaier\", \n  \"lastname\": \"hamza11\"\n  \n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1150,13 +1617,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/users/test",
+									"raw": "{{url}}/users/ines61",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"users",
-										"test"
+										"ines61"
 									]
 								}
 							},
@@ -1177,13 +1644,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/users/test@gmail.com/status",
+									"raw": "{{url}}/users/ines61/status",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"users",
-										"test@gmail.com",
+										"ines61",
 										"status"
 									]
 								}
@@ -1191,420 +1658,6 @@
 							"response": []
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "user register",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"firstname\": \"hamza\",\n    \"lastname\": \"sghaier\",\n    \"email\": \"hh@gmail.com\",\n    \"phone\": \"2626054\",\n    \"password\": \"test\",\n    \"password_confirmation\": \"test\"\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}:{{port}}/register",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "test",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"consumerId\": \"9100ea1c-3067-4e66-ae82-97409914aad3\",\n    \"username\": \"hh30@gmail.com\",\n    \"password\": \"test\",\n    \"scopes\": \"user\"\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}:{{port}}/api/test_password",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"test_password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "complete_profile",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "02135f755f3a4fdda3d562297f5e5115|d8d417744ceb4887a242e60c7bc9eba9",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"commercial_register\": \"iiiiiiiii\",\n  \"city\": \"tunis\",\n  \"zip_code\": \"string\",\n  \"adresse\": \"string\",\n  \"id_commercial\": \"50e209ca-e899-4201-b7c4-59c5cef44710\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}:{{port}}/complete_profile/50e209ca-e899-4201-b7c4-59c5cef44710",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"complete_profile",
-								"50e209ca-e899-4201-b7c4-59c5cef44710"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add agent_profile by admin",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"auth": {
-							"type": "oauth2",
-							"oauth2": [
-								{
-									"key": "grant_type",
-									"value": "password_credentials",
-									"type": "string"
-								},
-								{
-									"key": "scope",
-									"value": "",
-									"type": "string"
-								},
-								{
-									"key": "client_authentication",
-									"value": "body",
-									"type": "string"
-								},
-								{
-									"key": "addTokenTo",
-									"value": "header",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "hh79@gmail.com",
-									"type": "string"
-								},
-								{
-									"key": "clientId",
-									"value": "de9218fe-3e87-4c43-9af7-cc3c2441274f",
-									"type": "string"
-								},
-								{
-									"key": "clientSecret",
-									"value": "7e270c38-a8fc-4f50-ba79-2bdd2c5b0bc1",
-									"type": "string"
-								},
-								{
-									"key": "useBrowser",
-									"value": true,
-									"type": "boolean"
-								},
-								{
-									"key": "authUrl",
-									"value": "http://localhost:8080/oauth2/authorize?response_type=token&client_id=6babff35-e99e-4330-b410-ec1914887aa3&redirect_uri=http://localhost:5000/api/profile/",
-									"type": "string"
-								},
-								{
-									"key": "redirect_uri",
-									"value": "http://localhost:5000/api/profile/",
-									"type": "string"
-								},
-								{
-									"key": "accessTokenUrl",
-									"value": "http://localhost:8080/oauth2/token",
-									"type": "string"
-								},
-								{
-									"key": "headerPrefix",
-									"value": "Bearer",
-									"type": "string"
-								},
-								{
-									"key": "password",
-									"value": "test",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "*/*",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"firstname\": \"hamza\",\n    \"lastname\": \"sghaier\",\n    \"username\": \"imenhassine8\",\n    \"email\": \"hh127@gmail.com\",\n    \"phone\": \"26260686\"\n\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}:{{port}}/agent_register",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"agent_register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "activate/desactivate",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcklkIjoiYTUzNDczNzAtN2YwZC00OTlhLWExOGYtNjY0YjAwZjcwMTk0IiwiaWF0IjoxNjEwOTc1MDM0LCJleHAiOjE2MTgxNzUwMzQsImF1ZCI6InNvbWV0aGluZyIsImlzcyI6ImV4cHJlc3MtZ2F0ZXdheSIsInN1YiI6IjNwWFFqZWtsUzNjRmY4T0NKdzlCMjIifQ.iAO44r76Rtabs02Oe0jdarzEzVNBY9O8l2SmiCswJ3c",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "*/*",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\"code\": 11\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}:{{port}}/activate/6c215380-5bc7-4bf1-a319-7b53f3431b40",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"activate",
-								"6c215380-5bc7-4bf1-a319-7b53f3431b40"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "add an admin",
-					"protocolProfileBehavior": {
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eab3806402654636a4a85993790ac71b|1fb508b1d59d41ea8902f51f93890d75",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n   \"firstname\": \"admin\",\n          \"lastname\": \"admin\",\n          \"username\": \"email\",\n          \"email\": \"admin13@gmail.com\",\n          \"phone\": \"55872901\",\n          \"password\":\"test\",\"password_confirmation\":\"test\"\n\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}:{{port}}/admin-register",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"admin-register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "login",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true,
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "4fb1248464e1498da91e56192742c2b8|0b821c3d3bfa4c1ca15681be34711534",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n          \"username\": \"admin11@gmail.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}:{{port}}/api/login_callback",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"login_callback"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "registration_confirm",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true,
-						"disabledSystemHeaders": {}
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "4fb1248464e1498da91e56192742c2b8|0b821c3d3bfa4c1ca15681be34711534",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n          \"username\": \"admin11@gmail.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}:{{port}}/api/login_callback",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"login_callback"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "test autorize oauth2.0",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/oauth2/authorize?response_type=token&client_id=710fab94-9e09-46a1-ad9c-148b6c7cd929&redirect_uri=http://localhost:5000/api/profile/f6205213-e9c4-4658-b7d0-d153baacae17",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"oauth2",
-								"authorize"
-							],
-							"query": [
-								{
-									"key": "response_type",
-									"value": "token"
-								},
-								{
-									"key": "client_id",
-									"value": "710fab94-9e09-46a1-ad9c-148b6c7cd929"
-								},
-								{
-									"key": "redirect_uri",
-									"value": "http://localhost:5000/api/profile/f6205213-e9c4-4658-b7d0-d153baacae17"
-								}
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -1618,7 +1671,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"client_id\": \"a5367586-894c-4b78-949c-2fcd4ad53e80\",\n    \"client_secret\": \"29a3a6bc-738b-47d5-92c7-ff85193c7164\",\n    \"username\": \"hh68@gmail.com\",\n    \"password\": \"test\",\n    \"grant_type\": \"password\"\n    \n}",
+							"raw": "{\n    \"client_id\": \"ed04880a-af79-42e0-85ec-7042087e5cfb\",\n    \"client_secret\": \"f4662de4-07cd-4888-b5a6-ccde7b573dc1\",\n    \"username\": \"hh89@gmail.com\",\n    \"password\": \"test\",\n    \"grant_type\": \"password\"\n    \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1626,7 +1679,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/oauth2/token",
+							"raw": "http://localhost:8080/oauth2/token?scope=admin",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1661,6 +1714,10 @@
 									"key": "grant_type",
 									"value": "password",
 									"disabled": true
+								},
+								{
+									"key": "scope",
+									"value": "admin"
 								}
 							]
 						}
@@ -1782,7 +1839,8 @@
 		},
 		{
 			"key": "url",
-			"value": "localhost:9876"
+			"value": "localhost:9876",
+			"disabled": true
 		},
 		{
 			"key": "port",
@@ -1796,6 +1854,10 @@
 		{
 			"key": "url9090",
 			"value": "localhost:9090"
+		},
+		{
+			"key": "url",
+			"value": "localhost:8080"
 		}
 	]
 }
