@@ -8,53 +8,53 @@ admin:
 apiEndpoints:
   # profile:
   #   - host: localhost
-  #     paths: /user_management/profile
+  #     paths: /user-management/profile
   #     methods: ["GET"]
   #     scopes: ['admin']
 
   #   - host: localhost
-  #     paths: /user_management/profile*
+  #     paths: /user-management/profile*
   #     methods: ["POST","DELETE"]
   #     scopes: ['admin']
 
   #   - host: localhost
-  #     paths: /user_management/profile/agent
+  #     paths: /user-management/profile/agent
   #     methods: ["GET"]
   #     scopes: ['admin']
 
   #   - host: localhost
-  #     paths: /user_management/image*
+  #     paths: /user-management/image*
   #     scopes: ['admin']
 
   #   - host: localhost
-  #     paths: /user_management/activity*
+  #     paths: /user-management/activity*
   #     scopes: ['admin']
 
   #   - host: localhost
-  #     paths: /user_management/type-user*
+  #     paths: /user-management/type-user*
   #     scopes: ['admin']
 
   #   - host: localhost
-  #     paths: /user_management/category*
+  #     paths: /user-management/category*
   #     scopes: ['admin']
 
   #   - host: localhost
-  #     paths: /user_management/document*
+  #     paths: /user-management/document*
 
   #   - host: localhost
-  #     paths: /user_management/company*
+  #     paths: /user-management/company*
   #     scopes: ['admin']
 
   #   - host: localhost
-  #     paths: /user_management/activity-company*
+  #     paths: /user-management/activity-company*
   #     scopes: ['admin']
 
   #   - host: localhost
-  #     paths: /user_management/profile
+  #     paths: /user-management/profile
   #     scopes: ['admin']
 
   #   - host: localhost
-  #     paths: /user_management/profile/agent
+  #     paths: /user-management/profile/agent
   #     methods: ["POST"]
   #     scopes: ['admin']
 
@@ -66,42 +66,42 @@ apiEndpoints:
       
   profile:
     - host: localhost
-      paths: /user_management/profile/
+      paths: /user-management/profile/
       methods: ["GET"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /user_management/profile/
+      paths: /user-management/profile/
       methods: ["POST"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /user_management/profile/by_userId/:id
+      paths: /user-management/profile/by_userId/:id
       methods: ["GET"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /user_management/company/:id
+      paths: /user-management/company/:id
       methods: ["PATCH"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /user_management/company/profile-by-company
+      paths: /user-management/company/profile-by-company
       methods: ["POST"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /user_management/profile/agent
+      paths: /user-management/profile/agent
       methods: ["POST"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /user_management/history/*
+      paths: /user-management/history/*
       methods: ["GET"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /user_management/type_user*
+      paths: /user-management/type_user*
       methods: ["GET"]
       scopes: ['admin']
 
@@ -539,3 +539,5 @@ pipelines:
           - action:
               serviceEndpoint: api_management
               changeOrigin: true
+
+
