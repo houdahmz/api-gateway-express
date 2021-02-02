@@ -206,7 +206,7 @@ apiEndpoints:
       paths: /affiliation*
       methods: ["GET"]
       scopes: ['admin']
-     - host: localhost
+    - host: localhost
       paths: /affiliation/user*
       methods: ["GET"]
       scopes: ['user']
@@ -539,4 +539,3 @@ pipelines:
           - action:
               serviceEndpoint: api_management
               changeOrigin: true
- 
