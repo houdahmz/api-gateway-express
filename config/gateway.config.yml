@@ -256,7 +256,7 @@ apiEndpoints:
       scopes: ['agent']
   wallet:
     - host: localhost
-      paths: /api_management/wallet/supplier-service
+      paths: /wallet/supplier-service
       methods: ["GET"]
       scopes: ['user']
 
@@ -386,34 +386,7 @@ pipelines:
           - action:
               serviceEndpoint: api_management
               changeOrigin: true
-  wallet:
-    apiEndpoints:
-      - wallet
-    policies:
-      - log:
-          - action:
-              message: "header===> ${req.headers.authorization} ---${req}"
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
-      - validate-user:
-      - request-transformer:
-          action:
-            body:
-              add:
-                user: req.user
-      - log:
-          - action:
-              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
-      - proxy:
-          - action:
-              serviceEndpoint: api_management
-              changeOrigin: true
+
   topup:
     apiEndpoints:
       - topup

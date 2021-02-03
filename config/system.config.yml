@@ -1,9 +1,7 @@
 #Core
 db:
   redis:
-    host: localhost
-    port: ${REDIS_PORT:-6379}
-    # emulate: true
+    emulate: true
     namespace: EG
 # db:
 #   redis:
