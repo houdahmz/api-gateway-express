@@ -359,7 +359,32 @@ apiEndpoints:
       paths: /wallet/service
       methods: ["POST"]
       scopes: ['user']    
-    
+    - host: localhost
+      paths: /wallet/category
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/category
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/category*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/category*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/category/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/category/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/category            
   api:
     host: '*'
     paths: ['/users*','/scopes*','/credentials*','/apps*']
