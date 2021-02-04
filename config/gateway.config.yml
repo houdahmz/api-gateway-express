@@ -436,7 +436,33 @@ apiEndpoints:
       methods: ["DELETE"]
       scopes: ['user']                       
     - host: localhost
-      paths: /wallet/currency                 
+      paths: /wallet/currency   
+    - host: localhost
+      paths: /wallet/feed
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/feed
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/feed*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/feed*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/feed/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/feed/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/feed                    
   api:
     host: '*'
     paths: ['/users*','/scopes*','/credentials*','/apps*']
