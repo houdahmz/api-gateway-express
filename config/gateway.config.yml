@@ -514,7 +514,16 @@ apiEndpoints:
       methods: ["DELETE"]
       scopes: ['user']                       
     - host: localhost
-      paths: /wallet/commission                           
+      paths: /wallet/commission  
+    - host: localhost
+      paths: /wallet
+      methods: ["GET"]
+      scopes: ['admin']    
+    - host: localhost
+      paths: /wallet/history
+      methods: ["GET"]
+      scopes: ['admin']       
+                                  
   api:
     host: '*'
     paths: ['/users*','/scopes*','/credentials*','/apps*']
@@ -767,5 +776,34 @@ pipelines:
           - action:
               serviceEndpoint: api_management
               changeOrigin: true
+  wallet:
+    apiEndpoints:
+      - wallet
+    policies:
+      - log:
+          - action:
+              message: "header===> ${req.headers.authorization} ---${req}"
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
+
 
 
