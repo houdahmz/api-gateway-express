@@ -462,7 +462,33 @@ apiEndpoints:
       methods: ["DELETE"]
       scopes: ['user']                       
     - host: localhost
-      paths: /wallet/feed                    
+      paths: /wallet/feed   
+    - host: localhost
+      paths: /wallet/intervenant
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/intervenant
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/intervenant*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/intervenant*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/intervenant/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/intervenant/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/intervenant                       
   api:
     host: '*'
     paths: ['/users*','/scopes*','/credentials*','/apps*']
