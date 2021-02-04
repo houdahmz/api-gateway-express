@@ -303,7 +303,35 @@ apiEndpoints:
       paths: /wallet/supplier
       methods: ["POST"]
       scopes: ['user']
-       
+    - host: localhost
+      paths: /wallet/reimbursed
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/reimbursed
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/reimbursed*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/reimbursed*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/reimbursed/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/reimbursed/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/reimbursed
+      methods: ["POST"]
+      scopes: ['user']  
+    
   api:
     host: '*'
     paths: ['/users*','/scopes*','/credentials*','/apps*']
