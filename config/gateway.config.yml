@@ -259,11 +259,31 @@ apiEndpoints:
       paths: /wallet/supplier-service
       methods: ["GET"]
       scopes: ['user']
+    - host: localhost
+      paths: /wallet/supplier-service*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/supplier-service*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/supplier-service/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/supplier-service/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/supplier-service
+      methods: ["POST"]
+      scopes: ['user']
 
   api:
     host: '*'
     paths: ['/users*','/scopes*','/credentials*','/apps*']
-    methods: ["GET","POST","PUT","DELETE"]
+    methods: ["GET","POST","PUT","DELETE","PATCH",PUT]
     scopes: ['super_admin']
 
 serviceEndpoints:
