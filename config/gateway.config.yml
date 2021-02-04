@@ -276,10 +276,34 @@ apiEndpoints:
       methods: ["DELETE"]
       scopes: ['user']                       
     - host: localhost
-      paths: /wallet/supplier-service
+      paths: /wallet/supplier
       methods: ["POST"]
       scopes: ['user']
-
+    - host: localhost
+      paths: /wallet/supplier
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/supplier*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/supplier*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/supplier/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/supplier/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/supplier
+      methods: ["POST"]
+      scopes: ['user']
+       
   api:
     host: '*'
     paths: ['/users*','/scopes*','/credentials*','/apps*']
