@@ -67,8 +67,8 @@ module.exports = function (gatewayExpressApp) {
 
       // const confirm_token = Math.random().toString(36).substring(2, 40) + Math.random().toString(36).substring(2, 40);
       myUser = await services.user.insert({
-        isActive: true,
-        confirmMail: true,
+        isActive: false,
+        confirmMail: false,
         firstname: firstname,
         lastname: lastname,
         username: username,
@@ -80,7 +80,7 @@ module.exports = function (gatewayExpressApp) {
 
       const getType = async (code) => {
         try {
-          return await axios.get(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/type_user/by_code/` + code)
+          return await axios.get(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type_user/by_code/` + code)
         } catch (error) {
           console.error(error)
         }
@@ -90,12 +90,14 @@ module.exports = function (gatewayExpressApp) {
       const dataType = await getType("10");
       const creteProfile = async (myUser) => {
         try {
-          return await axios.post(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/profile`, {
+          return await axios.post(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
             id_user: myUser.id,
             first_name: myUser.firstname,
             last_name: myUser.lastname,
             phone: myUser.phone,
-            typeId: dataType.data.data.id
+            typeId: dataType.data.data.id,
+            created_by: myUser.id
+
           })
         } catch (error) {
           console.error(error)
@@ -110,11 +112,12 @@ module.exports = function (gatewayExpressApp) {
       })
       console.log("crd_basiiiiiiiiiiic",crd_basic)
 
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['admin'] })
+      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2',{ scopes: ['user'] })
       console.log("crd_oauth222222222222",crd_oauth2)
 
       
       const userProfile = await creteProfile(myUser);
+
       if (userProfile.data.status == "error") {
         return res.status(200).json(userProfile.data);
       }
@@ -215,23 +218,26 @@ if(!req.params.id){
     //     return res.status(200).json({ error: "user is desactivated" });
   
     //   }
-      const { commercial_register, city, zip_code, adresse, activity } = req.body
+      const { commercial_register, city, zip_code, adresse, activity ,updated_by,id_commercial} = req.body
 
       const updateprofile = async () => {
         try {
-          return await axios.patch(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/company/` + req.params.id, {
+          return await axios.patch(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/` + req.params.id, {
             commercial_register: commercial_register,
             city: city,
             zip_code: zip_code,
             adresse: adresse,
-            activity: activity
+            activity: activity,
+            id_commercial: id_commercial,
+            updated_by: updated_by
+
           })
         } catch (error) {
           console.error(error)
         }
       }
-      const userProfile = await updateprofile();
-
+      let userProfile = await updateprofile();
+        // console.log("userProfile",userProfile)
 
       // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
 
@@ -241,6 +247,7 @@ if(!req.params.id){
       // return res.status(201).json({message:"Check your email : "+myUser.email});
 
     } catch (err) {
+      
       return res.status(422).json({ error: err.message })
     }
   });
@@ -263,7 +270,7 @@ if(!req.params.id){
     // //////////////
     // const getType = async (code) => {
     //   try {
-    //     return await axios.get('http://localhost:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/type_user/by_code/' + code)
+    //     return await axios.get('http://localhost:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user-management/type_user/by_code/' + code)
     //   } catch (error) {
     //     console.error(error)
     //   }
@@ -274,12 +281,14 @@ if(!req.params.id){
     const createAgentProfile = async (agentUser) => {
 
       try {
-        return await axios.post(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/company/profile-by-company`, { ///profile-by-company
+        return await axios.post(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`, { ///profile-by-company
           idOwner: idOwner,
           id_user: agentUser.id,
           first_name: agentUser.firstname,
           last_name: agentUser.lastname,
-          phone: agentUser.phone
+          phone: agentUser.phone,
+          created_by: agentUser.id
+
         })
       } catch (error) {
         console.error(error)
@@ -394,7 +403,7 @@ return res.status(201).json({ etat: "Success",message: "We have sent an email to
   });
 
   gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => {
-    const { code } = req.body // code = 10 desactive , 11 active
+    const { code } = req.body // code = 10 desactive , 11 active // id is a username
     if (!code){
       return res.status(200).json({error : "Code can not be empty (set 10 to desactivate or 11 to activate a user"});
 
@@ -479,7 +488,7 @@ if ( myUser == false) {
       //////////////
       const getType = async (code) => {
         try {
-          return await axios.get(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/type_user/by_code/` + code)
+          return await axios.get(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type_user/by_code/` + code)
         } catch (error) {
           console.error(error)
         }
@@ -490,12 +499,14 @@ if ( myUser == false) {
       const createAgentProfile = async (agentUser) => {
 
         try {
-          return await axios.post(`http://localhost:${port.HTTP_env_API_MANAGEMENT}/api_management/user_management/profile/agent`, {
+          return await axios.post(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/agent`, {
             id_user: agentUser.id,
             first_name: agentUser.firstname,
             last_name: agentUser.lastname,
             phone: agentUser.phone,
-            typeId: dataType.data.data.id
+            typeId: dataType.data.data.id,
+            created_by: agentUser.id
+
           })
         } catch (error) {
           console.error(error)
@@ -814,7 +825,7 @@ console.log("myCredOauth",myCredOauth.scopes)
 
           const getProfile = async (id) => {
             try {
-              return await axios.get(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api_management/user_management/profile/by_userId/`+id)
+              return await axios.get(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/`+id)
             } catch (error) {
               console.error(error)
             }
