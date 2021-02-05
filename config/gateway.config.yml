@@ -211,11 +211,11 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['user']
     - host: localhost
-      paths: /poste/recharge-card*
+      paths: /poste/recharge*
       methods: ["GET"]
       scopes: ['admin']
     - host: localhost
-      paths: /poste/recharge-card/user*
+      paths: /poste/recharge/user*
       methods: ["GET"]
       scopes: ['user']
     - host: localhost
@@ -241,11 +241,11 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['user']
     - host: localhost
-      paths:  /topnet/transaction
+      paths:  /topnet/transaction*
       methods: ["GET"]
       scopes: ['admin']
     - host: localhost
-      paths: /topnet/bill
+      paths: /topnet/bill*
       methods: ["GET"]
       scopes: ['user']
   
@@ -726,15 +726,15 @@ pipelines:
       - log:
           - action:
               message: "header===> ${req.headers.authorization} ---${req}"
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
-      - validate-user:
+      # - oauth2:
+      #     - action:
+      #         jwt:
+      #           issuer: express-gateway
+      #           audience: something
+      #           subject: 3pXQjeklS3cFf8OCJw9B22
+      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+      #           checkCredentialExistence: false
+      # - validate-user:
       - request-transformer:
           action:
             body:
@@ -755,15 +755,15 @@ pipelines:
       - log:
           - action:
               message: "header===> ${req.headers.authorization} ---${req}"
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
-      - validate-user:
+      # - oauth2:
+      #     - action:
+      #         jwt:
+      #           issuer: express-gateway
+      #           audience: something
+      #           subject: 3pXQjeklS3cFf8OCJw9B22
+      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+      #           checkCredentialExistence: false
+      # - validate-user:
       - request-transformer:
           action:
             body:
