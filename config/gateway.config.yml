@@ -259,11 +259,275 @@ apiEndpoints:
       paths: /wallet/supplier-service
       methods: ["GET"]
       scopes: ['user']
-
+    - host: localhost
+      paths: /wallet/supplier-service*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/supplier-service*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/supplier-service/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/supplier-service/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/supplier
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/supplier
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/supplier*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/supplier*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/supplier/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/supplier/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/supplier
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/reimbursed
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/reimbursed
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/reimbursed*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/reimbursed*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/reimbursed/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/reimbursed/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/reimbursed
+      methods: ["POST"]
+      scopes: ['user']  
+    - host: localhost
+      paths: /wallet/service
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/service
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/service*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/service*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/service/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/service/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/service
+      methods: ["POST"]
+      scopes: ['user']    
+    - host: localhost
+      paths: /wallet/category
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/category
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/category*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/category*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/category/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/category/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/category  
+    - host: localhost
+      paths: /wallet/document
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/document
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/document*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/document*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/document/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/document/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/document     
+    - host: localhost
+      paths: /wallet/currency
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/currency
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/currency*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/currency*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/currency/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/currency/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/currency   
+    - host: localhost
+      paths: /wallet/feed
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/feed
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/feed*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/feed*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/feed/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/feed/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/feed   
+    - host: localhost
+      paths: /wallet/intervenant
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/intervenant
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/intervenant*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/intervenant*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/intervenant/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/intervenant/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/intervenant  
+    - host: localhost
+      paths: /wallet/commission
+      methods: ["POST"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/commission
+      methods: ["GET"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/commission*
+      methods: ["GET"]
+      scopes: ['user']   
+    - host: localhost
+      paths: /wallet/commission*
+      methods: ["PUT"]
+      scopes: ['user']
+    - host: localhost
+      paths: /wallet/commission/*
+      methods: ["PATCH"]
+      scopes: ['user'] 
+    - host: localhost
+      paths: /wallet/commission/*
+      methods: ["DELETE"]
+      scopes: ['user']                       
+    - host: localhost
+      paths: /wallet/commission  
+    - host: localhost
+      paths: /wallet
+      methods: ["GET"]
+      scopes: ['admin']    
+    - host: localhost
+      paths: /wallet/history
+      methods: ["GET"]
+      scopes: ['admin']       
+                                  
   api:
     host: '*'
     paths: ['/users*','/scopes*','/credentials*','/apps*']
-    methods: ["GET","POST","PUT","DELETE"]
+    methods: ["GET","POST","PUT","DELETE","PATCH",PUT]
     scopes: ['super_admin']
 
 serviceEndpoints:
@@ -512,5 +776,34 @@ pipelines:
           - action:
               serviceEndpoint: api_management
               changeOrigin: true
+  wallet:
+    apiEndpoints:
+      - wallet
+    policies:
+      - log:
+          - action:
+              message: "header===> ${req.headers.authorization} ---${req}"
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
+
 
 
