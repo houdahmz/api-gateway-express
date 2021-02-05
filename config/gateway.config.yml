@@ -178,61 +178,61 @@ apiEndpoints:
   
   poste:
     - host: localhost
-      paths: /affiliation*
+      paths: /poste/affiliation
       methods: ["POST"]
       scopes: ['user']
 
     - host: localhost
-      paths: /bill-payment*
+      paths: /poste/bill-payment
       methods: ["POST"]
       scopes: ['user']
 
     - host: localhost
-      paths: /recharge-card*
+      paths: /poste/recharge-card
       methods: ["POST"]
       scopes: ['user']
 
     - host: localhost
-      paths: /balance*
+      paths: /poste/balance
       methods: ["POST"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /unsubscribe*
+      paths: /poste/unsubscribe*
       methods: ["POST"]
       scopes: ['user']
 
     - host: localhost
-      paths: /affiliation*
+      paths: /poste/affiliation*
       methods: ["GET"]
       scopes: ['admin']
     - host: localhost
-      paths: /affiliation/user*
+      paths: /poste/affiliation/user*
       methods: ["GET"]
       scopes: ['user']
     - host: localhost
-      paths: /recharge-card*
+      paths: /poste/recharge-card*
       methods: ["GET"]
       scopes: ['admin']
     - host: localhost
-      paths: /recharge-card/user*
+      paths: /poste/recharge-card/user*
       methods: ["GET"]
       scopes: ['user']
     - host: localhost
-      paths: /bill-payment*
+      paths: /poste/bill-payment*
       methods: ["GET"]
       scopes: ['admin']  
     - host: localhost
-      paths: /bill-payment/user*
+      paths: /poste/bill-payment/user*
       methods: ["GET"]
       scopes: ['user']  
     - host: localhost
-      paths: /poste/transaction
+      paths: /poste/transaction*
       methods: ["GET"]
       scopes: ['admin'] 
   topnet:
     - host: localhost
-      paths: /payment*
+      paths: /topnet/payment*
       methods: ["POST"]
       scopes: ['user']
 
@@ -245,7 +245,7 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['admin']
     - host: localhost
-      paths: /bill
+      paths: /topnet/bill
       methods: ["GET"]
       scopes: ['user']
   
