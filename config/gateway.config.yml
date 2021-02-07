@@ -6,58 +6,6 @@ admin:
   host: localhost 
 
 apiEndpoints:
-  # profile:
-  #   - host: localhost
-  #     paths: /user-management/profile
-  #     methods: ["GET"]
-  #     scopes: ['admin']
-
-  #   - host: localhost
-  #     paths: /user-management/profile*
-  #     methods: ["POST","DELETE"]
-  #     scopes: ['admin']
-
-  #   - host: localhost
-  #     paths: /user-management/profile/agent
-  #     methods: ["GET"]
-  #     scopes: ['admin']
-
-  #   - host: localhost
-  #     paths: /user-management/image*
-  #     scopes: ['admin']
-
-  #   - host: localhost
-  #     paths: /user-management/activity*
-  #     scopes: ['admin']
-
-  #   - host: localhost
-  #     paths: /user-management/type-user*
-  #     scopes: ['admin']
-
-  #   - host: localhost
-  #     paths: /user-management/category*
-  #     scopes: ['admin']
-
-  #   - host: localhost
-  #     paths: /user-management/document*
-
-  #   - host: localhost
-  #     paths: /user-management/company*
-  #     scopes: ['admin']
-
-  #   - host: localhost
-  #     paths: /user-management/activity-company*
-  #     scopes: ['admin']
-
-  #   - host: localhost
-  #     paths: /user-management/profile
-  #     scopes: ['admin']
-
-  #   - host: localhost
-  #     paths: /user-management/profile/agent
-  #     methods: ["POST"]
-  #     scopes: ['admin']
-
   topup:
     host: localhost
     paths: /api/facial
@@ -65,16 +13,6 @@ apiEndpoints:
       - POST
       
   profile:
-    # - host: localhost
-    #   paths: /user-management/profile/
-    # scopes: ['admin']
-    #   methods: ["GET"]
-  
-    # - host: localhost
-    #   paths: /user-management/profile
-    #   methods: ["GET"]
-    #   scopes: ['admin']
-
     - host: localhost
       paths: /admin/company*
       methods: ["POST","PATCH"]
