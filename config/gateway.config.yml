@@ -65,35 +65,45 @@ apiEndpoints:
       - POST
       
   profile:
+    # - host: localhost
+    #   paths: /user-management/profile/
+    # scopes: ['admin']
+    #   methods: ["GET"]
+  
+    # - host: localhost
+    #   paths: /user-management/profile
+    #   methods: ["GET"]
+    #   scopes: ['admin']
+
     - host: localhost
-      paths: /user-management/profile/
-      methods: ["GET"]
+      paths: /admin/company*
+      methods: ["POST","PATCH"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /user-management/profile/
-      methods: ["POST"]
+      paths: /user-management/profile*
+      methods: ["DELETE","GET"]
       scopes: ['admin']
 
     - host: localhost
       paths: /user-management/profile/by_userId/:id
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['user']
+
+    - host: localhost
+      paths: /user-management/profile*
+      methods: ["PUT","PATCH"]
+      scopes: ['user']
 
     - host: localhost
       paths: /user-management/company/:id
-      methods: ["PATCH"]
-      scopes: ['admin']
+      methods: ["PUT","PATCH"]
+      scopes: ['user']
 
     - host: localhost
       paths: /user-management/company/profile-by-company
       methods: ["POST"]
-      scopes: ['admin']
-
-    - host: localhost
-      paths: /user-management/profile/agent
-      methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['user']
 
     - host: localhost
       paths: /user-management/history/*
@@ -101,19 +111,81 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: localhost
-      paths: /user-management/type_user*
+      paths: /user-management/image*
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user-management/activity*
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user-management/type_user/by_code/:id
       methods: ["GET"]
       scopes: ['admin']
 
-  voucher:
     - host: localhost
-      paths: /voucher/
+      paths: /user-management/type-user*
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user-management/category*
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user-management/document*
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user-management/company*
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: /user-management/activity-company*
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+  voucher:
+# add voucher 
+    - host: localhost
+      paths: /voucher*
+      methods: ["GET","POST","DELETE"]
+      scopes: ['admin']
+
+# valider les vouchers importer et modifier leurs status
+    - host: localhost
+      paths: /voucher/document*
+      methods: ["DELETE","GET","PUT"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: '/voucher/transaction'
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: '/voucher/transaction'
       methods: ["GET"]
+      scopes: ['admin']
+
+    - host: localhost
+      paths: '/voucher/transaction/by_user/:id'
+      methods: ["GET"]
+      scopes: ['user']
+# valider et refuser les commandes
+    - host: localhost
+      paths: '/voucher/transaction/status/:id'
+      methods: ["PUT"]
       scopes: ['admin']
 
     - host: localhost
       paths: /voucher/facial*
-      methods: ["POST"]
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
     # - host: localhost
@@ -123,37 +195,12 @@ apiEndpoints:
 
     - host: localhost
       paths: /voucher/operator*
-      methods: ["POST"]
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
     - host: localhost
-      paths: /voucher/document
-      methods: ["POST"]
-      scopes: ['admin']
-
-    - host: localhost
-      paths: '/voucher/transaction'
-      methods: ["GET"]
-      scopes: ['admin']
-
-    - host: localhost
-      paths: '/voucher/transaction'
-      methods: ["POST"]
-      scopes: ['admin']
-
-    - host: localhost
-      paths: '/voucher/transaction/by_user/:id'
-      methods: ["GET"]
-      scopes: ['user']
-
-    - host: localhost
-      paths: '/voucher/transaction/status'
-      methods: ["POST"]
-      scopes: ['admin']
-
-    - host: localhost
-      paths: '/voucher/settings'
-      methods: ["POST"]
+      paths: '/voucher/settings*'
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
     # - host: localhost

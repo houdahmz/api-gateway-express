@@ -88,6 +88,10 @@ module.exports = function (gatewayExpressApp) {
       console.log("myUser",myUser)
       
       const dataType = await getType("10");
+      console.log("dataType",dataType)
+      if (!dataType.data) return
+
+
       const creteProfile = async (myUser) => {
         try {
           return await axios.post(`http://localhost:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
@@ -117,6 +121,7 @@ module.exports = function (gatewayExpressApp) {
 
       
       const userProfile = await creteProfile(myUser);
+      console.log("aaaa",userProfile)
 
       if (userProfile.data.status == "error") {
         return res.status(200).json(userProfile.data);
