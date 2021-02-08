@@ -133,7 +133,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         console.log("crd_oauth2.id", crd_oauth2.id)
         console.log("crd_oauth2.secret", crd_oauth2.secret)
 
-        const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/registration_confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
+        const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
         console.log("confirm_uri", confirm_uri)
         //here je vais envoyer un mail
 
@@ -145,9 +145,9 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
       }
     });
 
-    gatewayExpressApp.post('/registration_confirm', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
+    gatewayExpressApp.post('/registration-confirm', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
-        console.log("/registration_confirm")
+        console.log("/registration-confirm")
         const { username, confirm_token } = req.query
         const user = await services.user.findByUsernameOrId(username)
         console.log("user", user)
