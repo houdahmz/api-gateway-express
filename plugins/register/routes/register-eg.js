@@ -1,7 +1,5 @@
 const services = require('express-gateway/lib/services/')
 const utils = require('express-gateway/lib/services/utils')
-var passwordValidator = require('password-validator');
-var schema = new passwordValidator();
 const superagent = require('superagent');
 const axios = require('axios');
 const mail = require("./mailer.config");
@@ -10,6 +8,8 @@ const CircularJSON = require('circular-json');
 
 const jwt = require('jsonwebtoken');
 const env = require("../../../config/env.config");
+const validation = require("./validation");
+
 
 // const oauth2orize = require('oauth2orize');
 // const passport = require('passport');
@@ -52,19 +52,10 @@ module.exports = function (gatewayExpressApp) {
 // console.log("PUB_KEY",PUB_KEY)
 
       const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
-      schema
-.is().min(8)                                    // Minimum length 8
-.is().max(100)                                  // Maximum length 100
-.has().uppercase()                              // Must have uppercase letters
-.has().lowercase()                              // Must have lowercase letters
-.has().digits(2)                                // Must have at least 2 digits
-.has().not().spaces()                           // Should not have spaces
-.is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
  
 // Validate against a password string
-        if(schema.validate(password) == false){
+        if(validation.validatePassword(password) == false){
         return res.status(400).json("password is not valide");
-
         }
       if (password != password_confirmation) {
         throw new Error('password does not much')
