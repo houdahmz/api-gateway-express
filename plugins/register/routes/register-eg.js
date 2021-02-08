@@ -803,7 +803,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
     });
 
-    gatewayExpressApp.post('/forgot', async (req, res, next) => { //get email from user change to email
+    gatewayExpressApp.post('/forgot-password', async (req, res, next) => { //get email from user change to email
       const username = req.body.username
       const user = await services.user.findByUsernameOrId(username)
       console.log("user", user)
@@ -821,7 +821,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
       });
       console.log("aaa", myUserJwt)
 
-      const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/reset?username=` + username + "&" + "token=" + myUserJwt;
+      const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/reset-password?username=` + username + "&" + "token=" + myUserJwt;
       console.log("confirm_uri", confirm_uri)
       //here je vais envoyer un mail
 
@@ -833,7 +833,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
     });
 
-    gatewayExpressApp.post('/reset', async (req, res, done) => {
+    gatewayExpressApp.post('/reset-password', async (req, res, done) => {
 
       try {
         console.log("/reset")
