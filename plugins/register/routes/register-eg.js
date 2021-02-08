@@ -202,9 +202,9 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
     });
 
 
-    gatewayExpressApp.patch('/complete_profile/:id', verifyTokenUser, async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
+    gatewayExpressApp.patch('/complete-profile/:id', verifyTokenUser, async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
-        console.log("/api/complete_profile")
+        console.log("/api/complete-profile")
         if (!req.params.id) {
           console.log("*********************************", req.body)
           return res.status(200).json({ error: "Id can not be empty" })
@@ -244,7 +244,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
       }
     });
 
-    gatewayExpressApp.post('/agent_register', verifyTokenUser, async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+    gatewayExpressApp.post('/agent-register', verifyTokenUser, async (req, res, next) => { // incomplete {add send mail with url /change_password} 
       try {
         const { firstname, username, lastname, email, phone, idOwner } = req.body
         console.log("/api/agent-register")
@@ -672,7 +672,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
     }
 
-    gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
+    gatewayExpressApp.post('/login', async (req, res, next) => { // code=20 for agent created by admin
       console.log("*********************************", req.body)
       console.log("/api/login")
 
