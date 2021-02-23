@@ -517,7 +517,7 @@ apiEndpoints:
 
 serviceEndpoints:
   api_management:
-    url: http://localhost:${HTTP_PORT_API_MANAGEMENT:-3000}/api-management
+    url: http://localhost:${HTTP_PORT_API_MANAGEMENT:-5008}/api-management
   backend:
     url: http://localhost:${HTTP_PORT_ADMIN:-9876}
 
