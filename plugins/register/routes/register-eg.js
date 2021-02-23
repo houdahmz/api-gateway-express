@@ -41,6 +41,8 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
       try {
         console.log("*********************************", req.body)
         console.log("/register")
+        console.log("/HTTP_PORT_API_MANAGEMENT",env.HTTP_PORT_API_MANAGEMENT)
+
 
         const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
 
