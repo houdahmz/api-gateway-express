@@ -60,11 +60,11 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
           algorithm: 'HS256'
         });
 
-        console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type_user/by_code/`)
+        console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
 
         myUser = await services.user.insert({
-          isActive: true,
-          confirmMail: true,
+          isActive: false,
+          confirmMail: false,
           firstname: firstname,
           lastname: lastname,
           username: username,
@@ -74,35 +74,35 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
           confirm_token: myUserJwt
         })
 
-        // const getType = async (code) => {
-        //   try {
-        //     return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type_user/by_code/` + code)
-        //   } catch (error) {
-        //     console.error(error)
-        //   }
-        // }
-        // console.log("myUser", myUser)
+        const getType = async (code) => {
+          try {
+            return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code)
+          } catch (error) {
+            return res.status(error.response.status).send(error.response.data);
+          }
+        }
+        console.log("myUser", myUser)
 
-        // const dataType = await getType("10");
-        // console.log("dataType", dataType)
-        // if (!dataType.data) return
+        const dataType = await getType("10");
+        console.log("dataType", dataType)
+        if (!dataType.data) return
 
 
-        // const creteProfile = async (myUser) => {
-        //   try {
-        //     return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
-        //       id_user: myUser.id,
-        //       first_name: myUser.firstname,
-        //       last_name: myUser.lastname,
-        //       phone: myUser.phone,
-        //       typeId: dataType.data.data.id,
-        //       created_by: myUser.id
+        const creteProfile = async (myUser) => {
+          try {
+            return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
+              id_user: myUser.id,
+              first_name: myUser.firstname,
+              last_name: myUser.lastname,
+              phone: myUser.phone,
+              typeId: dataType.data.data.id,
+              created_by: myUser.id
 
-        //     })
-        //   } catch (error) {
-        //     console.error(error)
-        //   }
-        // }
+            })
+          } catch (error) {
+            return res.status(error.response.status).send(error.response.data);
+          }
+        }
 
 
         crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
@@ -112,16 +112,16 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         })
         console.log("crd_basiiiiiiiiiiic", crd_basic)
 
-        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['super_admin'] })
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
         console.log("crd_oauth222222222222", crd_oauth2)
 
 
-        // const userProfile = await creteProfile(myUser);
-        // console.log("aaaa", userProfile)
+        const userProfile = await creteProfile(myUser);
+        console.log("aaaa", userProfile)
 
-        // if (userProfile.data.status == "error") {
-        //   return res.status(200).json(userProfile.data);
-        // }
+        if (userProfile.data.status == "error") {
+          return res.status(200).json(userProfile.data);
+        }
 
         myProfile = await services.application.insert({
           name: "complete_profile" + myUser.id,
@@ -225,7 +225,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
             })
           } catch (error) {
-            console.error(error)
+            return res.status(error.response.status).send(error.response.data);
           }
         }
         let userProfile = await updateprofile();
@@ -259,10 +259,11 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
           phone: phone,
           redirectUri: 'https://www.khallasli.com',
         })
+
         // //////////////
         // const getType = async (code) => {
         //   try {
-        //     return await axios.get('${env.baseURL}:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user-management/type_user/by_code/' + code)
+        //     return await axios.get('${env.baseURL}:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user-management/type-user/by_code/' + code)
         //   } catch (error) {
         //     console.error(error)
         //   }
@@ -283,7 +284,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
             })
           } catch (error) {
-            console.error(error)
+            return res.status(error.response.status).send(error.response.data);
           }
         }
         var randomPassword = Math.random().toString(36).slice(-8);
@@ -332,7 +333,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
             }
             return await axios.get('${env.baseURL}:5000/api/profile')
           } catch (error) {
-            console.error(error)
+            return res.status(error.response.status).send(error.response.data);
           }
         }
 
@@ -375,11 +376,11 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
     });
 
 
-    gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin, async (req, res, next) => {
+    gatewayExpressApp.post('/admin-register', async (req, res, next) => {
       try {
         console.log("/api/admin-register")
 
-        const { firstname, username, lastname, email, phone } = req.body
+        const { firstname, username, lastname, email, phone ,password} = req.body
 
         myUser = await services.user.insert({
           isActive: true,
@@ -398,13 +399,15 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         //////////////
         const getType = async (code) => {
           try {
-            return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type_user/by_code/` + code)
+            return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code)
           } catch (error) {
-            console.error(error)
+            return res.status(error.response.status).send(error.response.data);
           }
         }
-        const dataType = await getType("20");
+        const dataType = await getType("20") 
         /////////////
+        console.log("aaaaaaaaaa dataType",dataType)
+        console.log("aaaaaaaaaa ${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}",env.baseURL+env.HTTP_PORT_API_MANAGEMENT)
 
         const createAgentProfile = async (agentUser) => {
 
@@ -419,13 +422,15 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
             })
           } catch (error) {
-            console.error(error)
+            return res.status(error.response.status).send(error.response.data);
+
           }
         }
         //////////////
-
-        const userProfile = await createAgentProfile(myUser);
-
+        // let userProfile;
+  let  userProfile = await createAgentProfile(myUser) 
+ 
+          console.log("aaaaaaaaaa userProfile",userProfile.response)
         if (userProfile.data.status == "error") {
           return res.status(200).json(userProfile.data);
         }
@@ -433,12 +438,12 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
         crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
           autoGeneratePassword: false,
-          password: randomPassword,
+          password: password,
           scopes: []
         })
         console.log("crd_basic", crd_basic)
 
-        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['admin'] })
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['super_admin'] })
         console.log("crd_oauth2", crd_oauth2)
         console.log("email", email)
         console.log("password", randomPassword)
@@ -719,7 +724,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
             client_secret: client_secret
           })
         } catch (error) {
-          console.error(error)
+          return res.status(error.response.status).send(error.response.data);
         }
       }
       // here should get the token and applique invoke before generating a new one
@@ -737,7 +742,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         try {
           return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
         } catch (error) {
-          console.error(error)
+          return res.status(error.response.status).send(error.response.data);
         }
       }
       ///////////
