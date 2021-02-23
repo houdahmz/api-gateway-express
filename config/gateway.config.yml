@@ -682,15 +682,15 @@ pipelines:
       - log:
           - action:
               message: "api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}"
-      # - oauth2:
-      #     - action:
-      #         jwt:
-      #           issuer: express-gateway
-      #           audience: something
-      #           subject: 3pXQjeklS3cFf8OCJw9B22
-      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-      #           checkCredentialExistence: false
-      # - validate-user:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
       - request-transformer:
           action:
             body:
