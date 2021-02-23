@@ -63,8 +63,8 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type_user/by_code/`)
 
         myUser = await services.user.insert({
-          isActive: false,
-          confirmMail: false,
+          isActive: true,
+          confirmMail: true,
           firstname: firstname,
           lastname: lastname,
           username: username,
@@ -74,35 +74,35 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
           confirm_token: myUserJwt
         })
 
-        const getType = async (code) => {
-          try {
-            return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type_user/by_code/` + code)
-          } catch (error) {
-            console.error(error)
-          }
-        }
-        console.log("myUser", myUser)
+        // const getType = async (code) => {
+        //   try {
+        //     return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type_user/by_code/` + code)
+        //   } catch (error) {
+        //     console.error(error)
+        //   }
+        // }
+        // console.log("myUser", myUser)
 
-        const dataType = await getType("10");
-        console.log("dataType", dataType)
-        if (!dataType.data) return
+        // const dataType = await getType("10");
+        // console.log("dataType", dataType)
+        // if (!dataType.data) return
 
 
-        const creteProfile = async (myUser) => {
-          try {
-            return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
-              id_user: myUser.id,
-              first_name: myUser.firstname,
-              last_name: myUser.lastname,
-              phone: myUser.phone,
-              typeId: dataType.data.data.id,
-              created_by: myUser.id
+        // const creteProfile = async (myUser) => {
+        //   try {
+        //     return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
+        //       id_user: myUser.id,
+        //       first_name: myUser.firstname,
+        //       last_name: myUser.lastname,
+        //       phone: myUser.phone,
+        //       typeId: dataType.data.data.id,
+        //       created_by: myUser.id
 
-            })
-          } catch (error) {
-            console.error(error)
-          }
-        }
+        //     })
+        //   } catch (error) {
+        //     console.error(error)
+        //   }
+        // }
 
 
         crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
@@ -112,20 +112,20 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         })
         console.log("crd_basiiiiiiiiiiic", crd_basic)
 
-        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['super_admin'] })
         console.log("crd_oauth222222222222", crd_oauth2)
 
 
-        const userProfile = await creteProfile(myUser);
-        console.log("aaaa", userProfile)
+        // const userProfile = await creteProfile(myUser);
+        // console.log("aaaa", userProfile)
 
-        if (userProfile.data.status == "error") {
-          return res.status(200).json(userProfile.data);
-        }
+        // if (userProfile.data.status == "error") {
+        //   return res.status(200).json(userProfile.data);
+        // }
 
         myProfile = await services.application.insert({
           name: "complete_profile" + myUser.id,
-          redirectUri: '${env.baseURL}:5000/api/profile/'
+          redirectUri: `${env.baseURL}:5000/api/profile`
         }, myUser.id)
 
         console.log("email", username)
@@ -375,7 +375,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
     });
 
 
-    gatewayExpressApp.post('/admin_register', verifyTokenSuperAdmin, async (req, res, next) => {
+    gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin, async (req, res, next) => {
       try {
         console.log("/api/admin-register")
 
@@ -672,7 +672,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
     }
 
-    gatewayExpressApp.post('/login', async (req, res, next) => { // code=20 for agent created by admin
+    gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
       console.log("*********************************", req.body)
       console.log("/api/login")
 
