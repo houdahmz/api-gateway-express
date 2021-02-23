@@ -45,8 +45,6 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         console.log("/JWT_SECRET",env.JWT_SECRET)
         console.log("/baseURL",env.baseURL)
 
-
-
         const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
 
         // Validate against a password string
@@ -177,11 +175,12 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
           } else {
             if (user.username != decoded.username) {
-              console.debug('wrong confirmation token')
+              console.debug('???wrong confirmation token')
               return res.status(200).json({ error: "wrong confirmation token" });
 
             }
             const passBooleanTrue = await utils.compareSaltAndHashed(decoded.password, myCredBasic.password)
+
             if (!passBooleanTrue) {
               return res.status(200).json({ error: "wrong confirmation token" });
 
@@ -381,11 +380,11 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
     });
 
 
-    gatewayExpressApp.post('/admin-register', async (req, res, next) => {
+    gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin , async (req, res, next) => {
       try {
         console.log("/api/admin-register")
 
-        const { firstname, username, lastname, email, phone ,password} = req.body
+        const { firstname, username, lastname, email, phone } = req.body
 
         myUser = await services.user.insert({
           isActive: true,
@@ -443,12 +442,12 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
         crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
           autoGeneratePassword: false,
-          password: password,
+          password: randomPassword,
           scopes: []
         })
         console.log("crd_basic", crd_basic)
 
-        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['super_admin'] })
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['admin'] })
         console.log("crd_oauth2", crd_oauth2)
         console.log("email", email)
         console.log("password", randomPassword)
