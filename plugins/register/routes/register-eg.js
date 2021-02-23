@@ -42,6 +42,8 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         console.log("*********************************", req.body)
         console.log("/register")
         console.log("/HTTP_PORT_API_MANAGEMENT",env.HTTP_PORT_API_MANAGEMENT)
+        console.log("/JWT_SECRET",env.JWT_SECRET)
+        console.log("/baseURL",env.baseURL)
 
 
         const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
@@ -65,8 +67,8 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
 
         myUser = await services.user.insert({
-          isActive: false,
-          confirmMail: false,
+          isActive: true,
+          confirmMail: true,
           firstname: firstname,
           lastname: lastname,
           username: username,
@@ -169,18 +171,19 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
           console.log("decoded", decoded)
 
           if (!decoded) {
-            console.debug('wrong confirmation token')
-            return res.status(200).json({ error: "wrong confirmation token" });
+            console.debug('!!!!wrong confirmation token')
+            return res.status(200).json({ error: "!!!!wrong confirmation token" });
 
           } else {
             if (user.username != decoded.username) {
-              console.debug('wrong confirmation token')
-              return res.status(200).json({ error: "wrong confirmation token" });
+              console.debug('???wrong confirmation token')
+              return res.status(200).json({ error: "????,wrong confirmation token" });
 
             }
             const passBooleanTrue = await utils.compareSaltAndHashed(decoded.password, myCredBasic.password)
+console.log("passBooleanTrue",passBooleanTrue);
             if (!passBooleanTrue) {
-              return res.status(200).json({ error: "wrong confirmation token" });
+              return res.status(200).json({ error: "\\\\\wrong confirmation token" });
 
             }
           }
