@@ -752,6 +752,8 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
       } catch (error) {
         console.log("error", error)
+        return res.status(error.response.status).send(error.response.data);
+
       }
       let name = "complete_profile" + myUser.id
       userApp = await services.application.find(name)
