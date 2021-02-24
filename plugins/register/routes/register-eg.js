@@ -49,10 +49,11 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
         // Validate against a password string
         if (validation.validatePassword(password) == false) {
-          return res.status(400).json("password is not valide");
+          return res.status(400).json({error: "password is not valide"});
         }
         if (password != password_confirmation) {
-          throw new Error('password does not much')
+          return res.status(400).json({error: "password does not much"});
+
         }
 
         const myUserJwt = await jwt.sign({ username: username, password: password }, `${env.JWT_SECRET}`, {
