@@ -19,7 +19,7 @@ const fs = require('fs');
 const PUB_KEY = fs.readFileSync("./config/public.pem", 'utf8');
 const cors = require("cors");
 
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const express = require('express');
 const jsonParser = require('express').json();
 const urlEncodedParser = require("express").urlencoded({ extended: true });
@@ -41,7 +41,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
     gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
     gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
- gatewayExpressApp.use(cors(corsOptions));
+    gatewayExpressApp.use(cors(corsOptions));
 
 
     gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
