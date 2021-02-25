@@ -183,7 +183,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
           } else {
             if (user.username != decoded.username) {
-              console.debug('???wrong confirmation token')
+              console.debug('wrong confirmation token')
               return res.status(200).json({ error: "wrong confirmation token" });
 
             }
