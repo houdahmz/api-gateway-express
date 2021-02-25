@@ -17,6 +17,7 @@ const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
 const secretOrPrivateKey = config.systemConfig.accessTokens.secretOrPrivateKey
 const fs = require('fs');
 const PUB_KEY = fs.readFileSync("./config/public.pem", 'utf8');
+const cors = require("cors");
 
 // const bodyParser = require("body-parser");
 const express = require('express');
@@ -26,6 +27,9 @@ const { PassThrough } = require("stream");
 
 const bodyParser = require("body-parser");
 const app = express();
+var corsOptions = {
+  origin: `${env.baseURL}:${HTTP_PORT}`
+};
 
 require("body-parser").urlencoded({ limit: "50mb", extended: true }),
   require("body-parser").json({ limit: "50mb", extended: true }),
@@ -36,6 +40,9 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
     // gatewayExpressApp.use(bodyParser.json())
     gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
     gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+    gatewayExpressApp.use(cors(corsOptions));
+
 
     gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
