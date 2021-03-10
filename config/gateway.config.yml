@@ -517,7 +517,7 @@ apiEndpoints:
 
 serviceEndpoints:
   api_management:
-    url: http://localhost:${HTTP_PORT_API_MANAGEMENT:-4000}/api-management
+    url: http://localhost:${HTTP_PORT_API_MANAGEMENT:-5008}/api-management
   backend:
     url: http://localhost:${HTTP_PORT_ADMIN:-9876}
 
@@ -537,6 +537,7 @@ policies:
   - tokenReg
   - login
   - response-transformer
+  - cors
 
 pipelines:
   # default:
@@ -585,7 +586,7 @@ pipelines:
       - log:
           - action:
               message: "voucher header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
-          
+      - cors:    
       - oauth2:
           - action:
               jwt:
@@ -615,7 +616,7 @@ pipelines:
       - log:
           - action:
               message: "profile header===> ${req.headers.authorization} ---${req}"
-      
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -654,7 +655,7 @@ pipelines:
       - log:
           - action:
               message: "paymee header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
-      
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -685,7 +686,7 @@ pipelines:
       - log:
           - action:
               message: "api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}"
-                    
+      - cors:              
       - oauth2:
           - action:
               jwt:
@@ -715,7 +716,7 @@ pipelines:
       - log:
           - action:
               message: "header===> ${req.headers.authorization} ---${req}"
-      
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -745,7 +746,7 @@ pipelines:
       - log:
           - action:
               message: "topnet header===> ${req.headers.authorization} ---${req}"
-      
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -774,7 +775,7 @@ pipelines:
       - log:
           - action:
               message: "wallet header===> ${req.headers.authorization} ---${req}"
-      
+      - cors:
       - oauth2:
           - action:
               jwt:
