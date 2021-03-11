@@ -875,7 +875,10 @@ var corsOptions = {
 
       } catch (error) {
         console.log("error", error) //// tkt
-        
+        if(!error.response){
+          log4j.loggererror.error(error.message)
+          return res.status(500).send({"error":error.message});
+        }
         log4j.loggererror.error("Error in getting profile: "+error.response.data)
 
         return res.status(error.response.status).send(error.response.data);
@@ -893,8 +896,7 @@ var corsOptions = {
 
         }
       }
-      log4j.loggererror.error("Error :"+token)
-
+      log4j.loggerinfo.info("Getting token");
       return res.status(token.status).json(token);
 
     });
