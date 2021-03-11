@@ -13,6 +13,7 @@ const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
 const authService = services.auth;
 
+
 const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
 const secretOrPrivateKey = config.systemConfig.accessTokens.secretOrPrivateKey
 const fs = require('fs');
@@ -30,8 +31,7 @@ const app = express();
 var corsOptions = {
   origin: "*"
 };
-
-require("body-parser").urlencoded({ limit: "50mb", extended: true }),
+  require("body-parser").urlencoded({ limit: "50mb", extended: true }),
   require("body-parser").json({ limit: "50mb", extended: true }),
   require("express").json({ limit: "50mb", extended: true }), //-- use express.json
   require("express").urlencoded({ limit: "50mb", extended: true }), //-- use express.urlencoded
@@ -62,7 +62,17 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
           return res.status(400).json({error: "password does not much"});
 
         }
+        // console.log("2222222222222222")
 
+        // let teeeest = await services.user.findAll()
+        // console.log("333333333333")
+
+        // let test = await services.user.findByUsernameOrId(username)
+
+        // let test = await services.user.findByEmail(email)
+        // console.log("testttttttttttttttttttt1111111")
+
+        // console.log("testttttttttttttttttttt",test)
         const myUserJwt = await jwt.sign({ username: username, password: password }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
           audience: 'something',
@@ -111,6 +121,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
             })
           } catch (error) {
+         
             return res.status(error.response.status).send(error.response.data);
           }
         }
@@ -128,9 +139,11 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
 
         const userProfile = await creteProfile(myUser);
-        console.log("aaaa", userProfile)
+        if (!userProfile.data) return
 
+        console.log("aaaa", userProfile)
         if (userProfile.data.status == "error") {
+          // services.user.remove()
           return res.status(200).json(userProfile.data);
         }
 
@@ -695,6 +708,8 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
       const { username, password } = req.body
       console.log("eeee", password)
+      console.log("zzzzz",corsOptions)
+
       myUser = await services.user.find(username)
       console.log("myUser", myUser)
       // myUserUpdte = await services.user.update(myUser.id,"firstname")
