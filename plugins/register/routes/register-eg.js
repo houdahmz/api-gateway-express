@@ -28,7 +28,7 @@ const { PassThrough } = require("stream");
 const bodyParser = require("body-parser");
 const app = express();
 var corsOptions = {
-  origin: `${env.baseURL}:${env.HTTP_PORT}`
+  origin: "*"
 };
 
 require("body-parser").urlencoded({ limit: "50mb", extended: true }),
