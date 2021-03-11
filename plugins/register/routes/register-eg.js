@@ -48,23 +48,15 @@ var corsOptions = {
 
     gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
-        console.log("*********************************", req.body)
-        console.log("/register")
-        console.log("/HTTP_PORT_API_MANAGEMENT",env.HTTP_PORT_API_MANAGEMENT)
-        console.log("/JWT_SECRET",env.JWT_SECRET)
-        console.log("/baseURL",env.baseURL)
-
         const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
 
         // Validate against a password string
         if (validation.validatePassword(password) == false) {
           log4j.loggererror.error("Unkown error.")
-
           return res.status(400).json({error: "password is not valide"});
         }
         if (password != password_confirmation) {
           log4j.loggererror.error("Unkown error.")
-
           return res.status(400).json({error: "password does not much"});
 
         }
@@ -75,10 +67,10 @@ var corsOptions = {
 
         // let test = await services.user.findByUsernameOrId(username)
 
-        let test = await services.user.getEmail(email)
-        console.log("testttttttttttttttttttt1111111")
+        // let test = await services.user.getEmail(email)
+        // console.log("testttttttttttttttttttt1111111")
 
-        console.log("testttttttttttttttttttt",test)
+        // console.log("testttttttttttttttttttt",test)
         const myUserJwt = await jwt.sign({ username: username, password: password }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
           audience: 'something',
@@ -314,18 +306,12 @@ var corsOptions = {
           return res.status(500).json({"Error": "Problem in server"});
       
         }
-        // console.log("userProfile",userProfile)
-
-        // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
         log4j.loggerinfo.info("Success");
 
         return res.status(200).json({ message: userProfile.data });
 
-        // return res.status(201).json({message:"Check your email : "+myUser.email});
-
       } catch (err) {
         log4j.loggererror.error("Error in adding profile: "+userProfile.data)
-
         return res.status(422).json({ error: err.message })
       }
     });
@@ -345,17 +331,6 @@ var corsOptions = {
           phone: phone,
           redirectUri: 'https://www.khallasli.com',
         })
-
-        // //////////////
-        // const getType = async (code) => {
-        //   try {
-        //     return await axios.get('${env.baseURL}:${port.HTTP_PORT_API_MANAGEMENT}/api_management/user-management/type-user/by_code/' + code)
-        //   } catch (error) {
-        //     console.error(error)
-        //   }
-        // }
-        // const dataType = await getType("20");
-        // /////////////
 
         const createAgentProfile = async (agentUser) => {
 
@@ -394,8 +369,6 @@ var corsOptions = {
 
         crd_oauth2 = await services.credential.insertCredential(agentUser.id, 'oauth2', { scopes: ['agent'] })
         console.log("crd_oauth2", crd_oauth2)
-
-
         console.log("email", email)
         console.log("password", randomPassword)
         console.log("crd_oauth2.id", crd_oauth2.id)
@@ -422,31 +395,6 @@ var corsOptions = {
       } catch (err) {
         log4j.loggererror.error("Error in adding profile: "+userProfile.data)
 
-        return res.status(422).json({ error: err.message })
-      }
-    });
-
-
-    gatewayExpressApp.get('/test', async (req, res, next) => {
-      try {
-        const createAgentProfile = async () => {
-          try {
-
-            let config = {
-              headers: { Authorization: `Bearer ${req.header('authorization')}` }
-            }
-            return await axios.get('${env.baseURL}:5000/api/profile')
-          } catch (error) {
-            return res.status(error.response.status).send(error.response.data);
-          }
-        }
-
-        const userProfile = await createAgentProfile();
-        const json = CircularJSON.stringify(userProfile);
-        // JSON.stringify(userProfile)
-        return res.status(200).json(JSON.stringify(userProfile));
-
-      } catch (err) {
         return res.status(422).json({ error: err.message })
       }
     });
@@ -532,7 +480,6 @@ var corsOptions = {
         }
         /////////////
         console.log("aaaaaaaaaa dataType",dataType)
-        console.log("aaaaaaaaaa ${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}",env.baseURL+env.HTTP_PORT_API_MANAGEMENT)
 
         const createAgentProfile = async (agentUser) => {
 
