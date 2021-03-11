@@ -121,11 +121,7 @@ var corsOptions = {
 
             })
           } catch (error) {
-            if(error.response.status == '400'){
-             let deleted = await services.user.remove(myUser.id)
-             console.log("deleted",deleted)
-      
-            }
+         
             return res.status(error.response.status).send(error.response.data);
           }
         }
@@ -143,9 +139,11 @@ var corsOptions = {
 
 
         const userProfile = await creteProfile(myUser);
-        console.log("aaaa", userProfile)
+        if (!userProfile.data) return
 
+        console.log("aaaa", userProfile)
         if (userProfile.data.status == "error") {
+          // services.user.remove()
           return res.status(200).json(userProfile.data);
         }
 
