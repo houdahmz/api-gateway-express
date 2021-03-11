@@ -377,6 +377,7 @@ var corsOptions = {
               return res.status(500).send({"error":error.message});
             }
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+          const deleted =  services.user.remove(myUser.id);
 
             return res.status(error.response.status).send(error.response.data);
           }
@@ -553,6 +554,7 @@ var corsOptions = {
               return res.status(500).send({"error":error.message});
             }
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+          const deleted =  services.user.remove(myUser.id);
 
             return res.status(error.response.status).send(error.response.data);
 
