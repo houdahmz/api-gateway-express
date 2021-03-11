@@ -131,6 +131,9 @@ var corsOptions = {
           } catch (error) {
             log4j.loggererror.error("Error in createProfile :"+error.response.data)
           
+	console.log("aaaa iciii in create progifle",myUser.id)
+          const deleted =  services.user.remove(myUser.id);
+	console.log("deleted",deleted);	
             return res.status(error.response.status).send(error.response.data);
           }
         }
@@ -155,6 +158,7 @@ var corsOptions = {
           // services.user.remove()
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
 
+	  //console.log("aaaa iciii ",myUser.id)
           return res.status(400).json(userProfile.data);
         }
 

@@ -299,23 +299,23 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /wallet/reimbursed*
       methods: ["GET"]
-      scopes: ['user']   
+      scopes: ['admin']   
     - host: 192.168.12.115
       paths: /wallet/reimbursed*
       methods: ["PUT"]
-      scopes: ['user']
+      scopes: ['admin']
     - host: 192.168.12.115
       paths: /wallet/reimbursed/*
       methods: ["PATCH"]
-      scopes: ['user'] 
+      scopes: ['admin'] 
     - host: 192.168.12.115
       paths: /wallet/reimbursed/*
       methods: ["DELETE"]
-      scopes: ['user']                       
+      scopes: ['admin']                       
     - host: 192.168.12.115
       paths: /wallet/reimbursed
       methods: ["POST"]
-      scopes: ['user']  
+      scopes: ['admin']  
     - host: 192.168.12.115
       paths: /wallet/service
       methods: ["POST"]
@@ -327,52 +327,52 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /wallet/service*
       methods: ["GET"]
-      scopes: ['user']   
+      scopes: ['admin']   
     - host: 192.168.12.115
       paths: /wallet/service*
       methods: ["PUT"]
-      scopes: ['user']
+      scopes: ['admin']
     - host: 192.168.12.115
       paths: /wallet/service/*
       methods: ["PATCH"]
-      scopes: ['user'] 
+      scopes: ['admin'] 
     - host: 192.168.12.115
       paths: /wallet/service/*
       methods: ["DELETE"]
-      scopes: ['user']                       
+      scopes: ['admin']                       
     - host: 192.168.12.115
       paths: /wallet/service
       methods: ["POST"]
-      scopes: ['user']    
+      scopes: ['admin']    
     - host: 192.168.12.115
       paths: /wallet/category
       methods: ["POST"]
-      scopes: ['user']
+      scopes: ['admin']
     - host: 192.168.12.115
       paths: /wallet/category
       methods: ["GET"]
-      scopes: ['user']
+      scopes: ['admin']
     - host: 192.168.12.115
       paths: /wallet/category*
       methods: ["GET"]
-      scopes: ['user']   
+      scopes: ['admin']   
     - host: 192.168.12.115
       paths: /wallet/category*
       methods: ["PUT"]
-      scopes: ['user']
+      scopes: ['admin']
     - host: 192.168.12.115
       paths: /wallet/category/*
       methods: ["PATCH"]
-      scopes: ['user'] 
+      scopes: ['admin'] 
     - host: 192.168.12.115
       paths: /wallet/category/*
       methods: ["DELETE"]
-      scopes: ['user']                       
+      scopes: ['admin']                       
     - host: 192.168.12.115
       paths: /wallet/category  
     - host: 192.168.12.115
       paths: /wallet/document
-      methods: ["POST"]
+      methods: ["admin"]
       scopes: ['user']
     - host: 192.168.12.115
       paths: /wallet/document
@@ -537,7 +537,6 @@ policies:
   - tokenReg
   - login
   - response-transformer
-  - cors
 
 pipelines:
   # default:
@@ -586,7 +585,7 @@ pipelines:
       - log:
           - action:
               message: "voucher header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
-      - cors:    
+          
       - oauth2:
           - action:
               jwt:
@@ -616,7 +615,7 @@ pipelines:
       - log:
           - action:
               message: "profile header===> ${req.headers.authorization} ---${req}"
-      - cors:
+      
       - oauth2:
           - action:
               jwt:
@@ -655,7 +654,7 @@ pipelines:
       - log:
           - action:
               message: "paymee header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
-      - cors:
+      
       - oauth2:
           - action:
               jwt:
@@ -686,7 +685,7 @@ pipelines:
       - log:
           - action:
               message: "api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}"
-      - cors:              
+                    
       - oauth2:
           - action:
               jwt:
@@ -716,7 +715,7 @@ pipelines:
       - log:
           - action:
               message: "header===> ${req.headers.authorization} ---${req}"
-      - cors:
+      
       - oauth2:
           - action:
               jwt:
@@ -746,7 +745,7 @@ pipelines:
       - log:
           - action:
               message: "topnet header===> ${req.headers.authorization} ---${req}"
-      - cors:
+      
       - oauth2:
           - action:
               jwt:
@@ -775,7 +774,7 @@ pipelines:
       - log:
           - action:
               message: "wallet header===> ${req.headers.authorization} ---${req}"
-      - cors:
+      
       - oauth2:
           - action:
               jwt:
