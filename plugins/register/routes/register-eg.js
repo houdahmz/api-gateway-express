@@ -103,6 +103,8 @@ var corsOptions = {
 
         const getType = async (code) => {
           try {
+        log4j.loggerinfo.info("Call getType: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code);
+
             return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code)
           } catch (error) {
             log4j.loggererror.error("Error in getType: "+error.response.data)
@@ -114,11 +116,17 @@ var corsOptions = {
 
         const dataType = await getType("10");
         console.log("dataType", dataType)
-        if (!dataType.data) return
+        if (dataType.data == undefined) {
+          log4j.loggererror.error("Error Problem in server ")
+          return res.status(500).json({"Error": "Problem in server"});
+      
+        }
 
 
         const creteProfile = async (myUser) => {
           try {
+        log4j.loggerinfo.info("Call postProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+
             return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
               id_user: myUser.id,
               first_name: myUser.firstname,
@@ -151,7 +159,11 @@ var corsOptions = {
 
 
         const userProfile = await creteProfile(myUser);
-        if (!userProfile.data) return
+        if (!userProfile.data) {
+          log4j.loggererror.error("Error Problem in server ")
+          return res.status(500).json({"Error": "Problem in server"});
+      
+        }
 
         console.log("aaaa", userProfile)
         if (userProfile.data.status == "error") {
@@ -267,6 +279,8 @@ var corsOptions = {
 
         const updateprofile = async () => {
           try {
+        log4j.loggerinfo.info("Call updateProfile. "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/`);
+
             return await axios.patch(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/` + req.params.id, {
               commercial_register: commercial_register,
               city: city,
@@ -330,6 +344,8 @@ var corsOptions = {
         const createAgentProfile = async (agentUser) => {
 
           try {
+        log4j.loggerinfo.info("Call postProfile agent: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`);
+
             return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`, { ///profile-by-company
               idOwner: idOwner,
               id_user: agentUser.id,
@@ -469,6 +485,8 @@ var corsOptions = {
         //////////////
         const getType = async (code) => {
           try {
+        log4j.loggerinfo.info("Call getType agent: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`);
+
             return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code)
           } catch (error) {
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
@@ -484,6 +502,8 @@ var corsOptions = {
         const createAgentProfile = async (agentUser) => {
 
           try {
+        log4j.loggerinfo.info("Call post Profile agent: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/agent`);
+
             return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/agent`, {
               id_user: agentUser.id,
               first_name: agentUser.firstname,
@@ -805,6 +825,8 @@ var corsOptions = {
 
       const getToken = async (username, password, client_id, client_secret) => {
         try {
+        log4j.loggerinfo.info("Call getToken");
+
           return await axios.post(`${env.baseURL}:${env.HTTP_PORT}/oauth2/token`, {
             grant_type: "password",
             username: username,
@@ -821,6 +843,7 @@ var corsOptions = {
       // here should get the token and applique invoke before generating a new one
       let token;
       try {
+
         token = await getToken(username, password, crd_oauth2.id, crd_oauth2.secret)
 
       } catch (error) {
@@ -833,6 +856,8 @@ var corsOptions = {
 
       const getProfile = async (id) => {
         try {
+        log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id);
+
           return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
         } catch (error) {
           log4j.loggererror.error("Error in getting profile: "+error.response.data)
