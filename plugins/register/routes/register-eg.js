@@ -121,7 +121,9 @@ var corsOptions = {
 
             })
           } catch (error) {
-         
+	console.log("aaaa iciii in create progifle",myUser.id)
+          const deleted =  services.user.remove(myUser.id);
+	console.log("deleted",deleted);	
             return res.status(error.response.status).send(error.response.data);
           }
         }
@@ -144,7 +146,8 @@ var corsOptions = {
         console.log("aaaa", userProfile)
         if (userProfile.data.status == "error") {
           // services.user.remove()
-          return res.status(200).json(userProfile.data);
+	  //console.log("aaaa iciii ",myUser.id)
+          return res.status(400).json(userProfile.data);
         }
 
         myProfile = await services.application.insert({
