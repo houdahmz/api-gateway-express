@@ -13,6 +13,8 @@ const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
 const authService = services.auth;
 
+const log4j = require("../../../config/configLog4js.js");
+
 
 const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
 const secretOrPrivateKey = config.systemConfig.accessTokens.secretOrPrivateKey
@@ -56,9 +58,13 @@ var corsOptions = {
 
         // Validate against a password string
         if (validation.validatePassword(password) == false) {
+          log4j.loggererror.error("Unkown error.")
+
           return res.status(400).json({error: "password is not valide"});
         }
         if (password != password_confirmation) {
+          log4j.loggererror.error("Unkown error.")
+
           return res.status(400).json({error: "password does not much"});
 
         }
@@ -69,10 +75,10 @@ var corsOptions = {
 
         // let test = await services.user.findByUsernameOrId(username)
 
-        // let test = await services.user.findByEmail(email)
-        // console.log("testttttttttttttttttttt1111111")
+        let test = await services.user.getEmail(email)
+        console.log("testttttttttttttttttttt1111111")
 
-        // console.log("testttttttttttttttttttt",test)
+        console.log("testttttttttttttttttttt",test)
         const myUserJwt = await jwt.sign({ username: username, password: password }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
           audience: 'something',
@@ -99,6 +105,8 @@ var corsOptions = {
           try {
             return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code)
           } catch (error) {
+            log4j.loggererror.error("Error in getType: "+error.response.data)
+
             return res.status(error.response.status).send(error.response.data);
           }
         }
@@ -121,7 +129,8 @@ var corsOptions = {
 
             })
           } catch (error) {
-         
+            log4j.loggererror.error("Error in createProfile :"+error.response.data)
+          
             return res.status(error.response.status).send(error.response.data);
           }
         }
@@ -144,7 +153,9 @@ var corsOptions = {
         console.log("aaaa", userProfile)
         if (userProfile.data.status == "error") {
           // services.user.remove()
-          return res.status(200).json(userProfile.data);
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
+          return res.status(400).json(userProfile.data);
         }
 
         myProfile = await services.application.insert({
@@ -163,8 +174,10 @@ var corsOptions = {
 
         mail.send_email("confirmation", "Veuillez cliquer sur lien pour activer votre compte \n " + confirm_uri);
 
+        log4j.loggerinfo.info("Success, mail has been sent to : "+email);
         return res.status(201).json({ etat: "Success", message: "Check your email : " + email });
       } catch (err) {
+        log4j.loggererror.error("Error :"+err.message)
         return res.status(422).json({ error: err.message })
       }
     });
@@ -179,6 +192,7 @@ var corsOptions = {
         console.debug('confirmation', user, req.query, confirm_token, username)
         if (user == false) { // username does not exist
           console.debug('wrong confirmation token')
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
           return res.status(200).json({ error: "wrong confirmation token" });
         }
 
@@ -192,17 +206,23 @@ var corsOptions = {
 
           if (!decoded) {
             console.debug('wrong confirmation token')
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
             return res.status(200).json({ error: "wrong confirmation token" });
 
           } else {
             if (user.username != decoded.username) {
               console.debug('???wrong confirmation token')
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
               return res.status(200).json({ error: "wrong confirmation token" });
 
             }
             const passBooleanTrue = await utils.compareSaltAndHashed(decoded.password, myCredBasic.password)
 
             if (!passBooleanTrue) {
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
               return res.status(200).json({ error: "wrong confirmation token" });
 
             }
@@ -210,6 +230,8 @@ var corsOptions = {
         } catch (error) {
           console.log("error", error)
           // res.status(403).send(error);
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
           return res.status(400).json({ error: error });
         }
         // user_res = await services.user.activate(user.id)
@@ -222,6 +244,8 @@ var corsOptions = {
         return res.status(200).json({ etat: "Success" });
 
       } catch (err) {
+        log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
         return res.status(422).json({ error: err.message })
       }
     });
@@ -250,6 +274,8 @@ var corsOptions = {
 
             })
           } catch (error) {
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
             return res.status(error.response.status).send(error.response.data);
           }
         }
@@ -264,6 +290,7 @@ var corsOptions = {
         // return res.status(201).json({message:"Check your email : "+myUser.email});
 
       } catch (err) {
+        log4j.loggererror.error("Error in adding profile: "+userProfile.data)
 
         return res.status(422).json({ error: err.message })
       }
@@ -309,6 +336,8 @@ var corsOptions = {
 
             })
           } catch (error) {
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
             return res.status(error.response.status).send(error.response.data);
           }
         }
@@ -334,6 +363,8 @@ var corsOptions = {
         const userProfile = await createAgentProfile(agentUser);
         console.log("userProfile.data", userProfile.data)
         if (userProfile.data.status == "error") {
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
           return res.status(200).json(userProfile.data);
         }
 
@@ -343,6 +374,8 @@ var corsOptions = {
 
 
       } catch (err) {
+        log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
         return res.status(422).json({ error: err.message })
       }
     });
@@ -375,6 +408,8 @@ var corsOptions = {
     gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => {
       const { code } = req.body // code = 10 desactive , 11 active // id is a username
       if (!code) {
+        log4j.loggererror.error("Unkown error.")
+
         return res.status(200).json({ error: "Code can not be empty (set 10 to desactivate or 11 to activate a user" });
 
       }
@@ -382,18 +417,24 @@ var corsOptions = {
       console.log("myUser", myUser)
 
       if (myUser == false) {
+        log4j.loggererror.error("Unkown error.")
+
         return res.status(200).json({ message: "The user does not exist" });
       }
 
       if (code == 10) {
         myUser = await services.user.deactivate(myUser.id)
         if (myUser == true) {
+          log4j.loggererror.error("Unkown error.")
+
           return res.status(200).json({ message: "The user has been desactivated" });
         }
 
       } else if (code == 11) {
         myUser = await services.user.activate(myUser.id)
         if (myUser == true) {
+          log4j.loggererror.error("Unkown error.")
+
           return res.status(200).json({ message: "The user has been activated" });
         }
       }
@@ -426,6 +467,8 @@ var corsOptions = {
           try {
             return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code)
           } catch (error) {
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
             return res.status(error.response.status).send(error.response.data);
           }
         }
@@ -447,6 +490,8 @@ var corsOptions = {
 
             })
           } catch (error) {
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
             return res.status(error.response.status).send(error.response.data);
 
           }
@@ -457,6 +502,8 @@ var corsOptions = {
  
           console.log("aaaaaaaaaa userProfile",userProfile.response)
         if (userProfile.data.status == "error") {
+          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
           return res.status(200).json(userProfile.data);
         }
 
@@ -476,11 +523,14 @@ var corsOptions = {
         console.log("crd_oauth2.secret", crd_oauth2.secret)
 
         mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " )");
+        log4j.loggerinfo.info("Admin has been successfuly created, we have sent an email to " + email + " to set a new password");
 
         return res.status(201).json({ etat: "Success", message: "Admin has been successfuly created, we have sent an email to " + email + " to set a new password" });
 
 
       } catch (err) {
+        log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+
         return res.status(422).json({ error: err.message })
       }
     });
@@ -714,13 +764,19 @@ var corsOptions = {
       console.log("myUser", myUser)
       // myUserUpdte = await services.user.update(myUser.id,"firstname")
       if (myUser.confirmMail == 'false') {
+        log4j.loggererror.error("Error please confirm your email ")
+
         return res.status(200).json({ error: "Confirm your email" });
 
       }
       if (myUser == false) {
+        log4j.loggerinfo.info("Error username does not exist.");
+
         return res.status(200).json({ error: "username does not exist" });
 
       } else if (myUser.isActive == false) {
+        log4j.loggerinfo.info("Error user is desactivated.");
+
         return res.status(200).json({ error: "user is desactivated" });
 
       }
@@ -729,6 +785,8 @@ var corsOptions = {
       console.log("myCredBasic ", myCredBasic)
       const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password)
       if (!passBooleanTrue) {
+          log4j.loggererror.error("Error Wrong password")
+
         return res.status(200).json({ error: "Wrong password" });
 
       }
@@ -751,6 +809,8 @@ var corsOptions = {
             client_secret: client_secret
           })
         } catch (error) {
+          log4j.loggererror.error("Error in getToken: "+error.response.data)
+
           return res.status(error.response.status).send(error.response.data);
         }
       }
@@ -760,6 +820,8 @@ var corsOptions = {
         token = await getToken(username, password, crd_oauth2.id, crd_oauth2.secret)
 
       } catch (error) {
+        log4j.loggererror.error("Error :"+error)
+
         console.log("Error", error)
       }
 
@@ -769,6 +831,8 @@ var corsOptions = {
         try {
           return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
         } catch (error) {
+          log4j.loggererror.error("Error in getting profile: "+error.response.data)
+
           return res.status(error.response.status).send(error.response.data);
         }
       }
@@ -779,6 +843,8 @@ var corsOptions = {
 
       } catch (error) {
         console.log("error", error)
+        log4j.loggererror.error("Error in getting profile: "+error.response.data)
+
         return res.status(error.response.status).send(error.response.data);
 
       }
@@ -787,11 +853,14 @@ var corsOptions = {
       if (token) {
         if (token.status == 200) {
           if (data.status == 200) {
+            log4j.loggerinfo.info("Succes in getting token.");
+
             return res.status(token.status).json({ token: token.data, data: data.data.data });
           }
 
         }
       }
+      log4j.loggererror.error("Error :"+token)
 
       return res.status(token.status).json(token);
 
@@ -844,6 +913,8 @@ var corsOptions = {
       console.debug('confirmation', user, username)
       if (user == false) { // username does not exist
         console.debug('Username does not exist')
+        log4j.loggererror.error("Error Username does not exist: ")
+
         return res.status(200).json({ error: "Username does not exist" });
       }
       const myUserJwt = await jwt.sign({ username: username }, `${env.JWT_SECRET}`, {
@@ -860,6 +931,7 @@ var corsOptions = {
       //here je vais envoyer un mail
 
       mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures");
+      log4j.loggerinfo.info("Success check your email : " + user.email);
 
       return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email });
 
@@ -880,6 +952,8 @@ var corsOptions = {
         console.debug('confirmation', user, req.query, token, username)
         if (user == false) { // username does not exist
           console.debug('wrong confirmation token')
+          log4j.loggererror.error("Error wrong confirmation token")
+
           return res.status(200).json({ error: "wrong confirmation token" });
         }
 
@@ -893,25 +967,33 @@ var corsOptions = {
 
           if (!decoded) {
             console.debug('wrong confirmation token')
+          log4j.loggererror.error("Error wrong confirmation token")
+
             return res.status(200).json({ error: "wrong confirmation token" });
 
           } else {
             if (user.username != decoded.username) {
               console.debug('wrong confirmation token')
+          log4j.loggererror.error("Error wrong confirmation token")
+
               return res.status(200).json({ error: "wrong confirmation token" });
 
             }
 
             if (password != password_confirmation) {
+          log4j.loggererror.error("Error password does not much ")
+
               return res.status(200).json({ error: "password does not much" });
             }
 
             console.log("ddd")
           }
         } catch (error) {
-          console.log("error", error)
+          console.log("error", error.message)
           // res.status(403).send(error);
-          return res.status(400).json({ error: error });
+          log4j.loggererror.error("Error "+error.message)
+
+          return res.status(400).json({ error: error.message });
 
         }
 
@@ -929,11 +1011,16 @@ var corsOptions = {
 
         const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password)
         if (!passBooleanTrue) {
+          log4j.loggererror.error("Error wrong confirmation token ")
+
           return res.status(200).json({ error: "wrong confirmation token" });
         }
+        log4j.loggerinfo.info("Success.");
 
         return res.status(200).json({ etat: "Success" });
       } catch (err) {
+        log4j.loggererror.error("Error: "+err.message)
+
         return res.status(422).json({ error: err.message })
       }
 

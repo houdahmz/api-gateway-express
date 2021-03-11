@@ -3,3 +3,5 @@ package-lock.json
 .env
 .secrets.yml
 config/gateway.config.yml
+config/system.config.yml
+logs
