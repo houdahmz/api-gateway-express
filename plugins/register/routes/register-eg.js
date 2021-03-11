@@ -107,6 +107,10 @@ var corsOptions = {
 
             return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code)
           } catch (error) {
+            if(!error.response){
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({"error":error.message});
+            }
             log4j.loggererror.error("Error in getType: "+error.response.data)
 
             return res.status(error.response.status).send(error.response.data);
@@ -116,7 +120,7 @@ var corsOptions = {
 
         const dataType = await getType("10");
         console.log("dataType", dataType)
-        if (dataType.data == undefined) {
+        if (!dataType.data.data) {
           log4j.loggererror.error("Error Problem in server ")
           return res.status(500).json({"Error": "Problem in server"});
       
@@ -137,11 +141,14 @@ var corsOptions = {
 
             })
           } catch (error) {
+            if(!error.response){
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({"error":error.message});
+            }
             log4j.loggererror.error("Error in createProfile :"+error.response.data)
           
-	console.log("aaaa iciii in create progifle",myUser.id)
           const deleted =  services.user.remove(myUser.id);
-	console.log("deleted",deleted);	
+
             return res.status(error.response.status).send(error.response.data);
           }
         }
@@ -292,16 +299,25 @@ var corsOptions = {
 
             })
           } catch (error) {
+            if(!error.response){
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({"error":error.message});
+            }
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
 
             return res.status(error.response.status).send(error.response.data);
           }
         }
         let userProfile = await updateprofile();
+        if (!userProfile.data) {
+          log4j.loggererror.error("Error Problem in server ")
+          return res.status(500).json({"Error": "Problem in server"});
+      
+        }
         // console.log("userProfile",userProfile)
 
         // mail.send_email("confirmation","confirmer votre profile svp \n "+ confirm_uri);
-
+        log4j.loggerinfo.info("Success");
 
         return res.status(200).json({ message: userProfile.data });
 
@@ -356,6 +372,10 @@ var corsOptions = {
 
             })
           } catch (error) {
+            if(!error.response){
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({"error":error.message});
+            }
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
 
             return res.status(error.response.status).send(error.response.data);
@@ -382,6 +402,11 @@ var corsOptions = {
 
         const userProfile = await createAgentProfile(agentUser);
         console.log("userProfile.data", userProfile.data)
+        if (!userProfile.data) {
+          log4j.loggererror.error("Error Problem in server ")
+          return res.status(500).json({"Error": "Problem in server"});
+      
+        }
         if (userProfile.data.status == "error") {
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
 
@@ -489,12 +514,21 @@ var corsOptions = {
 
             return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code)
           } catch (error) {
+            if(!error.response){
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({"error":error.message});
+            }
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
 
             return res.status(error.response.status).send(error.response.data);
           }
         }
         const dataType = await getType("20") 
+        if (!dataType.data.data) {
+          log4j.loggererror.error("Error Problem in server ")
+          return res.status(500).json({"Error": "Problem in server"});
+      
+        }
         /////////////
         console.log("aaaaaaaaaa dataType",dataType)
         console.log("aaaaaaaaaa ${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}",env.baseURL+env.HTTP_PORT_API_MANAGEMENT)
@@ -514,6 +548,10 @@ var corsOptions = {
 
             })
           } catch (error) {
+            if(!error.response){
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({"error":error.message});
+            }
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
 
             return res.status(error.response.status).send(error.response.data);
@@ -523,7 +561,11 @@ var corsOptions = {
         //////////////
         // let userProfile;
   let  userProfile = await createAgentProfile(myUser) 
- 
+  if (!userProfile.data.data) {
+    log4j.loggererror.error("Error Problem in server ")
+    return res.status(500).json({"Error": "Problem in server"});
+
+  }
           console.log("aaaaaaaaaa userProfile",userProfile.response)
         if (userProfile.data.status == "error") {
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
@@ -638,9 +680,9 @@ var corsOptions = {
 
           } catch (error) {
             console.log("error", error)
+            res.send({"error":error.message});
 
           }
-
           console.log("myCredOauth", myCredOauth.scopes)
 
           let endpointScopes = "admin";
@@ -691,6 +733,7 @@ var corsOptions = {
             myCredOauth = await services.credential.getCredential(decoded.consumerId, 'oauth2')
           } catch (error) {
             console.log("error", error)
+            res.send({"error":error.message});
 
           }
 
@@ -745,6 +788,7 @@ var corsOptions = {
             myCredOauth = await services.credential.getCredential(decoded.consumerId, 'oauth2')
           } catch (error) {
             console.log("error", error)
+            res.send({"error":error.message});
 
           }
 
@@ -835,6 +879,10 @@ var corsOptions = {
             client_secret: client_secret
           })
         } catch (error) {
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
           log4j.loggererror.error("Error in getToken: "+error.response.data)
 
           return res.status(error.response.status).send(error.response.data);
@@ -847,9 +895,11 @@ var corsOptions = {
         token = await getToken(username, password, crd_oauth2.id, crd_oauth2.secret)
 
       } catch (error) {
-        log4j.loggererror.error("Error :"+error)
+        log4j.loggererror.error("Error :"+error.message)
 
-        console.log("Error", error)
+        console.log("Error", error.message)
+        return res.status(500).send({"error":error.message});
+
       }
 
       ///////////
@@ -860,6 +910,10 @@ var corsOptions = {
 
           return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
         } catch (error) {
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
           log4j.loggererror.error("Error in getting profile: "+error.response.data)
 
           return res.status(error.response.status).send(error.response.data);
@@ -871,7 +925,8 @@ var corsOptions = {
         data = await getProfile(myUser.id)
 
       } catch (error) {
-        console.log("error", error)
+        console.log("error", error) //// tkt
+        
         log4j.loggererror.error("Error in getting profile: "+error.response.data)
 
         return res.status(error.response.status).send(error.response.data);
