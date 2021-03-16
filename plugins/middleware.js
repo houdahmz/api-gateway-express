@@ -38,6 +38,7 @@ const middlewarePlugin = {
                     let userUpdated = await services.user.update(req.body.user.consumerId, { ip: ip ,os: os.platform(),source: ua.source})
                     // userUpdated = await services.user.update(req.body.user.consumerId, { os: os.platform(),source: ua.source })
                     console.log("userUpdated",userUpdated)
+                    console.log("req.device.type.toUpperCase()",req.device.type.toUpperCase())
 
                     const user = await services.user.findByUsernameOrId(req.body.user.consumerId)
                     console.log("user", user)
