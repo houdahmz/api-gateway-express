@@ -316,12 +316,12 @@ var corsOptions = {
       }
     });
 
-    gatewayExpressApp.post('/agent-register', verifyTokenUser, async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+    gatewayExpressApp.post('/agent-register', verifyTokenAdmin, async (req, res, next) => { // incomplete {add send mail with url /change_password} 
       try {
         const { firstname, username, lastname, email, phone, idOwner } = req.body
         console.log("/api/agent-register")
 
-
+console.log("req.headers.authorization",req.headers.authorization)
         agentUser = await services.user.insert({
           isActive: true,
           firstname: firstname,
@@ -337,21 +337,62 @@ var corsOptions = {
           try {
         log4j.loggerinfo.info("Call postProfile agent: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`);
 
-            return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`, { ///profile-by-company
-              idOwner: idOwner,
-              id_user: agentUser.id,
-              first_name: agentUser.firstname,
-              last_name: agentUser.lastname,
-              phone: agentUser.phone,
-              created_by: agentUser.id
+            return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`
+            , {    
+ ///profile-by-company
+                  idOwner: idOwner,
+                  id_user: agentUser.id,
+                  first_name: agentUser.firstname,
+                  last_name: agentUser.lastname,
+                  phone: agentUser.phone,
+                  created_by: agentUser.id
+    
+                }      
+)
 
-            })
+
+// return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`
+// , {    
+// ///profile-by-company
+//       idOwner: idOwner,
+//       id_user: agentUser.id,
+//       first_name: agentUser.firstname,
+//       last_name: agentUser.lastname,
+//       phone: agentUser.phone,
+//       created_by: agentUser.id
+
+//     }
+//     ,{
+//       headers: {
+//       'Authorization': req.headers.authorization}
+//     }
+
+// )
+
+// return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`
+// , {    
+//   headers: {
+//   'Authorization': req.headers.authorization
+// },
+// body: JSON.stringify(       
+// { ///profile-by-company
+//       idOwner: idOwner,
+//       id_user: agentUser.id,
+//       first_name: agentUser.firstname,
+//       last_name: agentUser.lastname,
+//       phone: agentUser.phone,
+//       created_by: agentUser.id
+
+//     }
+//     )
+// }
+// )
           } catch (error) {
             if(!error.response){
               log4j.loggererror.error(error.message)
               return res.status(500).send({"error":error.message});
             }
-          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+          log4j.loggererror.error("Error in adding profile: ")
           const deleted =  services.user.remove(myUser.id);
 
             return res.status(error.response.status).send(error.response.data);
@@ -393,7 +434,7 @@ var corsOptions = {
 
 
       } catch (err) {
-        log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+        log4j.loggererror.error("Error in adding profile: ")
 
         return res.status(422).json({ error: err.message })
       }
@@ -638,6 +679,10 @@ var corsOptions = {
 
           if (myCredOauth.scopes) {
             if (myCredOauth.scopes[0] == endpointScopes) {
+              console.log("req.headers.authorization",req.headers.authorization)
+
+              // console.log("res.headers.authorization",res.headers.authorization)
+              // res.headers.authorization = req.headers.authorization
               next();
             }
             else {
@@ -648,7 +693,7 @@ var corsOptions = {
           }
         }
         catch (error) {
-          let errorObject = { message: 'Unauthorized Token.', reason: error.name }
+          let errorObject = { message: 'Error Unauthorized Token.', reason: error.name }
           console.log(errorObject);
           res.status(403).send(errorObject);
         }
@@ -897,6 +942,7 @@ var corsOptions = {
         }
       }
       log4j.loggerinfo.info("Getting token");
+
       return res.status(token.status).json(token);
 
     });

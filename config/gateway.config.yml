@@ -533,6 +533,7 @@ policies:
   - jwt-permissions
   - jwtScopes
   - agent-register
+  - middleware
   - rewrite
   - tokenReg
   - login
@@ -601,6 +602,7 @@ pipelines:
             body:
               add:
                 user: req.user
+      - middleware:
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
@@ -631,6 +633,7 @@ pipelines:
             body:
               add:
                 user: req.user
+      - middleware:
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
@@ -731,6 +734,7 @@ pipelines:
             body:
               add:
                 user: req.user
+      - middleware:
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
@@ -761,6 +765,7 @@ pipelines:
             body:
               add:
                 user: req.user
+      - middleware:
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
@@ -790,6 +795,7 @@ pipelines:
             body:
               add:
                 user: req.user
+      - middleware:
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
