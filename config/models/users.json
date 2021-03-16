@@ -36,6 +36,12 @@
     },
     "source": {
       "type": "string"
+    },
+    "geoip": {
+      "type": "string"
+    },
+    "last_login": {
+      "type": "string"
     }
   },
   "required": [

@@ -19,7 +19,7 @@ const os = require('os');
 useragent = require('express-useragent');
 var device = require('express-device');
 var MobileDetect = require('mobile-detect');
-// const { lookup } = require('geoip-lite');
+const { lookup } = require('geoip-lite');
 
 const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
 const secretOrPrivateKey = config.systemConfig.accessTokens.secretOrPrivateKey
@@ -946,7 +946,7 @@ console.log("req.headers.authorization",req.headers.authorization)
    req.connection.socket.remoteAddress
       console.log("ip",ip)
       console.log("req.connection.remoteAddress",req.connection.remoteAddress)
-      // console.log(lookup(ip)); // location of the user
+      console.log("lookup",lookup(ip)); // location of the user
 
       console.log("os.platform()",os.platform())
       console.log("os.release()",os.release())
@@ -960,7 +960,13 @@ console.log("req.headers.authorization",req.headers.authorization)
       var isMobile = ua.isMobile
       console.log("isMobile",isMobile)
 
-      let userUpdated = await services.user.update(myUser.id, { ip: ip ,os: os.platform(),source: ua.source})
+      let userUpdated = await services.user.update(myUser.id, {
+        ip: ip ,
+        os: os.platform(),
+        source: ua.source,
+        geoip: lookup(ip),
+        last_login: Date.now()
+      })
       console.log("userUpdated",userUpdated)
 
       const user = await services.user.findByUsernameOrId(myUser.id)
