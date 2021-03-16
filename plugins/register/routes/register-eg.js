@@ -820,7 +820,11 @@ console.log("req.headers.authorization",req.headers.authorization)
     gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
       console.log("*********************************", req.body)
       console.log("/api/login")
-
+      var ip = (typeof req.headers['x-forwarded-for'] === 'string'
+      && req.headers['x-forwarded-for'].split(',').shift()) || 
+   req.connection.remoteAddress || 
+   req.socket.remoteAddress || 
+   req.connection.socket.remoteAddress
       console.log("ip",ip)
       console.log("os.platform()",os.platform())
       console.log("os.release()",os.release())
@@ -832,7 +836,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       var isMobile = ua.isMobile
       console.log("isMobile",isMobile)
 
-      
+
       const { username, password } = req.body
       console.log("eeee", password)
       console.log("zzzzz",corsOptions)
