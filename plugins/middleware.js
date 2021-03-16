@@ -3,6 +3,7 @@ useragent = require('express-useragent');
 const services = require('express-gateway/lib/services/')
 const { lookup } = require('geoip-lite');
 const iplocate = require("node-iplocate");
+var moment = require('moment');
 
 
 const middlewarePlugin = {
@@ -24,6 +25,11 @@ const middlewarePlugin = {
          req.socket.remoteAddress || 
          req.connection.socket.remoteAddress
          console.log("ip",ip)
+        //  console.log("Date.now()",Date.now().toString())
+         console.log("new Date()",new Date().toString())
+         
+
+
          console.log("os.platform()",os.platform())
          console.log("os.release()",os.release())
          console.log("os.type()",os.type()); // "Windows_NT"
@@ -57,7 +63,7 @@ const middlewarePlugin = {
                         os: os.platform(),
                         source: ua.source,
                         geoip: lookup(ip),
-                        last_login: Date.now()
+                        last_login: new Date().toString()
                     
                     })
                     // userUpdated = await services.user.update(req.body.user.consumerId, { os: os.platform(),source: ua.source })
