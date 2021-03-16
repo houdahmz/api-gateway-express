@@ -1,5 +1,7 @@
 const os = require('os');
 useragent = require('express-useragent');
+const services = require('express-gateway/lib/services/')
+
 const middlewarePlugin = {
   schema: { $id: "./../config/models/schema.js" },
   version: '1.0.0',
@@ -26,10 +28,21 @@ const middlewarePlugin = {
          var source = req.headers['user-agent']
          var ua = useragent.parse(source);
          console.log("ua",ua)
+         console.log("ua.source",ua.source)
+
          var isMobile = ua.isMobile
          console.log("isMobile",isMobile)
 
                 if(body.user){
+
+                    let userUpdated = await services.user.update(req.body.user.consumerId, { ip: ip ,os: os.platform(),source: ua.source})
+                    // userUpdated = await services.user.update(req.body.user.consumerId, { os: os.platform(),source: ua.source })
+                    console.log("userUpdated",userUpdated)
+
+                    const user = await services.user.findByUsernameOrId(req.body.user.consumerId)
+                    console.log("user", user)
+            
+
                 console.log("body before",body)
                 body.created_by = req.body.user.consumerId
                 body.deleted_by = req.body.user.consumerId

@@ -19,6 +19,7 @@ const os = require('os');
 useragent = require('express-useragent');
 var device = require('express-device');
 var MobileDetect = require('mobile-detect');
+// const { lookup } = require('geoip-lite');
 
 const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
 const secretOrPrivateKey = config.systemConfig.accessTokens.secretOrPrivateKey
@@ -821,40 +822,6 @@ console.log("req.headers.authorization",req.headers.authorization)
     gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
       console.log("*********************************", req.body)
       console.log("/api/login")
-      var md = new MobileDetect(req.headers['user-agent']);
-      // var m = new MobileDetect(window.navigator.userAgent);
-      console.log("md", md);
-      // console.log("m", m);
-      const md1 = new MobileDetect(req.get('User-Agent'));
-      res.locals.isMobile = md1.mobile();
-      console.log("md1", md1);
-
-      console.log("md.os(), md.os()", md.os());
-      if (md.os() === "iOS") {
-        console.log("is ios");
-      } else if (md.os() === "AndroidOS") {
-        console.log("is android");
-
-    }else if (md.os() === "AndroidOS") {
-      console.log("is android");
-
-  }
-      var ip = (typeof req.headers['x-forwarded-for'] === 'string'
-      && req.headers['x-forwarded-for'].split(',').shift()) || 
-   req.connection.remoteAddress || 
-   req.socket.remoteAddress || 
-   req.connection.socket.remoteAddress
-      console.log("ip",ip)
-      console.log("os.platform()",os.platform())
-      console.log("os.release()",os.release())
-      console.log("os.type()",os.type()); // "Windows_NT"
-
-      var source = req.headers['user-agent']
-      var ua = useragent.parse(source);
-      console.log("ua",ua)
-      var isMobile = ua.isMobile
-      console.log("isMobile",isMobile)
-
 
       const { username, password } = req.body
       console.log("eeee", password)
@@ -979,6 +946,52 @@ console.log("req.headers.authorization",req.headers.authorization)
 
         }
       }
+/************************** */
+      var md = new MobileDetect(req.headers['user-agent']);
+      // var m = new MobileDetect(window.navigator.userAgent);
+      console.log("md", md);
+      // console.log("m", m);
+      const md1 = new MobileDetect(req.get('User-Agent'));
+      res.locals.isMobile = md1.mobile();
+      console.log("md1", md1);
+
+      console.log("md.os(), md.os()", md.os());
+      if (md.os() === "iOS") {
+        console.log("is ios");
+      } else if (md.os() === "AndroidOS") {
+        console.log("is android");
+
+    }else if (md.os() === "AndroidOS") {
+      console.log("is android");
+  }
+
+      var ip = (typeof req.headers['x-forwarded-for'] === 'string'
+      && req.headers['x-forwarded-for'].split(',').shift()) || 
+   req.connection.remoteAddress || 
+   req.socket.remoteAddress || 
+   req.connection.socket.remoteAddress
+      console.log("ip",ip)
+      console.log("req.connection.remoteAddress",req.connection.remoteAddress)
+      // console.log(lookup(ip)); // location of the user
+
+      console.log("os.platform()",os.platform())
+      console.log("os.release()",os.release())
+      console.log("os.type()",os.type()); // "Windows_NT"
+
+      var source = req.headers['user-agent']
+      var ua = useragent.parse(source);
+      console.log("ua",ua)
+      var isMobile = ua.isMobile
+      console.log("isMobile",isMobile)
+
+                    let userUpdated = await services.user.update(req.body.user.consumerId, { ip: ip ,os: os.platform(),source: ua.source})
+      console.log("userUpdated",userUpdated)
+
+      const user = await services.user.findByUsernameOrId(myUser.id)
+      console.log("user", user)
+
+      /**************************** */
+
       log4j.loggerinfo.info("Getting token");
 
       return res.status(token.status).json(token);
