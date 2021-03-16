@@ -25,7 +25,7 @@ const middlewarePlugin = {
 
          var source = req.headers['user-agent']
          var ua = useragent.parse(source);
-        //  console.log("ua",ua)
+         console.log("ua",ua)
          var isMobile = ua.isMobile
          console.log("isMobile",isMobile)
 
