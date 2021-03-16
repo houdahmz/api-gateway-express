@@ -978,7 +978,7 @@ console.log("req.headers.authorization",req.headers.authorization)
         os: os.platform(),
         source: ua.source,
         geoip: lookup(ip),
-        last_login: Date.now()
+        last_login: new Date().toString()
       })
       console.log("userUpdated",userUpdated)
 
