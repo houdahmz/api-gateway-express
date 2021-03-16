@@ -17,7 +17,8 @@ const log4j = require("../../../config/configLog4js.js");
 
 const os = require('os');
 useragent = require('express-useragent');
-
+var device = require('express-device');
+var MobileDetect = require('mobile-detect');
 
 const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
 const secretOrPrivateKey = config.systemConfig.accessTokens.secretOrPrivateKey
@@ -820,6 +821,18 @@ console.log("req.headers.authorization",req.headers.authorization)
     gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
       console.log("*********************************", req.body)
       console.log("/api/login")
+      var md = new MobileDetect(req.headers['user-agent']);
+      console.log("md", md);
+      console.log("md.os(), md.os()", md.os());
+      if (md.os() === "iOS") {
+        console.log("is ios");
+      } else if (md.os() === "AndroidOS") {
+        console.log("is android");
+
+    }else if (md.os() === "AndroidOS") {
+      console.log("is android");
+
+  }
       var ip = (typeof req.headers['x-forwarded-for'] === 'string'
       && req.headers['x-forwarded-for'].split(',').shift()) || 
    req.connection.remoteAddress || 
