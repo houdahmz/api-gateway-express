@@ -822,9 +822,12 @@ console.log("req.headers.authorization",req.headers.authorization)
       console.log("*********************************", req.body)
       console.log("/api/login")
       var md = new MobileDetect(req.headers['user-agent']);
-      var m = new MobileDetect(window.navigator.userAgent);
+      // var m = new MobileDetect(window.navigator.userAgent);
       console.log("md", md);
-      console.log("m", m);
+      // console.log("m", m);
+      const md1 = new MobileDetect(req.get('User-Agent'));
+      res.locals.isMobile = md1.mobile();
+      console.log("md1", md1);
 
       console.log("md.os(), md.os()", md.os());
       if (md.os() === "iOS") {
