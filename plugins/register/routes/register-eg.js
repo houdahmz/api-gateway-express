@@ -995,7 +995,7 @@ console.log("req.headers.authorization",req.headers.authorization)
 
       log4j.loggerinfo.info("Getting token");
 
-      return res.status(token.status).json(token);
+      return res.status(token.status).json({token: token, role: scope  });
 
     });
 
