@@ -957,7 +957,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       var isMobile = ua.isMobile
       console.log("isMobile",isMobile)
 
-      let userUpdated = await services.user.update(req.body.user.consumerId, { ip: ip ,os: os.platform(),source: ua.source})
+      let userUpdated = await services.user.update(myUser.id, { ip: ip ,os: os.platform(),source: ua.source})
       console.log("userUpdated",userUpdated)
 
       const user = await services.user.findByUsernameOrId(myUser.id)
