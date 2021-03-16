@@ -15,6 +15,9 @@ const authService = services.auth;
 
 const log4j = require("../../../config/configLog4js.js");
 
+const os = require('os');
+useragent = require('express-useragent');
+
 
 const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
 const secretOrPrivateKey = config.systemConfig.accessTokens.secretOrPrivateKey
@@ -818,6 +821,18 @@ console.log("req.headers.authorization",req.headers.authorization)
       console.log("*********************************", req.body)
       console.log("/api/login")
 
+      console.log("ip",ip)
+      console.log("os.platform()",os.platform())
+      console.log("os.release()",os.release())
+      console.log("os.type()",os.type()); // "Windows_NT"
+
+      var source = req.headers['user-agent']
+      var ua = useragent.parse(source);
+      console.log("ua",ua)
+      var isMobile = ua.isMobile
+      console.log("isMobile",isMobile)
+
+      
       const { username, password } = req.body
       console.log("eeee", password)
       console.log("zzzzz",corsOptions)
