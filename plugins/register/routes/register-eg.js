@@ -958,7 +958,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       console.log("iplocate",iplocate(ip).country); // location of the user
       console.log(iplocate(ip)); // location of the user
 
-      iplocate("127.0.0.1").then(function(results) {
+      iplocate(ip).then(function(results) {
          console.log("IP Address: " + results.ip);
          console.log("Country: " + results.country + " (" + results.country_code + ")");
          console.log("Continent: " + results.continent);
@@ -966,7 +966,7 @@ console.log("req.headers.authorization",req.headers.authorization)
         
          console.log(JSON.stringify(results, null, 2));
        });
-       
+
       var source = req.headers['user-agent']
       var ua = useragent.parse(source);
       console.log("ua",ua)
