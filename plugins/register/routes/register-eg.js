@@ -49,6 +49,7 @@ var corsOptions = {
     gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
     gatewayExpressApp.use(cors(corsOptions));
+    gatewayExpressApp.use(device.capture());
 
 
     gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
@@ -950,6 +951,8 @@ console.log("req.headers.authorization",req.headers.authorization)
       console.log("os.platform()",os.platform())
       console.log("os.release()",os.release())
       console.log("os.type()",os.type()); // "Windows_NT"
+
+      console.log("req.device.type.toUpperCase()",req.device.type.toUpperCase())
 
       var source = req.headers['user-agent']
       var ua = useragent.parse(source);
