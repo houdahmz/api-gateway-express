@@ -919,34 +919,7 @@ console.log("req.headers.authorization",req.headers.authorization)
         }
       }
       ///////////
-      var data;
-      try {
-        data = await getProfile(myUser.id)
-
-      } catch (error) {
-        console.log("error", error) //// tkt
-        if(!error.response){
-          log4j.loggererror.error(error.message)
-          return res.status(500).send({"error":error.message});
-        }
-        log4j.loggererror.error("Error in getting profile: "+error.response.data)
-
-        return res.status(error.response.status).send(error.response.data);
-
-      }
-      let name = "complete_profile" + myUser.id
-      userApp = await services.application.find(name)
-      if (token) {
-        if (token.status == 200) {
-          if (data.status == 200) {
-            log4j.loggerinfo.info("Succes in getting token.");
-
-            return res.status(token.status).json({ token: token.data, data: data.data.data });
-          }
-
-        }
-      }
-/************************** */
+      /************************** */
       var md = new MobileDetect(req.headers['user-agent']);
       // var m = new MobileDetect(window.navigator.userAgent);
       console.log("md", md);
@@ -984,7 +957,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       var isMobile = ua.isMobile
       console.log("isMobile",isMobile)
 
-                    let userUpdated = await services.user.update(req.body.user.consumerId, { ip: ip ,os: os.platform(),source: ua.source})
+      let userUpdated = await services.user.update(req.body.user.consumerId, { ip: ip ,os: os.platform(),source: ua.source})
       console.log("userUpdated",userUpdated)
 
       const user = await services.user.findByUsernameOrId(myUser.id)
@@ -992,9 +965,37 @@ console.log("req.headers.authorization",req.headers.authorization)
 
       /**************************** */
 
+      var data;
+      try {
+        data = await getProfile(myUser.id)
+
+      } catch (error) {
+        console.log("error", error) //// tkt
+        if(!error.response){
+          log4j.loggererror.error(error.message)
+          return res.status(500).send({"error":error.message});
+        }
+        log4j.loggererror.error("Error in getting profile: "+error.response.data)
+
+        return res.status(error.response.status).send(error.response.data);
+
+      }
+      let name = "complete_profile" + myUser.id
+      userApp = await services.application.find(name)
+      if (token) {
+        if (token.status == 200) {
+          if (data.status == 200) {
+            log4j.loggerinfo.info("Succes in getting token.");
+
+            return res.status(token.status).json({ token: token.data, role: scope ,data: data.data.data });
+          }
+
+        }
+      }
+
       log4j.loggerinfo.info("Getting token");
 
-      return res.status(token.status).json(token);
+      return res.status(token.status).json({token: token, role: scope  });
 
     });
 
