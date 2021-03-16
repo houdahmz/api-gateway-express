@@ -1,6 +1,9 @@
 const os = require('os');
 useragent = require('express-useragent');
 const services = require('express-gateway/lib/services/')
+const { lookup } = require('geoip-lite');
+const iplocate = require("node-iplocate");
+
 
 const middlewarePlugin = {
   schema: { $id: "./../config/models/schema.js" },
@@ -24,10 +27,24 @@ const middlewarePlugin = {
          console.log("os.platform()",os.platform())
          console.log("os.release()",os.release())
          console.log("os.type()",os.type()); // "Windows_NT"
+         console.log("lookup",lookup("127.0.0.1")); // location of the user
+         console.log("iplocate",iplocate(ip)); // location of the user
+         console.log("iplocate",iplocate(ip).country); // location of the user
+         console.log(iplocate(ip)); // location of the user
+
+         iplocate("127.0.0.1").then(function(results) {
+            console.log("IP Address: " + results.ip);
+            console.log("Country: " + results.country + " (" + results.country_code + ")");
+            console.log("Continent: " + results.continent);
+            console.log("Organisation: " + results.org + " (" + results.asn + ")");
+           
+            console.log(JSON.stringify(results, null, 2));
+          });
+
 
          var source = req.headers['user-agent']
          var ua = useragent.parse(source);
-         console.log("ua",ua)
+        //  console.log("ua",ua)
          console.log("ua.source",ua.source)
 
          var isMobile = ua.isMobile
@@ -35,7 +52,14 @@ const middlewarePlugin = {
 
                 if(body.user){
 
-                    let userUpdated = await services.user.update(req.body.user.consumerId, { ip: ip ,os: os.platform(),source: ua.source})
+                    let userUpdated = await services.user.update(req.body.user.consumerId, { 
+                        ip: ip ,
+                        os: os.platform(),
+                        source: ua.source,
+                        geoip: lookup(ip),
+                        last_login: Date.now()
+                    
+                    })
                     // userUpdated = await services.user.update(req.body.user.consumerId, { os: os.platform(),source: ua.source })
                     console.log("userUpdated",userUpdated)
                     console.log("req.device.type.toUpperCase()",req.device.type.toUpperCase())
