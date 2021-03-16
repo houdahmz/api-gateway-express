@@ -517,7 +517,7 @@ apiEndpoints:
 
 serviceEndpoints:
   api_management:
-    url: http://192.168.12.115:${HTTP_PORT_API_MANAGEMENT:-4000}/api-management
+    url: http://localhost:${HTTP_PORT_API_MANAGEMENT:-4000}/api-management
   backend:
     url: http://localhost:${HTTP_PORT_ADMIN:-9876}
 
@@ -534,6 +534,7 @@ policies:
   - jwtScopes
   - agent-register
   - rewrite
+  - middleware
   - tokenReg
   - login
   - response-transformer
@@ -601,6 +602,7 @@ pipelines:
             body:
               add:
                 user: req.user
+      - middleware:
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
@@ -631,6 +633,7 @@ pipelines:
             body:
               add:
                 user: req.user
+      - middleware:
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
