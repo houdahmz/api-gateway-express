@@ -26,6 +26,16 @@
     "confirmMail": {
       "type": "string"
     
+    },
+    "ip": {
+      "type": "string"
+    
+    },
+    "os": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
     }
   },
   "required": [
