@@ -62,7 +62,7 @@ const middlewarePlugin = {
                         ip: ip ,
                         os: os.platform(),
                         source: ua.source,
-                        geoip: lookup(ip),
+                        // geoip: lookup(ip),
                         last_login: new Date().toString()
                     
                     })
