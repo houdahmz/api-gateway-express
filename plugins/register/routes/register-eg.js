@@ -1203,4 +1203,20 @@ console.log("req.headers.authorization",req.headers.authorization)
 
     });
 
+    gatewayExpressApp.get('/api/logout', async (req, res, next) => { // still incomplete
+      console.log('heere', req.headers.authorization)
+      const test = await services.token.getTokenObject(req.headers.authorization)
+
+      return res.status(200).json(test);
+
+    });
+
+    gatewayExpressApp.get('/api/stats', async (req, res, next) => { // still incomplete
+      console.log('heere', req.headers.authorization)
+      const test = await services.token.getTokenObject(req.headers.authorization)
+
+      return res.status(200).json(test);
+
+    });
+
   };
