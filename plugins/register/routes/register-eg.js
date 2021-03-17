@@ -977,7 +977,7 @@ console.log("req.headers.authorization",req.headers.authorization)
         ip: ip ,
         os: os.platform(),
         source: ua.source,
-        geoip: lookup(ip),
+        // geoip: lookup(ip),
         last_login: new Date().toString()
       })
       console.log("userUpdated",userUpdated)
@@ -1200,6 +1200,22 @@ console.log("req.headers.authorization",req.headers.authorization)
       console.log("findOrSaveJWT", token)
       console.log("findOrSaveJWT", token)
       return res.status(200).json("token");
+
+    });
+
+    gatewayExpressApp.get('/api/logout', async (req, res, next) => { // still incomplete
+      console.log('heere', req.headers.authorization)
+      const test = await services.token.getTokenObject(req.headers.authorization)
+
+      return res.status(200).json(test);
+
+    });
+
+    gatewayExpressApp.get('/api/stats', async (req, res, next) => { // still incomplete
+      console.log('heere', req.headers.authorization)
+      const test = await services.token.getTokenObject(req.headers.authorization)
+
+      return res.status(200).json(test);
 
     });
 

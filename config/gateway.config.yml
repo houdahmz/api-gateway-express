@@ -162,74 +162,74 @@ apiEndpoints:
       scopes: ['admin']
   
   poste:
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/affiliation
       methods: ["POST"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/bill-payment
       methods: ["POST"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/recharge-card
       methods: ["POST"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/balance
       methods: ["POST"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/unsubscribe*
       methods: ["POST"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/affiliation*
       methods: ["GET"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/affiliation/user*
       methods: ["GET"]
       scopes: ['user']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/recharge*
       methods: ["GET"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/recharge/user*
       methods: ["GET"]
       scopes: ['user']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/bill-payment*
       methods: ["GET"]
       scopes: ['admin']  
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/bill-payment/user*
       methods: ["GET"]
       scopes: ['user']  
-    - host: localhost
+    - host: 192.168.12.115
       paths: /poste/transaction*
       methods: ["GET"]
       scopes: ['admin'] 
   topnet:
-    - host: localhost
+    - host: 192.168.12.115
       paths: /topnet/payment*
       methods: ["POST"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths:  /topnet/transaction/user*
       methods: ["GET"]
       scopes: ['user']
-    - host: localhost
+    - host: 192.168.12.115
       paths:  /topnet/transaction*
       methods: ["GET"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /topnet/bill*
       methods: ["GET"]
       scopes: ['user']
