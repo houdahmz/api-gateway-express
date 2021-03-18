@@ -1239,10 +1239,10 @@ console.log("req.headers.authorization",req.headers.authorization)
                            res.status("500").json("Error: error server");
                          }
                          let ca = amountPaymee.data.data
-                         console.log("mountPaymee.data.data.amoun",amountPaymee.data.data)
-                         console.log("amountPosteRecharge.data.data.amoun",amountPosteRecharge.data.data)
-                         console.log("mountPaymee.data.data.amoun",amountPostePayemnt.data.data)
-                         console.log("mountPaymee.data.data.amoun",amountTopnet.data.data)
+                         console.log("mountPaymee.data.data.amoun",amountPaymee.data.data.amount)
+                         console.log("amountPosteRecharge.data.data.amoun",amountPosteRecharge.data)
+                         console.log("mountPaymee.data.data.amoun",amountPostePayemnt.data.data.amount)
+                         console.log("mountPaymee.data.data.amoun",amountTopnet.data.data.amount)
 
 
       return res.status(200).json({
