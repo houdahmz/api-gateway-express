@@ -1211,12 +1211,68 @@ console.log("req.headers.authorization",req.headers.authorization)
 
     });
 
-    gatewayExpressApp.get('/api/stats', async (req, res, next) => { // still incomplete
-      console.log('heere', req.headers.authorization)
-      const test = await services.token.getTokenObject(req.headers.authorization)
+    gatewayExpressApp.get('/stats-by-service', async (req, res, next) => { // still incomplete
 
-      return res.status(200).json(test);
+
+        try {
+
+      log4j.loggerinfo.info("Call paymee: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
+     const amountPaymee =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`)
+          if(!amountPaymee.data){
+            res.status("500").json("Error: error server");
+          }
+
+          log4j.loggerinfo.info("Call topnet: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`);
+          const amountTopnet =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`)
+               if(!amountTopnet.data){
+                 res.status("500").json("Error: error server");
+               }
+
+               log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`);
+               const amountPosteRecharge =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`)
+                    if(!amountPosteRecharge.data){
+                      res.status("500").json("Error: error server");
+                    }
+                    log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`);
+                    const amountPostePayemnt =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`)
+                         if(!amountPostePayemnt.data){
+                           res.status("500").json("Error: error server");
+                         }
+          
+      return res.status(200).json({
+        "Services":{
+          "paymee": amountPaymee,
+          "poste": {
+          "recharge": amountPosteRecharge,
+          "payement": amountPostePayemnt
+          },
+          "topnet": amountTopnet
+        }
+
+      });
+
+
+
+
+
+
+    } catch (error) {
+      if(!error.response){
+        log4j.loggererror.error(error.message)
+        return res.status(500).send({"error":error.message});
+      }
+      log4j.loggererror.error("Error paymee: ")
+      return res.status(error.response.status).send(error.response.data);
+    }
 
     });
+
+
+
+
+
+
+
+
 
   };
