@@ -1241,16 +1241,16 @@ console.log("req.headers.authorization",req.headers.authorization)
                          let ca = amountPaymee.data.data
                          console.log("mountPaymee.data.data.amoun",amountPaymee.data.data.amount)
                          console.log("amountPosteRecharge.data.data.amoun",amountPosteRecharge.data.amount)
-                         console.log("mountPaymee.data.data.amoun",amountPostePayemnt.data.data)
-                         console.log("mountPaymee.data.data.amoun",amountTopnet.data.data)
+                         console.log("mountPaymee.data.data.amoun",amountPostePayemnt.data.data.amount)
+                         console.log("mountPaymee.data.data.amoun",amountTopnet.data.data.amount)
 
 
       return res.status(200).json({
         "Services":{
           "paymee": amountPaymee.data.data,
           "poste": {
-          "recharge": amountPosteRecharge.data,
-          "payement": amountPostePayemnt.data
+          "recharge": amountPosteRecharge.data.data,
+          "payement": amountPostePayemnt.data.data
           },
           "topnet": amountTopnet.data.data
         },
