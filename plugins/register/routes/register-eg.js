@@ -1238,15 +1238,14 @@ console.log("req.headers.authorization",req.headers.authorization)
                          if(!amountPostePayemnt.data){
                            res.status("500").json("Error: error server");
                          }
-          console.log("amountPaymee.data",amountPaymee.data)
       return res.status(200).json({
         "Services":{
-          "paymee": amountPaymee.data,
+          "paymee": amountPaymee.data.data,
           "poste": {
-          "recharge": amountPosteRecharge.data,
-          "payement": amountPostePayemnt.data
+          "recharge": amountPosteRecharge.data.data,
+          "payement": amountPostePayemnt.data.data
           },
-          "topnet": amountTopnet.data
+          "topnet": amountTopnet.data.data
         }
 
       });
