@@ -1247,7 +1247,7 @@ console.log("req.headers.authorization",req.headers.authorization)
           },
           "topnet": amountTopnet.data.data
         },
-        "CA":amountPaymee.data.data.amount+amountPosteRecharge.data.data.amount+amountPostePayemnt.data.data.amount+amountTopnet.data.data.amount
+        "CA":12
 
       });
 
