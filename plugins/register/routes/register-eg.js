@@ -1255,7 +1255,7 @@ console.log("req.headers.authorization",req.headers.authorization)
           },
           "topnet": amountTopnet.data.data
         },
-        "CA":12
+        "CA":ca
 
       });
 
