@@ -1243,7 +1243,7 @@ console.log("req.headers.authorization",req.headers.authorization)
                          console.log("mountPaymee.data.data.amoun",amountPostePayemnt.data)
                          console.log("mountPaymee.data.data.amoun",amountTopnet.data)
 
-                         let ca = amountPaymee.data.data.amount+amountPosteRecharge.data.data.amount+amountPostePayemnt.data.data.amount+amountTopnet.data.data.amount
+                         let ca = amountPaymee.data.data.amount.Success+amountPosteRecharge.data.data.amount.Success+amountPostePayemnt.data.data.amount.Success+amountTopnet.data.data.amount.Success
                          console.log("ca",ca)
 
       return res.status(200).json({
