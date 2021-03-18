@@ -1241,7 +1241,7 @@ console.log("req.headers.authorization",req.headers.authorization)
                          let ca = amountPaymee.data.data
                          console.log("mountPaymee.data.data.amoun",amountPaymee.data.data.amount)
                          console.log("amountPosteRecharge.data.data.amoun",amountPosteRecharge.data.amount)
-                         console.log("mountPaymee.data.data.amoun",amountPostePayemnt.data.data)
+                         console.log("mountPaymee.data.data.amoun",amountPostePayemnt.data.data.amount)
                          console.log("mountPaymee.data.data.amoun",amountTopnet.data.data.amount)
 
 
