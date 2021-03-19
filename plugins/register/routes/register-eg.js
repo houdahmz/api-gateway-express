@@ -1217,24 +1217,36 @@ console.log("req.headers.authorization",req.headers.authorization)
         try {
 
       log4j.loggerinfo.info("Call paymee: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
-     const amountPaymee =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`)
+     const amountPaymee =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`,{
+      yearB: req.query.yearB,
+      dayB: req.query.dayB
+    })
           if(!amountPaymee.data){
             res.status("500").json("Error: error server");
           }
 
           log4j.loggerinfo.info("Call topnet: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`);
-          const amountTopnet =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`)
+          const amountTopnet =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`,{
+            yearB: req.query.yearB,
+            dayB: req.query.dayB
+          })
                if(!amountTopnet.data){
                  res.status("500").json("Error: error server");
                }
 
                log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`);
-               const amountPosteRecharge =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`)
+               const amountPosteRecharge =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`,{
+                yearB: req.query.yearB,
+                dayB: req.query.dayB
+              })
                     if(!amountPosteRecharge.data){
                       res.status("500").json("Error: error server");
                     }
                     log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`);
-                    const amountPostePayemnt =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`)
+                    const amountPostePayemnt =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`,{
+                      yearB: req.query.yearB,
+                      dayB: req.query.dayB
+                    })
                          if(!amountPostePayemnt.data){
                            res.status("500").json("Error: error server");
                          }
