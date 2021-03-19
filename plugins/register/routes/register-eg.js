@@ -1245,6 +1245,8 @@ console.log("req.headers.authorization",req.headers.authorization)
 
                          let ca = amountPaymee.data.data.amount.Success+amountPosteRecharge.data.data.amount.Success+amountPostePayemnt.data.data.amount.Success+amountTopnet.data.data.amount.Success
                          console.log("ca",ca)
+                         let nbT = amountPaymee.data.data.amount.Success+amountPosteRecharge.data.data.amount.Success+amountPostePayemnt.data.data.amount.Success+amountTopnet.data.data.amount.Success
+
 
       return res.status(200).json({
         "Services":{
@@ -1255,7 +1257,8 @@ console.log("req.headers.authorization",req.headers.authorization)
           },
           "topnet": amountTopnet.data.data
         },
-        "CA":ca
+        "CA":ca,
+        "Nombre_transaction":nbT
 
       });
 

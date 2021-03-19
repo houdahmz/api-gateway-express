@@ -74,7 +74,7 @@ const middlewarePlugin = {
                     console.log("user", user)
             
 
-                console.log("body before",body)
+                // console.log("body before",body)
                 body.created_by = req.body.user.consumerId
                 body.deleted_by = req.body.user.consumerId
                 body.updated_by = req.body.user.consumerId
