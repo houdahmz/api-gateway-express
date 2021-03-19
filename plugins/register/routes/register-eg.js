@@ -1245,7 +1245,7 @@ console.log("req.headers.authorization",req.headers.authorization)
 
                          let ca = amountPaymee.data.data.amount.Success+amountPosteRecharge.data.data.amount.Success+amountPostePayemnt.data.data.amount.Success+amountTopnet.data.data.amount.Success
                          console.log("ca",ca)
-                         let nbT = amountPaymee.data.data.amount.Success+amountPosteRecharge.data.data.amount.Success+amountPostePayemnt.data.data.amount.Success+amountTopnet.data.data.amount.Success
+                         let nbT = amountPaymee.data.data.transaction.All+amountPosteRecharge.data.data.transaction.All+amountPostePayemnt.data.data.transaction.All+amountTopnet.data.data.transaction.All
 
 
       return res.status(200).json({
