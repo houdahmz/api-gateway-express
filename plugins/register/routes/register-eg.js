@@ -1221,6 +1221,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       yearB: req.query.yearB,
       dayB: req.query.dayB
     })
+    console.log("amountPaymee",amountPaymee)
           if(!amountPaymee.data){
             res.status("500").json("Error: error server");
           }

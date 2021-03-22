@@ -394,9 +394,9 @@ apiEndpoints:
       paths: /wallet/document/*
       methods: ["DELETE"]
       scopes: ['user']                       
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/document     
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/currency
       methods: ["POST"]
       scopes: ['user']
@@ -448,19 +448,19 @@ apiEndpoints:
       scopes: ['user']                       
     - host: localhost
       paths: /wallet/feed   
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/intervenant
       methods: ["POST"]
       scopes: ['user']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/intervenant
       methods: ["GET"]
       scopes: ['user']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/intervenant*
       methods: ["GET"]
       scopes: ['user']   
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/intervenant*
       methods: ["PUT"]
       scopes: ['user']
