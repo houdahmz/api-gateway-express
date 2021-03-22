@@ -240,26 +240,22 @@ apiEndpoints:
       methods: ["POST"]
       scopes: ['agent']
   wallet:
+      
+    - host: 192.168.12.115
+      paths: /wallet/supplier-service*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: 192.168.12.115
+      paths: /wallet/supplier-service/:id
+      methods: ["GET"]
+      scopes: ['user']   
+
     - host: 192.168.12.115
       paths: /wallet/supplier-service
       methods: ["GET"]
-      scopes: ['admin']
-    - host: 192.168.12.115
-      paths: /wallet/supplier-service*
-      methods: ["GET"]
-      scopes: ['user']   
-    - host: 192.168.12.115
-      paths: /wallet/supplier-service*
-      methods: ["PUT"]
-      scopes: ['admin']
-    - host: 192.168.12.115
-      paths: /wallet/supplier-service/*
-      methods: ["PATCH"]
       scopes: ['admin'] 
-    - host: 192.168.12.115
-      paths: /wallet/supplier-service/*
-      methods: ["DELETE"]
-      scopes: ['admin']                       
+
     - host: 192.168.12.115
       paths: /wallet/supplier
       methods: ["POST"]
