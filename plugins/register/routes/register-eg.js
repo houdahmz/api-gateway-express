@@ -1235,6 +1235,16 @@ console.log("req.headers.authorization",req.headers.authorization)
                  res.status("500").json("Error: error server");
                }
 
+               log4j.loggerinfo.info("Call voucher: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`);
+               const amountVoucher =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`,{
+                 yearB: req.query.yearB,
+                 dayB: req.query.dayB
+               })
+                    if(!amountVoucher.data){
+                      res.status("500").json("Error: error server");
+                    }
+     
+
                log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`);
                const amountPosteRecharge =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`,{
                 yearB: req.query.yearB,
@@ -1264,6 +1274,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       return res.status(200).json({
         "Services":{
           "paymee": amountPaymee.data.data,
+          "voucher": amountVoucher.data.data,
           "poste": {
           "recharge": amountPosteRecharge.data.data,
           "payement": amountPostePayemnt.data.data
