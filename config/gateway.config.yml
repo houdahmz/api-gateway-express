@@ -393,13 +393,8 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /wallet/document/*
       methods: ["DELETE"]
-<<<<<<< HEAD
-      scopes: ['admin']                       
-    - host: localhost
-=======
-      scopes: ['user']                       
+      scopes: ['admin']                                           
     - host: 192.168.12.115
->>>>>>> c1971d83c4a4f33606a5994738ebb4185c8f6a45
       paths: /wallet/document     
     - host: 192.168.12.115
       paths: /wallet/currency
