@@ -13,12 +13,12 @@ apiEndpoints:
       - POST
       
   profile:
-    - host: 192.168.12.115
+    - host: localhost
       paths: /admin/company*
       methods: ["POST","PATCH"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /user-management/profile*
       methods: ["DELETE","GET"]
       scopes: ['admin']
@@ -327,61 +327,61 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /wallet/service*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['user']   
     - host: 192.168.12.115
       paths: /wallet/service*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: 192.168.12.115
       paths: /wallet/service/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['user'] 
     - host: 192.168.12.115
       paths: /wallet/service/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['user']                       
     - host: 192.168.12.115
       paths: /wallet/service
       methods: ["POST"]
-      scopes: ['admin']    
+      scopes: ['user']    
     - host: 192.168.12.115
       paths: /wallet/category
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: 192.168.12.115
       paths: /wallet/category
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: 192.168.12.115
       paths: /wallet/category*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['user']   
     - host: 192.168.12.115
       paths: /wallet/category*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: 192.168.12.115
       paths: /wallet/category/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['user'] 
     - host: 192.168.12.115
       paths: /wallet/category/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['user']                       
     - host: 192.168.12.115
       paths: /wallet/category  
     - host: 192.168.12.115
       paths: /wallet/document
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: 192.168.12.115
       paths: /wallet/document
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: 192.168.12.115
       paths: /wallet/document*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['user']   
     - host: 192.168.12.115
       paths: /wallet/document*
       methods: ["PUT"]
@@ -393,7 +393,7 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /wallet/document/*
       methods: ["DELETE"]
-      scopes: ['admin']                                           
+      scopes: ['user']                       
     - host: 192.168.12.115
       paths: /wallet/document     
     - host: 192.168.12.115
@@ -429,40 +429,28 @@ apiEndpoints:
     - host: localhost
       paths: /wallet/feed
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: localhost
       paths: /wallet/feed*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['user']   
     - host: localhost
       paths: /wallet/feed*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: localhost
       paths: /wallet/feed/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['user'] 
     - host: localhost
       paths: /wallet/feed/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['user']                       
     - host: localhost
       paths: /wallet/feed   
     - host: 192.168.12.115
       paths: /wallet/intervenant
       methods: ["POST"]
-<<<<<<< HEAD
-      scopes: ['admin']
-    - host: localhost
-      paths: /wallet/intervenant
-      methods: ["GET"]
-      scopes: ['admin']
-    - host: localhost
-      paths: /wallet/intervenant*
-      methods: ["GET"]
-      scopes: ['admin']   
-    - host: localhost
-=======
       scopes: ['user']
     - host: 192.168.12.115
       paths: /wallet/intervenant
@@ -473,44 +461,43 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['user']   
     - host: 192.168.12.115
->>>>>>> c1971d83c4a4f33606a5994738ebb4185c8f6a45
       paths: /wallet/intervenant*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: localhost
       paths: /wallet/intervenant/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['user'] 
     - host: localhost
       paths: /wallet/intervenant/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['user']                       
     - host: localhost
       paths: /wallet/intervenant  
     - host: localhost
       paths: /wallet/commission
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: localhost
       paths: /wallet/commission
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: localhost
       paths: /wallet/commission*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['user']   
     - host: localhost
       paths: /wallet/commission*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: localhost
       paths: /wallet/commission/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['user'] 
     - host: localhost
       paths: /wallet/commission/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['user']                       
     - host: localhost
       paths: /wallet/commission  
     - host: localhost
