@@ -1261,10 +1261,12 @@ console.log("req.headers.authorization",req.headers.authorization)
                          if(!amountPostePayemnt.data){
                            res.status("500").json("Error: error server");
                          }
-                         console.log("mountPaymee.data.data.amoun",amountPaymee.data)
-                         console.log("amountPosteRecharge.data.data.amoun",amountPosteRecharge.data)
-                         console.log("mountPaymee.data.data.amoun",amountPostePayemnt.data)
-                         console.log("mountPaymee.data.data.amoun",amountTopnet.data)
+                         console.log("amountPaymee",amountPaymee.data)
+                         console.log("amountPosteRecharge",amountPosteRecharge.data)
+                         console.log("amountPostePayemnt",amountPostePayemnt.data)
+                         console.log("amountTopnet",amountTopnet.data)
+                         console.log("amountVoucher",amountVoucher.data)
+
 
                          let ca = amountPaymee.data.data.amount.Success+amountPosteRecharge.data.data.amount.Success+amountPostePayemnt.data.data.amount.Success+amountTopnet.data.data.amount.Success
                          console.log("ca",ca)
