@@ -448,28 +448,22 @@ apiEndpoints:
       paths: /wallet/intervenant
       methods: ["POST"]
       scopes: ['user']
+
+    - host: 192.168.12.115
+      paths: /wallet/intervenant/:id
+      methods: ["GET"]
+      scopes: ['admin']
+
     - host: 192.168.12.115
       paths: /wallet/intervenant
       methods: ["GET"]
-      scopes: ['user']
+      scopes: ['admin']   
+
     - host: 192.168.12.115
-      paths: /wallet/intervenant*
-      methods: ["GET"]
-      scopes: ['user']   
-    - host: 192.168.12.115
-      paths: /wallet/intervenant*
-      methods: ["PUT"]
-      scopes: ['user']
-    - host: localhost
-      paths: /wallet/intervenant/*
-      methods: ["PATCH"]
-      scopes: ['user'] 
-    - host: localhost
-      paths: /wallet/intervenant/*
-      methods: ["DELETE"]
-      scopes: ['user']                       
-    - host: localhost
-      paths: /wallet/intervenant  
+      paths: /wallet/intervenant
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
     - host: localhost
       paths: /wallet/commission
       methods: ["POST"]
