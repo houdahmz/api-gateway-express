@@ -444,10 +444,6 @@ apiEndpoints:
       scopes: ['user']                       
     - host: localhost
       paths: /wallet/feed   
-    - host: 192.168.12.115
-      paths: /wallet/intervenant
-      methods: ["POST"]
-      scopes: ['user']
 
     - host: 192.168.12.115
       paths: /wallet/intervenant/:id
