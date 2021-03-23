@@ -1277,10 +1277,8 @@ console.log("req.headers.authorization",req.headers.authorization)
         "Services":{
           "paymee": amountPaymee.data.data,
           "voucher": amountVoucher.data,
-          "poste": {
-          "recharge": amountPosteRecharge.data.data,
-          "payement": amountPostePayemnt.data.data
-          },
+          "poste_recharge": amountPosteRecharge.data.data,
+          "poste_payement": amountPostePayemnt.data.data,
           "topnet": amountTopnet.data.data
         },
         "CA":ca,
