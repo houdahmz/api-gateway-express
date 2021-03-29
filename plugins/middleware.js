@@ -47,8 +47,9 @@ const middlewarePlugin = {
            
         //     console.log(JSON.stringify(results, null, 2));
         //   });
+        let addr = ip.address()
 
-          const results = await iplocate(ipF.address()) 
+          const results = await iplocate(addr) 
           console.log("results",results)
 
 
@@ -67,7 +68,7 @@ const middlewarePlugin = {
                 if(body.user){
 
                     let userUpdated = await services.user.update(req.body.user.consumerId, { 
-                        ip: ipF.address() ,
+                        ip: addr ,
                         os: os.platform(),
                         source: ua.source,
                         country:results.country,

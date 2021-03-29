@@ -958,8 +958,10 @@ console.log("req.headers.authorization",req.headers.authorization)
       // console.log("iplocate",iplocate(ip)); // location of the user
       // console.log("iplocate",iplocate(ip).country); // location of the user
       // console.log(iplocate(ip)); // location of the user
-
-      const results = await iplocate(ipF.address()) 
+      console.log("ipaddre",ip.address());
+      let addr = ip.address()
+      //////////////////////
+      const results = await iplocate(addr) 
       console.log("results",results)
 
       // iplocate(ip).then(function(results) {
@@ -978,7 +980,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       console.log("isMobile",isMobile)
 
       let userUpdated = await services.user.update(myUser.id, {
-        ip: ipF.address() ,
+        ip: ip ,
         os: os.platform(),
         source: ua.source,
         // geoip: lookup(ip),
@@ -991,8 +993,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       })
       console.log("userUpdated",userUpdated)
       ///////////////////////
-      console.log("ipaddre",ipF.address());
-      //////////////////////
+      
       var interfaces = os.networkInterfaces();
 var addresses = [];
 for (var k in interfaces) {
@@ -1040,7 +1041,7 @@ console.log("addresses",addresses);
         createdAt:user.createdAt,
         updatedAt:user.updatedAt,
         security:{
-          ip:user.ipF.address(),
+          ip:user.addr,
           source:user.source,
           os:user.os,
           last_login:user.last_login,
