@@ -958,8 +958,8 @@ console.log("req.headers.authorization",req.headers.authorization)
       // console.log("iplocate",iplocate(ip)); // location of the user
       // console.log("iplocate",iplocate(ip).country); // location of the user
       // console.log(iplocate(ip)); // location of the user
-      console.log("ipaddre",ip.address());
-      let addr = ip.address()
+      // console.log("ipaddre",ip.address());
+      let addr = ipF.address()
       //////////////////////
       const results = await iplocate(addr) 
       console.log("results",results)
