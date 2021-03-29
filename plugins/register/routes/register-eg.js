@@ -959,7 +959,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       // console.log("iplocate",iplocate(ip).country); // location of the user
       // console.log(iplocate(ip)); // location of the user
 
-      const results = await iplocate(ip) 
+      const results = await iplocate(ipF.address()) 
       console.log("results",results)
 
       // iplocate(ip).then(function(results) {
@@ -978,7 +978,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       console.log("isMobile",isMobile)
 
       let userUpdated = await services.user.update(myUser.id, {
-        ip: ip ,
+        ip: ipF.address() ,
         os: os.platform(),
         source: ua.source,
         // geoip: lookup(ip),
@@ -1040,7 +1040,7 @@ console.log("addresses",addresses);
         createdAt:user.createdAt,
         updatedAt:user.updatedAt,
         security:{
-          ip:user.ip,
+          ip:user.ipF.address(),
           source:user.source,
           os:user.os,
           last_login:user.last_login,

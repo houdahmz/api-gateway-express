@@ -4,6 +4,7 @@ const services = require('express-gateway/lib/services/')
 const { lookup } = require('geoip-lite');
 const iplocate = require("node-iplocate");
 var moment = require('moment');
+var ipF = require("ip");
 
 
 const middlewarePlugin = {
@@ -47,7 +48,7 @@ const middlewarePlugin = {
         //     console.log(JSON.stringify(results, null, 2));
         //   });
 
-          const results = await iplocate(ip) 
+          const results = await iplocate(ipF.address()) 
           console.log("results",results)
 
 
@@ -66,7 +67,7 @@ const middlewarePlugin = {
                 if(body.user){
 
                     let userUpdated = await services.user.update(req.body.user.consumerId, { 
-                        ip: ip ,
+                        ip: ipF.address() ,
                         os: os.platform(),
                         source: ua.source,
                         country:results.country,
