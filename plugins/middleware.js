@@ -48,7 +48,7 @@ const middlewarePlugin = {
         //     console.log(JSON.stringify(results, null, 2));
         //   });
         let addr = ipF.address()
-
+console.log("aaaaaaaaaaaaaaaaaaaa",addr)
           const results = await iplocate(addr) 
           console.log("results",results)
 
