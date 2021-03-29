@@ -964,7 +964,7 @@ console.log("req.headers.authorization",req.headers.authorization)
 console.log("aaaaaaaaaaaaaaaaaaaa",addr)
 
 const publicIpAdd = publicIp.v4()
-console.log("public ip",publicIpAdd)
+console.log("public ip",publicIpAdd.v4())
 
       //////////////////////
       const results = await iplocate(addr) 
