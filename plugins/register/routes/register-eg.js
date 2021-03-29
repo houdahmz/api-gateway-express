@@ -1012,12 +1012,35 @@ console.log("req.headers.authorization",req.headers.authorization)
       }
       let name = "complete_profile" + myUser.id
       userApp = await services.application.find(name)
+
+      let userJson = {
+        id:user.id,
+        username:user.username,
+        lastname:user.lastname,
+        firstname:user.firstname,
+        email:user.email,
+        isActive:user.isActive,
+        phone:user.phone,
+        createdAt:user.createdAt,
+        updatedAt:user.updatedAt,
+        security:{
+          ip:user.ip,
+          source:user.source,
+          os:user.os,
+          last_login:user.last_login,
+          latitude:user.latitude,
+          longitude:user.longitude,
+          city:user.city,
+          country:user.country
+        }
+      }
+
       if (token) {
         if (token.status == 200) {
           if (data.status == 200) {
             log4j.loggerinfo.info("Succes in getting token.");
 
-            return res.status(token.status).json({ token: token.data, role: scope ,data: data.data.data,user: myUser});
+            return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data});
           }
 
         }
