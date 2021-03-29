@@ -16,6 +16,7 @@ const authService = services.auth;
 const log4j = require("../../../config/configLog4js.js");
 
 const os = require('os');
+var ip = require("ip");
 useragent = require('express-useragent');
 var device = require('express-device');
 var MobileDetect = require('mobile-detect');
@@ -989,7 +990,22 @@ console.log("req.headers.authorization",req.headers.authorization)
         last_login: new Date().toString()
       })
       console.log("userUpdated",userUpdated)
+      ///////////////////////
+      console.log("ipaddre",ip.address());
+      //////////////////////
+      var interfaces = os.networkInterfaces();
+var addresses = [];
+for (var k in interfaces) {
+    for (var k2 in interfaces[k]) {
+        var address = interfaces[k][k2];
+        if (address.family === 'IPv4' && !address.internal) {
+            addresses.push(address.address);
+        }
+    }
+}
 
+console.log("addresses",addresses);
+////////////////////////////
       const user = await services.user.findByUsernameOrId(myUser.id)
       console.log("user", user)
 
