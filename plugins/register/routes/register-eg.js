@@ -17,6 +17,7 @@ const log4j = require("../../../config/configLog4js.js");
 
 const os = require('os');
 var ipF = require("ip");
+const publicIp = require('public-ip');
 useragent = require('express-useragent');
 var device = require('express-device');
 var MobileDetect = require('mobile-detect');
@@ -962,6 +963,9 @@ console.log("req.headers.authorization",req.headers.authorization)
       let addr = ipF.address()
 console.log("aaaaaaaaaaaaaaaaaaaa",addr)
 
+const publicIpAdd = publicIp.v4()
+console.log("public ip",publicIpAdd)
+
       //////////////////////
       const results = await iplocate(addr) 
       console.log("results",results)
@@ -982,7 +986,7 @@ console.log("aaaaaaaaaaaaaaaaaaaa",addr)
       console.log("isMobile",isMobile)
 
       let userUpdated = await services.user.update(myUser.id, {
-        ip: addr ,
+        ip: ip ,
         os: os.platform(),
         source: ua.source,
         // geoip: lookup(ip),
