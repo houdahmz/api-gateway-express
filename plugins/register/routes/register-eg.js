@@ -16,7 +16,7 @@ const authService = services.auth;
 const log4j = require("../../../config/configLog4js.js");
 
 const os = require('os');
-var ip = require("ip");
+var ipF = require("ip");
 useragent = require('express-useragent');
 var device = require('express-device');
 var MobileDetect = require('mobile-detect');
@@ -991,7 +991,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       })
       console.log("userUpdated",userUpdated)
       ///////////////////////
-      console.log("ipaddre",ip.address());
+      console.log("ipaddre",ipF.address());
       //////////////////////
       var interfaces = os.networkInterfaces();
 var addresses = [];
