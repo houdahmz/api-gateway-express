@@ -29,7 +29,6 @@
     },
     "ip": {
       "type": "string"
-    
     },
     "os": {
       "type": "string"
@@ -37,7 +36,16 @@
     "source": {
       "type": "string"
     },
-    "geoip": {
+    "country": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "string"
+    },
+    "longitude": {
       "type": "string"
     },
     "last_login": {

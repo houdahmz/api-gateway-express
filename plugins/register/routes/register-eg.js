@@ -259,7 +259,7 @@ var corsOptions = {
         // user_res = await services.user.activate(user.id)
         console.log("user_res")
 
-        user_res = await services.user.update(user.id, { confirmMail: 'true' })
+        user_res = await services.user.update(user.id, { confirmMail: 'true',confirm_token: "" }) //test this
 
         console.log("user_res", user_res)
         // user = await services.user.findByUsernameOrId(email)
@@ -947,25 +947,28 @@ console.log("req.headers.authorization",req.headers.authorization)
    req.connection.socket.remoteAddress
       console.log("ip",ip)
       console.log("req.connection.remoteAddress",req.connection.remoteAddress)
-      console.log("lookup",lookup(ip)); // location of the user
+      // console.log("lookup",lookup(ip)); // location of the user
 
       console.log("os.platform()",os.platform())
       console.log("os.release()",os.release())
       console.log("os.type()",os.type()); // "Windows_NT"
 
       console.log("req.device.type.toUpperCase()",req.device.type.toUpperCase())
-      console.log("iplocate",iplocate(ip)); // location of the user
-      console.log("iplocate",iplocate(ip).country); // location of the user
-      console.log(iplocate(ip)); // location of the user
+      // console.log("iplocate",iplocate(ip)); // location of the user
+      // console.log("iplocate",iplocate(ip).country); // location of the user
+      // console.log(iplocate(ip)); // location of the user
 
-      iplocate(ip).then(function(results) {
-         console.log("IP Address: " + results.ip);
-         console.log("Country: " + results.country + " (" + results.country_code + ")");
-         console.log("Continent: " + results.continent);
-         console.log("Organisation: " + results.org + " (" + results.asn + ")");
+      const results = await iplocate(ip) 
+      console.log("results",results)
+
+      // iplocate(ip).then(function(results) {
+      //    console.log("IP Address: " + results.ip);
+      //    console.log("Country: " + results.country + " (" + results.country_code + ")");
+      //    console.log("Continent: " + results.continent);
+      //    console.log("Organisation: " + results.org + " (" + results.asn + ")");
         
-         console.log(JSON.stringify(results, null, 2));
-       });
+      //    console.log(JSON.stringify(results, null, 2));
+      //  });
 
       var source = req.headers['user-agent']
       var ua = useragent.parse(source);
@@ -978,6 +981,11 @@ console.log("req.headers.authorization",req.headers.authorization)
         os: os.platform(),
         source: ua.source,
         // geoip: lookup(ip),
+        country:results.country,
+        city:results.city,
+        latitude:results.latitude,
+        longitude:results.longitude,
+
         last_login: new Date().toString()
       })
       console.log("userUpdated",userUpdated)

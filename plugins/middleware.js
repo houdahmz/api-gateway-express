@@ -33,19 +33,22 @@ const middlewarePlugin = {
          console.log("os.platform()",os.platform())
          console.log("os.release()",os.release())
          console.log("os.type()",os.type()); // "Windows_NT"
-         console.log("lookup",lookup("127.0.0.1")); // location of the user
-         console.log("iplocate",iplocate(ip)); // location of the user
-         console.log("iplocate",iplocate(ip).country); // location of the user
-         console.log(iplocate(ip)); // location of the user
-
-         iplocate("127.0.0.1").then(function(results) {
-            console.log("IP Address: " + results.ip);
-            console.log("Country: " + results.country + " (" + results.country_code + ")");
-            console.log("Continent: " + results.continent);
-            console.log("Organisation: " + results.org + " (" + results.asn + ")");
+        //  console.log("lookup",lookup("192.168.0.115")); // location of the user
+        //  console.log("iplocate",iplocate(ip)); // location of the user
+        //  console.log("iplocate",iplocate(ip).country); // location of the user
+        //  console.log(iplocate(ip)); // location of the user
+        // 192.168.0.115
+        //  iplocate("192.168.0.115").then(function(results) {
+        //     console.log("IP Address: " + results.ip);
+        //     console.log("Country: " + results.country + " (" + results.country_code + ")");
+        //     console.log("Continent: " + results.continent);
+        //     console.log("Organisation: " + results.org + " (" + results.asn + ")");
            
-            console.log(JSON.stringify(results, null, 2));
-          });
+        //     console.log(JSON.stringify(results, null, 2));
+        //   });
+
+          const results = await iplocate(ip) 
+          console.log("results",results)
 
 
          var source = req.headers['user-agent']
@@ -56,12 +59,20 @@ const middlewarePlugin = {
          var isMobile = ua.isMobile
          console.log("isMobile",isMobile)
 
+         console.log("lookup(ip)",lookup(ip))
+         console.log("lookup(ip)",lookup(ip))
+        //  console.log("iplocate",iplocate(ip)); // location of the user
+
                 if(body.user){
 
                     let userUpdated = await services.user.update(req.body.user.consumerId, { 
                         ip: ip ,
                         os: os.platform(),
                         source: ua.source,
+                        country:results.country,
+                        city:results.city,
+                        latitude:results.latitude,
+                        longitude:results.longitude,
                         // geoip: lookup(ip),
                         last_login: new Date().toString()
                     
