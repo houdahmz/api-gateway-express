@@ -963,11 +963,10 @@ console.log("req.headers.authorization",req.headers.authorization)
       let addr = ipF.address()
 console.log("aaaaaaaaaaaaaaaaaaaa",addr)
 
-const publicIpAdd = publicIp.v4()
-console.log("public ip",publicIpAdd.v4())
-
+const publicIpAdd = await publicIp.v4();
+console.log("publicIpAdd",publicIpAdd)
       //////////////////////
-      const results = await iplocate(addr) 
+      const results = await iplocate(publicIpAdd) 
       console.log("results",results)
 
       // iplocate(ip).then(function(results) {
@@ -986,7 +985,7 @@ console.log("public ip",publicIpAdd.v4())
       console.log("isMobile",isMobile)
 
       let userUpdated = await services.user.update(myUser.id, {
-        ip: ip ,
+        ip: publicIpAdd ,
         os: os.platform(),
         source: ua.source,
         // geoip: lookup(ip),

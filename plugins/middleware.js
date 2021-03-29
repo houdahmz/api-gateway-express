@@ -6,6 +6,7 @@ const iplocate = require("node-iplocate");
 var moment = require('moment');
 var ipF = require("ip");
 
+const publicIp = require('public-ip');
 
 const middlewarePlugin = {
   schema: { $id: "./../config/models/schema.js" },
@@ -47,8 +48,10 @@ const middlewarePlugin = {
            
         //     console.log(JSON.stringify(results, null, 2));
         //   });
-        let addr = ipF.address()
-          const results = await iplocate(addr) 
+        // let addr = ipF.address()
+        const publicIpAdd = await publicIp.v4();
+
+          const results = await iplocate(publicIpAdd) 
           console.log("results",results)
 
 
@@ -67,7 +70,7 @@ const middlewarePlugin = {
                 if(body.user){
 
                     let userUpdated = await services.user.update(req.body.user.consumerId, { 
-                        ip: addr ,
+                        ip: publicIpAdd ,
                         os: os.platform(),
                         source: ua.source,
                         country:results.country,
