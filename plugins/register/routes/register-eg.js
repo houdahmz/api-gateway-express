@@ -982,7 +982,7 @@ console.log("aaaaaaaaaaaaaaaaaaaa",addr)
       console.log("isMobile",isMobile)
 
       let userUpdated = await services.user.update(myUser.id, {
-        ip: ""+ip ,
+        ip: ip ,
         os: os.platform(),
         source: ua.source,
         // geoip: lookup(ip),
@@ -1043,7 +1043,7 @@ console.log("addresses",addresses);
         createdAt:user.createdAt,
         updatedAt:user.updatedAt,
         security:{
-          ip:user.addr,
+          ip:user.ip,
           source:user.source,
           os:user.os,
           last_login:user.last_login,
