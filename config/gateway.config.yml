@@ -249,7 +249,7 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /wallet/supplier-service/:id
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['user']   
 
     - host: 192.168.12.115
       paths: /wallet/supplier-service
@@ -483,13 +483,8 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /wallet/commission/*
       methods: ["DELETE"]
-<<<<<<< HEAD
-      scopes: ['admin']                       
-    - host: localhost
-=======
       scopes: ['user']                       
     - host: 192.168.12.115
->>>>>>> 5fc33be28dad914d8d6135b690647f5254ebe2e4
       paths: /wallet/commission  
     - host: 192.168.12.115
       paths: /wallet
