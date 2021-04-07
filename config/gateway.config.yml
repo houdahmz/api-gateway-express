@@ -460,37 +460,42 @@ apiEndpoints:
       methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/commission
       methods: ["POST"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/commission
       methods: ["GET"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/commission*
       methods: ["GET"]
       scopes: ['admin']   
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/commission*
       methods: ["PUT"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/commission/*
       methods: ["PATCH"]
       scopes: ['admin'] 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/commission/*
       methods: ["DELETE"]
+<<<<<<< HEAD
       scopes: ['admin']                       
     - host: localhost
+=======
+      scopes: ['user']                       
+    - host: 192.168.12.115
+>>>>>>> 5fc33be28dad914d8d6135b690647f5254ebe2e4
       paths: /wallet/commission  
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet
       methods: ["GET"]
       scopes: ['admin']    
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/history
       methods: ["GET"]
       scopes: ['admin']       
@@ -676,15 +681,15 @@ pipelines:
           - action:
               message: "api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}"
       - cors:              
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
-      - validate-user:
+      # - oauth2:
+      #     - action:
+      #         jwt:
+      #           issuer: express-gateway
+      #           audience: something
+      #           subject: 3pXQjeklS3cFf8OCJw9B22
+      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+      #           checkCredentialExistence: false
+      # - validate-user:
       - request-transformer:
           action:
             body:

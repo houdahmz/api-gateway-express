@@ -8,6 +8,27 @@
     "redirectUri": {
       "type": "string",
       "format": "uri"
+    },
+    "ip": {
+      "type": "string"
+    },
+    "os": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "string"
+    },
+    "longitude": {
+      "type": "string"
     }
   },
   "required": [

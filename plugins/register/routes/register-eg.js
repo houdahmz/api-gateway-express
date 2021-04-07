@@ -1032,8 +1032,25 @@ console.log("addresses",addresses);
         return res.status(error.response.status).send(error.response.data);
 
       }
-      let name = "complete_profile" + myUser.id
+      console.log("Date.now()",Date.now())
+      let name = "complete_profile" + Date.now()
+      // userApp = await services.application.find(name)
+
+
+      myApp = await services.application.insert({
+        name: "user_app" + Date.now(),
+        ip:user.ip,
+        source:user.source,
+        os:user.os,
+        latitude:user.latitude,
+        longitude:user.longitude,
+        city:user.city,
+        country:user.country
+      }, myUser.id)
+
       userApp = await services.application.find(name)
+      console.log("userapp",userApp)
+      console.log("myApp",myApp)
 
       let userJson = {
         id:user.id,
@@ -1045,7 +1062,8 @@ console.log("addresses",addresses);
         phone:user.phone,
         createdAt:user.createdAt,
         updatedAt:user.updatedAt,
-        security:{
+        application:{
+          id:myApp.id,
           ip:user.ip,
           source:user.source,
           os:user.os,
@@ -1067,8 +1085,18 @@ console.log("addresses",addresses);
 
         }
       }
+      else {
+        log4j.loggererror.error("Error in getting profile")
+        return res.status(500).send("error");
+
+      }
 
       log4j.loggerinfo.info("Getting token");
+console.log("token.status",token.status)
+console.log("token",token)
+
+console.log("scope",scope)
+console.log("myUser",myUser)
 
       return res.status(token.status).json({token: token, role: scope ,user: myUser });
 
