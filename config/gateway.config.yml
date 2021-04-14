@@ -18,115 +18,115 @@ apiEndpoints:
       methods: ["POST","PATCH"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/profile*
       methods: ["DELETE","GET"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/profile/by_userId/:id
       methods: ["GET"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/profile*
       methods: ["PUT","PATCH"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/company/:id
       methods: ["PUT","PATCH"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/company/profile-by-company
       methods: ["POST"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/history/*
       methods: ["GET"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/image*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/activity*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/type_user/by_code/:id
       methods: ["GET"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/type-user*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/category*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/document*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/company*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/activity-company*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
   voucher:
 # add voucher 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /voucher*
       methods: ["GET","POST","DELETE"]
       scopes: ['admin']
 
 # valider les vouchers importer et modifier leurs status
-    - host: localhost
+    - host: 192.168.12.115
       paths: /voucher/document*
       methods: ["DELETE","GET","PUT"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: '/voucher/transaction'
       methods: ["POST"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: '/voucher/transaction'
       methods: ["GET"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: '/voucher/transaction/by_user/:id'
       methods: ["GET"]
       scopes: ['user']
 # valider et refuser les commandes
-    - host: localhost
+    - host: 192.168.12.115
       paths: '/voucher/transaction/status/:id'
       methods: ["PUT"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /voucher/facial*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    # - host: localhost
+    # - host: 192.168.12.115
     #   paths: /voucher/voucher*
     #   methods: ["POST"]
     #   scopes: ['admin']
@@ -136,28 +136,28 @@ apiEndpoints:
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: '/voucher/settings*'
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    # - host: localhost
+    # - host: 192.168.12.115
     #   paths: /voucher/transaction/
     #   methods: ["GET"]
     #   scopes: ['admin']
 
   paymee:
-    - host: localhost
+    - host: 192.168.12.115
       paths: /paymee/cashin
       methods: ["POST"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths:  ['/paymee/accountname/:id']
       methods: ["GET"]
       scopes: ['user']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /paymee/transactions
       scopes: ['admin']
   
@@ -235,7 +235,7 @@ apiEndpoints:
       scopes: ['user']
   
   agent-register:
-    - host: localhost
+    - host: 192.168.12.115
       paths: /api/agent-register/profile/agent
       methods: ["POST"]
       scopes: ['agent']
@@ -396,53 +396,53 @@ apiEndpoints:
       paths: /wallet/currency
       methods: ["POST"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/currency
       methods: ["GET"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/currency*
       methods: ["GET"]
       scopes: ['admin']   
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/currency*
       methods: ["PUT"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/currency/*
       methods: ["PATCH"]
       scopes: ['admin'] 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/currency/*
       methods: ["DELETE"]
       scopes: ['admin']                       
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/currency   
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/feed
       methods: ["POST"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/feed
       methods: ["GET"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/feed*
       methods: ["GET"]
       scopes: ['admin']   
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/feed*
       methods: ["PUT"]
       scopes: ['admin']
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/feed/*
       methods: ["PATCH"]
       scopes: ['admin'] 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/feed/*
       methods: ["DELETE"]
       scopes: ['admin']                       
-    - host: localhost
+    - host: 192.168.12.115
       paths: /wallet/feed   
 
     - host: 192.168.12.115
