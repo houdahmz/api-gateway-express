@@ -17,9 +17,9 @@ const middlewarePlugin = {
       name: 'middleware',
       policy: (params) =>
         async function (req, res, next) {
-          console.log("in middleware")
+          console.log("in middleware gateway")
           try {
-            console.log("icii",req.body)
+            console.log("icii in middleware gateway",req.body)
             let body = req.body;
             var ip = (typeof req.headers['x-forwarded-for'] === 'string'
             && req.headers['x-forwarded-for'].split(',').shift()) || 

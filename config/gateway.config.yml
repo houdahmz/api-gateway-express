@@ -124,7 +124,7 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /voucher/facial*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['user']
 
     # - host: 192.168.12.115
     #   paths: /voucher/voucher*
@@ -589,6 +589,11 @@ pipelines:
               add:
                 user: req.user
       - middleware:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
