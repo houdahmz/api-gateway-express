@@ -124,7 +124,7 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /voucher/facial*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
-      scopes: ['user','admin']
+      scopes: ['user']
 
     # - host: 192.168.12.115
     #   paths: /voucher/voucher*
@@ -134,12 +134,12 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /voucher/operator*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['user']
 
     - host: 192.168.12.115
       paths: '/voucher/settings*'
       methods: ["GET","POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['user']
 
     # - host: 192.168.12.115
     #   paths: /voucher/transaction/
