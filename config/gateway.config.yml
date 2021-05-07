@@ -122,8 +122,18 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: 192.168.12.115
+      paths: /voucher/facial
+      methods: ["GET"]
+      scopes: ['user','admin']
+
+    - host: 192.168.12.115
+      paths: /voucher/facial/:id
+      methods: ["GET"]
+      scopes: ['user','admin']
+
+    - host: 192.168.12.115
       paths: /voucher/facial*
-      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['user']
 
     # - host: 192.168.12.115
@@ -566,6 +576,7 @@ pipelines:
   #         - action:
   #             serviceEndpoint: api_management
   #             changeOrigin: true
+
   voucher:
     apiEndpoints:
       - voucher
@@ -583,17 +594,43 @@ pipelines:
                 secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
                 checkCredentialExistence: false
       - validate-user:
-      - request-transformer:
-          action:
-            body:
-              add:
-                user: req.user
+      # - request-transformer:
+      #     action:
+      #       body:
+      #         add:
+      #           user: req.user
       - middleware:
       - request-transformer:
-          action:
+        # - condition:
+        #     name: method
+        #     methods:
+        #     - POST
+      #   -   # array of Actions optionally gated by a condition
+      #      condition: # this action is executed only if path is exactly /v1
+      #        name: pathExact
+      #        path: /v1
+        # - condition:
+        #   name: method
+        #   methods:
+        #     - GET
+        # - condition:
+        #     name: oneOf
+        #     conditions:
+        #         -
+        #             name: pathExact
+        #             path: /api/facial
+        #         -
+        #             name: not
+        #             condition:
+        #                 name: method
+        #                 methods:
+        #                     - GET
+        #                     - HEAD 
+        - action:
             body:
               add:
                 user: req.user
+
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
@@ -602,36 +639,76 @@ pipelines:
               serviceEndpoint: api_management
               changeOrigin: true
 
-  profile:
-    apiEndpoints:
-      - profile
-    policies:
-      - log:
-          - action:
-              message: "profile header===> ${req.headers.authorization} ---${req}"
-      - cors:
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
-      - validate-user:
-      - request-transformer:
-          action:
-            body:
-              add:
-                user: req.user
-      - middleware:
-      - log:
-          - action:
-              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
-      - proxy:
-          - action:
-              serviceEndpoint: api_management
-              changeOrigin: true
+  # voucher:
+  #   apiEndpoints:
+  #   - voucher
+  #   policies:
+  #   - log:
+  #     - action:
+  #         message: voucher header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}
+  #   - cors:
+  #   - oauth2:
+  #     - action:
+  #         jwt:
+  #           issuer: express-gateway
+  #           audience: something
+  #           subject: 3pXQjeklS3cFf8OCJw9B22
+  #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+  #           checkCredentialExistence: false
+  #   - validate-user:
+  #   - request-transformer:
+  #       action:
+  #         body:
+  #           add:
+  #             user: req.user
+  #   - middleware:
+  #   - request-transformer:
+  #     # - condition:
+  #     #     name: method
+  #     #     methods:
+  #     #     - POST
+  #     - action:
+  #         body:
+  #           add:
+  #             user: req.user
+  #   - log:
+  #     - action:
+  #         message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+  #   - proxy:
+  #     - action:
+  #         serviceEndpoint: api_management
+  #         changeOrigin: true
+
+    profile:
+      apiEndpoints:
+        - profile
+      policies:
+        - log:
+            - action:
+                message: "profile header===> ${req.headers.authorization} ---${req}"
+        - cors:
+        - oauth2:
+            - action:
+                jwt:
+                  issuer: express-gateway
+                  audience: something
+                  subject: 3pXQjeklS3cFf8OCJw9B22
+                  secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                  checkCredentialExistence: false
+        - validate-user:
+        - request-transformer:
+            action:
+              body:
+                add:
+                  user: req.user
+        - middleware:
+        - log:
+            - action:
+                message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+        - proxy:
+            - action:
+                serviceEndpoint: api_management
+                changeOrigin: true
 
   topup:
     apiEndpoints:

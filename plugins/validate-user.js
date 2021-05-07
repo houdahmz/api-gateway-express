@@ -15,6 +15,8 @@ const validateUserPlugin = {
       policy: (params) =>
         async function (req, res, next) {
           console.log("in validate-user")
+          console.log("validate-user headerrrr",req.headers)
+
           try {
             let token = (req.headers.authorization).replace("Bearer ", "");
             let decoded;

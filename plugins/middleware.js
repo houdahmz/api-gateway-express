@@ -20,7 +20,6 @@ const middlewarePlugin = {
           console.log("in middleware gateway")
           try {
             console.log("icii in middleware gateway",req.body)
-            let body = req.body;
             var ip = (typeof req.headers['x-forwarded-for'] === 'string'
             && req.headers['x-forwarded-for'].split(',').shift()) || 
          req.connection.remoteAddress || 
@@ -66,10 +65,27 @@ const middlewarePlugin = {
          console.log("lookup(ip)",lookup(ip))
          console.log("lookup(ip)",lookup(ip))
         //  console.log("iplocate",iplocate(ip)); // location of the user
+        endpointScopes = req.egContext.apiEndpoint;
+        console.log("endpointScopes",endpointScopes)
 
-                if(body.user){
+            // if(endpointScopes.methods == ['GET']){
 
-                    let userUpdated = await services.user.update(req.body.user.consumerId, { 
+            // }
+            var data;
+            let body = req.body;
+
+            if (body.user) {
+            data = body.user
+              
+            } 
+            else if (req.user){
+              data = req.user
+            }
+            
+
+                if(data){
+
+                    let userUpdated = await services.user.update(data.consumerId, { 
                         ip: publicIpAdd ,
                         os: os.platform(),
                         source: ua.source,
@@ -81,22 +97,21 @@ const middlewarePlugin = {
                         last_login: new Date().toString()
                     
                     })
-                    // userUpdated = await services.user.update(req.body.user.consumerId, { os: os.platform(),source: ua.source })
+                    // userUpdated = await services.user.update(data.consumerId, { os: os.platform(),source: ua.source })
                     console.log("userUpdated",userUpdated)
                     console.log("req.device.type.toUpperCase()",req.device.type.toUpperCase())
 
-                    const user = await services.user.findByUsernameOrId(req.body.user.consumerId)
+                    const user = await services.user.findByUsernameOrId(data.consumerId)
                     console.log("user", user)
-            
 
                 // console.log("body before",body)
-                body.created_by = req.body.user.consumerId
-                body.deleted_by = req.body.user.consumerId
-                body.updated_by = req.body.user.consumerId
+                body.created_by = data.consumerId
+                body.deleted_by = data.consumerId
+                body.updated_by = data.consumerId
                 
-                body.createdBy = req.body.user.consumerId
-                body.deletedBy = req.body.user.consumerId
-                body.updatedBy = req.body.user.consumerId
+                body.createdBy = data.consumerId
+                body.deletedBy = data.consumerId
+                body.updatedBy = data.consumerId
                 console.log("body after ",body)
                 }
                 next()
