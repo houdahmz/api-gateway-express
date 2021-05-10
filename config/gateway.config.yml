@@ -90,10 +90,21 @@ apiEndpoints:
 
   voucher:
 # add voucher 
-#    - host: 192.168.12.115
-#      paths: /voucher*
-#      methods: ["GET","POST","DELETE"]
-#      scopes: ['admin']
+   - host: 192.168.12.115
+     paths: /voucher
+     methods: ["GET"]
+     scopes: ['admin']
+
+   - host: 192.168.12.115
+     paths: /voucher/:id
+     methods: ["GET","DELETE"]
+     scopes: ['admin']
+
+   - host: 192.168.12.115
+     paths: /voucher
+     methods: ["POST"]
+     scopes: ['admin']
+
 
 # valider les vouchers importer et modifier leurs status
     - host: 192.168.12.115
