@@ -67,6 +67,7 @@ const middlewarePlugin = {
         //  console.log("iplocate",iplocate(ip)); // location of the user
         endpointScopes = req.egContext.apiEndpoint;
         console.log("endpointScopes",endpointScopes)
+	console.log("*********************************")	
 
             // if(endpointScopes.methods == ['GET']){
 

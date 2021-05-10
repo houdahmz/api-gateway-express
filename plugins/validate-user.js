@@ -30,8 +30,8 @@ const validateUserPlugin = {
             }
 
             const myCredOauth = await services.credential.getCredential(decoded.consumerId, 'oauth2')
-            console.log("myCredOauth ", myCredOauth)
-
+//            console.log("myCredOauth ", myCredOauth)
+		console.log("*********************************")
             console.log("myCredOauth ", myCredOauth.scopes)
 
             let endpointScopes;
@@ -39,6 +39,8 @@ const validateUserPlugin = {
               endpointScopes = req.egContext.apiEndpoint.scopes;
             }
             console.log('endpointScopes', endpointScopes)
+		console.log("************************************")
+		console.log("req.egContext",req.egContext.apiEndpoint)
             try {
 
               if (myCredOauth.scopes) {
