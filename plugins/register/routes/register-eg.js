@@ -1302,7 +1302,8 @@ console.log("myUser",myUser)
       yearB: req.query.yearB,
       dayB: req.query.dayB
     })
-    console.log("amountPaymee",amountPaymee)
+    // console.log("amountPaymee",amountPaymee)
+    console.log("amountPaymee.data",amountPaymee.data)
           if(!amountPaymee.data){
             res.status("500").json("Error: error server");
           }
@@ -1312,6 +1313,8 @@ console.log("myUser",myUser)
             yearB: req.query.yearB,
             dayB: req.query.dayB
           })
+    console.log("amountTopnet.data",amountTopnet.data)
+
                if(!amountTopnet.data){
                  res.status("500").json("Error: error server");
                }
@@ -1321,6 +1324,8 @@ console.log("myUser",myUser)
                  yearB: req.query.yearB,
                  dayB: req.query.dayB
                })
+    console.log("amountVoucher.data",amountVoucher.data)
+
                     if(!amountVoucher.data){
                       res.status("500").json("Error: error server");
                     }
@@ -1331,6 +1336,8 @@ console.log("myUser",myUser)
                 yearB: req.query.yearB,
                 dayB: req.query.dayB
               })
+    console.log("amountPosteRecharge.data",amountPosteRecharge.data)
+
                     if(!amountPosteRecharge.data){
                       res.status("500").json("Error: error server");
                     }
@@ -1339,6 +1346,8 @@ console.log("myUser",myUser)
                       yearB: req.query.yearB,
                       dayB: req.query.dayB
                     })
+    console.log("amountPostePayemnt",amountPostePayemnt)
+
                          if(!amountPostePayemnt.data){
                            res.status("500").json("Error: error server");
                          }
@@ -1353,6 +1362,14 @@ console.log("myUser",myUser)
                          console.log("ca",ca)
                          let nbT = amountPaymee.data.data.transaction.All+amountPosteRecharge.data.data.transaction.All+amountPostePayemnt.data.data.transaction.All+amountTopnet.data.data.transaction.All
 
+                         log4j.loggerinfo.info("Call stats by month endpoint api-management/admin/statsAllMonth: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`);
+                         const statsDataAllMonth =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`)
+                        // console.log("statsDataAllMonth",statsDataAllMonth)
+                        console.log("statsDataAllMonth.data",statsDataAllMonth.data)
+                              if(!statsDataAllMonth.data){
+                                res.status("500").json("Error: error server");
+                              }
+
 
       return res.status(200).json({
         "Services":{
@@ -1363,7 +1380,8 @@ console.log("myUser",myUser)
           "topnet": amountTopnet.data.data
         },
         "CA":ca,
-        "Nombre_transaction":nbT
+        "Nombre_transaction":nbT,
+        "Stats_by_month": statsDataAllMonth.data.data
 
       });
 
