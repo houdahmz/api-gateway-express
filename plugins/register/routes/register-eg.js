@@ -612,7 +612,9 @@ console.log("req.headers.authorization",req.headers.authorization)
           try {
             decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
             console.log("decode", decoded.consumerId)
-
+            req.body = {
+              userId: decoded.consumerId
+            }
           } catch (error) {
             console.log("error", error)
             res.status(403).send(error);
@@ -633,6 +635,10 @@ console.log("req.headers.authorization",req.headers.authorization)
 
           if (myCredOauth.scopes) {
             if (myCredOauth.scopes[0] == endpointScopes) {
+              console.log("**************************************************")
+              console.log("req.body",req.body)
+              console.log("**************************************************")
+
               next();
             }
             else {
@@ -667,7 +673,9 @@ console.log("req.headers.authorization",req.headers.authorization)
           try {
             decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
             console.log("decode.consumerId", decoded.consumerId)
-
+            req.body = {
+              userId: decoded.consumerId
+            }
           } catch (error) {
             console.log("error", error)
             res.status(403).send(error);
@@ -689,6 +697,9 @@ console.log("req.headers.authorization",req.headers.authorization)
           if (myCredOauth.scopes) {
             if (myCredOauth.scopes[0] == endpointScopes) {
               console.log("req.headers.authorization",req.headers.authorization)
+              console.log("**************************************************")
+              console.log("req.body",req.body)
+              console.log("**************************************************")
 
               // console.log("res.headers.authorization",res.headers.authorization)
               // res.headers.authorization = req.headers.authorization
@@ -726,7 +737,9 @@ console.log("req.headers.authorization",req.headers.authorization)
           try {
             decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
             console.log("decode", decoded.consumerId)
-
+            req.body = {
+              userId: decoded.consumerId
+            }
           } catch (error) {
             console.log("error", error)
             res.status(403).send(error);
@@ -746,6 +759,10 @@ console.log("req.headers.authorization",req.headers.authorization)
 
           if (myCredOauth.scopes) {
             if (myCredOauth.scopes[0] == endpointScopes) {
+              console.log("**************************************************")
+              console.log("req.body",req.body)
+              console.log("**************************************************")
+
               next();
             }
             else {
@@ -781,7 +798,9 @@ console.log("req.headers.authorization",req.headers.authorization)
           try {
             decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
             console.log("decode", decoded.consumerId)
-
+            req.body = {
+              userId: decoded.consumerId
+            }
           } catch (error) {
             console.log("error", error)
             res.status(403).send(error);
@@ -800,6 +819,10 @@ console.log("req.headers.authorization",req.headers.authorization)
           if (myCredOauth.scopes) {
 
             if (myCredOauth.scopes[0] == "super_admin" || myCredOauth.scopes[0] == "admin") {
+              console.log("**************************************************")
+              console.log("req.body",req.body)
+              console.log("**************************************************")
+
               next();
             }
             else {
@@ -1292,7 +1315,7 @@ console.log("myUser",myUser)
 
     });
 
-    gatewayExpressApp.get('/stats-by-service', async (req, res, next) => { // still incomplete
+    gatewayExpressApp.get('/stats', async (req, res, next) => { // still incomplete
 
 
         try {
@@ -1370,6 +1393,13 @@ console.log("myUser",myUser)
                                 res.status("500").json("Error: error server");
                               }
 
+                              log4j.loggerinfo.info("Call statsCommission endpoint api-management/wallet/stats-commission: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
+                              const statsDataCommission =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`)
+                             // console.log("statsDataCommission",statsDataCommission)
+                             console.log("statsDataCommission.data",statsDataCommission.data)
+                                   if(!statsDataCommission.data){
+                                     res.status("500").json("Error: error server");
+                                   }
 
       return res.status(200).json({
         "Services":{
@@ -1381,6 +1411,7 @@ console.log("myUser",myUser)
         },
         "CA":ca,
         "Nombre_transaction":nbT,
+        // "Stats_Commission":statsDataCommission.data.data,
         "Stats_by_month": statsDataAllMonth.data.data
 
       });
@@ -1395,14 +1426,151 @@ console.log("myUser",myUser)
         log4j.loggererror.error(error.message)
         return res.status(500).send({"error":error.message});
       }
-      log4j.loggererror.error("Error paymee: ")
+      log4j.loggererror.error("Error: ")
       return res.status(error.response.status).send(error.response.data);
     }
 
     });
 
 
+    gatewayExpressApp.get('/stats/byUser', verifyTokenUser ,async (req, res, next) => { // still incomplete
 
+
+      try {
+console.log("------------------------")
+console.log("----------req.body.userId-------------- ",req.body.userId)
+req.query.userId = req.body.userId
+console.log("----------req.query.userId-------------- ",req.query.userId)
+
+console.log("------------------------")
+const paramPaymee = {
+  id_pdv: req.query.userId,  
+  yearB: req.query.yearB,
+  dayB: req.query.dayB
+}
+console.log("paramPaymee",paramPaymee)
+    log4j.loggerinfo.info("Call paymee: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
+   const amountPaymee =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`,paramPaymee)
+  // console.log("amountPaymee",amountPaymee)
+  console.log("amountPaymee.data",amountPaymee.data)
+        if(!amountPaymee.data){
+          res.status("500").json("Error: error server");
+        }
+
+        log4j.loggerinfo.info("Call topnet: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`);
+        const amountTopnet =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`,{
+          company_id: req.query.userId,
+          yearB: req.query.yearB,
+          dayB: req.query.dayB
+        })
+  console.log("amountTopnet.data",amountTopnet.data)
+
+             if(!amountTopnet.data){
+               res.status("500").json("Error: error server");
+             }
+
+             log4j.loggerinfo.info("Call voucher: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`);
+             const amountVoucher =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`,{
+              id_user: req.query.userId, 
+              yearB: req.query.yearB,
+               dayB: req.query.dayB
+             })
+  console.log("amountVoucher.data",amountVoucher.data)
+
+                  if(!amountVoucher.data){
+                    res.status("500").json("Error: error server");
+                  }
+   
+
+             log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`);
+             const amountPosteRecharge =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`,{
+              company_id: req.query.userId,
+              yearB: req.query.yearB,
+              dayB: req.query.dayB
+            })
+  console.log("amountPosteRecharge.data",amountPosteRecharge.data)
+
+                  if(!amountPosteRecharge.data){
+                    res.status("500").json("Error: error server");
+                  }
+                  log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`);
+                  const amountPostePayemnt =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`,{
+                    company_id: req.query.userId,  
+                    yearB: req.query.yearB,
+                    dayB: req.query.dayB
+                  })
+  console.log("amountPostePayemnt",amountPostePayemnt.data)
+
+                       if(!amountPostePayemnt.data){
+                         res.status("500").json("Error: error server");
+                       }
+                       console.log("amountPaymee",amountPaymee.data)
+                       console.log("amountPosteRecharge",amountPosteRecharge.data)
+                       console.log("amountPostePayemnt",amountPostePayemnt.data)
+                       console.log("amountTopnet",amountTopnet.data)
+                       console.log("amountVoucher",amountVoucher.data)
+
+
+                       let ca = amountPaymee.data.data.amount.Success+amountPosteRecharge.data.data.amount.Success+amountPostePayemnt.data.data.amount.Success+amountTopnet.data.data.amount.Success
+                       console.log("ca",ca)
+                       let nbT = amountPaymee.data.data.transaction.All+amountPosteRecharge.data.data.transaction.All+amountPostePayemnt.data.data.transaction.All+amountTopnet.data.data.transaction.All
+                       console.log("azerty",
+                       {
+                        userId: req.userId,
+                        query: req.query.userId,
+                        body: req.body.userId
+                                            }
+                       )
+                       log4j.loggerinfo.info("Call stats by month endpoint api-management/admin/statsAllMonth: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`);
+                       const statsDataAllMonth =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`,
+                       {
+                        userId: req.body.userId
+                                            }
+                                            )
+                      // console.log("statsDataAllMonth",statsDataAllMonth)
+                      console.log("statsDataAllMonth.data",statsDataAllMonth.data)
+                            if(!statsDataAllMonth.data){
+                              res.status("500").json("Error: error server");
+                            }
+
+                          //   log4j.loggerinfo.info("Call statsCommission endpoint api-management/wallet/stats-commission: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
+                          //   const statsDataCommission =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`)
+                          //  // console.log("statsDataCommission",statsDataCommission)
+                          //  console.log("statsDataCommission.data",statsDataCommission.data)
+                          //        if(!statsDataCommission.data){
+                          //          res.status("500").json("Error: error server");
+                          //        }
+
+    return res.status(200).json({
+      "Services":{
+        "paymee": amountPaymee.data.data,
+        "voucher": amountVoucher.data,
+        "poste_recharge": amountPosteRecharge.data.data,
+        "poste_payement": amountPostePayemnt.data.data,
+        "topnet": amountTopnet.data.data
+      },
+      "CA":ca,
+      "Nombre_transaction":nbT,
+      // "Stats_Commission":statsDataCommission.data.data,
+      "Stats_by_month": statsDataAllMonth.data.data
+
+    });
+
+
+
+
+
+
+  } catch (error) {
+    if(!error.response){
+      log4j.loggererror.error(error.message)
+      return res.status(500).send({"error":error.message});
+    }
+    log4j.loggererror.error("Error: ")
+    return res.status(error.response.status).send(error.response.data);
+  }
+
+  });
 
 
 

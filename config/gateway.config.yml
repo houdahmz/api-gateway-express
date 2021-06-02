@@ -100,7 +100,7 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: '/voucher/transaction'
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['user']
 
     - host: 192.168.12.115
       paths: '/voucher/transaction'
@@ -201,7 +201,7 @@ apiEndpoints:
 
     - host: 192.168.12.115
       paths: /paymee/transactions
-      scopes: ['admin']
+      scopes: ['user']
   
   poste:
     - host: 192.168.12.115
