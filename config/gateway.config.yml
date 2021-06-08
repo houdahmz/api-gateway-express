@@ -100,7 +100,12 @@ apiEndpoints:
 
 # valider les vouchers importer et modifier leurs status
     - host: 192.168.12.115
-      paths: /voucher/document*
+      paths: /voucher/document
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: 192.168.12.115
+      paths: /voucher/document/:id
       methods: ["DELETE","GET","PUT"]
       scopes: ['admin']
 
@@ -144,7 +149,7 @@ apiEndpoints:
     #   methods: ["POST"]
     #   scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /voucher/operator
       methods: ["GET"]
       scopes: ['user',"admin"]
@@ -154,7 +159,7 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['user',"admin"]
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /voucher/operator*
       methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
@@ -644,21 +649,21 @@ pipelines:
           - action:
               message: "voucher header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
       - cors:    
-      # - oauth2:
-      #     - action:
-      #         jwt:
-      #           issuer: express-gateway
-      #           audience: something
-      #           subject: 3pXQjeklS3cFf8OCJw9B22
-      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-      #           checkCredentialExistence: false
-      # - validate-user:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
       # - request-transformer:
       #     action:
       #       body:
       #         add:
       #           user: req.user
-      # - middleware:
+      - middleware:
       - request-transformer:
         # - condition:
         #     name: method
