@@ -7,11 +7,18 @@ admin:
 
 apiEndpoints:
   topup:
-    host: localhost
-    paths: /api/facial
-    methods:
-      - POST
-      
+    - host: 192.168.12.115
+      paths: /topup/operator*
+      methods: ["POST","PATCH","GET","PUT","DELETE"]
+      scopes: ['admin']
+    - host: 192.168.12.115
+      paths: /topup/simcard*
+      methods: ["POST","PATCH","GET","PUT","DELETE"]
+      scopes: ['admin'] 
+    - host: 192.168.12.115
+      paths: /topup/serialeport*
+      methods: ["POST","PATCH","GET","PUT"]
+      scopes: ['admin']   
   profile:
     - host: 192.168.12.115
       paths: /admin/company*
@@ -766,6 +773,28 @@ pipelines:
     apiEndpoints:
       - topup
     policies:
+      - log:
+          - action:
+              message: "topup header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
+      - cors:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+
       - proxy:
           - action:
               serviceEndpoint: api_management
