@@ -1450,9 +1450,15 @@ const paramPaymee = {
 }
 console.log("paramPaymee",paramPaymee)
     log4j.loggerinfo.info("Call paymee: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
-   const amountPaymee =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`,paramPaymee)
+   const amountPaymee =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`,{
+    params:paramPaymee
+          })
   // console.log("amountPaymee",amountPaymee)
+  console.log("*************************************")
   console.log("amountPaymee.data",amountPaymee.data)
+  console.log("*************************************")
+
+   
         if(!amountPaymee.data){
           res.status("500").json("Error: error server");
         }
@@ -1509,9 +1515,12 @@ console.log("paramPaymee",paramPaymee)
                        console.log("amountPostePayemnt",amountPostePayemnt.data)
                        console.log("amountTopnet",amountTopnet.data)
                        console.log("amountVoucher",amountVoucher.data)
-
-
-                       let ca = amountPaymee.data.data.amount.Success+amountPosteRecharge.data.data.amount.Success+amountPostePayemnt.data.data.amount.Success+amountTopnet.data.data.amount.Success
+                       let ca = 0;
+// if (condition) {
+  
+// }
+console.log("amountPaymee.data",amountPaymee.data)
+                       ca = amountPaymee.data.data.amount.Success+amountPosteRecharge.data.data.amount.Success+amountPostePayemnt.data.data.amount.Success+amountTopnet.data.data.amount.Success
                        console.log("ca",ca)
                        let nbT = amountPaymee.data.data.transaction.All+amountPosteRecharge.data.data.transaction.All+amountPostePayemnt.data.data.transaction.All+amountTopnet.data.data.transaction.All
                        console.log("azerty",
