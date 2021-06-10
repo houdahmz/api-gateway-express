@@ -50,8 +50,8 @@ const middlewarePlugin = {
         // let addr = ipF.address()
         const publicIpAdd = await publicIp.v4();
 
-          const results = await iplocate(publicIpAdd) 
-          console.log("results",results)
+          // const results = await iplocate(publicIpAdd) 
+          // console.log("results",results)
 
 
          var source = req.headers['user-agent']
@@ -90,10 +90,10 @@ const middlewarePlugin = {
                         ip: publicIpAdd ,
                         os: os.platform(),
                         source: ua.source,
-                        country:results.country,
-                        city:results.city,
-                        latitude:results.latitude,
-                        longitude:results.longitude,
+                        // country:results.country,
+                        // city:results.city,
+                        // latitude:results.latitude,
+                        // longitude:results.longitude,
                         // geoip: lookup(ip),
                         last_login: new Date().toString()
                     

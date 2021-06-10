@@ -99,12 +99,12 @@ apiEndpoints:
 
 
 # valider les vouchers importer et modifier leurs status
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/document
       methods: ["GET"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/document/:id
       methods: ["DELETE","GET","PUT"]
       scopes: ['admin']
@@ -129,7 +129,7 @@ apiEndpoints:
       methods: ["PUT"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/facial
       methods: ["GET"]
       scopes: ['user',"admin"]
@@ -200,7 +200,7 @@ apiEndpoints:
       methods: ["GET","DELETE"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher
       methods: ["POST"]
       scopes: ['admin']

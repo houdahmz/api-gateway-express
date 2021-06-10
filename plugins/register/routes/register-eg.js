@@ -989,8 +989,15 @@ console.log("aaaaaaaaaaaaaaaaaaaa",addr)
 const publicIpAdd = await publicIp.v4();
 console.log("publicIpAdd",publicIpAdd)
       //////////////////////
-      const results = await iplocate(publicIpAdd) 
-      console.log("results",results)
+      // let results;
+      // try {
+      //    results = await iplocate(publicIpAdd) 
+      //   console.log("results",results)
+  
+      // } catch (error) {
+      //   console.log("error",error)
+        
+      // }
 
       // iplocate(ip).then(function(results) {
       //    console.log("IP Address: " + results.ip);
@@ -1011,11 +1018,11 @@ console.log("publicIpAdd",publicIpAdd)
         ip: publicIpAdd ,
         os: os.platform(),
         source: ua.source,
-        // geoip: lookup(ip),
-        country:results.country,
-        city:results.city,
-        latitude:results.latitude,
-        longitude:results.longitude,
+        // // geoip: lookup(ip),
+        // country:results.country,
+        // city:results.city,
+        // latitude:results.latitude,
+        // longitude:results.longitude,
 
         last_login: new Date().toString()
       })
