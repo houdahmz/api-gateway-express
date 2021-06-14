@@ -784,12 +784,12 @@ pipelines:
                 secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
                 checkCredentialExistence: false
       - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
               add:
                 user: req.user
-      - middleware:
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
