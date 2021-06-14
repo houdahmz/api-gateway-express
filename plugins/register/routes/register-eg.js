@@ -1082,7 +1082,11 @@ console.log("addresses",addresses);
 console.log("data.data",data.data)
 if(data.data){
   if(data.data.data){
+console.log("data.data.data",data.data.data)
+
     if (data.data.data.Company.Category){
+console.log("data.data.data.Company",data.data.data.Company)
+
   console.log("data.data.data.Category",data.data.data.Company.Category)
   var code = data.data.data.Company.Category.code
       var dataCategory;
