@@ -77,15 +77,15 @@ const middlewarePlugin = {
 
       const getProfile = async (id) => {
         try {
-        log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id);
+        // log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id);
 
           return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
         } catch (error) {
           if(!error.response){
-            log4j.loggererror.error(error.message)
+            // log4j.loggererror.error(error.message)
             return res.status(500).send({"error":error.message});
           }
-          log4j.loggererror.error("Error in getting profile: "+error.response.data)
+          // log4j.loggererror.error("Error in getting profile: "+error.response.data)
 
           return res.status(error.response.status).send(error.response.data);
         }
@@ -93,15 +93,15 @@ const middlewarePlugin = {
       ///////////
       const getCategoryFromWalletWithCode = async (code) => {
         try {
-        log4j.loggerinfo.info("Call getcategory: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category/`);
+        // log4j.loggerinfo.info("Call getcategory: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category/`);
 
           return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category?name=`+code)
         } catch (error) {
           if(!error.response){
-            log4j.loggererror.error(error.message)
+            // log4j.loggererror.error(error.message)
             return res.status(500).send({"error":error.message});
           }
-          log4j.loggererror.error("Error in getting getcategory: "+error.response.data)
+          // log4j.loggererror.error("Error in getting getcategory: "+error.response.data)
 
           return res.status(error.response.status).send(error.response.data);
         }
@@ -163,10 +163,10 @@ const middlewarePlugin = {
       } catch (error) {
         console.log("error", error) //// tkt
         if(!error.response){
-          log4j.loggererror.error(error.message)
+          // log4j.loggererror.error(error.message)
           return res.status(500).send({"error":error.message});
         }
-        log4j.loggererror.error("Error in getting profile: "+error.response.data)
+        // log4j.loggererror.error("Error in getting profile: "+error.response.data)
 
         return res.status(error.response.status).send(error.response.data);
 
@@ -184,16 +184,17 @@ if (data.data.data.Company){
       console.log("data.data.data.Category",data.data.data.Company.Category)
       if(data.data.data.Company.Category){
         var code = data.data.data.Company.Category.code
+        console.log("cooooode ",code)
         try {
-          dataCategory = await getCategoryFromWalletWithCode(code)
+          dataCategory = await getCategoryFromWalletWithCode('CAT3')
       
         } catch (error) {
           console.log("error", error) //// tkt
           if(!error.response){
-            log4j.loggererror.error(error.message)
+            // log4j.loggererror.error(error.message)
             return res.status(500).send({"error":error.message});
           }
-          log4j.loggererror.error("Error in getting profile: "+error.response.data)
+          // log4j.loggererror.error("Error in getting profile: "+error.response.data)
       
           return res.status(error.response.status).send(error.response.data);
       
@@ -207,20 +208,25 @@ if (data.data.data.Company){
   }
 }
       /************************************************************************************** */
-      console.log("dataCategory",dataCategory)
+      console.log("dataCategory status",dataCategory.status)
       if(dataCategory){
       console.log("dataCategory.data",dataCategory.data)
 
         if(dataCategory.data.data.data){
-      console.log("dataCategory.data.data",dataCategory.data.data)
-
-body.categoryId = dataCategory.data.data
+          console.log("********categoryId ************",dataCategory.data.data.data.items[0].id)
+          body.categoryId = dataCategory.data.data.data.items[0].id
         }
+      console.log("--------------------")
+        
 }
+console.log("------ddddddddddddd--------------")
+
       /************************************************************************************** */
 
                 
                 }
+console.log("------fffffffffffff--------------")
+
                 next()
           }
           catch (error) {
