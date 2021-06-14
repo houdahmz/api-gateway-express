@@ -99,124 +99,124 @@ apiEndpoints:
 
 
 # valider les vouchers importer et modifier leurs status
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/document
       methods: ["GET"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/document/:id
       methods: ["DELETE","GET","PUT"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: '/voucher/transaction'
       methods: ["POST"]
       scopes: ['user']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: '/voucher/transaction'
       methods: ["GET"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: '/voucher/transaction/by_user/:id'
       methods: ["GET"]
       scopes: ['user']
 # valider et refuser les commandes
-    - host: 192.168.12.115
+    - host: localhost
       paths: '/voucher/transaction/status/:id'
       methods: ["PUT"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/facial
       methods: ["GET"]
       scopes: ['user',"admin"]
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/facial/:id
       methods: ["GET"]
       scopes: ['user',"admin"]
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/facial*
       methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    # - host: 192.168.12.115
+    # - host: localhost
     #   paths: /voucher/voucher*
     #   methods: ["POST"]
     #   scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/operator
       methods: ["GET"]
       scopes: ['user',"admin"]
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/operator/:id
       methods: ["GET"]
       scopes: ['user',"admin"]
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/operator*
       methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/settings
       methods: ["GET"]
       scopes: ['user',"admin"]
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/settings/:id
       methods: ["GET"]
       scopes: ['user',"admin"]
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/settings*
       methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    # - host: 192.168.12.115
+    # - host: localhost
     #   paths: /voucher/document*
     #   methods: ["POST","DELETE","PUT","PATCH","GET"]
     #   scopes: ['admin']
 
-    # - host: 192.168.12.115
+    # - host: localhost
     #   paths: /voucher/transaction/
     #   methods: ["GET"]
     #   scopes: ['admin']
 
 # add voucher 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher
       methods: ["GET"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher/:id
       methods: ["GET","DELETE"]
       scopes: ['admin']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /voucher
       methods: ["POST"]
-      scopes: ['user']
+      scopes: ['admin']
 
   paymee:
-    - host: 192.168.12.115
+    - host: localhost
       paths: /paymee/cashin
       methods: ["POST"]
       scopes: ['user']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths:  ['/paymee/accountname/:id']
       methods: ["GET"]
       scopes: ['user']
 
-    - host: 192.168.12.115
+    - host: localhost
       paths: /paymee/transactions
       scopes: ['user']
   
@@ -323,12 +323,12 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /wallet/supplier-service/:id
       methods: ["GET"]
-      scopes: ['user']   
+      scopes: ['user','admin']   
 
     - host: 192.168.12.115
       paths: /wallet/supplier-service
       methods: ["GET"]
-      scopes: ['admin'] 
+      scopes: ['admin','user'] 
 
     - host: 192.168.12.115
       paths: /wallet/supplier
