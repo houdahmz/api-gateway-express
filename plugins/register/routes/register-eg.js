@@ -1115,8 +1115,11 @@ console.log("data.data.data.Company",data.data.data.Company)
   
   }
 }
+      /************************************************************************************** */
 
-console.log("dataCategory.data",dataCategory.data)
+console.log("dataCategory.data",dataCategory)
+console.log("dataCategory",dataCategory)
+
       /************************************************************************************** */
 
       console.log("Date.now()",Date.now())
