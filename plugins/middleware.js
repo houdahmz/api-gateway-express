@@ -208,9 +208,9 @@ if (data.data.data.Company){
   }
 }
       /************************************************************************************** */
-      console.log("dataCategory status",dataCategory.status)
       if(dataCategory){
       console.log("dataCategory.data",dataCategory.data)
+      console.log("dataCategory status",dataCategory.status)
 
         if(dataCategory.data.data.data){
           console.log("********categoryId ************",dataCategory.data.data.data.items[0].id)
