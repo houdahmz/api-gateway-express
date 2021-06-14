@@ -61,18 +61,38 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: 192.168.12.115
-      paths: /user-management/activity*
-      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      paths: /user-management/activity
+      methods: ["GET"]
+      scopes: ['user',"admin"]
+
+    - host: 192.168.12.115
+      paths: /user-management/activity/:id
+      methods: ["GET"]
+      scopes: ['user',"admin"]
+
+    - host: 192.168.12.115
+      paths: /user-management/activity
+      methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
     - host: 192.168.12.115
-      paths: /user-management/type_user/by_code/:id
+      paths: /user-management/type-user/by_code/:id
       methods: ["GET"]
       scopes: ['admin']
 
     - host: 192.168.12.115
-      paths: /user-management/type-user*
-      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      paths: /user-management/type-user
+      methods: ["GET"]
+      scopes: ['user',"admin"]
+
+    - host: 192.168.12.115
+      paths: /user-management/type-user/:id
+      methods: ["GET"]
+      scopes: ['user',"admin"]
+
+    - host: 192.168.12.115
+      paths: /user-management/type-user
+      methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
     - host: 192.168.12.115
