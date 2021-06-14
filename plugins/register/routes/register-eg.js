@@ -1086,6 +1086,7 @@ console.log("*********************************")
 console.log("**************/////////////////////*******************")
 console.log("iciiiiiiiiiiiiiiiiiiii",data.data.data)
 console.log("****************//////////////////*****************")
+var dataCategory;
 
 if(data.data){
   if(data.data.data){
@@ -1095,30 +1096,30 @@ console.log("data.data.data",data.data.data)
 console.log("data.data.data.Company",data.data.data.Company)
 
   console.log("data.data.data.Category",data.data.data.Company.Category)
-  var code = data.data.data.Company.Category.code
-      var dataCategory;
-      try {
-        dataCategory = await getCategoryFromWalletWithCode(code)
-    
-      } catch (error) {
-        console.log("error", error) //// tkt
-        if(!error.response){
-          log4j.loggererror.error(error.message)
-          return res.status(500).send({"error":error.message});
-        }
-        log4j.loggererror.error("Error in getting profile: "+error.response.data)
-    
-        return res.status(error.response.status).send(error.response.data);
-    
+  if(data.data.data.Company.Category){
+    var code = data.data.data.Company.Category.code
+    try {
+      dataCategory = await getCategoryFromWalletWithCode(code)
+  
+    } catch (error) {
+      console.log("error", error) //// tkt
+      if(!error.response){
+        log4j.loggererror.error(error.message)
+        return res.status(500).send({"error":error.message});
       }
+      log4j.loggererror.error("Error in getting profile: "+error.response.data)
+  
+      return res.status(error.response.status).send(error.response.data);
+  
+    }
+  }
+
     }
   
   }
 }
       /************************************************************************************** */
-
-console.log("dataCategory.data",dataCategory)
-console.log("dataCategory",dataCategory)
+      console.log("dataCategory",dataCategory)
 
       /************************************************************************************** */
 
@@ -1169,10 +1170,13 @@ console.log("dataCategory",dataCategory)
         if (token.status == 200) {
           if (data.status == 200) {
             log4j.loggerinfo.info("Succes in getting token.");
-if(dataCategory.data.data.data){
-  return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: dataCategory.data.data});
+            if(dataCategory){
+              if(dataCategory.data.data.data){
+                return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: dataCategory.data.data});
+              
+              }
+            }
 
-}
 return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: null});
 
           }
