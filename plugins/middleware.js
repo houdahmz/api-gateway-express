@@ -6,6 +6,11 @@ const iplocate = require("node-iplocate");
 var moment = require('moment');
 var ipF = require("ip");
 
+
+const axios = require('axios');
+const env = require("../config/env.config");
+
+
 const publicIp = require('public-ip');
 
 const middlewarePlugin = {
@@ -68,7 +73,40 @@ const middlewarePlugin = {
         endpointScopes = req.egContext.apiEndpoint;
         console.log("endpointScopes",endpointScopes)
 	console.log("*********************************")	
+      ///////////
 
+      const getProfile = async (id) => {
+        try {
+        log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id);
+
+          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
+        } catch (error) {
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
+          log4j.loggererror.error("Error in getting profile: "+error.response.data)
+
+          return res.status(error.response.status).send(error.response.data);
+        }
+      }
+      ///////////
+      const getCategoryFromWalletWithCode = async (code) => {
+        try {
+        log4j.loggerinfo.info("Call getcategory: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category/`);
+
+          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category?name=`+code)
+        } catch (error) {
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
+          log4j.loggererror.error("Error in getting getcategory: "+error.response.data)
+
+          return res.status(error.response.status).send(error.response.data);
+        }
+      }
+      ///////////
             // if(endpointScopes.methods == ['GET']){
 
             // }
@@ -114,6 +152,74 @@ const middlewarePlugin = {
                 body.deletedBy = data.consumerId
                 body.updatedBy = data.consumerId
                 console.log("body after ",body)
+/*********************************************Call profile */
+
+      /**************************** */
+
+      var data;
+      try {
+        data = await getProfile(data.consumerId)
+
+      } catch (error) {
+        console.log("error", error) //// tkt
+        if(!error.response){
+          log4j.loggererror.error(error.message)
+          return res.status(500).send({"error":error.message});
+        }
+        log4j.loggererror.error("Error in getting profile: "+error.response.data)
+
+        return res.status(error.response.status).send(error.response.data);
+
+      }
+/***********************************************************************************************/
+var dataCategory;
+
+if(data.data){
+  if(data.data.data){
+console.log("data.data.data",data.data.data)
+if (data.data.data.Company){
+  if (data.data.data.Company.Category){
+    console.log("data.data.data.Company",data.data.data.Company)
+    
+      console.log("data.data.data.Category",data.data.data.Company.Category)
+      if(data.data.data.Company.Category){
+        var code = data.data.data.Company.Category.code
+        try {
+          dataCategory = await getCategoryFromWalletWithCode(code)
+      
+        } catch (error) {
+          console.log("error", error) //// tkt
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
+          log4j.loggererror.error("Error in getting profile: "+error.response.data)
+      
+          return res.status(error.response.status).send(error.response.data);
+      
+        }
+      }
+    
+        }
+}
+
+  
+  }
+}
+      /************************************************************************************** */
+      console.log("dataCategory",dataCategory)
+      if(dataCategory){
+      console.log("dataCategory.data",dataCategory.data)
+
+        if(dataCategory.data.data.data){
+      console.log("dataCategory.data.data",dataCategory.data.data)
+
+body.categoryId = dataCategory.data.data
+        }
+}
+      /************************************************************************************** */
+
+                
                 }
                 next()
           }
