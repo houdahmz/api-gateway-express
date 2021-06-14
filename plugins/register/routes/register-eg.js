@@ -1079,28 +1079,32 @@ console.log("addresses",addresses);
 
       }
 /********************************************************************************************** */
-if(data.data.data){
-  if (data.data.data.Company.Category){
-console.log("data.data.data.Category",data.data.data.Company.Category)
-var code = data.data.data.Company.Category.code
-    var dataCategory;
-    try {
-      dataCategory = await getCategoryFromWalletWithCode(code)
-  
-    } catch (error) {
-      console.log("error", error) //// tkt
-      if(!error.response){
-        log4j.loggererror.error(error.message)
-        return res.status(500).send({"error":error.message});
+console.log("data.data",data.data)
+if(data.data){
+  if(data.data.data){
+    if (data.data.data.Company.Category){
+  console.log("data.data.data.Category",data.data.data.Company.Category)
+  var code = data.data.data.Company.Category.code
+      var dataCategory;
+      try {
+        dataCategory = await getCategoryFromWalletWithCode(code)
+    
+      } catch (error) {
+        console.log("error", error) //// tkt
+        if(!error.response){
+          log4j.loggererror.error(error.message)
+          return res.status(500).send({"error":error.message});
+        }
+        log4j.loggererror.error("Error in getting profile: "+error.response.data)
+    
+        return res.status(error.response.status).send(error.response.data);
+    
       }
-      log4j.loggererror.error("Error in getting profile: "+error.response.data)
-  
-      return res.status(error.response.status).send(error.response.data);
-  
     }
+  
   }
-
 }
+
 console.log("dataCategory.data",dataCategory.data)
       /************************************************************************************** */
 
