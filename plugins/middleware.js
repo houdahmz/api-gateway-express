@@ -161,10 +161,10 @@ const middlewarePlugin = {
         data = await getProfile(data.consumerId)
 
       } catch (error) {
-        console.log("error", error) //// tkt
+        console.log("error getProfile", error) //// tkt
         if(!error.response){
           // log4j.loggererror.error(error.message)
-          return res.status(500).send({"error":error.message});
+          return res.status(500).send({"error getProfile in Gateway":error.message});
         }
         // log4j.loggererror.error("Error in getting profile: "+error.response.data)
 
@@ -186,13 +186,13 @@ if (data.data.data.Company){
         var code = data.data.data.Company.Category.code
         console.log("cooooode ",code)
         try {
-          dataCategory = await getCategoryFromWalletWithCode('CAT3')
+          dataCategory = await getCategoryFromWalletWithCode(code)
       
         } catch (error) {
           console.log("error", error) //// tkt
           if(!error.response){
             // log4j.loggererror.error(error.message)
-            return res.status(500).send({"error":error.message});
+            return res.status(500).send({"Error getCategory in Gateway":error.message});
           }
           // log4j.loggererror.error("Error in getting profile: "+error.response.data)
       
@@ -215,17 +215,20 @@ if (data.data.data.Company){
         if(dataCategory.data.data.data){
           console.log("********categoryId ************",dataCategory.data.data.data.items[0].id)
           body.categoryId = dataCategory.data.data.data.items[0].id
-        }
-      console.log("--------------------")
+        }else {
+          body.categoryId = null
         
+        }
+        
+}else {
+  body.categoryId = null
+
 }
-console.log("------ddddddddddddd--------------")
 
       /************************************************************************************** */
 
                 
                 }
-console.log("------fffffffffffff--------------")
 
                 next()
           }

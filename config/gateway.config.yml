@@ -169,7 +169,7 @@ apiEndpoints:
     #   methods: ["POST"]
     #   scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /voucher/operator
       methods: ["GET"]
       scopes: ['user',"admin"]
