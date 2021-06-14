@@ -946,6 +946,22 @@ console.log("req.headers.authorization",req.headers.authorization)
         }
       }
       ///////////
+      const getCategoryFromWalletWithCode = async (code) => {
+        try {
+        log4j.loggerinfo.info("Call getcategory: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category/`);
+
+          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category?name=`+code)
+        } catch (error) {
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
+          log4j.loggererror.error("Error in getting getcategory: "+error.response.data)
+
+          return res.status(error.response.status).send(error.response.data);
+        }
+      }
+      ///////////
       /************************** */
       var md = new MobileDetect(req.headers['user-agent']);
       // var m = new MobileDetect(window.navigator.userAgent);
@@ -1062,6 +1078,32 @@ console.log("addresses",addresses);
         return res.status(error.response.status).send(error.response.data);
 
       }
+/********************************************************************************************** */
+if(data.data.data){
+  if (data.data.data.Company.Category){
+console.log("data.data.data.Category",data.data.data.Company.Category)
+var code = data.data.data.Company.Category.code
+    var dataCategory;
+    try {
+      dataCategory = await getCategoryFromWalletWithCode(code)
+  
+    } catch (error) {
+      console.log("error", error) //// tkt
+      if(!error.response){
+        log4j.loggererror.error(error.message)
+        return res.status(500).send({"error":error.message});
+      }
+      log4j.loggererror.error("Error in getting profile: "+error.response.data)
+  
+      return res.status(error.response.status).send(error.response.data);
+  
+    }
+  }
+
+}
+console.log("dataCategory.data",dataCategory.data)
+      /************************************************************************************** */
+
       console.log("Date.now()",Date.now())
       let name = "complete_profile" + Date.now()
       // userApp = await services.application.find(name)
@@ -1109,8 +1151,12 @@ console.log("addresses",addresses);
         if (token.status == 200) {
           if (data.status == 200) {
             log4j.loggerinfo.info("Succes in getting token.");
+if(dataCategory.data.data.data){
+  return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: dataCategory.data.data});
 
-            return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data});
+}
+return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: null});
+
           }
 
         }
