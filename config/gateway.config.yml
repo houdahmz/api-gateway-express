@@ -774,22 +774,22 @@ pipelines:
       - log:
           - action:
               message: "profile header===> ${req.headers.authorization} ---${req}"
-      - cors:
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
-                checkCredentialExistence: false
-      - validate-user:
-      - middleware:
-      - request-transformer:
-          action:
-            body:
-              add:
-                user: req.user
+      # - cors:
+      # - oauth2:
+      #     - action:
+      #         jwt:
+      #           issuer: express-gateway
+      #           audience: something
+      #           subject: 3pXQjeklS3cFf8OCJw9B22
+      #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+      #           checkCredentialExistence: false
+      # - validate-user:
+      # - middleware:
+      # - request-transformer:
+      #     action:
+      #       body:
+      #         add:
+      #           user: req.user
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
