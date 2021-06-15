@@ -583,11 +583,15 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /wallet
       methods: ["GET"]
-      scopes: ['admin']  
+      scopes: ['admin'] 
+    - host: 192.168.12.115
+      paths: /wallet
+      methods: ["POST"]
+      scopes: ['admin','user']   
     - host: 192.168.12.115
       paths: /wallet/:id
       methods: ["GET"]
-      scopes: ['admin']    
+      scopes: ['admin','user']    
     - host: 192.168.12.115
       paths: /wallet/history
       methods: ["GET"]
