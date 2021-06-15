@@ -38,12 +38,12 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /user-management/profile*
       methods: ["PUT","PATCH"]
-      scopes: ['user']
+      scopes: ['user','admin']
 
     - host: 192.168.12.115
       paths: /user-management/company/:id
       methods: ["PUT","PATCH"]
-      scopes: ['user']
+      scopes: ['user','admin']
 
     - host: 192.168.12.115
       paths: /user-management/company/profile-by-company
