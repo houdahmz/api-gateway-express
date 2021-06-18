@@ -580,9 +580,9 @@ apiEndpoints:
       methods: ["PATCH"]
       scopes: ['admin'] 
     - host: 192.168.12.115
-      paths: /wallet/commission/*
+      paths: /wallet/commission/:id
       methods: ["DELETE"]
-      scopes: ['user']                       
+      scopes: ['admin']                       
     - host: 192.168.12.115
       paths: /wallet/commission  
     - host: 192.168.12.115
