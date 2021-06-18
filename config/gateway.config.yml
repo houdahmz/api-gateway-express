@@ -25,7 +25,7 @@ apiEndpoints:
       methods: ["POST","PATCH"]
       scopes: ['admin']
 
-    - host: localhost
+    - host: 192.168.12.115
       paths: /user-management/user/:id
       methods: ["GET"]
       scopes: ['admin']
