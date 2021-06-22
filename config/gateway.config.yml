@@ -204,6 +204,11 @@ apiEndpoints:
       methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
+    - host: 192.168.12.115
+      paths: /voucher/transactionByAdmin/:id
+      methods: ["PUT"]
+      scopes: ['user']
+
     # - host: localhost
     #   paths: /voucher/document*
     #   methods: ["POST","DELETE","PUT","PATCH","GET"]

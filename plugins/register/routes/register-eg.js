@@ -1174,6 +1174,8 @@ if (data.data.data.Company){
             log4j.loggerinfo.info("Succes in getting token.");
             if(dataCategory){
               console.log("dataCategory.data",dataCategory.data)
+
+              console.log("dataCategory.data",dataCategory.data)
               console.log("dataCategory.data.data",dataCategory.data.data)
 
               console.log("dataCategory.data.data.data",dataCategory.data.data.data)
