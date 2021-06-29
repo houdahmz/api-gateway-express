@@ -156,6 +156,10 @@ const middlewarePlugin = {
                 body.createdBy = data.consumerId
                 body.deletedBy = data.consumerId
                 body.updatedBy = data.consumerId
+
+                body.userId = data.consumerId
+
+
                 console.log("body after ",body)
 /*********************************************Call profile */
 
@@ -182,6 +186,9 @@ var dataCategory;
 if(data.data){
   if(data.data.data){
 console.log("data.data.data",data.data.data)
+body.CompanyId = data.data.data.CompanyId
+body.company_id = data.data.data.CompanyId
+
 if (data.data.data.Company){
   if (data.data.data.Company.Category){
     console.log("data.data.data.Company",data.data.data.Company)

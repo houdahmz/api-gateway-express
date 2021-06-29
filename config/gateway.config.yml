@@ -174,7 +174,7 @@ apiEndpoints:
       methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
-    # - host: localhost
+    # - host: 192.168.12.115
     #   paths: /voucher/voucher*
     #   methods: ["POST"]
     #   scopes: ['admin']
@@ -214,12 +214,12 @@ apiEndpoints:
       methods: ["PUT"]
       scopes: ['user']
 
-    # - host: localhost
+    # - host: 192.168.12.115
     #   paths: /voucher/document*
     #   methods: ["POST","DELETE","PUT","PATCH","GET"]
     #   scopes: ['admin']
 
-    # - host: localhost
+    # - host: 192.168.12.115
     #   paths: /voucher/transaction/
     #   methods: ["GET"]
     #   scopes: ['admin']
@@ -995,6 +995,7 @@ pipelines:
                 secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
                 checkCredentialExistence: false
       - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
