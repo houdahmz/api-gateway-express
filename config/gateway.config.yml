@@ -31,6 +31,11 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: 192.168.12.115
+      paths: /user-management/by_user
+      methods: ["GET"]
+      scopes: ['user']
+
+    - host: 192.168.12.115
       paths: /user-management/profile*
       methods: ["DELETE","GET"]
       scopes: ['admin']

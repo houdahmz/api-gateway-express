@@ -41,6 +41,10 @@ const validateUserPlugin = {
             console.log('endpointScopes', endpointScopes)
 		console.log("************************************")
 		console.log("req.egContext",req.egContext.apiEndpoint)
+		// console.log("req.egContext",req.egContext.apiEndpoint.methods[0] == 'GET')
+		// console.log("req.egContext check",req.egContext.apiEndpoint.methods.includes("GET"))
+
+
             try {
 
               if (myCredOauth.scopes) {

@@ -110,6 +110,11 @@ const middlewarePlugin = {
             // if(endpointScopes.methods == ['GET']){
 
             // }
+		console.log("req.egContext.apiEndpoint.methods check",req.egContext.apiEndpoint.methods.includes("GET"))
+    if(req.egContext.apiEndpoint.methods.includes("GET")){
+      console.log("Methode GET")
+      
+    }
             var data;
             let body = req.body;
 
