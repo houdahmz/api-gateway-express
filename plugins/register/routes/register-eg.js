@@ -1407,9 +1407,10 @@ console.log("myUser",myUser)
 
       log4j.loggerinfo.info("Call paymee: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
      const amountPaymee =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`,{
-      yearB: req.query.yearB,
-      dayB: req.query.dayB
-    })
+      params:{
+        yearB: req.query.yearB,
+        dayB: req.query.dayB
+      }    })
     // console.log("amountPaymee",amountPaymee)
     console.log("amountPaymee.data",amountPaymee.data)
           if(!amountPaymee.data){
@@ -1418,9 +1419,10 @@ console.log("myUser",myUser)
 
           log4j.loggerinfo.info("Call topnet: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`);
           const amountTopnet =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`,{
-            yearB: req.query.yearB,
-            dayB: req.query.dayB
-          })
+            params:{
+              yearB: req.query.yearB,
+              dayB: req.query.dayB
+            }          })
     console.log("amountTopnet.data",amountTopnet.data)
 
                if(!amountTopnet.data){
@@ -1428,10 +1430,14 @@ console.log("myUser",myUser)
                }
 
                log4j.loggerinfo.info("Call voucher: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`);
-               const amountVoucher =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`,{
-                 yearB: req.query.yearB,
-                 dayB: req.query.dayB
-               })
+               const amountVoucher =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`,
+               {
+                params:{
+                  yearB: req.query.yearB,
+                  dayB: req.query.dayB
+                }
+                      }
+               )
     console.log("amountVoucher.data",amountVoucher.data)
 
                     if(!amountVoucher.data){
@@ -1451,9 +1457,10 @@ console.log("myUser",myUser)
                     }
                     log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`);
                     const amountPostePayemnt =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`,{
-                      yearB: req.query.yearB,
-                      dayB: req.query.dayB
-                    })
+                      params:{
+                        yearB: req.query.yearB,
+                        dayB: req.query.dayB
+                      }                    })
     console.log("amountPostePayemnt",amountPostePayemnt)
 
                          if(!amountPostePayemnt.data){
@@ -1478,13 +1485,13 @@ console.log("myUser",myUser)
                                 res.status("500").json("Error: error server");
                               }
 
-                              log4j.loggerinfo.info("Call statsCommission endpoint api-management/wallet/stats-commission: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
-                              const statsDataCommission =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`)
-                             // console.log("statsDataCommission",statsDataCommission)
-                             console.log("statsDataCommission.data",statsDataCommission.data)
-                                   if(!statsDataCommission.data){
-                                     res.status("500").json("Error: error server");
-                                   }
+                            //   log4j.loggerinfo.info("Call statsCommission endpoint api-management/wallet/stats-commission: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
+                            //   const statsDataCommission =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`)
+                            //  // console.log("statsDataCommission",statsDataCommission)
+                            //  console.log("statsDataCommission.data",statsDataCommission.data)
+                            //        if(!statsDataCommission.data){
+                            //          res.status("500").json("Error: error server");
+                            //        }
 
       return res.status(200).json({
         "Services":{
@@ -1550,9 +1557,12 @@ console.log("paramPaymee",paramPaymee)
 
         log4j.loggerinfo.info("Call topnet: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`);
         const amountTopnet =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`,{
-          company_id: req.query.userId,
-          yearB: req.query.yearB,
-          dayB: req.query.dayB
+         
+          params:{
+            company_id: req.query.userId,
+            yearB: req.query.yearB,
+            dayB: req.query.dayB
+            }
         })
   console.log("amountTopnet.data",amountTopnet.data)
 
@@ -1575,10 +1585,11 @@ console.log("paramPaymee",paramPaymee)
 
              log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`);
              const amountPosteRecharge =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`,{
-              company_id: req.query.userId,
-              yearB: req.query.yearB,
-              dayB: req.query.dayB
-            })
+              params:{
+                company_id: req.query.userId,
+                yearB: req.query.yearB,
+                dayB: req.query.dayB
+                }            })
   console.log("amountPosteRecharge.data",amountPosteRecharge.data)
 
                   if(!amountPosteRecharge.data){
@@ -1586,10 +1597,11 @@ console.log("paramPaymee",paramPaymee)
                   }
                   log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`);
                   const amountPostePayemnt =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`,{
-                    company_id: req.query.userId,  
-                    yearB: req.query.yearB,
-                    dayB: req.query.dayB
-                  })
+                    params:{
+                      company_id: req.query.userId,
+                      yearB: req.query.yearB,
+                      dayB: req.query.dayB
+                      }                  })
   console.log("amountPostePayemnt",amountPostePayemnt.data)
 
                        if(!amountPostePayemnt.data){
@@ -1618,7 +1630,9 @@ console.log("amountPaymee.data",amountPaymee.data)
                        log4j.loggerinfo.info("Call stats by month endpoint api-management/admin/statsAllMonth: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`);
                        const statsDataAllMonth =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`,
                        {
-                        userId: req.body.userId
+                        params:{
+                          userId: req.body.userId
+                          }
                                             }
                                             )
                       // console.log("statsDataAllMonth",statsDataAllMonth)
