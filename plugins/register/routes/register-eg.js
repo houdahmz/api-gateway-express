@@ -41,6 +41,10 @@ const app = express();
 var corsOptions = {
   origin: "*"
 };
+var status = {
+  "incompleted":0,
+  "completed":1
+}
   require("body-parser").urlencoded({ limit: "50mb", extended: true }),
   require("body-parser").json({ limit: "50mb", extended: true }),
   require("express").json({ limit: "50mb", extended: true }), //-- use express.json
@@ -91,8 +95,9 @@ var corsOptions = {
         console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
 
         myUser = await services.user.insert({
-          isActive: false,
-          confirmMail: false,
+          isActive: true,
+          confirmMail: true,
+          profilCompleted: false,
           firstname: firstname,
           lastname: lastname,
           username: username,
@@ -857,23 +862,32 @@ console.log("req.headers.authorization",req.headers.authorization)
       myUser = await services.user.find(username)
       console.log("myUser", myUser)
       // myUserUpdte = await services.user.update(myUser.id,"firstname")
-      if (myUser.confirmMail == 'false') {
-        log4j.loggererror.error("Error please confirm your email ")
 
-        return res.status(200).json({ error: "Confirm your email" });
-
-      }
       if (myUser == false) {
         log4j.loggerinfo.info("Error username does not exist.");
 
         return res.status(200).json({ error: "username does not exist" });
 
-      } else if (myUser.isActive == false) {
-        log4j.loggerinfo.info("Error user is desactivated.");
+      }
+      else if (myUser.confirmMail == 'false') {
+        log4j.loggererror.error("Error please confirm your email ")
 
-        return res.status(200).json({ error: "user is desactivated" });
+        return res.status(200).json({ error: "Confirm your email" });
 
       }
+
+      else if (myUser.profilCompleted == 'false') {
+        log4j.loggerinfo.info("Error user profile is incompleted. ");
+
+        return res.status(200).json({ error: "user profile is incompleted." });
+
+      }
+      else if (myUser.isActive == false) {
+        log4j.loggerinfo.info("Error user is desactivated. please wait for the administrator's agreement ");
+
+        return res.status(200).json({ error: "user is desactivated. please wait for the administrator's agreement " });
+
+      } 
       myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth')
 
       console.log("myCredBasic ", myCredBasic)

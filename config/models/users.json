@@ -27,6 +27,10 @@
       "type": "string"
     
     },
+    "profilCompleted": {
+      "type": "string"
+    
+    },
     "ip": {
       "type": "string"
     },
