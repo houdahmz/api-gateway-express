@@ -616,7 +616,7 @@ apiEndpoints:
     - host: '*'
       paths: ['/scopes*','/credentials*','/apps*']
       methods: ["GET","POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['user']
+      scopes: ['super_admin']
 
     - host: '*'
       paths: ['/users*']
