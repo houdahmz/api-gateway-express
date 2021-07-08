@@ -1136,6 +1136,10 @@ console.log("myUser.id",myUser.id)
       if(scope[0] == 'visitor'){
         return res.status(token.status).json({ token: token.data, role: scope ,user: userJsonVisistor , categoryWalletId: null});
       }
+      // else
+      // if(scope[0] == 'admin'){
+      //   return res.status(token.status).json({ token: token.data, role: scope ,user: userJsonVisistor , categoryWalletId: null});
+      // }
       else {
 
 
