@@ -167,7 +167,7 @@ var status = {
         })
         console.log("crd_basiiiiiiiiiiic", crd_basic)
 
-        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['visitor'] })
         console.log("crd_oauth222222222222", crd_oauth2)
 
 
@@ -201,7 +201,7 @@ var status = {
         console.log("confirm_uri", confirm_uri)
         //here je vais envoyer un mail
 
-        mail.send_email("confirmation", "Veuillez cliquer sur lien pour activer votre compte \n " + confirm_uri);
+        mail.send_email("confirmation", "Veuillez cliquer sur lien pour completer votre compte \n " + confirm_uri);
 
         log4j.loggerinfo.info("Success, mail has been sent to : "+email);
         return res.status(201).json({ etat: "Success", message: "Check your email : " + email });
@@ -280,7 +280,7 @@ var status = {
     });
 
 
-    gatewayExpressApp.patch('/complete-profile/:id', verifyTokenUser, async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
+    gatewayExpressApp.patch('/complete-profile/:id', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
         console.log("/api/complete-profile")
         if (!req.params.id) {
@@ -288,41 +288,40 @@ var status = {
           return res.status(200).json({ error: "Id can not be empty" })
 
         }
-        const { commercial_register, city, zip_code, adresse, activity, updated_by, id_commercial } = req.body
+        const {image , patent,photo, cin,commercial_register, city, zip_code, adresse, activity, updated_by, id_commercial } = req.body
 
-        const updateprofile = async () => {
+        const updateprofile = async (body) => {
+
           try {
-        log4j.loggerinfo.info("Call updateProfile. "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/`);
-
-            return await axios.patch(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/` + req.params.id, {
-              commercial_register: commercial_register,
-              city: city,
-              zip_code: zip_code,
-              adresse: adresse,
-              activity: activity,
-              id_commercial: id_commercial,
-              updated_by: updated_by
-
-            })
+        log4j.loggerinfo.info("Call updateProfile in complete-profile "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/company/`);
+        console.log("bodyyyyyyyyy",body)
+        body.updated_by = req.params.id
+        body.updatedBy = req.params.id
+            return await axios.patch(
+              `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/company/` + req.params.id, body
+            )
           } catch (error) {
             if(!error.response){
               log4j.loggererror.error(error.message)
               return res.status(500).send({"error":error.message});
             }
-          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+          log4j.loggererror.error("Error in adding profile: ")
 
             return res.status(error.response.status).send(error.response.data);
           }
         }
-        let userProfile = await updateprofile();
+        console.log("req.ody",req.body)
+        let userProfile = await updateprofile(req.body);
         if (!userProfile.data) {
           log4j.loggererror.error("Error Problem in server ")
           return res.status(500).json({"Error": "Problem in server"});
       
         }
+        user_res = await services.user.update(req.params.id, { profilCompleted: 'true' }) //test this
+
         log4j.loggerinfo.info("Success");
 
-        return res.status(200).json({ message: userProfile.data });
+        return res.status(200).json({ etat:"success", message:"Wait for the admin to accept your profile ",data: userProfile.data });
 
       } catch (err) {
         log4j.loggererror.error("Error in adding profile: "+userProfile.data)
@@ -454,7 +453,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       }
     });
 
-    gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => {
+    gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //endpoint pour activer
       const { code } = req.body // code = 10 desactive , 11 active // id is a username
       if (!code) {
         log4j.loggererror.error("Unkown error.")
@@ -480,6 +479,7 @@ console.log("req.headers.authorization",req.headers.authorization)
         }
 
       } else if (code == 11) {
+
         myUser = await services.user.activate(myUser.id)
         if (myUser == true) {
           log4j.loggererror.error("Unkown error.")
@@ -490,7 +490,160 @@ console.log("req.headers.authorization",req.headers.authorization)
 
     });
 
+    gatewayExpressApp.patch('/update_role/:id', async (req, res, next) => {
 
+      const { role } = req.body // code = 10 desactive , 11 active // id is a username
+
+      if (!role) {
+        log4j.loggererror.error("Unkown error.")
+
+        return res.status(200).json({ error: "role can not be empty " });
+
+      }
+      myUser = await services.user.find(req.params.id)
+      console.log("myUser", myUser)
+
+      if (myUser == false) {
+        log4j.loggererror.error("User does not exist")
+        return res.status(200).json({ status :"error", message: "The user does not exist" });
+      }
+else {
+
+  myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
+  console.log("******************Scopeeeeeee******************")
+  console.log("old myCredOauth", myCredOauth)
+  console.log("************************************")
+
+  let scope = myCredOauth.scopes;
+  console.log("******************Scopeeeeeee******************")
+  console.log("old scope", scope)
+  console.log("************************************")
+
+  myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
+  let roles = []
+  roles[0] = role
+  crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: roles })
+
+  console.log("crd_oauth2 ", crd_oauth2)
+
+
+  myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
+
+
+
+      return res.status(200).json({ status :"success",message: "The user has been updates" ,role :myCredOauth.scopes});
+
+}
+
+
+
+
+    });
+
+    gatewayExpressApp.patch('/accept/:id',verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //accept or refuser a visitor (means give a visitor a role as a user)
+      const getProfile = async (myUser) => {
+        try {
+      log4j.loggerinfo.info("Call postProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+
+          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?id_user=`+myUser.id)
+        } catch (error) {
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
+          log4j.loggererror.error("Error in getProfile :"+error.response.data)
+          return res.status(error.response.status).send(error.response.data);
+        }
+      }
+      const deleteCompany = async (idCompany,deletedByUser) => {
+        try {
+          console.log("idCompany",idCompany)
+          console.log("deletedByUser",deletedByUser)
+      log4j.loggerinfo.info("Call postProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+// const bodyCompany
+          return await axios.delete(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/`+idCompany, {data:req.body})
+        } catch (error) {
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
+          log4j.loggererror.error("Error in deleteProfile :"+error.response.data)
+          return res.status(error.response.status).send(error.response.data);
+        }
+      }
+      const { code } = req.body // code = 10 delete , 11 accept // id is a username
+console.log("Bodyyy in accepte endpint ",req.body)
+      if (!code) {
+        log4j.loggererror.error("Role can not be empty")
+
+        return res.status(200).json({ error: "Role can not be empty " });
+
+      }
+      myUser = await services.user.find(req.params.id)
+      console.log("myUser", myUser)
+
+      if (myUser == false) {
+        log4j.loggererror.error("User does not exist")
+        return res.status(200).json({ status :"error", message: "The user does not exist" });
+      }
+else {
+
+
+  if (code == 10) {
+    const deleted =  services.user.remove(myUser.id);
+    const getProfiled = await getProfile(myUser)
+    console.log("getProfile",getProfiled.data)
+    if(getProfiled.data.status == 'success'){
+console.log("CompanyId",getProfiled.data.data.data[0].CompanyId)
+console.log("myUser.id",myUser.id)
+
+      const deletedCompany = await deleteCompany(getProfiled.data.data.data[0].CompanyId,myUser.id)
+      console.log("deletedCompany",deletedCompany.data)
+  
+      log4j.loggererror.error("The visitor has been refused")
+  
+        return res.status(200).json({ message: "The visitor has been refused" });
+  
+    }else {
+      return res.status(200).json({ message: getProfiled.data });
+
+    }
+
+  } else if (code == 11) {
+    if(myUser.profilCompleted == 'false'){
+      log4j.loggererror.error("Please complete your profile")
+
+      return res.status(200).json({ error:"error",message: "Please complete your profile" });
+
+    }
+    myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
+    console.log("******************Scopeeeeeee******************")
+    console.log("old myCredOauth", myCredOauth)
+    console.log("************************************")
+  
+    let scope = myCredOauth.scopes;
+    console.log("******************Scopeeeeeee******************")
+    console.log("old scope", scope)
+    console.log("************************************")
+  
+    myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
+    crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
+  
+    console.log("crd_oauth2 ", crd_oauth2)
+  
+  
+    myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
+  
+    return res.status(200).json({ status :"success", message: "The visitor has been accepted" ,role :myCredOauth.scopes });
+  }
+
+
+}
+
+
+
+
+    });
     gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin , async (req, res, next) => {
       try {
         console.log("/api/admin-register")
@@ -803,9 +956,19 @@ console.log("req.headers.authorization",req.headers.authorization)
           try {
             decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
             console.log("decode", decoded.consumerId)
-            req.body = {
-              userId: decoded.consumerId
-            }
+            let body = req.body
+            
+            body.userId =  decoded.consumerId
+            
+
+            body.created_by = decoded.consumerId
+            body.deleted_by = decoded.consumerId
+            body.updated_by = decoded.consumerId
+            
+            body.createdBy = decoded.consumerId
+            body.deletedBy = decoded.consumerId
+            body.updatedBy = decoded.consumerId
+
           } catch (error) {
             console.log("error", error)
             res.status(403).send(error);
@@ -853,8 +1016,8 @@ console.log("req.headers.authorization",req.headers.authorization)
 
     gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
       console.log("*********************************", req.body)
-      console.log("/api/login")
 
+      console.log("/api/login")
       const { username, password } = req.body
       console.log("eeee", password)
       console.log("zzzzz",corsOptions)
@@ -876,21 +1039,23 @@ console.log("req.headers.authorization",req.headers.authorization)
 
       }
 
-      else if (myUser.profilCompleted == 'false') {
-        log4j.loggerinfo.info("Error user profile is incompleted. ");
+      // else if (myUser.profilCompleted == 'false') {
+      //   log4j.loggerinfo.info("Error user profile is incompleted. ");
 
-        return res.status(200).json({ error: "user profile is incompleted." });
+      //   return res.status(200).json({ error: "user profile is incompleted." });
 
-      }
+      // }
       else if (myUser.isActive == false) {
         log4j.loggerinfo.info("Error user is desactivated. please wait for the administrator's agreement ");
 
         return res.status(200).json({ error: "user is desactivated. please wait for the administrator's agreement " });
 
       } 
+
       myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth')
 
       console.log("myCredBasic ", myCredBasic)
+
       const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password)
       if (!passBooleanTrue) {
           log4j.loggererror.error("Error Wrong password")
@@ -901,7 +1066,11 @@ console.log("req.headers.authorization",req.headers.authorization)
 
       myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
       let scope = myCredOauth.scopes;
+      console.log("******************Scopeeeeeee******************")
+
       console.log("scope", scope)
+      console.log("************************************")
+
       myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: scope })
       console.log("crd_oauth2 ", crd_oauth2)
@@ -941,157 +1110,182 @@ console.log("req.headers.authorization",req.headers.authorization)
         return res.status(500).send({"error":error.message});
 
       }
+      /////////////////////////////Get user info by username //////////////////////////////////
+      const user = await services.user.findByUsernameOrId(myUser.id)
+      console.log("******************userici****************")
+      
+      console.log("user", user)
+      console.log("*****************************************")
 
-      ///////////
+      /////////// Check if it is a visitor ////////////////////
+      let userJsonVisistor = {
+        id:user.id,
+        username:user.username,
+        lastname:user.lastname,
+        firstname:user.firstname,
+        email:user.email,
+        isActive:user.isActive,
+        confirmMail:user.confirmMail,
+        profilCompleted:user.profilCompleted,
 
-      const getProfile = async (id) => {
-        try {
-        log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id);
-
-          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
-        } catch (error) {
-          if(!error.response){
-            log4j.loggererror.error(error.message)
-            return res.status(500).send({"error":error.message});
-          }
-          log4j.loggererror.error("Error in getting profile: "+error.response.data)
-
-          return res.status(error.response.status).send(error.response.data);
-        }
+        phone:user.phone,
+        createdAt:user.createdAt,
+        updatedAt:user.updatedAt,
       }
-      ///////////
-      const getCategoryFromWalletWithCode = async (code) => {
-        try {
-        log4j.loggerinfo.info("Call getcategory: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category/`);
 
-          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category?name=`+code)
-        } catch (error) {
-          if(!error.response){
-            log4j.loggererror.error(error.message)
-            return res.status(500).send({"error":error.message});
-          }
-          log4j.loggererror.error("Error in getting getcategory: "+error.response.data)
-
-          return res.status(error.response.status).send(error.response.data);
-        }
+      if(scope[0] == 'visitor'){
+        return res.status(token.status).json({ token: token.data, role: scope ,user: userJsonVisistor , categoryWalletId: null});
       }
-      ///////////
-      /************************** */
-      var md = new MobileDetect(req.headers['user-agent']);
-      // var m = new MobileDetect(window.navigator.userAgent);
-      console.log("md", md);
-      // console.log("m", m);
-      const md1 = new MobileDetect(req.get('User-Agent'));
-      res.locals.isMobile = md1.mobile();
-      console.log("md1", md1);
+      else {
 
-      console.log("md.os(), md.os()", md.os());
-      if (md.os() === "iOS") {
-        console.log("is ios");
-      } else if (md.os() === "AndroidOS") {
-        console.log("is android");
 
-    }else if (md.os() === "AndroidOS") {
-      console.log("is android");
+///////////////////////////////////////////////////////////////////////////
+const getProfile = async (id) => {
+  try {
+  log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id);
+
+    return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
+  } catch (error) {
+    if(!error.response){
+      log4j.loggererror.error(error.message)
+      return res.status(500).send({"error":error.message});
+    }
+    log4j.loggererror.error("Error in getting profile: "+error.response.data)
+
+    return res.status(error.response.status).send(error.response.data);
   }
+}
+///////////
+const getCategoryFromWalletWithCode = async (code) => {
+  try {
+  log4j.loggerinfo.info("Call getcategory: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category/`);
 
-      var ip = (typeof req.headers['x-forwarded-for'] === 'string'
-      && req.headers['x-forwarded-for'].split(',').shift()) || 
-   req.connection.remoteAddress || 
-   req.socket.remoteAddress || 
-   req.connection.socket.remoteAddress
-      console.log("ip",ip)
-      console.log("req.connection.remoteAddress",req.connection.remoteAddress)
-      // console.log("lookup",lookup(ip)); // location of the user
+    return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category?name=`+code)
+  } catch (error) {
+    if(!error.response){
+      log4j.loggererror.error(error.message)
+      return res.status(500).send({"error":error.message});
+    }
+    log4j.loggererror.error("Error in getting getcategory: "+error.response.data)
 
-      console.log("os.platform()",os.platform())
-      console.log("os.release()",os.release())
-      console.log("os.type()",os.type()); // "Windows_NT"
+    return res.status(error.response.status).send(error.response.data);
+  }
+}
+///////////
+/************************** */
+var md = new MobileDetect(req.headers['user-agent']);
+// var m = new MobileDetect(window.navigator.userAgent);
+console.log("md", md);
+// console.log("m", m);
+const md1 = new MobileDetect(req.get('User-Agent'));
+res.locals.isMobile = md1.mobile();
+console.log("md1", md1);
 
-      console.log("req.device.type.toUpperCase()",req.device.type.toUpperCase())
-      // console.log("iplocate",iplocate(ip)); // location of the user
-      // console.log("iplocate",iplocate(ip).country); // location of the user
-      // console.log(iplocate(ip)); // location of the user
-      console.log("ipaddre",ipF.address());
-      let addr = ipF.address()
+console.log("md.os(), md.os()", md.os());
+if (md.os() === "iOS") {
+  console.log("is ios");
+} else if (md.os() === "AndroidOS") {
+  console.log("is android");
+
+}else if (md.os() === "AndroidOS") {
+console.log("is android");
+}
+
+var ip = (typeof req.headers['x-forwarded-for'] === 'string'
+&& req.headers['x-forwarded-for'].split(',').shift()) || 
+req.connection.remoteAddress || 
+req.socket.remoteAddress || 
+req.connection.socket.remoteAddress
+console.log("ip",ip)
+console.log("req.connection.remoteAddress",req.connection.remoteAddress)
+// console.log("lookup",lookup(ip)); // location of the user
+
+console.log("os.platform()",os.platform())
+console.log("os.release()",os.release())
+console.log("os.type()",os.type()); // "Windows_NT"
+
+console.log("req.device.type.toUpperCase()",req.device.type.toUpperCase())
+// console.log("iplocate",iplocate(ip)); // location of the user
+// console.log("iplocate",iplocate(ip).country); // location of the user
+// console.log(iplocate(ip)); // location of the user
+console.log("ipaddre",ipF.address());
+let addr = ipF.address()
 console.log("aaaaaaaaaaaaaaaaaaaa",addr)
 
 const publicIpAdd = await publicIp.v4();
 console.log("publicIpAdd",publicIpAdd)
-      //////////////////////
-      // let results;
-      // try {
-      //    results = await iplocate(publicIpAdd) 
-      //   console.log("results",results)
+//////////////////////
+// let results;
+// try {
+//    results = await iplocate(publicIpAdd) 
+//   console.log("results",results)
+
+// } catch (error) {
+//   console.log("error",error)
   
-      // } catch (error) {
-      //   console.log("error",error)
-        
-      // }
+// }
 
-      // iplocate(ip).then(function(results) {
-      //    console.log("IP Address: " + results.ip);
-      //    console.log("Country: " + results.country + " (" + results.country_code + ")");
-      //    console.log("Continent: " + results.continent);
-      //    console.log("Organisation: " + results.org + " (" + results.asn + ")");
-        
-      //    console.log(JSON.stringify(results, null, 2));
-      //  });
+// iplocate(ip).then(function(results) {
+//    console.log("IP Address: " + results.ip);
+//    console.log("Country: " + results.country + " (" + results.country_code + ")");
+//    console.log("Continent: " + results.continent);
+//    console.log("Organisation: " + results.org + " (" + results.asn + ")");
+  
+//    console.log(JSON.stringify(results, null, 2));
+//  });
 
-      var source = req.headers['user-agent']
-      var ua = useragent.parse(source);
-      console.log("ua",ua)
-      var isMobile = ua.isMobile
-      console.log("isMobile",isMobile)
+var source = req.headers['user-agent']
+var ua = useragent.parse(source);
+console.log("ua",ua)
+var isMobile = ua.isMobile
+console.log("isMobile",isMobile)
 
-      let userUpdated = await services.user.update(myUser.id, {
-        ip: publicIpAdd ,
-        os: os.platform(),
-        source: ua.source,
-        // // geoip: lookup(ip),
-        // country:results.country,
-        // city:results.city,
-        // latitude:results.latitude,
-        // longitude:results.longitude,
+let userUpdated = await services.user.update(myUser.id, {
+  ip: publicIpAdd ,
+  os: os.platform(),
+  source: ua.source,
+  // // geoip: lookup(ip),
+  // country:results.country,
+  // city:results.city,
+  // latitude:results.latitude,
+  // longitude:results.longitude,
 
-        last_login: new Date().toString()
-      })
-      console.log("userUpdated",userUpdated)
-      ///////////////////////
-      
-      var interfaces = os.networkInterfaces();
+  last_login: new Date().toString()
+})
+console.log("userUpdated",userUpdated)
+///////////////////////
+
+var interfaces = os.networkInterfaces();
 var addresses = [];
 for (var k in interfaces) {
-    for (var k2 in interfaces[k]) {
-        var address = interfaces[k][k2];
-        if (address.family === 'IPv4' && !address.internal) {
-            addresses.push(address.address);
-        }
-    }
+for (var k2 in interfaces[k]) {
+  var address = interfaces[k][k2];
+  if (address.family === 'IPv4' && !address.internal) {
+      addresses.push(address.address);
+  }
+}
 }
 
 console.log("addresses",addresses);
 ////////////////////////////
-      const user = await services.user.findByUsernameOrId(myUser.id)
-      console.log("user", user)
 
-      /**************************** */
+/**************************** */
 
-      var data;
-      try {
-        data = await getProfile(myUser.id)
+var data;
+try {
+  data = await getProfile(myUser.id)
 
-      } catch (error) {
-        console.log("error", error) //// tkt
-        if(!error.response){
-          log4j.loggererror.error(error.message)
-          return res.status(500).send({"error":error.message});
-        }
-        log4j.loggererror.error("Error in getting profile: "+error.response.data)
+} catch (error) {
+  console.log("error", error) //// tkt
+  if(!error.response){
+    log4j.loggererror.error(error.message)
+    return res.status(500).send({"error":error.message});
+  }
+  log4j.loggererror.error("Error in getting profile: "+error.response.data)
 
-        return res.status(error.response.status).send(error.response.data);
+  return res.status(error.response.status).send(error.response.data);
 
-      }
+}
 /********************************************************************************************** */
 console.log("data.data",data.data)
 console.log("*********************************")
@@ -1103,124 +1297,127 @@ console.log("****************//////////////////*****************")
 var dataCategory;
 
 if(data.data){
-  if(data.data.data){
+if(data.data.data){
 console.log("data.data.data",data.data.data)
 if (data.data.data.Company){
-  if (data.data.data.Company.Category){
-    console.log("data.data.data.Company",data.data.data.Company)
-    
-      console.log("data.data.data.Category",data.data.data.Company.Category)
-      if(data.data.data.Company.Category){
-        var code = data.data.data.Company.Category.code
-        try {
-          dataCategory = await getCategoryFromWalletWithCode(code)
-      
-        } catch (error) {
-          console.log("error", error) //// tkt
-          if(!error.response){
-            log4j.loggererror.error(error.message)
-            return res.status(500).send({"error":error.message});
-          }
-          log4j.loggererror.error("Error in getting profile: "+error.response.data)
-      
-          return res.status(error.response.status).send(error.response.data);
-      
-        }
-      }
-    
-        }
-}
+if (data.data.data.Company.Category){
+console.log("data.data.data.Company",data.data.data.Company)
 
-  
+console.log("data.data.data.Category",data.data.data.Company.Category)
+if(data.data.data.Company.Category){
+  var code = data.data.data.Company.Category.code
+  try {
+    dataCategory = await getCategoryFromWalletWithCode(code)
+
+  } catch (error) {
+    console.log("error", error) //// tkt
+    if(!error.response){
+      log4j.loggererror.error(error.message)
+      return res.status(500).send({"error":error.message});
+    }
+    log4j.loggererror.error("Error in getting profile: "+error.response.data)
+
+    return res.status(error.response.status).send(error.response.data);
+
   }
 }
-      /************************************************************************************** */
-      console.log("dataCategory",dataCategory)
 
-      /************************************************************************************** */
-
-      console.log("Date.now()",Date.now())
-      let name = "complete_profile" + Date.now()
-      // userApp = await services.application.find(name)
+  }
+}
 
 
-      myApp = await services.application.insert({
-        name: "user_app" + Date.now(),
-        ip:user.ip,
-        source:user.source,
-        os:user.os,
-        latitude:user.latitude,
-        longitude:user.longitude,
-        city:user.city,
-        country:user.country
-      }, myUser.id)
+}
+}
+/************************************************************************************** */
+console.log("dataCategory",dataCategory)
 
-      userApp = await services.application.find(name)
-      console.log("userapp",userApp)
-      console.log("myApp",myApp)
+/************************************************************************************** */
 
-      let userJson = {
-        id:user.id,
-        username:user.username,
-        lastname:user.lastname,
-        firstname:user.firstname,
-        email:user.email,
-        isActive:user.isActive,
-        phone:user.phone,
-        createdAt:user.createdAt,
-        updatedAt:user.updatedAt,
-        application:{
-          id:myApp.id,
-          ip:user.ip,
-          source:user.source,
-          os:user.os,
-          last_login:user.last_login,
-          latitude:user.latitude,
-          longitude:user.longitude,
-          city:user.city,
-          country:user.country
+console.log("Date.now()",Date.now())
+let name = "complete_profile" + Date.now()
+// userApp = await services.application.find(name)
+
+
+myApp = await services.application.insert({
+  name: "user_app" + Date.now(),
+  ip:user.ip,
+  source:user.source,
+  os:user.os,
+  latitude:user.latitude,
+  longitude:user.longitude,
+  city:user.city,
+  country:user.country
+}, myUser.id)
+
+userApp = await services.application.find(name)
+console.log("userapp",userApp)
+console.log("myApp",myApp)
+
+let userJson = {
+  id:user.id,
+  username:user.username,
+  lastname:user.lastname,
+  firstname:user.firstname,
+  email:user.email,
+  isActive:user.isActive,
+  phone:user.phone,
+  createdAt:user.createdAt,
+  updatedAt:user.updatedAt,
+  application:{
+    id:myApp.id,
+    ip:user.ip,
+    source:user.source,
+    os:user.os,
+    last_login:user.last_login,
+    latitude:user.latitude,
+    longitude:user.longitude,
+    city:user.city,
+    country:user.country
+  }
+}
+
+if (token) {
+  if (token.status == 200) {
+    if (data.status == 200) {
+      log4j.loggerinfo.info("Succes in getting token.");
+      if(dataCategory){
+        console.log("dataCategory.data",dataCategory.data)
+
+        console.log("dataCategory.data",dataCategory.data)
+        console.log("dataCategory.data.data",dataCategory.data.data)
+
+        console.log("dataCategory.data.data.data",dataCategory.data.data.data)
+
+
+        if(dataCategory.data.data.data){
+          return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: dataCategory.data.data.data.items[0]});
+        
         }
       }
-
-      if (token) {
-        if (token.status == 200) {
-          if (data.status == 200) {
-            log4j.loggerinfo.info("Succes in getting token.");
-            if(dataCategory){
-              console.log("dataCategory.data",dataCategory.data)
-
-              console.log("dataCategory.data",dataCategory.data)
-              console.log("dataCategory.data.data",dataCategory.data.data)
-
-              console.log("dataCategory.data.data.data",dataCategory.data.data.data)
-
-
-              if(dataCategory.data.data.data){
-                return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: dataCategory.data.data.data.items[0]});
-              
-              }
-            }
 
 return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: null});
 
-          }
+    }
 
-        }
-      }
-      else {
-        log4j.loggererror.error("Error in getting profile")
-        return res.status(500).send("error");
+  }
+}
+else {
+  log4j.loggererror.error("Error in getting profile")
+  return res.status(500).send("error");
 
-      }
+}
 
-      log4j.loggerinfo.info("Getting token");
+log4j.loggerinfo.info("Getting token");
 console.log("token.status",token.status)
 console.log("token",token)
 
 console.log("scope",scope)
 console.log("myUser",myUser)
 
-      return res.status(token.status).json({token: token, role: scope ,user: myUser });
+return res.status(token.status).json({token: token, role: scope ,user: myUser });
+
+
+      }
 
     });
 
@@ -1585,11 +1782,12 @@ console.log("paramPaymee",paramPaymee)
              }
 
              log4j.loggerinfo.info("Call voucher: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`);
-             const amountVoucher =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`,{
+             const amountVoucher =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`,
+    {         params:{
               id_user: req.query.userId, 
               yearB: req.query.yearB,
                dayB: req.query.dayB
-             })
+             }})
   console.log("amountVoucher.data",amountVoucher.data)
 
                   if(!amountVoucher.data){
