@@ -3,17 +3,22 @@ var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: 'imene.hassine@khallasli.com',
-      pass: '123456789'
+      user: 'khalaslipaypos@gmail.com',
+      pass: 'khalasli26260534'
     }
   });
 01
-
-  exports.send_email = function send_email (subject , text){
+// verify connection configuration
+transporter.verify((error) => {
+  if (error) {
+    console.log('error with email connection');
+  }
+});
+  exports.send_email = function send_email (subject , text,mail){
     console.log("eeeeee")
     var mailOptions = {
-        from: 'imene.hassine@khallasli.com',
-        to: 'imen.hssinee@gmail.com',
+        from: 'khalaslipaypos@gmail.com',
+        to: mail,
         subject:subject,
         text: text
       };
@@ -25,3 +30,6 @@ var transporter = nodemailer.createTransport({
         }
       });
   }
+
+// EMAIL_USERNAME=khalaslipaypos@gmail.com
+// EMAIL_PASSWORD=khalasli26260534

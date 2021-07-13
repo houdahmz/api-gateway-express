@@ -10,6 +10,8 @@
     "circular-json": "^0.5.9",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "dotenv-safe": "^8.2.0",
+    "email-templates": "^8.0.7",
     "example": "0.0.0",
     "express-device": "^0.4.2",
     "express-gateway": "^1.16.10",

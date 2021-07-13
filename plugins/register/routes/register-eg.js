@@ -2,7 +2,7 @@ const services = require('express-gateway/lib/services/')
 const utils = require('express-gateway/lib/services/utils')
 const superagent = require('superagent');
 const axios = require('axios');
-const mail = require("./mailer.config");
+// const mail = require("../../../services/emails/emailProvider");
 const { user } = require('express-gateway/lib/services/');
 const CircularJSON = require('circular-json');
 
@@ -35,6 +35,9 @@ const express = require('express');
 const jsonParser = require('express').json();
 const urlEncodedParser = require("express").urlencoded({ extended: true });
 const { PassThrough } = require("stream");
+
+const mail = require("./mailer.config.js")
+
 
 const bodyParser = require("body-parser");
 const app = express();
@@ -87,7 +90,7 @@ var status = {
         const myUserJwt = await jwt.sign({ username: username, password: password }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
           audience: 'something',
-          expiresIn: 18000,
+          expiresIn: 180000,
           subject: '3pXQjeklS3cFf8OCJw9B22',
           algorithm: 'HS256'
         });
@@ -96,7 +99,7 @@ var status = {
 
         myUser = await services.user.insert({
           isActive: true,
-          confirmMail: true,
+          confirmMail: false,
           profilCompleted: false,
           firstname: firstname,
           lastname: lastname,
@@ -201,8 +204,9 @@ var status = {
         console.log("confirm_uri", confirm_uri)
         //here je vais envoyer un mail
 
-        mail.send_email("confirmation", "Veuillez cliquer sur lien pour completer votre compte \n " + confirm_uri);
-
+        mail.send_email("confirmation", "Veuillez cliquer sur lien pour completer votre compte \n " + confirm_uri,req.body.email);
+            // mail.sendMailConfirm("imen.hassine96@gmail.com",myUserJwt);
+//console.log("mail",mail)
         log4j.loggerinfo.info("Success, mail has been sent to : "+email);
         return res.status(201).json({ etat: "Success", message: "Check your email : " + email });
       } catch (err) {
@@ -221,7 +225,7 @@ var status = {
         console.debug('confirmation', user, req.query, confirm_token, username)
         if (user == false) { // username does not exist
           console.debug('wrong confirmation token')
-          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+          log4j.loggererror.error("wrong confirmation token")
           return res.status(200).json({ error: "wrong confirmation token" });
         }
 
@@ -235,14 +239,14 @@ var status = {
 
           if (!decoded) {
             console.debug('wrong confirmation token')
-          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+          log4j.loggererror.error("wrong confirmation token")
 
             return res.status(200).json({ error: "wrong confirmation token" });
 
           } else {
-            if (user.username != decoded.username) {
+            if(user.username != decoded.username) {
               console.debug('???wrong confirmation token')
-          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+          log4j.loggererror.error("???wrong confirmation token")
 
               return res.status(200).json({ error: "wrong confirmation token" });
 
@@ -250,7 +254,7 @@ var status = {
             const passBooleanTrue = await utils.compareSaltAndHashed(decoded.password, myCredBasic.password)
 
             if (!passBooleanTrue) {
-          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+          log4j.loggererror.error("???wrong confirmation token")
 
               return res.status(200).json({ error: "wrong confirmation token" });
 
@@ -259,21 +263,24 @@ var status = {
         } catch (error) {
           console.log("error", error)
           // res.status(403).send(error);
-          log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+          log4j.loggererror.error("Error in adding profile: "+error.message)
 
           return res.status(400).json({ error: error });
         }
         // user_res = await services.user.activate(user.id)
         console.log("user_res")
 
-        user_res = await services.user.update(user.id, { confirmMail: 'true',confirm_token: "" }) //test this
+        // user_res = await services.user.update(user.id, { confirmMail: 'true',confirm_token: "" }) //test this
+        user_res = await services.user.update(user.id, { confirmMail: 'true' }) //test this
+        // user_res = await services.user.update(user.id, { confirm_token: '' }) //test this
+
 
         console.log("user_res", user_res)
         // user = await services.user.findByUsernameOrId(email)
         return res.status(200).json({ etat: "Success" });
 
       } catch (err) {
-        log4j.loggererror.error("Error in adding profile: "+userProfile.data)
+        log4j.loggererror.error("Error in adding profile: "+ err.message)
 
         return res.status(422).json({ error: err.message })
       }
@@ -759,7 +766,46 @@ console.log("myUser.id",myUser.id)
     });
 
     async function verifyTokenUser(req, res, next) {
+      let body = req.body
 
+///////////////////////////////////////////////////////////////////////////
+const getProfile = async (id) => {
+  try {
+  log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id);
+
+    return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
+  } catch (error) {
+    if(!error.response){
+      log4j.loggererror.error(error.message)
+      return res.status(500).send({"error":error.message});
+    }
+    log4j.loggererror.error("Error in getting profile: "+error.response.data)
+
+    return res.status(error.response.status).send(error.response.data);
+  }
+}
+///////////
+const getWallet = async (idCompany) => {
+  try {
+  log4j.loggerinfo.info("Call getWallet: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/`);
+
+    return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet`,
+    {
+      params: {
+        companyId: idCompany
+      }
+    })
+  } catch (error) {
+    if(!error.response){
+      log4j.loggererror.error(error.message)
+      return res.status(500).send({"error":error.message});
+    }
+    log4j.loggererror.error("Error in getting getWallet: "+error.response.data)
+
+    return res.status(error.response.status).send(error.response.data);
+  }
+}
+///////////
       const bearerHeader = req.headers['authorization'];
 
       if (bearerHeader) {
@@ -770,9 +816,17 @@ console.log("myUser.id",myUser.id)
           try {
             decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
             console.log("decode", decoded.consumerId)
-            req.body = {
-              userId: decoded.consumerId
-            }
+            
+            body.userId =  decoded.consumerId
+            
+
+            body.created_by = decoded.consumerId
+            body.deleted_by = decoded.consumerId
+            body.updated_by = decoded.consumerId
+            
+            body.createdBy = decoded.consumerId
+            body.deletedBy = decoded.consumerId
+            body.updatedBy = decoded.consumerId
           } catch (error) {
             console.log("error", error)
             res.status(403).send(error);
@@ -793,9 +847,73 @@ console.log("myUser.id",myUser.id)
 
           if (myCredOauth.scopes) {
             if (myCredOauth.scopes[0] == endpointScopes) {
-              console.log("**************************************************")
-              console.log("req.body",req.body)
-              console.log("**************************************************")
+/**************************** */
+
+var data;
+try {
+  data = await getProfile(req.body.userId)
+
+} catch (error) {
+  console.log("error", error) //// tkt
+  if(!error.response){
+    log4j.loggererror.error(error.message)
+    return res.status(500).send({"error":error.message});
+  }
+  log4j.loggererror.error("Error in getting profile: "+error.response.data)
+
+  return res.status(error.response.status).send(error.response.data);
+
+}
+/********************************************************************************************** */
+console.log("data.data",data.data)
+console.log("*********************************")
+console.log("iciiiiiiiiiiiiiiiiiiii",data.data)
+console.log("*********************************")
+console.log("**************/////////////////////*******************")
+console.log("iciiiiiiiiiiiiiiiiiiii",data.data.data)
+console.log("****************//////////////////*****************")
+var dataWallet;
+
+if(data.data){
+if(data.data.data){
+console.log("data.data.data",data.data.data) //CompanyId
+
+try {
+  dataWallet = await getWallet(data.data.data.CompanyId)
+
+} catch (error) {
+  console.log("error", error) //// tkt
+  if(!error.response){
+    log4j.loggererror.error(error.message)
+    return res.status(500).send({"error":error.message});
+  }
+  log4j.loggererror.error("Error in getting profile: "+error.response.data)
+
+  return res.status(error.response.status).send(error.response.data);
+
+}
+console.log("dataWallet.data",dataWallet.data.data)
+
+if(dataWallet.data.data.data){
+  console.log("iiiiiiiiii")
+  body.walletId = dataWallet.data.data.data.items[0].id
+
+}
+else {
+  console.log("vvvvvv")
+  console.log("**************************************************")
+  console.log("req.body",body)
+  console.log("**************************************************")
+
+  body.walletId = null
+
+}
+
+}
+}
+console.log("**************************************************")
+console.log("req.body",req.body)
+console.log("**************************************************")
 
               next();
             }
@@ -895,9 +1013,18 @@ console.log("myUser.id",myUser.id)
           try {
             decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
             console.log("decode", decoded.consumerId)
-            req.body = {
-              userId: decoded.consumerId
-            }
+            let body = req.body
+            
+            body.userId =  decoded.consumerId
+            
+
+            body.created_by = decoded.consumerId
+            body.deleted_by = decoded.consumerId
+            body.updated_by = decoded.consumerId
+            
+            body.createdBy = decoded.consumerId
+            body.deletedBy = decoded.consumerId
+            body.updatedBy = decoded.consumerId
           } catch (error) {
             console.log("error", error)
             res.status(403).send(error);
@@ -1700,13 +1827,13 @@ return res.status(token.status).json({token: token, role: scope ,user: myUser })
                                 res.status("500").json("Error: error server");
                               }
 
-                            //   log4j.loggerinfo.info("Call statsCommission endpoint api-management/wallet/stats-commission: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
-                            //   const statsDataCommission =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`)
-                            //  // console.log("statsDataCommission",statsDataCommission)
-                            //  console.log("statsDataCommission.data",statsDataCommission.data)
-                            //        if(!statsDataCommission.data){
-                            //          res.status("500").json("Error: error server");
-                            //        }
+                              log4j.loggerinfo.info("Call statsCommission endpoint api-management/wallet/stats-commission: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
+                              const statsDataCommission =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`)
+                             // console.log("statsDataCommission",statsDataCommission)
+                             console.log("statsDataCommission.data",statsDataCommission.data)
+                                   if(!statsDataCommission.data){
+                                     res.status("500").json("Error: error server");
+                                   }
 
       return res.status(200).json({
         "Services":{
@@ -1718,7 +1845,7 @@ return res.status(token.status).json({token: token, role: scope ,user: myUser })
         },
         "CA":ca,
         "Nombre_transaction":nbT,
-        // "Stats_Commission":statsDataCommission.data.data,
+        "Stats_Commission":statsDataCommission.data.data,
         "Stats_by_month": statsDataAllMonth.data.data
 
       });
@@ -1857,13 +1984,18 @@ console.log("amountPaymee.data",amountPaymee.data)
                               res.status("500").json("Error: error server");
                             }
 
-                          //   log4j.loggerinfo.info("Call statsCommission endpoint api-management/wallet/stats-commission: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
-                          //   const statsDataCommission =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`)
-                          //  // console.log("statsDataCommission",statsDataCommission)
-                          //  console.log("statsDataCommission.data",statsDataCommission.data)
-                          //        if(!statsDataCommission.data){
-                          //          res.status("500").json("Error: error server");
-                          //        }
+                            log4j.loggerinfo.info("Call statsCommission endpoint api-management/wallet/stats-commission: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
+                            const statsDataCommission =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`,
+                            {
+                              params:{
+                                walletId: req.body.userId
+                                }
+                            })
+                           // console.log("statsDataCommission",statsDataCommission)
+                           console.log("statsDataCommission.data",statsDataCommission.data)
+                                 if(!statsDataCommission.data){
+                                   res.status("500").json("Error: error server");
+                                 }
 
     return res.status(200).json({
       "Services":{
@@ -1875,7 +2007,7 @@ console.log("amountPaymee.data",amountPaymee.data)
       },
       "CA":ca,
       "Nombre_transaction":nbT,
-      // "Stats_Commission":statsDataCommission.data.data,
+      "Stats_Commission":statsDataCommission.data.data,
       "Stats_by_month": statsDataAllMonth.data.data
 
     });
