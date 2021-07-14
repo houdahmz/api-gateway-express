@@ -1257,6 +1257,7 @@ console.log("**************************************************")
         isActive:user.isActive,
         confirmMail:user.confirmMail,
         profilCompleted:user.profilCompleted,
+        role:user.role,
 
         phone:user.phone,
         createdAt:user.createdAt,
