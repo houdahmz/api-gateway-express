@@ -48,12 +48,12 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /user-management/profile*
       methods: ["PUT","PATCH"]
-      scopes: ['user','admin']
+      scopes: ['user','admin',"visitor"]
 
     - host: 192.168.12.115
       paths: /user-management/company/:id
       methods: ["PUT","PATCH"]
-      scopes: ['user','admin']
+      scopes: ['user','admin',"visitor"]
 
     - host: 192.168.12.115
       paths: /user-management/company/profile-by-company
@@ -73,7 +73,7 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /user-management/activity
       methods: ["GET"]
-      scopes: ['user',"admin"]
+      scopes: ['user',"admin","visitor"]
 
     - host: 192.168.12.115
       paths: /user-management/activity/:id
@@ -93,7 +93,7 @@ apiEndpoints:
     - host: 192.168.12.115
       paths: /user-management/type-user
       methods: ["GET"]
-      scopes: ['user',"admin"]
+      scopes: ['user',"admin","visitor"]
 
     - host: 192.168.12.115
       paths: /user-management/type-user/:id
