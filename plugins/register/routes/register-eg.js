@@ -106,7 +106,7 @@ var status = {
           username: username,
           email: email,
           phone: phone,
-          role:"visitor"
+          role:"visitor",
           redirectUri: 'https://www.khallasli.com',
           confirm_token: myUserJwt
         })
@@ -642,7 +642,7 @@ console.log("myUser.id",myUser.id)
   
   
     myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
-        mail.send_email("confirmation", "Votre compte a été approuvé par l'admin \n ");
+        mail.send_email("confirmation", "Votre compte a été approuvé par l'admin \n " + confirm_uri,req.body.email);
   
     return res.status(200).json({ status :"success", message: "The visitor has been accepted" ,role :myCredOauth.scopes });
   }
