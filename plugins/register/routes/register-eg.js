@@ -642,7 +642,7 @@ console.log("myUser.id",myUser.id)
   
   
     myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
-        mail.send_email("confirmation", "Votre compte a été approuvé par l'admin \n " + confirm_uri,req.body.email);
+        mail.send_email("confirmation", "Votre compte a été approuvé par l'admin \n ");
   
     return res.status(200).json({ status :"success", message: "The visitor has been accepted" ,role :myCredOauth.scopes });
   }
