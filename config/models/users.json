@@ -31,6 +31,10 @@
       "type": "string"
     
     },
+    "role": {
+      "type": "string"
+    
+    },
     "ip": {
       "type": "string"
     },

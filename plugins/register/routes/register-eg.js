@@ -106,6 +106,7 @@ var status = {
           username: username,
           email: email,
           phone: phone,
+          role:"visitor"
           redirectUri: 'https://www.khallasli.com',
           confirm_token: myUserJwt
         })
@@ -635,11 +636,13 @@ console.log("myUser.id",myUser.id)
   
     myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
     crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
+        user_res = await services.user.update(myUser.id, { role: 'user' }) //test this
   
     console.log("crd_oauth2 ", crd_oauth2)
   
   
     myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
+        mail.send_email("confirmation", "Votre compte a été approuvé par l'admin \n ");
   
     return res.status(200).json({ status :"success", message: "The visitor has been accepted" ,role :myCredOauth.scopes });
   }
