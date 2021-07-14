@@ -618,12 +618,12 @@ console.log("myUser.id",myUser.id)
     }
 
   } else if (code == 11) {
-    if(myUser.profilCompleted == 'false'){
-      log4j.loggererror.error("Please complete your profile")
+    // if(myUser.profilCompleted == 'false'){
+    //   log4j.loggererror.error("Please complete your profile")
 
-      return res.status(200).json({ error:"error",message: "Please complete your profile" });
+    //   return res.status(200).json({ error:"error",message: "Please complete your profile" });
 
-    }
+    // }
     myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
     console.log("******************Scopeeeeeee******************")
     console.log("old myCredOauth", myCredOauth)
