@@ -449,7 +449,7 @@ console.log("req.headers.authorization",req.headers.authorization)
           return res.status(200).json(userProfile.data);
         }
 
-        mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " )");
+        mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " )",req.body.email);
 
         return res.status(201).json({ etat: "Success", message: "We have sent an email to " + agentUser.email + " to set a new password" });
 
@@ -641,8 +641,8 @@ console.log("myUser.id",myUser.id)
     console.log("crd_oauth2 ", crd_oauth2)
   
   
-    myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
-        mail.send_email("confirmation", "Votre compte a été approuvé par l'admin \n ");
+    myCredOauth = await servmail.send_emailices.credential.getCredential(myUser.id, 'oauth2')
+        mail.send_email("confirmation", "Votre compte a été approuvé par l'admin \n ",myUser.email);
   
     return res.status(200).json({ status :"success", message: "The visitor has been accepted" ,role :myCredOauth.scopes });
   }
@@ -755,7 +755,7 @@ console.log("myUser.id",myUser.id)
         console.log("crd_oauth2.id", crd_oauth2.id)
         console.log("crd_oauth2.secret", crd_oauth2.secret)
 
-        mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " )");
+        mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " )",req.body.email);
         log4j.loggerinfo.info("Admin has been successfuly created, we have sent an email to " + email + " to set a new password");
 
         return res.status(201).json({ etat: "Success", message: "Admin has been successfuly created, we have sent an email to " + email + " to set a new password" });
