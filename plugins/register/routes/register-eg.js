@@ -222,6 +222,8 @@ var status = {
       try {
         console.log("/registration-confirm")
         const { username, confirm_token } = req.query
+        console.log("/req.query",req.query)
+
         const user = await services.user.findByUsernameOrId(username)
         console.log("***********************************")
 
@@ -295,7 +297,7 @@ var status = {
         return res.status(200).json({ etat: "Success" });
 
       } catch (err) {
-        log4j.loggererror.error("Error in adding profile: "+ err.message)
+        log4j.loggererror.error("Error in adding profile: "+ err.message) //ici
 
         return res.status(422).json({ error: err.message })
       }
