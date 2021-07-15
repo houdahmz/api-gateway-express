@@ -201,7 +201,9 @@ var status = {
         console.log("crd_oauth2.id", crd_oauth2.id)
         console.log("crd_oauth2.secret", crd_oauth2.secret)
 
-        const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
+        // const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
+        const confirm_uri = `http://localhost:3000/signin?username=` + username + "&" + "confirm_token=" + myUserJwt;
+
         console.log("confirm_uri", confirm_uri)
         //here je vais envoyer un mail
 
