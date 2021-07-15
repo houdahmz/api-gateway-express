@@ -223,7 +223,12 @@ var status = {
         console.log("/registration-confirm")
         const { username, confirm_token } = req.query
         const user = await services.user.findByUsernameOrId(username)
+        console.log("***********************************")
+
         console.log("user", user)
+        console.log("confirm_token", confirm_token)
+        console.log("***********************************")
+
 
         console.debug('confirmation', user, req.query, confirm_token, username)
         if (user == false) { // username does not exist
@@ -238,7 +243,10 @@ var status = {
         let decoded;
         try {
           decoded = await jwt.verify(confirm_token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
+        console.log("***********************************")
+          
           console.log("decoded", decoded)
+        console.log("***********************************")
 
           if (!decoded) {
             console.debug('wrong confirmation token')
@@ -264,11 +272,15 @@ var status = {
             }
           }
         } catch (error) {
+        console.log("***********************************")
+
           console.log("error", error)
+        console.log("***********************************")
+
           // res.status(403).send(error);
           log4j.loggererror.error("Error in adding profile: "+error.message)
 
-          return res.status(400).json({ error: error });
+          return res.status(400).json({ error: error.message });
         }
         // user_res = await services.user.activate(user.id)
         console.log("user_res")
