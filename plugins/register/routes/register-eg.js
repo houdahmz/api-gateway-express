@@ -223,6 +223,8 @@ var status = {
         console.log("/registration-confirm")
         const { username, confirm_token } = req.query
         console.log("/req.query",req.query)
+        console.log("/req.body",req.body)
+
 
         const user = await services.user.findByUsernameOrId(username)
         console.log("***********************************")
