@@ -1424,16 +1424,15 @@ try {
 
 }
 /********************************************************************************************** */
-console.log("data.data",data.data)
+// console.log("data",data)
 console.log("*********************************")
-console.log("iciiiiiiiiiiiiiiiiiiii",data.data)
 console.log("*********************************")
 console.log("**************/////////////////////*******************")
-console.log("iciiiiiiiiiiiiiiiiiiii",data.data.data)
-console.log("****************//////////////////*****************")
 var dataCategory;
 
 if(data.data){
+console.log("iciiiiiiiiiiiiiiiiiiii",data.data)
+
 if(data.data.data){
 console.log("data.data.data",data.data.data)
 if (data.data.data.Company){
@@ -1546,12 +1545,12 @@ else {
 
 log4j.loggerinfo.info("Getting token");
 console.log("token.status",token.status)
-console.log("token",token)
+console.log("token",token.data)
 
 console.log("scope",scope)
 console.log("myUser",myUser)
 
-return res.status(token.status).json({token: token, role: scope ,user: myUser });
+return res.status(token.status).json({token: token.data, role: scope ,user: myUser });
 
 
       }

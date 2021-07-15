@@ -61,6 +61,11 @@ apiEndpoints:
       scopes: ['user']
 
     - host: 192.168.12.115
+      paths: /user-management/company/import
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: 192.168.12.115
       paths: /user-management/history/*
       methods: ["GET"]
       scopes: ['admin']
