@@ -147,7 +147,14 @@ var status = {
               last_name: myUser.lastname,
               phone: myUser.phone,
               typeId: dataType.data.data.id,
-              created_by: myUser.id
+              created_by: myUser.id,
+              
+              isActive: true,
+              confirmMail: false,
+              profilCompleted: false,
+              username: username,
+              email: email,
+              role:"visitor",
 
             })
           } catch (error) {
@@ -597,6 +604,29 @@ else {
           return res.status(error.response.status).send(error.response.data);
         }
       }
+    //////////////////////////////////////////////////////////////////////////////////
+      const updateprofile = async (body,id) => {
+
+        try {
+      log4j.loggerinfo.info("Call updateProfile in complete-profile "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+      console.log("bodyyyyyyyyy",body)
+      body.updated_by = id
+      body.updatedBy = id
+          return await axios.patch(
+            `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/` + id, body
+          )
+        } catch (error) {
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
+        log4j.loggererror.error("Error in adding profile: ")
+
+          return res.status(error.response.status).send(error.response.data);
+        }
+      }
+    //////////////////////////////////////////////////////////////////////////////////
+
       const { code } = req.body // code = 10 delete , 11 accept // id is a username
 console.log("Bodyyy in accepte endpint ",req.body)
       if (!code) {
@@ -614,11 +644,11 @@ console.log("Bodyyy in accepte endpint ",req.body)
       }
 else {
 
+  const getProfiled = await getProfile(myUser)
+  console.log("getProfile",getProfiled.data)
 
   if (code == 10) {
     const deleted =  services.user.remove(myUser.id);
-    const getProfiled = await getProfile(myUser)
-    console.log("getProfile",getProfiled.data)
     if(getProfiled.data.status == 'success'){
 console.log("CompanyId",getProfiled.data.data.data[0].CompanyId)
 console.log("myUser.id",myUser.id)
@@ -658,7 +688,21 @@ console.log("myUser.id",myUser.id)
   
     console.log("crd_oauth2 ", crd_oauth2)
   
-  
+  /////////////////////
+  const updateBody = {
+    role: 'user'
+  }
+  console.log("*************************************************************************************")
+  console.log("getProfiled.data.data.data[0].id_user",getProfiled.data.data.data[0].id)
+  console.log("*************************************************************************************")
+
+  let userProfile = await updateprofile(updateBody,getProfiled.data.data.data[0].id);
+  if (!userProfile.data) {
+    log4j.loggererror.error("Error Problem in server ")
+    return res.status(500).json({"Error": "Problem in server"});
+
+  }
+  ////////////////////////////////////
     myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
         mail.send_email("confirmation", "Votre compte a été approuvé par l'admin \n ",myUser.email);
   
