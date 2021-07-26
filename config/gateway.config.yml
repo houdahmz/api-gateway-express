@@ -1,6 +1,6 @@
 http:
-  # port: ${HTTP_PORT:-8080}
-    host: https://refonte-api.khallasli.com
+  port: ${HTTP_PORT:-8080}
+
 admin: 
   port: ${HTTP_PORT_ADMIN:-9876}
   host: localhost 
