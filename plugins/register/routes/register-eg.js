@@ -344,6 +344,7 @@ var status = {
           }
         }
         console.log("req.ody",req.body)
+        req.body.profilCompleted = true
         let userProfile = await updateprofile(req.body);
         if (!userProfile.data) {
           log4j.loggererror.error("Error Problem in server ")
