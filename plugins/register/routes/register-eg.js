@@ -239,6 +239,28 @@ var status = {
         console.log("user", user)
         console.log("confirm_token", confirm_token)
         console.log("***********************************")
+    //////////////////////////////////////////////////////////////////////////////////
+    const updateprofile = async (body,id) => {
+
+      try {
+    log4j.loggerinfo.info("Call updateProfile in complete-profile "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+    console.log("bodyyyyyyyyy",body)
+    body.updated_by = id
+    body.updatedBy = id
+        return await axios.patch(
+          `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/` + id, body
+        )
+      } catch (error) {
+        if(!error.response){
+          log4j.loggererror.error(error.message)
+          return res.status(500).send({"error":error.message});
+        }
+      log4j.loggererror.error("Error in adding profile: ")
+
+        return res.status(error.response.status).send(error.response.data);
+      }
+    }
+  //////////////////////////////////////////////////////////////////////////////////
 
 
         console.debug('confirmation', user, req.query, confirm_token, username)
@@ -344,7 +366,7 @@ var status = {
           }
         }
         console.log("req.ody",req.body)
-        req.body.profilCompleted = true
+        req.body.company.profilCompleted = true
         let userProfile = await updateprofile(req.body);
         if (!userProfile.data) {
           log4j.loggererror.error("Error Problem in server ")
