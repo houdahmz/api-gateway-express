@@ -240,15 +240,16 @@ var status = {
         console.log("confirm_token", confirm_token)
         console.log("***********************************")
     //////////////////////////////////////////////////////////////////////////////////
-    const updateprofile = async (body,id) => {
+    //////////////////////////////////////////////////////////////////////////////////
+    const updateProfileWithuserId = async (body,id) => { //with id user
 
       try {
-    log4j.loggerinfo.info("Call updateProfile in complete-profile "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+    log4j.loggerinfo.info("Call updateProfile in complete-profile "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/company/`);
     console.log("bodyyyyyyyyy",body)
     body.updated_by = id
     body.updatedBy = id
         return await axios.patch(
-          `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/` + id, body
+          `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/company/` + id, body
         )
       } catch (error) {
         if(!error.response){
@@ -260,6 +261,7 @@ var status = {
         return res.status(error.response.status).send(error.response.data);
       }
     }
+  //////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -325,6 +327,21 @@ var status = {
 
         console.log("user_res", user_res)
         // user = await services.user.findByUsernameOrId(email)
+
+        //////////////////////////////////////////
+        const updateBody = {
+          company: {
+            confirmMail: true
+          }
+        }
+        // updateBody.company.profilCompleted = true
+        let userProfile = await updateProfileWithuserId(updateBody,user.id);
+        if (!userProfile.data) {
+          log4j.loggererror.error("Error Problem in server ")
+          return res.status(500).json({"Error": "Problem in server"});
+      
+        }
+///////////////////////////////////
         return res.status(200).json({ etat: "Success" });
 
       } catch (err) {
@@ -345,7 +362,7 @@ var status = {
         }
         const {image , patent,photo, cin,commercial_register, city, zip_code, adresse, activity, updated_by, id_commercial } = req.body
 
-        const updateprofile = async (body) => {
+        const updateprofile = async (body) => { //with id user
 
           try {
         log4j.loggerinfo.info("Call updateProfile in complete-profile "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/company/`);
