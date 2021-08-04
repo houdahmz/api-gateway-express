@@ -624,11 +624,11 @@ apiEndpoints:
     - host: '*'
       paths: /wallet
       methods: ["GET"]
-      scopes: ['admin'] 
+      scopes: ['admin','user'] 
     - host: '*'
       paths: /wallet
       methods: ["POST"]
-      scopes: ['admin','user']   
+      scopes: ['admin']   
     - host: '*'
       paths: /wallet/:id
       methods: ["GET"]
