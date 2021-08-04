@@ -636,7 +636,7 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/history
       methods: ["GET"]
-      scopes: ['admin']       
+      scopes: ['admin','user']       
                                   
   api:
     - host: '*'
