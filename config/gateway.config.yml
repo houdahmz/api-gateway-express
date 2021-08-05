@@ -236,6 +236,12 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
+      paths: /voucher/ooredoo
+      methods: ["POST"]
+      scopes: ['admin']
+
+
+    - host: '*'
       paths: /voucher/:id
       methods: ["GET","DELETE"]
       scopes: ['admin']
