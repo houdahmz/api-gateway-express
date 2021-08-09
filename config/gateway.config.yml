@@ -261,20 +261,11 @@ apiEndpoints:
       scopes: ['user']
   
   poste:
-    # - host: '*'
-    #   paths: /poste/affiliation
-    #   methods: ["GET"]
-    #   scopes: ['user',"admin"]
 
-    # - host: '*'
-    #   paths: /poste/affiliation/:id
-    #   methods: ["GET"]
-    #   scopes: ['user',"admin"]
-
-    # - host: '*'
-    #   paths: /poste/affiliation*
-    #   methods: ["POST","DELETE","PUT","PATCH"]
-    #   scopes: ['admin']
+    - host: '*'
+      paths: /poste/affiliation/:id
+      methods: ["GET"]
+      scopes: ['user']
 
     - host: '*'
       paths: /poste/affiliation
@@ -300,7 +291,18 @@ apiEndpoints:
       paths: /poste/unsubscribe*
       methods: ["POST"]
       scopes: ['user']
-
+    - host: '*'
+      paths: /poste/card*
+      methods: ["POST","GET","DELETE","UPDATE"]
+      scopes: ['admin']
+    - host: '*'
+      paths: /poste/alimentation-pos*
+      methods: ["POST"]
+      scopes: ['admin']
+    - host: '*'
+      paths: /poste/collect-fond*
+      methods: ["POST"]
+      scopes: ['admin']
     - host: '*'
       paths: /poste/affiliation*
       methods: ["GET"]
