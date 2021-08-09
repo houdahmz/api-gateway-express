@@ -236,6 +236,12 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
+      paths: /voucher/ooredoo
+      methods: ["POST"]
+      scopes: ['admin']
+
+
+    - host: '*'
       paths: /voucher/:id
       methods: ["GET","DELETE"]
       scopes: ['admin']
@@ -243,6 +249,27 @@ apiEndpoints:
     - host: '*'
       paths: /voucher
       methods: ["POST"]
+      scopes: ['admin']
+
+  topupKh:
+    - host: '*'
+      paths: '/topUpKh/transaction'
+      methods: ["POST"]
+      scopes: ['user']
+
+    - host: '*'
+      paths: '/topUpKh/transaction'
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: '/topUpKh/transaction/by_user/:id'
+      methods: ["GET"]
+      scopes: ['user']
+
+    - host: '*'
+      paths: /topUpKh/transaction/:id
+      methods: ["GET","DELETE"]
       scopes: ['admin']
 
   paymee:
@@ -605,11 +632,11 @@ apiEndpoints:
     - host: '*'
       paths: /wallet
       methods: ["GET"]
-      scopes: ['admin'] 
+      scopes: ['admin','user'] 
     - host: '*'
       paths: /wallet
       methods: ["POST"]
-      scopes: ['admin','user']   
+      scopes: ['admin']   
     - host: '*'
       paths: /wallet/:id
       methods: ["GET"]
@@ -617,7 +644,7 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/history
       methods: ["GET"]
-      scopes: ['admin']       
+      scopes: ['admin','user']       
                                   
   api:
     - host: '*'
@@ -802,6 +829,36 @@ pipelines:
   #     - action:
   #         serviceEndpoint: api_management
   #         changeOrigin: true
+  topupKh:
+    apiEndpoints:
+      - topupKh
+    policies:
+      - log:
+          - action:
+              message: "topupKh header===> ${req.headers.authorization} ---${req}"
+      - cors:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - middleware:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
 
   profile:
     apiEndpoints:
