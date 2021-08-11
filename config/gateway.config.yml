@@ -320,7 +320,7 @@ apiEndpoints:
       scopes: ['user']
     - host: '*'
       paths: /poste/card*
-      methods: ["POST","POST","DELETE","PUT","PATCH"]
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
     - host: '*'
       paths: /poste/alimentation-pos*
