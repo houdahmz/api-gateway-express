@@ -564,30 +564,28 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/feed
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: '*'
       paths: /wallet/feed
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: '*'
       paths: /wallet/feed*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['user']   
     - host: '*'
       paths: /wallet/feed*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: '*'
       paths: /wallet/feed/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['user'] 
     - host: '*'
       paths: /wallet/feed/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
-    - host: '*'
-      paths: /wallet/feed   
-
+      scopes: ['user']                       
+   
     - host: '*'
       paths: /wallet/intervenant/:id
       methods: ["GET"]
