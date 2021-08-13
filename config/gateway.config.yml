@@ -334,7 +334,7 @@ apiEndpoints:
       methods: ["POST"]
       scopes: ['admin']
     - host: '*'
-      paths: /poste/affiliation*
+      paths: /poste/affiliation
       methods: ["GET"]
       scopes: ['admin']
     - host: '*'
@@ -342,7 +342,7 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['user']
     - host: '*'
-      paths: /poste/recharge*
+      paths: /poste/recharge
       methods: ["GET"]
       scopes: ['admin']
     - host: '*'
@@ -350,7 +350,7 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['user']
     - host: '*'
-      paths: /poste/bill-payment*
+      paths: /poste/bill-payment
       methods: ["GET"]
       scopes: ['admin']  
     - host: '*'
