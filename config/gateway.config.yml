@@ -298,7 +298,10 @@ apiEndpoints:
       paths: /poste/affiliation
       methods: ["POST"]
       scopes: ['user']
-
+    - host: '*'
+      paths: /poste/affiliation-commercant
+      methods: ["POST"]
+      scopes: ['admin']
     - host: '*'
       paths: /poste/bill-payment
       methods: ["POST"]
