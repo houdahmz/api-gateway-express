@@ -303,26 +303,20 @@ apiEndpoints:
       scopes: ['user']
   
   poste:
-    # - host: '*'
-    #   paths: /poste/affiliation
-    #   methods: ["GET"]
-    #   scopes: ['user',"admin"]
 
-    # - host: '*'
-    #   paths: /poste/affiliation/:id
-    #   methods: ["GET"]
-    #   scopes: ['user',"admin"]
-
-    # - host: '*'
-    #   paths: /poste/affiliation*
-    #   methods: ["POST","DELETE","PUT","PATCH"]
-    #   scopes: ['admin']
+    - host: '*'
+      paths: /poste/affiliation/:id
+      methods: ["GET"]
+      scopes: ['user']
 
     - host: '*'
       paths: /poste/affiliation
       methods: ["POST"]
       scopes: ['user']
-
+    - host: '*'
+      paths: /poste/affiliation-commercant
+      methods: ["POST"]
+      scopes: ['admin']
     - host: '*'
       paths: /poste/bill-payment
       methods: ["POST"]
@@ -342,9 +336,20 @@ apiEndpoints:
       paths: /poste/unsubscribe*
       methods: ["POST"]
       scopes: ['user']
-
     - host: '*'
-      paths: /poste/affiliation*
+      paths: /poste/card*
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+    - host: '*'
+      paths: /poste/alimentation-pos*
+      methods: ["POST"]
+      scopes: ['admin']
+    - host: '*'
+      paths: /poste/collect-fond*
+      methods: ["POST"]
+      scopes: ['admin']
+    - host: '*'
+      paths: /poste/affiliation
       methods: ["GET"]
       scopes: ['admin']
     - host: '*'
@@ -352,7 +357,7 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['user']
     - host: '*'
-      paths: /poste/recharge*
+      paths: /poste/recharge
       methods: ["GET"]
       scopes: ['admin']
     - host: '*'
@@ -360,7 +365,7 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['user']
     - host: '*'
-      paths: /poste/bill-payment*
+      paths: /poste/bill-payment
       methods: ["GET"]
       scopes: ['admin']  
     - host: '*'
@@ -577,30 +582,28 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/feed
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: '*'
       paths: /wallet/feed
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: '*'
       paths: /wallet/feed*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['user']   
     - host: '*'
       paths: /wallet/feed*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['user']
     - host: '*'
       paths: /wallet/feed/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['user'] 
     - host: '*'
       paths: /wallet/feed/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
-    - host: '*'
-      paths: /wallet/feed   
-
+      scopes: ['user']                       
+   
     - host: '*'
       paths: /wallet/intervenant/:id
       methods: ["GET"]
