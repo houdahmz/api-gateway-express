@@ -111,6 +111,21 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
+      paths: /user-management/region
+      methods: ["GET"]
+      scopes: ['user',"admin"]
+
+    - host: '*'
+      paths: /user-management/region/:id
+      methods: ["GET"]
+      scopes: ['user',"admin"]
+
+    - host: '*'
+      paths: /user-management/region
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
       paths: /user-management/category*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
@@ -300,7 +315,7 @@ apiEndpoints:
       scopes: ['user']
     - host: '*'
       paths: /poste/affiliation-commercant
-      methods: ["POST"]
+      methods: ["POST","GET"]
       scopes: ['admin']
     - host: '*'
       paths: /poste/bill-payment
@@ -569,25 +584,29 @@ apiEndpoints:
       methods: ["POST"]
       scopes: ['user']
     - host: '*'
+      paths: /wallet/feed/type
+      methods: ["POST"]
+      scopes: ['admin']
+    - host: '*'
       paths: /wallet/feed
       methods: ["GET"]
       scopes: ['user']
     - host: '*'
-      paths: /wallet/feed*
+      paths: /wallet/feed/type
       methods: ["GET"]
-      scopes: ['user']   
+      scopes: ['user','admin']   
     - host: '*'
       paths: /wallet/feed*
       methods: ["PUT"]
-      scopes: ['user']
+      scopes: ['admin']
     - host: '*'
       paths: /wallet/feed/*
       methods: ["PATCH"]
-      scopes: ['user'] 
+      scopes: ['admin'] 
     - host: '*'
       paths: /wallet/feed/*
       methods: ["DELETE"]
-      scopes: ['user']                       
+      scopes: ['admin']                       
    
     - host: '*'
       paths: /wallet/intervenant/:id
