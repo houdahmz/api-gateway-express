@@ -111,6 +111,21 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
+      paths: /user-management/region
+      methods: ["GET"]
+      scopes: ['user',"admin"]
+
+    - host: '*'
+      paths: /user-management/region/:id
+      methods: ["GET"]
+      scopes: ['user',"admin"]
+
+    - host: '*'
+      paths: /user-management/region
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
       paths: /user-management/category*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
