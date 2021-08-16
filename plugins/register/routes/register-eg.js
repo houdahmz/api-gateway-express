@@ -1852,6 +1852,22 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
         try {
 
+          //////////////////////////Wallet///////////////////////
+
+          log4j.loggerinfo.info("Call wallet get solde all: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet`);
+          const amountWallet =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet`,{
+           params:{
+             yearB: req.query.yearB,
+             dayB: req.query.dayB
+           }    })
+         // console.log("amountPaymee",amountPaymee)
+         console.log("amountWallet.data",amountWallet.data)
+               if(!amountWallet.data){
+                return res.status("500").json("Error: error server");
+               }
+               return res.status("500").json("Error: error server");
+
+
       log4j.loggerinfo.info("Call paymee: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
      const amountPaymee =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`,{
       params:{
@@ -1939,6 +1955,9 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
                                    if(!statsDataCommission.data){
                                      res.status("500").json("Error: error server");
                                    }
+
+
+
 
       return res.status(200).json({
         "Services":{
