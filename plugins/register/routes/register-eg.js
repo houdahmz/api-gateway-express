@@ -1852,6 +1852,44 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
         try {
 
+          //////////////////////////Wallet///////////////////////
+
+          log4j.loggerinfo.info("Call wallet get solde all: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`);
+          const amountWallet =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`,{
+           params:{
+             yearB: req.query.yearB,
+             dayB: req.query.dayB
+           }    })
+         // console.log("amountPaymee",amountPaymee)
+         console.log("amountWallet.data",amountWallet.data)
+               if(!amountWallet.data){
+                return res.status("500").json("Error: Call wallet get solde all");
+               }
+               var amountTotalWallet = 0
+               if(amountWallet.data.status =='success'){
+                amountTotalWallet = amountWallet.data.data
+               }
+               console.log("amountTotalWallet",amountTotalWallet)
+
+               ////////////////////////////////////region////////////////////////////////////////
+               log4j.loggerinfo.info("Call get users by region: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/getUserByRegion`);
+               const statsRegion =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/getUserByRegion`,{
+                params:{
+                  yearB: req.query.yearB,
+                  dayB: req.query.dayB
+                }    })
+              // console.log("amountPaymee",amountPaymee)
+              console.log("amountWallet.data",statsRegion.data)
+                    if(!statsRegion.data){
+                     return res.status("500").json("Error: error Call get users by region");
+                    }
+                    var arrayStatsRegion = []
+                    if(statsRegion.data.status =='success'){
+                      arrayStatsRegion = statsRegion.data.data
+                    }
+                    console.log("amountTotalWallet",arrayStatsRegion)
+               
+
       log4j.loggerinfo.info("Call paymee: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
      const amountPaymee =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`,{
       params:{
@@ -1940,6 +1978,9 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
                                      res.status("500").json("Error: error server");
                                    }
 
+
+
+
       return res.status(200).json({
         "Services":{
           "paymee": amountPaymee.data.data,
@@ -1951,7 +1992,9 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         "CA":ca,
         "Nombre_transaction":nbT,
         "Stats_Commission":statsDataCommission.data.data,
-        "Stats_by_month": statsDataAllMonth.data.data
+        "Stats_by_month": statsDataAllMonth.data.data,
+        "Totale_wallet": amountTotalWallet ,
+        "number_users_by_region": arrayStatsRegion
 
       });
 
