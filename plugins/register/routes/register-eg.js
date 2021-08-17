@@ -1865,7 +1865,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
                  if(!statTopup.data){
                   return res.status("500").json("Error: Call wallet get solde all");
                  }
-                 var stockTopup = 0
+                 var stockTopup = []
                  if(statTopup.data.status =='success'){
                   stockTopup = statTopup.data.data
                  }
@@ -1898,7 +1898,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
     // console.log("amountPaymee",amountPaymee)
     console.log("amountPaymee.data",amountPaymee.data)
           if(!amountPaymee.data){
-            res.status("500").json("Error: error server");
+            res.status("500").json("Error: error server paymee");
           }
 
           log4j.loggerinfo.info("Call topnet: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`);
@@ -1910,7 +1910,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
     console.log("amountTopnet.data",amountTopnet.data)
 
                if(!amountTopnet.data){
-                 res.status("500").json("Error: error server");
+                 res.status("500").json("Error: error server topnet");
                }
 
                log4j.loggerinfo.info("Call voucher: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`);
@@ -1925,7 +1925,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
     console.log("amountVoucher.data",amountVoucher.data)
 
                     if(!amountVoucher.data){
-                      res.status("500").json("Error: error server");
+                      res.status("500").json("Error: error server voucher");
                     }
      
 
@@ -1937,7 +1937,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
     console.log("amountPosteRecharge.data",amountPosteRecharge.data)
 
                     if(!amountPosteRecharge.data){
-                      res.status("500").json("Error: error server");
+                      res.status("500").json("Error: error server poste recharge");
                     }
                     log4j.loggerinfo.info("Call poste: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`);
                     const amountPostePayemnt =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`,{
@@ -1948,7 +1948,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
     console.log("amountPostePayemnt",amountPostePayemnt)
 
                          if(!amountPostePayemnt.data){
-                           res.status("500").json("Error: error server");
+                           res.status("500").json("Error: error server poste payement");
                          }
                          console.log("amountPaymee",amountPaymee.data)
                          console.log("amountPosteRecharge",amountPosteRecharge.data)
@@ -1966,7 +1966,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
                         // console.log("statsDataAllMonth",statsDataAllMonth)
                         console.log("statsDataAllMonth.data",statsDataAllMonth.data)
                               if(!statsDataAllMonth.data){
-                                res.status("500").json("Error: error server");
+                                res.status("500").json("Error: error server stats all month");
                               }
 
                               log4j.loggerinfo.info("Call statsCommission endpoint api-management/wallet/stats-commission: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
@@ -1974,7 +1974,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
                              // console.log("statsDataCommission",statsDataCommission)
                              console.log("statsDataCommission.data",statsDataCommission.data)
                                    if(!statsDataCommission.data){
-                                     res.status("500").json("Error: error server");
+                                     res.status("500").json("Error: error server statsDataCommission ");
                                    }
 
 
