@@ -272,6 +272,12 @@ apiEndpoints:
       scopes: ['admin']
 
   topupKh:
+
+    - host: '*'
+      paths: '/topUpKh/stats'
+      methods: ["GET"]
+      scopes: ['admin']
+
     - host: '*'
       paths: '/topUpKh/transaction'
       methods: ["POST"]
