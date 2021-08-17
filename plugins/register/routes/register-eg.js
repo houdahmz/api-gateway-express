@@ -2024,6 +2024,26 @@ req.query.userId = req.body.userId
 console.log("----------req.query.userId-------------- ",req.query.userId)
 
 console.log("------------------------")
+            //////////////////////////topup///////////////////////
+
+            log4j.loggerinfo.info("Call wallet get stock topup: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/stats/`);
+            const statTopup =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/stats/`,{
+             params:{
+               id_pdv: req.query.userId,  
+               yearB: req.query.yearB,
+               dayB: req.query.dayB
+             }    })
+           // console.log("amountPaymee",amountPaymee)
+           console.log("amountWallet.data",statTopup)
+                 if(!statTopup.data){
+                  return res.status("500").json("Error: Call wallet get solde all");
+                 }
+                 var stockTopup = []
+                 if(statTopup.data.status =='success'){
+                  stockTopup = statTopup.data.data
+                 }
+                 console.log("statTopup",statTopup.data)  
+                 ////////////////////////
 const paramPaymee = {
   id_pdv: req.query.userId,  
   yearB: req.query.yearB,
