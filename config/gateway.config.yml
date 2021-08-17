@@ -126,6 +126,11 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
+      paths: /user-management/getUserByRegion
+      methods: ["GET"]
+      scopes: ["admin"]
+
+    - host: '*'
       paths: /user-management/category*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
@@ -267,6 +272,12 @@ apiEndpoints:
       scopes: ['admin']
 
   topupKh:
+
+    - host: '*'
+      paths: '/topUpKh/stats'
+      methods: ["GET"]
+      scopes: ['admin']
+
     - host: '*'
       paths: '/topUpKh/transaction'
       methods: ["POST"]

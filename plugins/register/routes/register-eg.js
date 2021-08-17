@@ -1852,6 +1852,43 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
         try {
 
+            //////////////////////////topup///////////////////////
+
+            log4j.loggerinfo.info("Call wallet get stock topup: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/stats/`);
+            const statTopup =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/stats/`,{
+             params:{
+               yearB: req.query.yearB,
+               dayB: req.query.dayB
+             }    })
+           // console.log("amountPaymee",amountPaymee)
+           console.log("amountWallet.data",statTopup)
+                 if(!statTopup.data){
+                  return res.status("500").json("Error: Call wallet get solde all");
+                 }
+                 var stockTopup = 0
+                 if(statTopup.data.status =='success'){
+                  stockTopup = statTopup.data.data
+                 }
+                 console.log("statTopup",statTopup.data)   
+               ////////////////////////////////////region////////////////////////////////////////
+               log4j.loggerinfo.info("Call get users by region: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/getUserByRegion`);
+               const statsRegion =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/getUserByRegion`,{
+                params:{
+                  yearB: req.query.yearB,
+                  dayB: req.query.dayB
+                }    })
+              // console.log("amountPaymee",amountPaymee)
+              console.log("amountWallet.data",statsRegion.data)
+                    if(!statsRegion.data){
+                     return res.status("500").json("Error: error Call get users by region");
+                    }
+                    var arrayStatsRegion = []
+                    if(statsRegion.data.status =='success'){
+                      arrayStatsRegion = statsRegion.data.data
+                    }
+                    console.log("amountTotalWallet",arrayStatsRegion)
+               
+
       log4j.loggerinfo.info("Call paymee: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
      const amountPaymee =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`,{
       params:{
@@ -1940,18 +1977,23 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
                                      res.status("500").json("Error: error server");
                                    }
 
+
+
+
       return res.status(200).json({
         "Services":{
           "paymee": amountPaymee.data.data,
           "voucher": amountVoucher.data,
           "poste_recharge": amountPosteRecharge.data.data,
           "poste_payement": amountPostePayemnt.data.data,
+          "topup_ooredoo":stockTopup,
           "topnet": amountTopnet.data.data
         },
         "CA":ca,
         "Nombre_transaction":nbT,
         "Stats_Commission":statsDataCommission.data.data,
-        "Stats_by_month": statsDataAllMonth.data.data
+        "Stats_by_month": statsDataAllMonth.data.data,
+        "number_users_by_region": arrayStatsRegion
 
       });
 
@@ -2133,9 +2175,65 @@ console.log("amountPaymee.data",amountPaymee.data)
 
   });
 
+  gatewayExpressApp.get('/stock_wallet', async (req, res, next) => { // still incomplete
 
 
+    try {
+
+                //////////////////////////Wallet///////////////////////
+
+                log4j.loggerinfo.info("Call wallet get solde all: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`);
+                const amountWallet =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`,{
+                 params:{
+                   yearB: req.query.yearB,
+                   dayB: req.query.dayB
+                 }    })
+               // console.log("amountPaymee",amountPaymee)
+               console.log("amountWallet.data",amountWallet.data)
+                     if(!amountWallet.data){
+                      return res.status("500").json("Error: Call wallet get solde all");
+                     }
+                     var amountTotalWallet = 0
+                     if(amountWallet.data.status =='success'){
+                      amountTotalWallet = amountWallet.data.data
+                     }
+                     console.log("amountTotalWallet",amountTotalWallet)
+
+            //////////////////////////voucher///////////////////////
+                 
+                 log4j.loggerinfo.info("Call voucher get stock voucher: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher`);
+                 const stockVoucher =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher`,{
+                  params:{
+                    status: "1100",
+                    dayB: req.query.dayB
+                  }    })
+                // console.log("amountPaymee",amountPaymee)
+                console.log("amountWallet.data",stockVoucher.data)
+                      if(!stockVoucher){
+                       return res.status("500").json("Error: Call wallet get solde all");
+                      }
+                      var stockTotalVoucher = 0
+                      if(stockVoucher.data.status =='success'){
+                        stockTotalVoucher = stockVoucher.data.data.totalPages
+                      }
+                      console.log("stockTotalVoucher",stockTotalVoucher)  
+
+                      const responseST_W={
+                        "totale_wallet": amountTotalWallet ,
+                        "stock": stockTotalVoucher
+                      }
+
+                      return res.status(200).send(responseST_W);
 
 
+} catch (error) {
+  if(!error.response){
+    log4j.loggererror.error(error.message)
+    return res.status(500).send({"error":error.message});
+  }
+  log4j.loggererror.error("Error: ")
+  return res.status(error.response.status).send(error.response.data);
+}
 
+});
   };
