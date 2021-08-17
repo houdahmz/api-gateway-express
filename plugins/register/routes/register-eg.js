@@ -1977,6 +1977,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
                                      res.status("500").json("Error: error server statsDataCommission ");
                                    }
 
+                                   console.log("statTopup",statTopup.data)   
 
 
 
@@ -2164,12 +2165,17 @@ console.log("amountPaymee.data",amountPaymee.data)
                                    res.status("500").json("Error: error server");
                                  }
 
+                 console.log("statTopup",statTopup.data)   
+
+
     return res.status(200).json({
       "Services":{
         "paymee": amountPaymee.data.data,
         "voucher": amountVoucher.data,
         "poste_recharge": amountPosteRecharge.data.data,
         "poste_payement": amountPostePayemnt.data.data,
+        "topup_ooredoo":stockTopup,
+
         "topnet": amountTopnet.data.data
       },
       "CA":ca,
