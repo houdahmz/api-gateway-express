@@ -601,11 +601,31 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/feed
       methods: ["GET"]
-      scopes: ['user']
+      scopes: ['user','admin']
     - host: '*'
       paths: /wallet/feed/type
       methods: ["GET"]
       scopes: ['user','admin']   
+    - host: '*'
+      paths: /wallet/feed/type/*
+      methods: ["GET"]
+      scopes: ['user','admin']  
+    - host: '*'
+      paths: /wallet/feed/type/*
+      methods: ["PUT"]
+      scopes: ['admin','user']
+    - host: '*'
+      paths: /wallet/feed/type/*
+      methods: ["PATCH"]
+      scopes: ['admin'] 
+    - host: '*'
+      paths: /wallet/feed/type/*
+      methods: ["DELETE"]
+      scopes: ['admin']  
+    - host: '*'
+      paths: /wallet/feed*
+      methods: ["GET"]
+      scopes: ['user','admin']
     - host: '*'
       paths: /wallet/feed*
       methods: ["PUT"]
