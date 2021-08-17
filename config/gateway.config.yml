@@ -384,7 +384,7 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['user']  
     - host: '*'
-      paths: /poste/transaction*
+      paths: /poste/transaction-transfer
       methods: ["GET"]
       scopes: ['admin'] 
   topnet:
