@@ -1854,8 +1854,8 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
             //////////////////////////topup///////////////////////
 
-            log4j.loggerinfo.info("Call wallet get stock topup: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/stats/`);
-            const statTopup =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/stats/`,{
+            log4j.loggerinfo.info("Call wallet get stock topup: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`);
+            const statTopup =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`,{
              params:{
                yearB: req.query.yearB,
                dayB: req.query.dayB
@@ -2031,7 +2031,7 @@ console.log("----------req.query.userId-------------- ",req.query.userId)
 console.log("------------------------")
             //////////////////////////topup///////////////////////
 
-            log4j.loggerinfo.info("Call wallet get stock topup: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/stats/`);
+            log4j.loggerinfo.info("Call wallet get stock topup: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`);
             const statTopup =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/stats/`,{
              params:{
                id_pdv: req.query.userId,  
