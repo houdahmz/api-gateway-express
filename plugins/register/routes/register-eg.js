@@ -1978,7 +1978,11 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
                                    }
 
                                    console.log("statTopup",statTopup.data)   
+                                   console.log("eeeeeefffff")   
 
+                                   console.log("statTopup",statTopup)   
+                                   console.log("statTopup.data",statTopup.data)   
+                                   console.log("statTopup.data.data",statTopup.data.data)  
 
 
       return res.status(200).json({
@@ -2171,7 +2175,6 @@ console.log("amountPaymee.data",amountPaymee.data)
                  console.log("statTopup.data.data",statTopup.data.data)   
 
 
-                 stockTopup = statTopup.data.data
 
 
     return res.status(200).json({
