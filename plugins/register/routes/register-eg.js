@@ -2164,8 +2164,14 @@ console.log("amountPaymee.data",amountPaymee.data)
                                  if(!statsDataCommission.data){
                                    res.status("500").json("Error: error server");
                                  }
+                                 console.log("eeeeeefffff")   
 
                  console.log("statTopup",statTopup)   
+                 console.log("statTopup.data",statTopup.data)   
+                 console.log("statTopup.data.data",statTopup.data.data)   
+
+
+                 stockTopup = statTopup.data.data
 
 
     return res.status(200).json({
