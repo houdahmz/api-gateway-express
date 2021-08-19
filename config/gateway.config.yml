@@ -298,6 +298,53 @@ apiEndpoints:
       methods: ["GET","DELETE"]
       scopes: ['admin']
 
+  home:
+
+    - host: '*'
+      paths: /home/contact*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/block*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/header*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/logo*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/regard*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/partner*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/feature*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/image*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/serivce*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
   paymee:
     - host: '*'
       paths: /paymee/cashin
@@ -1004,6 +1051,38 @@ pipelines:
               serviceEndpoint: api_management
               changeOrigin: true
 
+  home:
+    apiEndpoints:
+      - home
+    policies:
+      - log:
+          - action:
+              message: "home header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
+      - cors:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - middleware:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
+
   adminAPI:
     apiEndpoints:
       - api
@@ -1051,6 +1130,7 @@ pipelines:
                 secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
                 checkCredentialExistence: false
       - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
