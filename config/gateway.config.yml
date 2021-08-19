@@ -297,9 +297,89 @@ apiEndpoints:
       paths: /topUpKh/transaction/:id
       methods: ["GET","DELETE"]
       scopes: ['admin']
+  
+  open:
+    - host: '*'
+      paths: /home/contact
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/contact/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/block
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/block/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/header
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/header/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/logo
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/logo/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/regards
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/regards/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/service
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/service/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/contact
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/contact/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/image
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/image/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/partner
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/partner/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/feature
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/feature/:id
+      methods: ["GET"]
 
   home:
-
     - host: '*'
       paths: /home/contact*
       methods: ["POST","DELETE","PUT","PATCH"]
@@ -1083,6 +1163,22 @@ pipelines:
               serviceEndpoint: api_management
               changeOrigin: true
 
+  open:
+    apiEndpoints:
+      - open
+    policies:
+      - log:
+          - action:
+              message: "open header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
+      - cors:
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
   adminAPI:
     apiEndpoints:
       - api
