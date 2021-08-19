@@ -297,6 +297,133 @@ apiEndpoints:
       paths: /topUpKh/transaction/:id
       methods: ["GET","DELETE"]
       scopes: ['admin']
+  
+  open:
+    - host: '*'
+      paths: /home/contact
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/contact/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/block
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/block/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/header
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/header/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/logo
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/logo/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/regards
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/regards/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/service
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/service/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/contact
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/contact/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/image
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/image/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/partner
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/partner/:id
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/feature
+      methods: ["GET"]
+
+    - host: '*'
+      paths: /home/feature/:id
+      methods: ["GET"]
+
+  home:
+    - host: '*'
+      paths: /home/contact*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/block*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/header*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/logo*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/regard*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/partner*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/feature*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/image*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /home/serivce*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
 
   paymee:
     - host: '*'
@@ -1004,6 +1131,54 @@ pipelines:
               serviceEndpoint: api_management
               changeOrigin: true
 
+  home:
+    apiEndpoints:
+      - home
+    policies:
+      - log:
+          - action:
+              message: "home header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
+      - cors:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: 3pXQjeklS3cFf8OCJw9B22
+                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                checkCredentialExistence: false
+      - validate-user:
+      - middleware:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
+
+  open:
+    apiEndpoints:
+      - open
+    policies:
+      - log:
+          - action:
+              message: "open header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
+      - cors:
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
   adminAPI:
     apiEndpoints:
       - api
@@ -1051,6 +1226,7 @@ pipelines:
                 secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
                 checkCredentialExistence: false
       - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
