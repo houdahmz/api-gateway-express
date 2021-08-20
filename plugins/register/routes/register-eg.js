@@ -149,7 +149,18 @@ var status = {
               phone: myUser.phone,
               typeId: dataType.data.data.id,
               created_by: myUser.id,
-              
+
+              image:body.image ,
+              patent:body.patent,
+              patent:body.photo,
+              cin:body.cin,
+              commercial_register:body.commercial_register,
+              city:body.city,
+              zip_code:body.zip_code,
+              adresse:body.adresse,
+              activity:body.activity,
+              id_commercial:body.id_commercial,
+
               isActive: true,
               confirmMail: false,
               profilCompleted: true,
