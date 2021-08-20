@@ -768,7 +768,7 @@ apiEndpoints:
    
     - host: '*'
       paths: /wallet/intervenant/:id
-      methods: ["GET"]
+      methods: ["GET","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
     - host: '*'
@@ -1257,6 +1257,7 @@ pipelines:
                 secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
                 checkCredentialExistence: false
       - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
