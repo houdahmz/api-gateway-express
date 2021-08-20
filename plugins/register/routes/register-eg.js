@@ -99,7 +99,7 @@ var status = {
         console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
 
         myUser = await services.user.insert({
-          isActive: true,
+          isActive: false,
           confirmMail: false,
           profilCompleted: true,
           firstname: firstname,
@@ -161,7 +161,7 @@ var status = {
               activity:body.activity,
               id_commercial:body.id_commercial,
 
-              isActive: true,
+              isActive: false,
               confirmMail: false,
               profilCompleted: true,
               username: username,
@@ -553,7 +553,7 @@ console.log("req.headers.authorization",req.headers.authorization)
       }
     });
 
-    gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //endpoint pour activer
+    gatewayExpressApp.patch('/activate/:id', async (req, res, next) => { //endpoint pour activer
       const { code } = req.body // code = 10 desactive , 11 active // id is a username
       if (!code) {
         log4j.loggererror.error("Unkown error.")
@@ -569,24 +569,110 @@ console.log("req.headers.authorization",req.headers.authorization)
 
         return res.status(200).json({ message: "The user does not exist" });
       }
+      /************************************ */
 
-      if (code == 10) {
-        myUser = await services.user.deactivate(myUser.id)
-        if (myUser == true) {
-          log4j.loggererror.error("Unkown error.")
+      const getProfile = async (myUser) => {
+        try {
+      log4j.loggerinfo.info("Call postProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
 
-          return res.status(200).json({ message: "The user has been desactivated" });
-        }
-
-      } else if (code == 11) {
-
-        myUser = await services.user.activate(myUser.id)
-        if (myUser == true) {
-          log4j.loggererror.error("Unkown error.")
-
-          return res.status(200).json({ message: "The user has been activated" });
+          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?username=`+myUser)
+        } catch (error) {
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
+          log4j.loggererror.error("Error in getProfile :"+error.response.data)
+          return res.status(error.response.status).send(error.response.data);
         }
       }
+      /************************************ */
+         const updateprofile = async (body,id) => {
+
+          try {
+        log4j.loggerinfo.info("Call updateProfile in complete-profile "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+        console.log("bodyyyyyyyyy",body)
+        body.updated_by = id
+        body.updatedBy = id
+            return await axios.patch(
+              `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/` + id, body
+            )
+          } catch (error) {
+            if(!error.response){
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({"error":error.message});
+            }
+          log4j.loggererror.error("Error in adding profile: ")
+  
+            return res.status(error.response.status).send(error.response.data);
+          }
+        }
+         //////////////////////////////////////////////////////////////////////////////////
+
+         /////////////////////////////
+
+      const getProfiled = await getProfile(req.params.id)
+      console.log("getProfile",getProfiled.data)
+      if(getProfiled.data.status == 'success'){
+        console.log("myUser.id",myUser.id)
+        
+        if (code == 10) {
+          myUser = await services.user.deactivate(myUser.id)
+          if (myUser == true) {
+            log4j.loggererror.error("Unkown error.")
+             /////////////////////
+             console.log("id",getProfiled.data.data.data[0].id)
+
+             const updateBody = {
+              isActive: false
+            }
+            console.log("*************************************************************************************")
+            console.log("getProfiled.data.data.data[0].id_user",getProfiled.data.data.data[0].id)
+            console.log("*************************************************************************************")
+          
+            let userProfile = await updateprofile(updateBody,getProfiled.data.data.data[0].id);
+            if (!userProfile.data) {
+              log4j.loggererror.error("Error Problem in server ")
+              return res.status(500).json({"Error": "Problem in server"});
+          
+            }
+            ////////////////////////////////////
+            return res.status(200).json({ message: "The user has been desactivated" });
+          }
+  
+        } else if (code == 11) {
+
+          myUser = await services.user.activate(myUser.id)
+          if (myUser == true) {
+            log4j.loggererror.error("Unkown error.")
+               /////////////////////
+               console.log("id",getProfiled.data.data.data[0].id)
+
+               const updateBody = {
+                isActive: true
+              }
+              console.log("*************************************************************************************")
+              console.log("getProfiled.data.data.data[0].id_user",getProfiled.data.data.data[0].id)
+              console.log("*************************************************************************************")
+            
+              let userProfile = await updateprofile(updateBody,getProfiled.data.data.data[0].id);
+              if (!userProfile.data) {
+                log4j.loggererror.error("Error Problem in server ")
+                return res.status(500).json({"Error": "Problem in server"});
+            
+              }
+              ////////////////////////////////////
+              console.log("userProfile.data",userProfile.data)
+            return res.status(200).json({ message: "The user has been activated" });
+          }
+        }
+          
+                return res.status(200).json({ message: "The visitor has been refused" });
+          
+            }else {
+              return res.status(200).json({ message: getProfiled.data });
+        
+            }
+
 
     });
 
