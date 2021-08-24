@@ -1830,6 +1830,13 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
       });
       console.log("aaa", myUserJwt)
 
+      console.log("req.header Referer",req.header('Referer'))
+      console.log("req.headers['referer']",req.headers['referer'])
+      console.log("req.header Referrer",req.get('Referrer'))
+      console.log(" Referrer || Referer",req.headers.referrer || req.headers.referer
+      )
+      console.log("req.headers.origin ",req.headers.origin)
+
       const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/reset-password?username=` + username + "&" + "token=" + myUserJwt;
       console.log("confirm_uri", confirm_uri)
       //here je vais envoyer un mail
