@@ -235,12 +235,15 @@ var status = {
         console.log("crd_oauth2.id", crd_oauth2.id)
         console.log("crd_oauth2.secret", crd_oauth2.secret)
 
+        var origin = req.headers.origin;
+        console.log("req.headers.origin ",req.headers.origin)
+
         // const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
-        const confirm_uri = `http://localhost:3000/signin?username=` + username + "&" + "confirm_token=" + myUserJwt;
+        const confirm_uri = `${origin}/signin?username=` + username + "&" + "confirm_token=" + myUserJwt;
 
         console.log("confirm_uri", confirm_uri)
         //here je vais envoyer un mail
-
+  
         mail.send_email("confirmation", "Veuillez cliquer sur lien pour completer votre compte \n " + confirm_uri,req.body.email);
             // mail.sendMailConfirm("imen.hassine96@gmail.com",myUserJwt);
 //console.log("mail",mail)
@@ -1835,13 +1838,21 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
       console.log("req.header Referrer",req.get('Referrer'))
       console.log(" Referrer || Referer",req.headers.referrer || req.headers.referer
       )
+      var host = req.headers.host;
+      console.log("host ",host)
+      var origin = req.headers.origin;
       console.log("req.headers.origin ",req.headers.origin)
-
-      const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/reset-password?username=` + username + "&" + "token=" + myUserJwt;
+        // const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
+      if(origin){
+        var url = origin
+      }else{
+        var url = `${env.baseURL}:${env.HTTP_PORT}`
+      }
+      const confirm_uri = `${url}/reset-password?username=` + username + "&" + "token=" + myUserJwt;
       console.log("confirm_uri", confirm_uri)
       //here je vais envoyer un mail
 
-      mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures");
+      mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures",user.email);
       log4j.loggerinfo.info("Success check your email : " + user.email);
 
       return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email });
