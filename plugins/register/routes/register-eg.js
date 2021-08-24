@@ -1822,48 +1822,92 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
     });
 
     gatewayExpressApp.post('/forgot-password', async (req, res, next) => { //get email from user change to email
-      const username = req.body.username
-      const user = await services.user.findByUsernameOrId(username)
-      console.log("user", user)
-      console.debug('confirmation', user, username)
-      if (user == false) { // username does not exist
-        console.debug('Username does not exist')
-        log4j.loggererror.error("Error Username does not exist: ")
 
-        return res.status(200).json({ status: "Error" ,error: "Username does not exist" });
+      const email = req.body.email
+
+      const getProfile = async (myUser) => {
+        try {
+      log4j.loggerinfo.info("Call postProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+
+          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?email=`+myUser)
+        } catch (error) {
+          if(!error.response){
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({"error":error.message});
+          }
+          log4j.loggererror.error("Error in getProfile :"+error.response.data)
+          return res.status(error.response.status).send(error.response.data);
+        }
       }
-      const myUserJwt = await jwt.sign({ username: username }, `${env.JWT_SECRET}`, {
-        issuer: 'express-gateway',
-        audience: 'something',
-        expiresIn: 18000,
-        subject: '3pXQjeklS3cFf8OCJw9B22',
-        algorithm: 'HS256'
-      });
-      console.log("aaa", myUserJwt)
 
-      console.log("req.header Referer",req.header('Referer'))
-      console.log("req.headers['referer']",req.headers['referer'])
-      console.log("req.header Referrer",req.get('Referrer'))
-      console.log(" Referrer || Referer",req.headers.referrer || req.headers.referer
-      )
-      var host = req.headers.host;
-      console.log("host ",host)
-      var origin = req.headers.origin;
-      console.log("req.headers.origin ",req.headers.origin)
-        // const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
-      if(origin){
-        var url = origin
-      }else{
-        var url = `${env.baseURL}:${env.HTTP_PORT}`
+         /////////////////////////////
+
+      const getProfiled = await getProfile(email)
+      console.log("getProfile",getProfiled.data)
+      if(getProfiled.data.status == 'success'){
+
+
+        /*********************************** */
+        const username = getProfiled.data.data[0].username
+        console.log("username",username)
+        const user = await services.user.findByUsernameOrId(username)
+        console.log("user", user)
+        console.debug('confirmation', user, username)
+        if (user == false) { // username does not exist
+          console.debug('Username does not exist')
+          log4j.loggererror.error("Error Username does not exist: ")
+  
+          return res.status(200).json({ status: "Error" ,error: "Username does not exist" });
+        }
+        const myUserJwt = await jwt.sign({ username: username }, `${env.JWT_SECRET}`, {
+          issuer: 'express-gateway',
+          audience: 'something',
+          expiresIn: 18000,
+          subject: '3pXQjeklS3cFf8OCJw9B22',
+          algorithm: 'HS256'
+        });
+        console.log("aaa", myUserJwt)
+  
+        console.log("req.header Referer",req.header('Referer'))
+        console.log("req.headers['referer']",req.headers['referer'])
+        console.log("req.header Referrer",req.get('Referrer'))
+        console.log(" Referrer || Referer",req.headers.referrer || req.headers.referer
+        )
+        var host = req.headers.host;
+        console.log("host ",host)
+        var origin = req.headers.origin;
+        console.log("req.headers.origin ",req.headers.origin)
+          // const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
+        if(origin){
+          var url = origin
+        }else{
+          var url = `${env.baseURL}:${env.HTTP_PORT}`
+        }
+        const confirm_uri = `${url}/reset-password?username=` + username + "&" + "token=" + myUserJwt;
+        console.log("confirm_uri", confirm_uri)
+        //here je vais envoyer un mail
+  
+        mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures",user.email);
+        log4j.loggerinfo.info("Success check your email : " + user.email);
+  
+        return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email });
+        /*********************************** */
+      } else {
+
+
+
+
+
+
+
+
+
+
+
+
+
       }
-      const confirm_uri = `${url}/reset-password?username=` + username + "&" + "token=" + myUserJwt;
-      console.log("confirm_uri", confirm_uri)
-      //here je vais envoyer un mail
 
-      mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures",user.email);
-      log4j.loggerinfo.info("Success check your email : " + user.email);
-
-      return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email });
 
 
 
