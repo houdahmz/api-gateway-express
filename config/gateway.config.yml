@@ -386,6 +386,16 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
+      paths: /home/contact_user
+      methods: ["POST"]
+      scopes: ['user']
+
+    - host: '*'
+      paths: /home/contact_user*
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
       paths: /home/block*
       methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
