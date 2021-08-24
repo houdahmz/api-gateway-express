@@ -1848,7 +1848,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
 
         /*********************************** */
-        const username = getProfiled.data.data[0].username
+        const username = getProfiled.data.data.data[0].username
         console.log("username",username)
         const user = await services.user.findByUsernameOrId(username)
         console.log("user", user)
@@ -1898,6 +1898,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
 
 
+        return res.status(200).json({ message: getProfiled.data });
 
 
 
