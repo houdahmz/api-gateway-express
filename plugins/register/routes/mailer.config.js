@@ -15,13 +15,14 @@ transporter.verify((error) => {
   }
 });
   exports.send_email = function send_email (subject , text,mail){
-    console.log("eeeeee")
     var mailOptions = {
         from: 'khalaslipaypos@gmail.com',
         to: mail,
         subject:subject,
         text: text
       };
+    console.log("mailOptions",mailOptions)
+
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {
           console.log(error);
@@ -31,5 +32,5 @@ transporter.verify((error) => {
       });
   }
 
-// EMAIL_USERNAME=khalaslipaypos@gmail.com
+// EMAIL_USERNAME=khalaslipaypos@gmail.com 
 // EMAIL_PASSWORD=khalasli26260534
