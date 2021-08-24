@@ -1830,7 +1830,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         console.debug('Username does not exist')
         log4j.loggererror.error("Error Username does not exist: ")
 
-        return res.status(200).json({ error: "Username does not exist" });
+        return res.status(200).json({ status: "Error" ,error: "Username does not exist" });
       }
       const myUserJwt = await jwt.sign({ username: username }, `${env.JWT_SECRET}`, {
         issuer: 'express-gateway',
