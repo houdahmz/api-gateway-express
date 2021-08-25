@@ -38,6 +38,7 @@ const { PassThrough } = require("stream");
 
 const mail = require("./mailer.config.js")
 
+const status_code = require("../config")
 
 const bodyParser = require("body-parser");
 const app = express();
@@ -61,7 +62,21 @@ var status = {
     gatewayExpressApp.use(cors(corsOptions));
     gatewayExpressApp.use(device.capture());
 
+    const getProfileByEmail = async (email) => {
+      try {
+    log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
 
+        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?email=`+email)
+      } catch (error) {
+        if(!error.response){
+          log4j.loggererror.error(error.message)
+          return res.status(500).send({status:"Error",error:error.message,code:status_code.CODE_ERROR.SERVER});
+          
+        }
+        log4j.loggererror.error("Error in getProfile :"+error.response.data)
+        return res.status(error.response.status).send(error.response.data);
+      }
+    }
     gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
         const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
@@ -70,12 +85,26 @@ var status = {
         // Validate against a password string
         if (validation.validatePassword(password) == false) {
           log4j.loggererror.error("Unkown error.")
-          return res.status(400).json({error: "password is not valide"});
+          return res.status(400).json({status:"Error",error: "password is not the correct format"});
         }
         if (password != password_confirmation) {
           log4j.loggererror.error("Unkown error.")
-          return res.status(400).json({error: "password does not much"});
+          return res.status(400).json({status:"Error",error: "password does not much"});
 
+        }
+        const getProfiled = await getProfileByEmail(email)
+        console.log("getProfile",getProfiled.data)
+        if(getProfiled.data.status == 'success'){
+          console.log("getProfiled.data.data",getProfiled.data.data)
+          console.log("id",getProfiled.data.data.data[0].id)
+
+          if(getProfiled.data.data.data[0]){
+              return res.status(200).json({ status: "Error" ,error: "Email already exist" , code:status_code.CODE_ERROR.ALREADY_EXIST});
+            }
+
+        }else {
+          return res.status(200).json({ message: getProfiled.data });
+    
         }
         // console.log("2222222222222222")
 
@@ -88,6 +117,7 @@ var status = {
         // console.log("testttttttttttttttttttt1111111")
 
         // console.log("testttttttttttttttttttt",test)
+
         const myUserJwt = await jwt.sign({ username: username, password: password }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
           audience: 'something',
@@ -112,6 +142,7 @@ var status = {
           confirm_token: myUserJwt
         })
 
+        
         const getType = async (code) => {
           try {
         log4j.loggerinfo.info("Call getType: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code);
@@ -1824,7 +1855,10 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
     gatewayExpressApp.post('/forgot-password', async (req, res, next) => { //get email from user change to email
 
       const email = req.body.email
+      if(!email){
+        return res.status(400).json({ status: "Error" ,error: "email is required" , code:status_code.CODE_ERROR.REQUIRED});
 
+      }
       const getProfile = async (myUser) => {
         try {
       log4j.loggerinfo.info("Call postProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
@@ -1833,7 +1867,8 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         } catch (error) {
           if(!error.response){
             log4j.loggererror.error(error.message)
-            return res.status(500).send({"error":error.message});
+            return res.status(500).send({status:"Error",error:error.message,code:status_code.CODE_ERROR.SERVER});
+            
           }
           log4j.loggererror.error("Error in getProfile :"+error.response.data)
           return res.status(error.response.status).send(error.response.data);
@@ -1843,13 +1878,25 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
          /////////////////////////////
 
       const getProfiled = await getProfile(email)
+      console.log("********************************************************************************")
       console.log("getProfile",getProfiled.data)
+      console.log("********************************************************************************")
+
       if(getProfiled.data.status == 'success'){
 
+                if(!getProfiled.data.data.data[0]){
+
+
+                     return res.status(200).json({ status: "Error" ,error: "User with this email does not exist" , code:status_code.CODE_ERROR.NOT_EXIST});
+
+                }
 
         /*********************************** */
         const username = getProfiled.data.data.data[0].username
+      console.log("********************************************************************************")
         console.log("username",username)
+      console.log("********************************************************************************")
+
         const user = await services.user.findByUsernameOrId(username)
         console.log("user", user)
         console.debug('confirmation', user, username)
@@ -1857,7 +1904,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
           console.debug('Username does not exist')
           log4j.loggererror.error("Error Username does not exist: ")
   
-          return res.status(200).json({ status: "Error" ,error: "Username does not exist" });
+          return res.status(200).json({ status: "Error" ,error: "Username does not exist", code:status_code.CODE_ERROR.NOT_EXIST });
         }
         const myUserJwt = await jwt.sign({ username: username }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
@@ -1890,7 +1937,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures",user.email);
         log4j.loggerinfo.info("Success check your email : " + user.email);
   
-        return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email });
+        return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email +"for username"+username });
         /*********************************** */
       } else {
 
@@ -1898,7 +1945,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
 
 
-        return res.status(200).json({ message: getProfiled.data });
+        return res.status(200).json({etat: "Error", message: getProfiled.data, code:status_code.CODE_ERROR.INCONNU });
 
 
 
