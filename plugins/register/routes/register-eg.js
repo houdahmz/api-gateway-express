@@ -38,6 +38,7 @@ const { PassThrough } = require("stream");
 
 const mail = require("./mailer.config.js")
 
+const status_code = require("../config")
 
 const bodyParser = require("body-parser");
 const app = express();
@@ -1824,7 +1825,10 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
     gatewayExpressApp.post('/forgot-password', async (req, res, next) => { //get email from user change to email
 
       const email = req.body.email
+      if(!email){
+        return res.status(400).json({ status: "Error" ,error: "email is required" , code:status_code.CODE_ERROR.REQUIRED});
 
+      }
       const getProfile = async (myUser) => {
         try {
       log4j.loggerinfo.info("Call postProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
@@ -1833,7 +1837,8 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         } catch (error) {
           if(!error.response){
             log4j.loggererror.error(error.message)
-            return res.status(500).send({"error":error.message});
+            return res.status(500).send({status:"Error",error:error.message,code:status_code.CODE_ERROR.SERVER});
+            
           }
           log4j.loggererror.error("Error in getProfile :"+error.response.data)
           return res.status(error.response.status).send(error.response.data);
@@ -1843,13 +1848,25 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
          /////////////////////////////
 
       const getProfiled = await getProfile(email)
+      console.log("********************************************************************************")
       console.log("getProfile",getProfiled.data)
+      console.log("********************************************************************************")
+
       if(getProfiled.data.status == 'success'){
 
+                if(!getProfiled.data.data.data[0]){
+
+
+                     return res.status(200).json({ status: "Error" ,error: "User with this email does not exist" , code:status_code.CODE_ERROR.NOT_EXIST});
+
+                }
 
         /*********************************** */
         const username = getProfiled.data.data.data[0].username
+      console.log("********************************************************************************")
         console.log("username",username)
+      console.log("********************************************************************************")
+
         const user = await services.user.findByUsernameOrId(username)
         console.log("user", user)
         console.debug('confirmation', user, username)
@@ -1857,7 +1874,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
           console.debug('Username does not exist')
           log4j.loggererror.error("Error Username does not exist: ")
   
-          return res.status(200).json({ status: "Error" ,error: "Username does not exist" });
+          return res.status(200).json({ status: "Error" ,error: "Username does not exist", code:status_code.CODE_ERROR.NOT_EXIST });
         }
         const myUserJwt = await jwt.sign({ username: username }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
@@ -1890,7 +1907,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures",user.email);
         log4j.loggerinfo.info("Success check your email : " + user.email);
   
-        return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email });
+        return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email +"for username"+username });
         /*********************************** */
       } else {
 
@@ -1898,7 +1915,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
 
 
-        return res.status(200).json({ message: getProfiled.data });
+        return res.status(200).json({etat: "Error", message: getProfiled.data, code:status_code.CODE_ERROR.INCONNU });
 
 
 
