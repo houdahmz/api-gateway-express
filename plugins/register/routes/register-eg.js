@@ -277,10 +277,10 @@ var status = {
 
         // const confirm_uri = `${url}/signin?username=` + username + "&" + "confirm_token=" + myUserJwt;
 
-        console.log("confirm_uri", confirm_uri)
         //here je vais envoyer un mail
         const confirm_uri = `${url}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
         mail.send_email("Confirmation", "Veuillez cliquer sur lien pour confirmer votre mail \n " + confirm_uri,req.body.email);
+        console.log("confirm_uri", confirm_uri)
   
         // mail.send_email("confirmation", "Veuillez cliquer sur lien pour completer votre compte \n " + confirm_uri,req.body.email);
             // mail.sendMailConfirm("imen.hassine96@gmail.com",myUserJwt);
