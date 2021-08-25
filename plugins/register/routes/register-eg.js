@@ -96,7 +96,6 @@ var status = {
         console.log("getProfile",getProfiled.data)
         if(getProfiled.data.status == 'success'){
           console.log("getProfiled.data.data",getProfiled.data.data)
-          console.log("id",getProfiled.data.data.data[0].id)
 
           if(getProfiled.data.data.data[0]){
               return res.status(200).json({ status: "Error" ,error: "Email already exist" , code:status_code.CODE_ERROR.ALREADY_EXIST});
@@ -1937,7 +1936,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures",user.email);
         log4j.loggerinfo.info("Success check your email : " + user.email);
   
-        return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email +"for username"+username });
+        return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email +" for username "+username });
         /*********************************** */
       } else {
 
