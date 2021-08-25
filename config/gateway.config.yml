@@ -31,7 +31,7 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
-      paths: /user-management/by_user
+      paths: /user-management/profile
       methods: ["GET"]
       scopes: ['user']
 
