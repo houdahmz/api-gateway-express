@@ -62,7 +62,21 @@ var status = {
     gatewayExpressApp.use(cors(corsOptions));
     gatewayExpressApp.use(device.capture());
 
+    const getProfileByEmail = async (email) => {
+      try {
+    log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
 
+        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?email=`+email)
+      } catch (error) {
+        if(!error.response){
+          log4j.loggererror.error(error.message)
+          return res.status(500).send({status:"Error",error:error.message,code:status_code.CODE_ERROR.SERVER});
+          
+        }
+        log4j.loggererror.error("Error in getProfile :"+error.response.data)
+        return res.status(error.response.status).send(error.response.data);
+      }
+    }
     gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
         const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
@@ -71,12 +85,26 @@ var status = {
         // Validate against a password string
         if (validation.validatePassword(password) == false) {
           log4j.loggererror.error("Unkown error.")
-          return res.status(400).json({error: "password is not valide"});
+          return res.status(400).json({status:"Error",error: "password is not the correct format"});
         }
         if (password != password_confirmation) {
           log4j.loggererror.error("Unkown error.")
-          return res.status(400).json({error: "password does not much"});
+          return res.status(400).json({status:"Error",error: "password does not much"});
 
+        }
+        const getProfiled = await getProfileByEmail(email)
+        console.log("getProfile",getProfiled.data)
+        if(getProfiled.data.status == 'success'){
+          console.log("getProfiled.data.data",getProfiled.data.data)
+          console.log("id",getProfiled.data.data.data[0].id)
+
+          if(getProfiled.data.data.data[0]){
+              return res.status(200).json({ status: "Error" ,error: "Email already exist" , code:status_code.CODE_ERROR.ALREADY_EXIST});
+            }
+
+        }else {
+          return res.status(200).json({ message: getProfiled.data });
+    
         }
         // console.log("2222222222222222")
 
@@ -89,6 +117,7 @@ var status = {
         // console.log("testttttttttttttttttttt1111111")
 
         // console.log("testttttttttttttttttttt",test)
+
         const myUserJwt = await jwt.sign({ username: username, password: password }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
           audience: 'something',
@@ -113,6 +142,7 @@ var status = {
           confirm_token: myUserJwt
         })
 
+        
         const getType = async (code) => {
           try {
         log4j.loggerinfo.info("Call getType: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code);
