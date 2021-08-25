@@ -77,6 +77,23 @@ var status = {
         return res.status(error.response.status).send(error.response.data);
       }
     }
+
+    const getProfileByPhone = async (phone) => {
+      try {
+    log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+
+        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?phone=`+phone)
+      } catch (error) {
+        if(!error.response){
+          log4j.loggererror.error(error.message)
+          return res.status(500).send({status:"Error",error:error.message,code:status_code.CODE_ERROR.SERVER});
+          
+        }
+        log4j.loggererror.error("Error in getProfile :"+error.response.data)
+        return res.status(error.response.status).send(error.response.data);
+      }
+    }
+
     gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
         const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
@@ -103,6 +120,19 @@ var status = {
 
         }else {
           return res.status(200).json({ message: getProfiled.data });
+    
+        }
+        const getProfiledByPhone = await getProfileByPhone(phone)
+        console.log("getProfiledByPhone",getProfiledByPhone.data)
+        if(getProfiledByPhone.data.status == 'success'){
+          console.log("getProfiledByPhone.data.data",getProfiledByPhone.data.data)
+
+          if(getProfiledByPhone.data.data.data[0]){
+              return res.status(200).json({ status: "Error" ,error: "Phone already exist" , code:status_code.CODE_ERROR.ALREADY_EXIST});
+            }
+
+        }else {
+          return res.status(200).json({ message: getProfiledByPhone.data });
     
         }
         // console.log("2222222222222222")
