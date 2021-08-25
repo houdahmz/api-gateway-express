@@ -26,10 +26,15 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
+      paths: /user-management/wallet/extrait
+      methods: ["GET"]
+      scopes: ['user']
+
+    - host: '*'
       paths: /user-management/user/profile
       methods: ["GET"]
       scopes: ['user']
-      
+
     - host: '*'
       paths: /user-management/user/:id
       methods: ["GET"]
