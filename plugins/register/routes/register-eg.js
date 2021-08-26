@@ -2136,7 +2136,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         const user = await services.user.findByUsernameOrId(userId)
         console.log("user", user)
 
-        console.debug('confirmation', user, req.query, token, username)
+        // console.debug('confirmation', user, req.query, token, username)
         if (user == false) { // username does not exist
           console.debug('wrong confirmation token')
           log4j.loggererror.error("Error wrong confirmation token")
