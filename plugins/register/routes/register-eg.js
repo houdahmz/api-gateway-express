@@ -2066,21 +2066,19 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
             console.debug('wrong confirmation token')
           log4j.loggererror.error("Error wrong confirmation token")
 
-            return res.status(200).json({ error: "wrong confirmation token" });
-
+          return res.status(403).json({ status:"Error",error: "wrong confirmation token" });
           } else {
             if (user.username != decoded.username) {
               console.debug('wrong confirmation token')
           log4j.loggererror.error("Error wrong confirmation token")
 
-              return res.status(200).json({ error: "wrong confirmation token" });
-
+          return res.status(403).json({status:"Error", error: "wrong confirmation token" });
             }
 
             if (password != password_confirmation) {
           log4j.loggererror.error("Error password does not much ")
 
-              return res.status(200).json({ error: "password does not much" });
+              return res.status(200).json({ status:"Error",error: "password does not much" });
             }
 
             console.log("ddd")
@@ -2090,7 +2088,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
           // res.status(403).send(error);
           log4j.loggererror.error("Error "+error.message)
 
-          return res.status(400).json({ error: error.message });
+          return res.status(400).json({ status:"Error",error: error.message });
 
         }
 
@@ -2147,36 +2145,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         let myCredBasicA = await services.credential.getCredential(user.id, 'basic-auth')
         console.log("myCredBasicssssssss", myCredBasicA)
 
-        let decoded;
-        try {
-          decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
-          console.log("decoded", decoded)
 
-          if (!decoded) {
-            console.debug('wrong confirmation token')
-          log4j.loggererror.error("Error wrong confirmation token")
-
-            return res.status(403).json({ status:"Error",error: "wrong confirmation token" });
-
-          } else {
-            if (user.username != decoded.username) {
-              console.debug('wrong confirmation token')
-          log4j.loggererror.error("Error wrong confirmation token")
-
-              return res.status(403).json({status:"Error", error: "wrong confirmation token" });
-
-            }
-
-            console.log("ddd")
-          }
-        } catch (error) {
-          console.log("error", error.message)
-          // res.status(403).send(error);
-          log4j.loggererror.error("Error "+error.message)
-
-          return res.status(400).json({ error: error.message });
-
-        }
 
 
 
@@ -2193,13 +2162,14 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
           let myCredBasic = await services.credential.removeCredential(user.id, 'basic-auth')
           myCredBasic = await services.credential.getCredential(user.id, 'basic-auth')
-  
+          console.log("myCredBasic",myCredBasic)
           const crd_basic = await services.credential.insertCredential(user.id, 'basic-auth', {
             autoGeneratePassword: false,
             password: new_password,
             scopes: []
           })
           log4j.loggerinfo.info("Success.");
+          console.log("crd_basic",crd_basic)
 
           return res.status(200).json({ status: "Success" ,message:"Password has been successfully changed"});
   
