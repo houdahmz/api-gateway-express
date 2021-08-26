@@ -224,9 +224,9 @@ if (data.data.data.Company){
       console.log("dataCategory.data",dataCategory.data)
       console.log("dataCategory status",dataCategory.status)
 
-        if(dataCategory.data.data.data){
-          console.log("********categoryId ************",dataCategory.data.data.data.items[0].id)
-          body.category_id = dataCategory.data.data.data.items[0].id
+        if(dataCategory.data.data){
+          console.log("********categoryId ************",dataCategory.data.data.items[0].id)
+          body.category_id = dataCategory.data.data.items[0].id
         }else {
           body.category_id = null
         
