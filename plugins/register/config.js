@@ -9,7 +9,7 @@ module.exports = {
         SERVER: 2005,
         INCONNU: 2006,
         USER_DESACTIVATE : 2007,
-        INCORRECT : 2008,
+        INCORRECT_PASSWORD : 2008,
 
 
 

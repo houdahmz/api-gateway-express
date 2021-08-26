@@ -1476,7 +1476,7 @@ console.log("**************************************************")
       if (!passBooleanTrue) {
           log4j.loggererror.error("Error Wrong password")
 
-        return res.status(200).json({ status:"Error",error: "Wrong password" ,code:status_code.CODE_ERROR.INCORRECT });
+        return res.status(200).json({ status:"Error",error: "Wrong password" ,code:status_code.CODE_ERROR.INCORRECT_PASSWORD });
 
       }
 
@@ -1510,7 +1510,7 @@ console.log("**************************************************")
           }
           log4j.loggererror.error("Error in getToken: "+error.response.data)
 
-          return res.status(error.response.status).send(error.response.data);
+          return res.status(error.response.status).send({status:"Error",error:error.response.data});
         }
       }
       // here should get the token and applique invoke before generating a new one
@@ -1523,7 +1523,7 @@ console.log("**************************************************")
         log4j.loggererror.error("Error :"+error.message)
 
         console.log("Error", error.message)
-        return res.status(500).send({"error":error.message});
+        return res.status(500).send({status:"Error","error":error.message});
 
       }
       /////////////////////////////Get user info by username //////////////////////////////////
@@ -1569,11 +1569,11 @@ const getProfile = async (id) => {
   } catch (error) {
     if(!error.response){
       log4j.loggererror.error(error.message)
-      return res.status(500).send({"error":error.message});
+      return res.status(500).send({status:"Error","error":error.message});
     }
     log4j.loggererror.error("Error in getting profile: "+error.response.data)
 
-    return res.status(error.response.status).send(error.response.data);
+    return res.status(error.response.status).send({status:"Error",error:error.response.data});
   }
 }
 ///////////
@@ -1589,7 +1589,7 @@ const getCategoryFromWalletWithCode = async (code) => {
     }
     log4j.loggererror.error("Error in getting getcategory: "+error.response.data)
 
-    return res.status(error.response.status).send(error.response.data);
+    return res.status(error.response.status).send({status:"Error",error:error.response.data});
   }
 }
 ///////////
@@ -1704,7 +1704,7 @@ try {
   }
   log4j.loggererror.error("Error in getting profile: "+error.response.data)
 
-  return res.status(error.response.status).send(error.response.data);
+  return res.status(error.response.status).send({status:"Error",error:error.response.data});
 
 }
 /********************************************************************************************** */
@@ -1737,7 +1737,7 @@ if(data.data.data.Company.Category){
     }
     log4j.loggererror.error("Error in getting profile: "+error.response.data)
 
-    return res.status(error.response.status).send(error.response.data);
+    return res.status(error.response.status).send({status:"Error",error:error.response.data});
 
   }
 }
