@@ -310,6 +310,10 @@ apiEndpoints:
   
   open:
     - host: '*'
+      paths: /user-management/documents
+      methods: ["GET"]
+
+    - host: '*'
       paths: /home/contact
       methods: ["GET"]
 
