@@ -317,7 +317,7 @@ var status = {
 
         const change_password_uri = `${url}/change-password`;
 
-        mail.send_email("Change password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " ) \n "+ confirm_uri,req.body.email);
+        mail.send_email("Change password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " ) \n "+ change_password_uri,req.body.email);
 
         console.log("confirm_uri", confirm_uri)
         console.log("change_password_uri", change_password_uri)
