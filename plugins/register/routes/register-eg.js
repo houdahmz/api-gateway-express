@@ -295,7 +295,7 @@ var status = {
         }, myUser.id)
 
         console.log("email", username)
-        console.log("password", password)
+        console.log("password", randomPassword)
         console.log("crd_oauth2.id", crd_oauth2.id)
         console.log("crd_oauth2.secret", crd_oauth2.secret)
 
