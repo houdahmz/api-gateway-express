@@ -227,13 +227,17 @@ if (data.data.data.Company){
         if(dataCategory.data.data){
           console.log("********categoryId ************",dataCategory.data.data.items[0].id)
           body.category_id = dataCategory.data.data.items[0].id
+          body.categoryId = dataCategory.data.data.items[0].id
+
         }else {
           body.category_id = null
+  body.categoryId = null
         
         }
         
 }else {
   body.categoryId = null
+  body.category_id = null
 
 }
 
