@@ -1857,7 +1857,7 @@ if (token) {
 
 
         if(dataCategory.data.data){
-          return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0]});
+          return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0].id});
         
         }
       }
