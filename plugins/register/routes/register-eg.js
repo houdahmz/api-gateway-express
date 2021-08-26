@@ -1054,6 +1054,51 @@ console.log("myUser.id",myUser.id)
       }
     });
 
+
+    async function verifyToken(req, res, next) {
+
+      const bearerHeader = req.headers['authorization'];
+
+      if (bearerHeader) {
+
+        try {
+          let token = (req.headers.authorization).replace("Bearer ", "");
+          let decoded;
+          try {
+            decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
+            console.log("decode", decoded)
+            let body = req.body
+            
+            body.userId =  decoded.consumerId
+            
+
+            body.created_by = decoded.consumerId
+            body.deleted_by = decoded.consumerId
+            body.updated_by = decoded.consumerId
+            
+            body.createdBy = decoded.consumerId
+            body.deletedBy = decoded.consumerId
+            body.updatedBy = decoded.consumerId
+            next()
+          } catch (error) {
+            console.log("error", error)
+            res.status(403).send(error);
+          }
+
+        }
+        catch (error) {
+          let errorObject = { message: 'Unauthorized Token.', reason: error.name }
+          console.log(errorObject);
+          res.status(403).send(errorObject);
+        }
+
+      } else {
+        // Forbidden
+        res.sendStatus(403)
+      }
+
+
+    }
     async function verifyTokenUser(req, res, next) {
       let body = req.body
 
@@ -1429,6 +1474,8 @@ console.log("**************************************************")
 
 
     }
+
+    
 
     gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
       console.log("*********************************", req.body)
@@ -1848,7 +1895,6 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
       return res.status(200).json(test);
 
     });
-
     gatewayExpressApp.post('/api/refreshToken', async (req, res, next) => { // still incomplete
       const { client_id, refresh_token } = req.body
 
@@ -2077,6 +2123,99 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
     });
 
+    gatewayExpressApp.post('/change-password',verifyToken, async (req, res, done) => {
+
+      try {
+        console.log("/change-password")
+        console.log("req.body", req.body)
+
+        const { old_password, new_password ,userId} = req.body
+        console.log("old_password", old_password)
+        console.log("new_password", new_password)
+
+        const user = await services.user.findByUsernameOrId(userId)
+        console.log("user", user)
+
+        console.debug('confirmation', user, req.query, token, username)
+        if (user == false) { // username does not exist
+          console.debug('wrong confirmation token')
+          log4j.loggererror.error("Error wrong confirmation token")
+
+          return res.status(200).json({status:"Error", error: "wrong confirmation token",code:status_code.CODE_ERROR.NOT_EXIST });
+        }
+
+        let myCredBasicA = await services.credential.getCredential(user.id, 'basic-auth')
+        console.log("myCredBasicssssssss", myCredBasicA)
+
+        let decoded;
+        try {
+          decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
+          console.log("decoded", decoded)
+
+          if (!decoded) {
+            console.debug('wrong confirmation token')
+          log4j.loggererror.error("Error wrong confirmation token")
+
+            return res.status(403).json({ status:"Error",error: "wrong confirmation token" });
+
+          } else {
+            if (user.username != decoded.username) {
+              console.debug('wrong confirmation token')
+          log4j.loggererror.error("Error wrong confirmation token")
+
+              return res.status(403).json({status:"Error", error: "wrong confirmation token" });
+
+            }
+
+            console.log("ddd")
+          }
+        } catch (error) {
+          console.log("error", error.message)
+          // res.status(403).send(error);
+          log4j.loggererror.error("Error "+error.message)
+
+          return res.status(400).json({ error: error.message });
+
+        }
+
+
+
+        let myCredBasic = await services.credential.getCredential(user.id, 'basic-auth')
+        console.log("myCredBasic", myCredBasic)
+
+        const passBooleanTrue = await utils.compareSaltAndHashed(old_password, myCredBasic.password)
+        if (!passBooleanTrue) {
+          log4j.loggererror.error("Error wrong password ")
+
+          return res.status(200).json({ status:"Error", error: "wrong password" ,code:status_code.CODE_ERROR.INCORRECT_PASSWORD});
+        }
+        else {
+
+          let myCredBasic = await services.credential.removeCredential(user.id, 'basic-auth')
+          myCredBasic = await services.credential.getCredential(user.id, 'basic-auth')
+  
+          const crd_basic = await services.credential.insertCredential(user.id, 'basic-auth', {
+            autoGeneratePassword: false,
+            password: new_password,
+            scopes: []
+          })
+          log4j.loggerinfo.info("Success.");
+
+          return res.status(200).json({ status: "Success" ,message:"Password has been successfully changed"});
+  
+
+        }
+
+
+
+      } catch (err) {
+        log4j.loggererror.error("Error: "+err.message)
+
+        return res.status(422).json({ error: err.message })
+      }
+
+    });
+
     gatewayExpressApp.post('/api/test_password', async (req, res, done) => { // still 
 
       const validateConsumer = await authService.validateConsumer(req.body.consumerId);
@@ -2107,7 +2246,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
     });
 
-    gatewayExpressApp.get('/stats', async (req, res, next) => { // still incomplete
+    gatewayExpressApp.get('/stats',verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // still incomplete
 
 
         try {
@@ -2470,7 +2609,7 @@ console.log("amountPaymee.data",amountPaymee.data)
 
   });
 
-  gatewayExpressApp.get('/stock_wallet', async (req, res, next) => { // still incomplete
+  gatewayExpressApp.get('/stock_wallet', verifyTokenSuperAdminOrAdmin ,async (req, res, next) => { // still incomplete
 
 
     try {
