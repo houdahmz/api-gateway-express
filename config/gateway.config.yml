@@ -247,7 +247,7 @@ apiEndpoints:
     - host: '*'
       paths: /voucher/transactionByAdmin/:id
       methods: ["PUT"]
-      scopes: ['user']
+      scopes: ['admin']
 
     # - host: '*'
     #   paths: /voucher/document*
