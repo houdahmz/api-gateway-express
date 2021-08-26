@@ -96,19 +96,19 @@ var status = {
 
     gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
-        const { firstname, username, lastname, email, phone, password, password_confirmation } = req.body
+        const { firstname, username, lastname, email, phone,  } = req.body
         const {image , patent,photo, cin,commercial_register, city, zip_code, adresse, activity, updated_by, id_commercial } = req.body
 
-        // Validate against a password string
-        if (validation.validatePassword(password) == false) {
-          log4j.loggererror.error("Unkown error.")
-          return res.status(400).json({status:"Error",error: "password is not the correct format"});
-        }
-        if (password != password_confirmation) {
-          log4j.loggererror.error("Unkown error.")
-          return res.status(400).json({status:"Error",error: "password does not much"});
+        // // Validate against a password string
+        // if (validation.validatePassword(password) == false) {
+        //   log4j.loggererror.error("Unkown error.")
+        //   return res.status(400).json({status:"Error",error: "password is not the correct format"});
+        // }
+        // if (password != password_confirmation) {
+        //   log4j.loggererror.error("Unkown error.")
+        //   return res.status(400).json({status:"Error",error: "password does not much"});
 
-        }
+        // }
         const getProfiled = await getProfileByEmail(email)
         console.log("getProfile",getProfiled.data)
         if(getProfiled.data.status == 'success'){
@@ -147,7 +147,10 @@ var status = {
 
         // console.log("testttttttttttttttttttt",test)
 
-        const myUserJwt = await jwt.sign({ username: username, password: password }, `${env.JWT_SECRET}`, {
+        var randomPassword = Math.random().toString(36).slice(-8);
+        console.log("randomPassword", randomPassword)
+
+        const myUserJwt = await jwt.sign({ username: username, password: randomPassword }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
           audience: 'something',
           expiresIn: 180000,
@@ -243,9 +246,10 @@ var status = {
         }
 
 
+
         crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
           autoGeneratePassword: false,
-          password: password,
+          password: randomPassword,
           scopes: []
         })
         console.log("crd_basiiiiiiiiiiic", crd_basic)
@@ -310,7 +314,13 @@ var status = {
         //here je vais envoyer un mail
         const confirm_uri = `${url}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
         mail.send_email("Confirmation", "Veuillez cliquer sur lien pour confirmer votre mail \n " + confirm_uri,req.body.email);
+
+        const change_password_uri = `${url}/change-password`;
+
+        mail.send_email("Change password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " ) \n "+ confirm_uri,req.body.email);
+
         console.log("confirm_uri", confirm_uri)
+        console.log("change_password_uri", change_password_uri)
   
         // mail.send_email("confirmation", "Veuillez cliquer sur lien pour completer votre compte \n " + confirm_uri,req.body.email);
             // mail.sendMailConfirm("imen.hassine96@gmail.com",myUserJwt);
