@@ -1445,7 +1445,7 @@ console.log("**************************************************")
       if (myUser == false) {
         log4j.loggerinfo.info("Error username does not exist.");
 
-        return res.status(200).json({ error: "username does not exist" });
+        return res.status(200).json({ status:"Error",error: "username does not exist",code:status_code.CODE_ERROR.NOT_EXIST });
 
       }
       else if (myUser.confirmMail == 'false') {
@@ -1464,7 +1464,7 @@ console.log("**************************************************")
       else if (myUser.isActive == false) {
         log4j.loggerinfo.info("Error user is desactivated. please wait for the administrator's agreement ");
 
-        return res.status(200).json({ error: "user is desactivated. please wait for the administrator's agreement " });
+        return res.status(200).json({status:"Error", error: "user is desactivated. please wait for the administrator's agreement ",code:status_code.CODE_ERROR.USER_DESACTIVATE });
 
       } 
 
@@ -1476,7 +1476,7 @@ console.log("**************************************************")
       if (!passBooleanTrue) {
           log4j.loggererror.error("Error Wrong password")
 
-        return res.status(200).json({ error: "Wrong password" });
+        return res.status(200).json({ status:"Error",error: "Wrong password" ,code:status_code.CODE_ERROR.INCORRECT });
 
       }
 

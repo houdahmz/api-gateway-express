@@ -8,11 +8,15 @@ module.exports = {
         REQUIRED: 2004,
         SERVER: 2005,
         INCONNU: 2006,
+        USER_DESACTIVATE : 2007,
+        INCORRECT : 2008,
+
+
 
     }
     ,
-    PASSWORD_ERROR : {
-        LENGTH : 00,
+    USER : {
+        DESACTIVATE : 2007,
         NOT_EXIST : 01,
         TYPE : 02,
         ALREADY_EXIST : 03,
