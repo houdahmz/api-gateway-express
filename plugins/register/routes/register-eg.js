@@ -1853,11 +1853,10 @@ if (token) {
         console.log("dataCategory.data",dataCategory.data)
         console.log("dataCategory.data.data",dataCategory.data.data)
 
-        console.log("dataCategory.data.data.data",dataCategory.data.data.data)
 
 
         if(dataCategory.data.data.data){
-          return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: dataCategory.data.data.data.items[0]});
+          return res.status(token.status).json({ token: token.data, role: scope ,user: userJson ,profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0]});
         
         }
       }
