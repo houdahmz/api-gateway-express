@@ -86,11 +86,6 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
-      paths: /user-management/activity
-      methods: ["GET"]
-      scopes: ['user',"admin","visitor"]
-
-    - host: '*'
       paths: /user-management/activity/:id
       methods: ["GET"]
       scopes: ['user',"admin"]
@@ -309,6 +304,11 @@ apiEndpoints:
       scopes: ['admin']
   
   open:
+
+    - host: '*'
+      paths: /user-management/activity
+      methods: ["GET"]
+      
     - host: '*'
       paths: /user-management/documents
       methods: ["GET"]
