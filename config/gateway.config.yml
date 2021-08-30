@@ -31,7 +31,7 @@ apiEndpoints:
       scopes: ['user']
 
     - host: '*'
-      paths: /user-management/wallet/history/pdf
+      paths: /wallet/history/pdf
       methods: ["GET"]
       scopes: ['user']
 
