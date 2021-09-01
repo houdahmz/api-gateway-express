@@ -18,13 +18,20 @@ apiEndpoints:
     - host: '*'
       paths: /topup/serialeport*
       methods: ["POST","PATCH","GET","PUT"]
-      scopes: ['admin']   
+      scopes: ['admin']
+      
+
   profile:
     - host: '*'
       paths: /admin/company*
       methods: ["POST","PATCH"]
       scopes: ['admin']
 
+    - host: '*'
+      paths: /admin/statsmobile
+      methods: ["GET"]
+      scopes: ['user']
+      
     - host: '*'
       paths: /user-management/wallet/extrait
       methods: ["GET"]
