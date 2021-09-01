@@ -31,9 +31,14 @@ apiEndpoints:
       paths: /admin/statsmobile
       methods: ["GET"]
       scopes: ['user']
-      
+
     - host: '*'
       paths: /user-management/wallet/extrait
+      methods: ["GET"]
+      scopes: ['user']
+
+    - host: '*'
+      paths: /user-management/wallet/extrait/pdf
       methods: ["GET"]
       scopes: ['user']
 
