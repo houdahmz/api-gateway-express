@@ -841,6 +841,10 @@ apiEndpoints:
       scopes: ['admin']   
     - host: '*'
       paths: /wallet/:id
+      methods: ["PUT","PATCH","DELETE"]
+      scopes: ['admin']  
+    - host: '*'
+      paths: /wallet/:id
       methods: ["GET"]
       scopes: ['admin','user']    
     - host: '*'
