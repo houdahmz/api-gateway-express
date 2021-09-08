@@ -3,8 +3,8 @@ var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: 'khalaslipaypos@gmail.com',
-      pass: 'khalasli26260534'
+      user: 'imene.hassine@khallasli.com',
+      pass: '123456789'
     }
   });
 01
@@ -16,7 +16,7 @@ transporter.verify((error) => {
 });
   exports.send_email = function send_email (subject , text,mail){
     var mailOptions = {
-        from: 'khalaslipaypos@gmail.com',
+        from: 'imene.hassine@khallasli.com',
         to: mail,
         subject:subject,
         text: text
