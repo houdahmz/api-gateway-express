@@ -23,6 +23,45 @@ transporter.verify((error) => {
   }
 });
 
+exports.sendMail = async (object,text,url,toEmail,username) => {
+  console.log("toEmail",toEmail)
+  console.log("emailConfig.username",emailConfig.username)
+  console.log("emailConfig.password",emailConfig.password)
+  console.log("url",url)
+
+
+
+  const email = new Email({
+    views: { root: __dirname },
+    message: {
+      from: 'support@your-app.com',
+    },
+    // uncomment below to send emails in development/test env:
+    send: true,
+    transport: transporter,
+  });
+
+  email
+    .send({
+      template: 'sendMail',
+      message: {
+        to: toEmail,
+
+      },
+      locals: {
+        productName: 'Khallasli',
+        // passwordResetUrl should be a URL to your app that displays a view where they
+        // can enter a new password along with passing the confirmToken in the params
+        object: object,
+        username: username,
+
+        text: text,
+        url: url,
+      },
+    })
+    .catch((error) => console.log('error sending email' , error));
+};
+
 exports.sendMailConfirm = async (toEmail,confirmToken) => {
   console.log("toEmail",toEmail)
   console.log("confirmToken",confirmToken)
@@ -79,7 +118,7 @@ exports.sendPasswordReset = async (toEmail,confirmToken) => {
 
       },
       locals: {
-        productName: 'Kato',
+        productName: 'Khallasli',
         // passwordResetUrl should be a URL to your app that displays a view where they
         // can enter a new password along with passing the confirmToken in the params
         passwordResetUrl: `${emailConfig.baseURL}/#/reset-pwd/?token=${confirmToken}`,
@@ -88,7 +127,7 @@ exports.sendPasswordReset = async (toEmail,confirmToken) => {
     .catch((err) => console.log('error sending password reset email '+err));
 };
 
-exports.sendPasswordChangeEmail = async (user) => {
+exports.sendPasswordChange = async (object,text,url,toEmail) => {
   const email = new Email({
     views: { root: __dirname },
     message: {
@@ -103,12 +142,42 @@ exports.sendPasswordChangeEmail = async (user) => {
     .send({
       template: 'passwordChange',
       message: {
-        to: user.email,
+        to: toEmail,
       },
       locals: {
-        productName: 'Kato',
-        name: user.name,
-      },
+        // productName: 'khallasli',
+        object: object,
+        text: text,
+        url: url,      },
     })
     .catch(() => console.log('error sending change password email'));
+};
+
+exports.sendChangePassword = async (object,text,url,toEmail,username,randomPassword) => {
+  const email = new Email({
+    views: { root: __dirname },
+    message: {
+      from: 'support@your-app.com',
+    },
+    // uncomment below to send emails in development/test env:
+    send: true,
+    transport: transporter,
+  });
+
+  email
+    .send({
+      template: 'Changepswd',
+      message: {
+        to: toEmail,
+      },
+      locals: {
+        productName: 'khallasli',
+        object: object,
+        text: text,
+        url: url,     
+        username: username,      
+        randomPassword: randomPassword,      
+      },
+    })
+    .catch((error) => console.log('error sending change password email',error));
 };
