@@ -2,7 +2,9 @@ const services = require('express-gateway/lib/services/')
 const utils = require('express-gateway/lib/services/utils')
 const superagent = require('superagent');
 const axios = require('axios');
-// const mail = require("../../../services/emails/emailProvider");
+const mail = require("../../../services/emails/emailProvider");
+const mailSimple = require("./mailer.config.js")
+
 const { user } = require('express-gateway/lib/services/');
 const CircularJSON = require('circular-json');
 
@@ -36,7 +38,6 @@ const jsonParser = require('express').json();
 const urlEncodedParser = require("express").urlencoded({ extended: true });
 const { PassThrough } = require("stream");
 
-const mail = require("./mailer.config.js")
 
 const status_code = require("../config")
 
@@ -109,6 +110,7 @@ var status = {
         //   return res.status(400).json({status:"Error",error: "password does not much"});
 
         // }
+
         const getProfiled = await getProfileByEmail(email)
         console.log("getProfile",getProfiled.data)
         if(getProfiled.data.status == 'success'){
@@ -135,6 +137,7 @@ var status = {
           return res.status(200).json({ message: getProfiledByPhone.data });
     
         }
+
         // console.log("2222222222222222")
 
         // let teeeest = await services.user.findAll()
@@ -197,7 +200,7 @@ var status = {
         console.log("myUser", myUser)
 
         const dataType = await getType("10");
-        console.log("dataType", dataType)
+        // console.log("dataType", dataType)
         if (!dataType.data.data) {
           log4j.loggererror.error("Error Problem in server ")
           return res.status(500).json({"Error": "Problem in server"});
@@ -282,7 +285,7 @@ var status = {
         }
         
 
-        console.log("aaaa", userProfile)
+        // console.log("aaaa", userProfile)
         if (userProfile.data.status == "error") {
           // services.user.remove()
           log4j.loggererror.error("Error in adding profile: "+userProfile.data)
@@ -317,18 +320,18 @@ var status = {
 
         //here je vais envoyer un mail
         const confirm_uri = `${url}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
-        mail.send_email("Confirmation", "Veuillez cliquer sur lien pour confirmer votre mail \n " + confirm_uri,req.body.email);
+        mail.sendMail("Confirmation", "Veuillez cliquer sur lien pour confirmer votre mail \n " , confirm_uri,req.body.email,username);
 
         const change_password_uri = `${url}/change-password`;
 
-        mail.send_email("Change password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " ) \n "+ change_password_uri,req.body.email);
+        mail.sendChangePassword("Change password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " ) \n ",change_password_uri,req.body.email,username,randomPassword);
 
         console.log("confirm_uri", confirm_uri)
         console.log("change_password_uri", change_password_uri)
   
         // mail.send_email("confirmation", "Veuillez cliquer sur lien pour completer votre compte \n " + confirm_uri,req.body.email);
             // mail.sendMailConfirm("imen.hassine96@gmail.com",myUserJwt);
-//console.log("mail",mail)
+        //console.log("mail",mail)
         log4j.loggerinfo.info("Success, mail has been sent to : "+email);
         return res.status(201).json({ etat: "Success", message: "Check your email : " + email });
       } catch (err) {
@@ -626,7 +629,7 @@ console.log("req.headers.authorization",req.headers.authorization)
           return res.status(200).json(userProfile.data);
         }
 
-        mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " )",req.body.email);
+        mailSimple.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " )",req.body.email);
 
         return res.status(201).json({ etat: "Success", message: "We have sent an email to " + agentUser.email + " to set a new password" });
 
@@ -942,7 +945,7 @@ console.log("myUser.id",myUser.id)
   }
   ////////////////////////////////////
     myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
-        mail.send_email("confirmation", "Votre compte a été approuvé par l'admin \n ",myUser.email);
+    mailSimple.send_email("confirmation", "Votre compte a été approuvé par l'admin \n ",myUser.email);
   
     return res.status(200).json({ status :"success", message: "The visitor has been accepted" ,role :myCredOauth.scopes });
   }
@@ -997,7 +1000,7 @@ console.log("myUser.id",myUser.id)
       
         }
         /////////////
-        console.log("aaaaaaaaaa dataType",dataType)
+        // console.log("aaaaaaaaaa dataType",dataType)
 
         const createAgentProfile = async (agentUser) => {
 
@@ -1055,7 +1058,7 @@ console.log("myUser.id",myUser.id)
         console.log("crd_oauth2.id", crd_oauth2.id)
         console.log("crd_oauth2.secret", crd_oauth2.secret)
 
-        mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " )",req.body.email);
+        mailSimple.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " )",req.body.email);
         log4j.loggerinfo.info("Admin has been successfuly created, we have sent an email to " + email + " to set a new password");
 
         return res.status(201).json({ etat: "Success", message: "Admin has been successfuly created, we have sent an email to " + email + " to set a new password" });
@@ -2023,7 +2026,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         console.log("confirm_uri", confirm_uri)
         //here je vais envoyer un mail
   
-        mail.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures",user.email);
+        mailSimple.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures",user.email);
         log4j.loggerinfo.info("Success check your email : " + user.email);
   
         return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email +" for username "+username });
