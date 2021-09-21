@@ -2622,20 +2622,31 @@ console.log("amountPaymee.data",amountPaymee.data)
 
             //////////////////////////voucher///////////////////////
                  
-                 log4j.loggerinfo.info("Call voucher get stock voucher: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher`);
-                 const stockVoucher =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher`,{
+                 log4j.loggerinfo.info("Call voucher get stock voucher: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`);
+                 const stockVoucher =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`,{
                   params:{
-                    status: "1100",
-                    dayB: req.query.dayB
+                    // status: "1100",
+                    // dayB: req.query.dayB
                   }    })
                 // console.log("amountPaymee",amountPaymee)
+
                 console.log("amountWallet.data",stockVoucher.data)
                       if(!stockVoucher){
                        return res.status("500").json("Error: Call wallet get solde all");
                       }
                       var stockTotalVoucher = 0
                       if(stockVoucher.data.status =='success'){
-                        stockTotalVoucher = stockVoucher.data.data.totalPages
+
+                        for (let index = 0; index < stockVoucher.data.data.length; index++) {
+                          const element = array[index];
+                          for (let j = 0; j < element.facial.length; j++) {
+                            const elt = array[j];
+                          stockTotalVoucher = elt.countAll+stockTotalVoucher
+                            
+                          }
+                        }
+
+                        // stockTotalVoucher = stockVoucher.data.data.totalPages
                       }
                       console.log("stockTotalVoucher",stockTotalVoucher)  
 
