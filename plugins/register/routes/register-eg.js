@@ -2638,9 +2638,9 @@ console.log("amountPaymee.data",amountPaymee.data)
                       if(stockVoucher.data.status =='success'){
 
                         for (let index = 0; index < stockVoucher.data.data.length; index++) {
-                          const element = array[index];
+                          const element = stockVoucher.data.data[index];
                           for (let j = 0; j < element.facial.length; j++) {
-                            const elt = array[j];
+                            const elt = element.facial[j];
                           stockTotalVoucher = elt.countAll+stockTotalVoucher
                             
                           }
