@@ -2148,7 +2148,14 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         const { old_password, new_password ,userId} = req.body
         console.log("old_password", old_password)
         console.log("new_password", new_password)
+      if(!old_password){
+        return res.status(400).json({ status: "Error" ,error: "old_password is required" , code:status_code.CODE_ERROR.REQUIRED});
 
+      }
+            if(!new_password){
+        return res.status(400).json({ status: "Error" ,error: "new_password is required" , code:status_code.CODE_ERROR.REQUIRED});
+
+      }
         const user = await services.user.findByUsernameOrId(userId)
         console.log("user", user)
 
