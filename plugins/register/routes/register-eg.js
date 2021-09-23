@@ -1974,17 +1974,18 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
       console.log("getProfile",getProfiled.data)
       console.log("********************************************************************************")
 
-      if(getProfiled.data.status == 'success'){
+      // if(getProfiled.data.status == 'success'){
 
-                if(!getProfiled.data.data.data[0]){
+      //           if(!getProfiled.data.data.data[0]){
 
 
-                     return res.status(200).json({ status: "Error" ,error: "User with this email does not exist" , code:status_code.CODE_ERROR.NOT_EXIST});
+      //                return res.status(200).json({ status: "Error" ,error: "User with this email does not exist" , code:status_code.CODE_ERROR.NOT_EXIST});
 
-                }
+      //           }
 
-        /*********************************** */
-        const username = getProfiled.data.data.data[0].username
+      //   /*********************************** */
+      //   const username = getProfiled.data.data.data[0].username
+      const username = req.body.username
       console.log("********************************************************************************")
         console.log("username",username)
       console.log("********************************************************************************")
@@ -2031,13 +2032,13 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
   
         return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email +" for username "+username });
         /*********************************** */
-      } else {
+      // } else {
 
 
 
 
 
-        return res.status(200).json({etat: "Error", message: getProfiled.data, code:status_code.CODE_ERROR.INCONNU });
+      //   return res.status(200).json({etat: "Error", message: getProfiled.data, code:status_code.CODE_ERROR.INCONNU });
 
 
 
@@ -2046,7 +2047,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
 
 
-      }
+      // }
 
 
 
