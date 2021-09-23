@@ -2668,4 +2668,78 @@ console.log("amountPaymee.data",amountPaymee.data)
 }
 
 });
+
+gatewayExpressApp.get('/registre', verifyTokenSuperAdminOrAdmin ,async (req, res, next) => { // still incomplete
+
+
+  try {
+
+              //////////////////////////Wallet///////////////////////
+
+              log4j.loggerinfo.info("Call wallet get solde all: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`);
+              const amountWallet =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`,{
+               params:{
+                 yearB: req.query.yearB,
+                 dayB: req.query.dayB
+               }    })
+             // console.log("amountPaymee",amountPaymee)
+             console.log("amountWallet.data",amountWallet.data)
+                   if(!amountWallet.data){
+                    return res.status("500").json("Error: Call wallet get solde all");
+                   }
+                   var amountTotalWallet = 0
+                   if(amountWallet.data.status =='success'){
+                    amountTotalWallet = amountWallet.data.data
+                   }
+                   console.log("amountTotalWallet",amountTotalWallet)
+
+          //////////////////////////voucher///////////////////////
+               
+               log4j.loggerinfo.info("Call voucher get stock voucher: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`);
+               const stockVoucher =  await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`,{
+                params:{
+                  // status: "1100",
+                  // dayB: req.query.dayB
+                }    })
+              // console.log("amountPaymee",amountPaymee)
+
+              console.log("amountWallet.data",stockVoucher.data)
+                    if(!stockVoucher){
+                     return res.status("500").json("Error: Call wallet get solde all");
+                    }
+                    var stockTotalVoucher = 0
+                    if(stockVoucher.data.status =='success'){
+
+                      for (let index = 0; index < stockVoucher.data.data.length; index++) {
+                        const element = stockVoucher.data.data[index];
+                        for (let j = 0; j < element.facial.length; j++) {
+                          const elt = element.facial[j];
+                        stockTotalVoucher = elt.countAll+stockTotalVoucher
+                          
+                        }
+                      }
+
+                      // stockTotalVoucher = stockVoucher.data.data.totalPages
+                    }
+                    console.log("stockTotalVoucher",stockTotalVoucher)  
+
+                    const responseST_W={
+                      "totale_wallet": amountTotalWallet ,
+                      "stock": stockTotalVoucher
+                    }
+
+                    return res.status(200).send(responseST_W);
+
+
+                  } catch (error) {
+                  if(!error.response){
+                    log4j.loggererror.error(error.message)
+                    return res.status(500).send({"error":error.message});
+                  }
+                  log4j.loggererror.error("Error: ")
+                  return res.status(error.response.status).send(error.response.data);
+                  }
+
+});
+
   };
