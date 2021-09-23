@@ -1969,9 +1969,9 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
          /////////////////////////////
 
-      const getProfiled = await getProfile(email)
-      console.log("********************************************************************************")
-      console.log("getProfile",getProfiled.data)
+      // const getProfiled = await getProfile(email)
+      // console.log("********************************************************************************")
+      // console.log("getProfile",getProfiled.data)
       console.log("********************************************************************************")
 
       // if(getProfiled.data.status == 'success'){
