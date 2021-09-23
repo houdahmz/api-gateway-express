@@ -311,7 +311,7 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
-      paths: '/topUpKh/transaction/by_user/:id'
+      paths: '/topUpKh/transaction/by_user'
       methods: ["GET"]
       scopes: ['user']
 
