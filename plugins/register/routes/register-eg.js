@@ -1946,11 +1946,11 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
     gatewayExpressApp.post('/forgot-password', async (req, res, next) => { //get email from user change to email
 
-      // const email = req.body.email
-      // if(!email){
-      //   return res.status(400).json({ status: "Error" ,error: "email is required" , code:status_code.CODE_ERROR.REQUIRED});
+      const email = req.body.email
+      if(!email){
+        return res.status(400).json({ status: "Error" ,error: "email is required" , code:status_code.CODE_ERROR.REQUIRED});
 
-      // }
+      }
       const getProfile = async (myUser) => {
         try {
       log4j.loggerinfo.info("Call postProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
@@ -1969,23 +1969,22 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
          /////////////////////////////
 
-      // const getProfiled = await getProfile(email)
-      // console.log("********************************************************************************")
-      // console.log("getProfile",getProfiled.data)
+      const getProfiled = await getProfile(email)
+      console.log("********************************************************************************")
+      console.log("getProfile",getProfiled.data)
       console.log("********************************************************************************")
 
-      // if(getProfiled.data.status == 'success'){
+      if(getProfiled.data.status == 'success'){
 
-      //           if(!getProfiled.data.data.data[0]){
+                if(!getProfiled.data.data.data[0]){
 
 
-      //                return res.status(200).json({ status: "Error" ,error: "User with this email does not exist" , code:status_code.CODE_ERROR.NOT_EXIST});
+                     return res.status(200).json({ status: "Error" ,error: "User with this email does not exist" , code:status_code.CODE_ERROR.NOT_EXIST});
 
-      //           }
+                }
 
-      //   /*********************************** */
-      //   const username = getProfiled.data.data.data[0].username
-      const username = req.body.username
+        /*********************************** */
+        const username = getProfiled.data.data.data[0].username
       console.log("********************************************************************************")
         console.log("username",username)
       console.log("********************************************************************************")
@@ -2032,13 +2031,13 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
   
         return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email +" for username "+username });
         /*********************************** */
-      // } else {
+      } else {
 
 
 
 
 
-      //   return res.status(200).json({etat: "Error", message: getProfiled.data, code:status_code.CODE_ERROR.INCONNU });
+        return res.status(200).json({etat: "Error", message: getProfiled.data, code:status_code.CODE_ERROR.INCONNU });
 
 
 
@@ -2047,7 +2046,7 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
 
 
-      // }
+      }
 
 
 
@@ -2148,14 +2147,14 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
         const { old_password, new_password ,userId} = req.body
         console.log("old_password", old_password)
         console.log("new_password", new_password)
-      if(!old_password){
-        return res.status(400).json({ status: "Error" ,error: "old_password is required" , code:status_code.CODE_ERROR.REQUIRED});
-
-      }
-            if(!new_password){
-        return res.status(400).json({ status: "Error" ,error: "new_password is required" , code:status_code.CODE_ERROR.REQUIRED});
-
-      }
+        if(!old_password){
+          return res.status(400).json({ status: "Error" ,error: "old_password is required" , code:status_code.CODE_ERROR.REQUIRED});
+  
+        }
+              if(!new_password){
+          return res.status(400).json({ status: "Error" ,error: "new_password is required" , code:status_code.CODE_ERROR.REQUIRED});
+  
+        }
         const user = await services.user.findByUsernameOrId(userId)
         console.log("user", user)
 
