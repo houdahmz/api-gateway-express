@@ -411,10 +411,6 @@ apiEndpoints:
       methods: ["GET"]
 
   home:
-    - host: '*'
-      paths: /home/contact*
-      methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
 
     - host: '*'
       paths: /home/contact_user
@@ -426,6 +422,11 @@ apiEndpoints:
       methods: ["GET","DELETE","PUT","PATCH"]
       scopes: ['admin']
 
+    - host: '*'
+      paths: /home/contact*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+      
     - host: '*'
       paths: /home/block*
       methods: ["POST","DELETE","PUT","PATCH"]
