@@ -1946,11 +1946,11 @@ return res.status(token.status).json({token: token.data, role: scope ,user: myUs
 
     gatewayExpressApp.post('/forgot-password', async (req, res, next) => { //get email from user change to email
 
-      const email = req.body.email
-      if(!email){
-        return res.status(400).json({ status: "Error" ,error: "email is required" , code:status_code.CODE_ERROR.REQUIRED});
+      // const email = req.body.email
+      // if(!email){
+      //   return res.status(400).json({ status: "Error" ,error: "email is required" , code:status_code.CODE_ERROR.REQUIRED});
 
-      }
+      // }
       const getProfile = async (myUser) => {
         try {
       log4j.loggerinfo.info("Call postProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
