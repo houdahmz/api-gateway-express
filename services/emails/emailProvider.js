@@ -101,9 +101,11 @@ exports.sendMailAdminConfirmation = async (object,url,toEmail,firstname ,lastnam
     .catch((error) => console.log('error sending password reset email' , error));
 };
 
-exports.sendPasswordReset = async (toEmail,confirmToken) => {
+exports.sendPasswordReset = async (object,url,toEmail,firstname ,lastname) => {
   console.log("toEmail",toEmail)
-  console.log("confirmToken",confirmToken)
+  console.log("url",url)
+
+  // console.log("confirmToken",confirmToken)
 
   const email = new Email({
     views: { root: __dirname },
@@ -114,7 +116,7 @@ exports.sendPasswordReset = async (toEmail,confirmToken) => {
     send: true,
     transport: transporter,
   });
-  console.log("email",`${emailConfig.baseURL}/#/reset-pwd/?token=${confirmToken}`)
+  // console.log("email",`${emailConfig.baseURL}/#/reset-pwd/?token=${confirmToken}`)
   email
     .send({
       template: 'passwordReset',
@@ -126,7 +128,10 @@ exports.sendPasswordReset = async (toEmail,confirmToken) => {
         productName: 'Khallasli',
         // passwordResetUrl should be a URL to your app that displays a view where they
         // can enter a new password along with passing the confirmToken in the params
-        passwordResetUrl: `${emailConfig.baseURL}/#/reset-pwd/?token=${confirmToken}`,
+        passwordResetUrl: url,
+        firstname: firstname,
+        lastname: lastname,
+
       },
     })
     .catch((err) => console.log('error sending password reset email '+err));
