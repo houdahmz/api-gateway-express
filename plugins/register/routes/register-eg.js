@@ -147,41 +147,41 @@ var status = {
 
         // }
 
-        // if (!email) {
-        //   return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
+        if (!email) {
+          return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
   
-        // }
-        // if (!phone) {
-        //   return res.status(400).json({ status: "Error", error: "phone is required", code: status_code.CODE_ERROR.REQUIRED });
+        }
+        if (!phone) {
+          return res.status(400).json({ status: "Error", error: "phone is required", code: status_code.CODE_ERROR.REQUIRED });
   
-        // }
+        }
 
-        // const getProfiled = await getProfileByEmail(email)
-        // console.log("getProfile", getProfiled.data)
-        // if (getProfiled.data.status == 'success') {
-        //   console.log("getProfiled.data.data", getProfiled.data.data)
+        const getProfiled = await getProfileByEmail(email)
+        console.log("getProfile", getProfiled.data)
+        if (getProfiled.data.status == 'success') {
+          console.log("getProfiled.data.data", getProfiled.data.data)
 
-        //   if (getProfiled.data.data.data[0]) {
-        //     return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-        //   }
+          if (getProfiled.data.data.data[0]) {
+            return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+          }
 
-        // } else {
-        //   return res.status(200).json({ message: getProfiled.data });
+        } else {
+          return res.status(200).json({ message: getProfiled.data });
 
-        // }
-        // const getProfiledByPhone = await getProfileByPhone(phone)
-        // console.log("getProfiledByPhone", getProfiledByPhone.data)
-        // if (getProfiledByPhone.data.status == 'success') {
-        //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+        }
+        const getProfiledByPhone = await getProfileByPhone(phone)
+        console.log("getProfiledByPhone", getProfiledByPhone.data)
+        if (getProfiledByPhone.data.status == 'success') {
+          console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
 
-        //   if (getProfiledByPhone.data.data.data[0]) {
-        //     return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-        //   }
+          if (getProfiledByPhone.data.data.data[0]) {
+            return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+          }
 
-        // } else {
-        //   return res.status(200).json({ message: getProfiledByPhone.data });
+        } else {
+          return res.status(200).json({ message: getProfiledByPhone.data });
 
-        // }
+        }
 
         // console.log("2222222222222222")
 
@@ -2315,8 +2315,8 @@ var status = {
         const confirm_uri = `${url}/reset-password?username=` + username + "&" + "token=" + myUserJwt;
         console.log("confirm_uri", confirm_uri)
         //here je vais envoyer un mail
-
-        mailSimple.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures", user.email);
+        mail.sendPasswordReset("Reset password", confirm_uri, user.email,user.firstname,user.lastname)
+        // mailSimple.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures", user.email);
         log4j.loggerinfo.info("Success check your email : " + user.email);
 
         return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email + " for username " + username });
