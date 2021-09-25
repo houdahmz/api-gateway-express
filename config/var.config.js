@@ -1,0 +1,26 @@
+module.exports = { 
+    ROLE :{
+
+        VISITOR :  'visitor'  ,
+        AGENT : 'agent' ,//CREATED BY PDV
+        USER : 'user' ,//PDV
+        ADMIN : 'admin',
+        SUPPORT :   'support' ,
+        COMMERCIAL :   'commercial' ,
+        COMPTABLE :   'comptable' ,
+
+
+
+    },
+            CODE_ERROR : {
+        EMPTY : 2000,
+        NOT_EXIST : 2001,
+        TYPE : 2002,
+        ALREADY_EXIST : 2003 ,
+        OUT_OF_STOCK : 2004 ,
+        OTHER : 2005 
+
+
+    }
+ 
+ } 
