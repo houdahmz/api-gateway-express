@@ -23,7 +23,7 @@ transporter.verify((error) => {
   }
 });
 
-exports.sendMail = async (object,text,url,toEmail,username) => {
+exports.sendMail = async (object,text,url,toEmail,username,firstname ,lastname,randomPassword) => {
   console.log("toEmail",toEmail)
   console.log("emailConfig.username",emailConfig.username)
   console.log("emailConfig.password",emailConfig.password)
@@ -54,17 +54,21 @@ exports.sendMail = async (object,text,url,toEmail,username) => {
         // can enter a new password along with passing the confirmToken in the params
         object: object,
         username: username,
+        firstname: firstname,
+        lastname: lastname,
+
 
         text: text,
+        password: randomPassword,
+
         url: url,
       },
     })
     .catch((error) => console.log('error sending email' , error));
 };
 
-exports.sendMailConfirm = async (toEmail,confirmToken) => {
+exports.sendMailAdminConfirmation = async (object,url,toEmail,firstname ,lastname) => {
   console.log("toEmail",toEmail)
-  console.log("confirmToken",confirmToken)
   console.log("emailConfig.username",emailConfig.username)
   console.log("emailConfig.password",emailConfig.password)
 
@@ -81,16 +85,17 @@ exports.sendMailConfirm = async (toEmail,confirmToken) => {
 
   email
     .send({
-      template: 'passwordReset',
+      template: 'adminConfirm',
       message: {
         to: toEmail,
 
       },
       locals: {
         productName: 'Khallasli',
-        // passwordResetUrl should be a URL to your app that displays a view where they
-        // can enter a new password along with passing the confirmToken in the params
-        passwordResetUrl: `tttttttt`,
+        object: object,
+        firstname: firstname,
+        lastname: lastname,
+        url: url,
       },
     })
     .catch((error) => console.log('error sending password reset email' , error));
