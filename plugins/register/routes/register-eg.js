@@ -130,6 +130,60 @@ var status = {
         return res.status(error.response.status).send(error.response.data);
       }
     }
+      //////////////////////////////////////////////////////////////////////////////////
+      const addWallet = async (body) => {
+
+        try {
+          log4j.loggerinfo.info("Call addWallet in wallet " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet`);
+          console.log("bodyyyyyyyyy", body)
+          // body.updated_by = id
+          // body.updatedBy = id
+          return await axios.post(
+            `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet` , body
+          )
+        } catch (error) {
+          console.log("error",error)
+          console.log("error.response",error.response)
+          console.log("error.response.data",error.response.data)
+          console.log("error.message",error.message)
+
+
+          if (!error.response) {
+            const message = {
+              data : error.response
+            }
+            log4j.loggererror.error(error.message)
+            return message
+          }else {
+            const message = {
+              status:error.response.status,
+              data : error.response.data
+            }
+          log4j.loggererror.error("Error in addWallet: ,error",error)
+          // return res.status(error.response.status).send(error.response.data);
+            return message
+          }
+
+
+        }
+      }
+      //////////////////////////////////////////////////////////////////////////////////
+      const getCurrency = async () => {
+        try {
+          log4j.loggerinfo.info("Call getCurrency: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/currency` );
+
+          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/currency` )
+        } catch (error) {
+          if (!error.response) {
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({ "error": error.message });
+          }
+          log4j.loggererror.error("Error in getCurrency: " + error.response.data)
+
+          return res.status(error.response.status).send(error.response.data);
+        }
+      }
+      ///////////////////////////////////////////////////////////////////////////
 
     gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
@@ -1080,6 +1134,7 @@ var status = {
     });
 
     gatewayExpressApp.patch('/accept/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //accept or refuser a visitor (means give a visitor a role as a user)
+      //accept or refuse a pdv 
       console.log("iciiiiibbbbbbbbbb")
       const getProfile = async (myUser) => {
         try {
@@ -1111,28 +1166,6 @@ var status = {
           return res.status(error.response.status).send(error.response.data);
         }
       }
-      //////////////////////////////////////////////////////////////////////////////////
-      // const updateprofile = async (body, id) => {
-
-      //   try {
-      //     log4j.loggerinfo.info("Call updateProfile in complete-profile " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
-      //     console.log("bodyyyyyyyyy", body)
-      //     body.updated_by = id
-      //     body.updatedBy = id
-      //     return await axios.patch(
-      //       `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/` + id, body
-      //     )
-      //   } catch (error) {
-      //     if (!error.response) {
-      //       log4j.loggererror.error(error.message)
-      //       return res.status(500).send({ "error": error.message });
-      //     }
-      //     log4j.loggererror.error("Error in adding profile: ")
-
-      //     return res.status(error.response.status).send(error.response.data);
-      //   }
-      // }
-      //////////////////////////////////////////////////////////////////////////////////
 
       const { code } = req.body // code = 10 delete , 11 accept // id is a username
       console.log("Bodyyy in accepte endpint ", req.body)
@@ -1175,8 +1208,8 @@ var status = {
         } else if (code == 11) {
 
           myUserUpdated = await services.user.activate(myUser.id)
-
           if (myUserUpdated == true) {
+            ////generate pswd/////////
             var randomPassword = Math.random().toString(36).slice(-8);
             console.log("randomPassword", randomPassword)
 
@@ -1188,7 +1221,34 @@ var status = {
               password: randomPassword,
               scopes: []
             })
+            /////get currency///////////
+            const dataCurrency = await getCurrency();
+            console.log("dataCurrency",dataCurrency.data)
+            if (!dataCurrency.data.data) {
+              log4j.loggererror.error("Error Problem in server ")
+              return res.status(500).json({ "Error": "Problem in server" });
+    
+            }
+            const currencyId = dataCurrency.data.data.items[0].id
+            /////add wallet///////////
+            const companyId = getProfiled.data.data.data[0].CompanyId
 
+            const dataWallet = await addWallet({
+              balance:"0",
+              companyId:companyId,
+              currencyId:currencyId,
+              createdBy:req.body.createdBy,
+
+          
+            });
+
+            console.log("dataWaccccccllet",dataWallet)
+
+            if(dataWallet.data.status == "error"){
+            return res.status(dataWallet.status).json({ status: dataWallet.data.status, message:dataWallet.data.message });
+
+            }
+            
             var origin = req.headers.origin;
             console.log("req.headers.origin ", req.headers.origin)
   
@@ -1778,7 +1838,7 @@ var status = {
       else if (myUser.confirmMail == 'false') {
         log4j.loggererror.error("Error please confirm your email ")
 
-        return res.status(200).json({ status: "Error",error: "Confirm your email" ,code: status_code.CODE_ERROR.NOT_EXIST});
+        return res.status(200).json({ status: "Error",error: "Confirm your email" ,code: status_code.CODE_ERROR.CONFIRM_MAIL});
 
       }
 

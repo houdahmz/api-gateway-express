@@ -10,6 +10,7 @@ module.exports = {
         INCONNU: 2006,
         USER_DESACTIVATE : 2007,
         INCORRECT_PASSWORD : 2008,
+        CONFIRM_MAIL : 2009,
 
 
 
