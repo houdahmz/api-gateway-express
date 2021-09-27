@@ -1280,7 +1280,7 @@ var status = {
 
 
     });
-    gatewayExpressApp.post('/admin-register', async (req, res, next) => {
+    gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin, async (req, res, next) => {
       try {
         console.log("/api/admin-register")
 
