@@ -56,6 +56,8 @@ exports.sendMail = async (object,text,url,toEmail,username,firstname ,lastname,r
         username: username,
         firstname: firstname,
         lastname: lastname,
+        email: toEmail,
+
 
 
         text: text,
@@ -67,10 +69,16 @@ exports.sendMail = async (object,text,url,toEmail,username,firstname ,lastname,r
     .catch((error) => console.log('error sending email' , error));
 };
 
-exports.sendMailAdminConfirmation = async (object,url,toEmail,firstname ,lastname) => {
+exports.sendMailAdminConfirmation = async (object,url,toEmail,firstname ,lastname,username,randomPassword) => {
   console.log("toEmail",toEmail)
   console.log("emailConfig.username",emailConfig.username)
   console.log("emailConfig.password",emailConfig.password)
+  console.log("firstname",firstname)
+  console.log("lastname",lastname)
+  console.log("username",username)
+  console.log("randomPassword",randomPassword)
+
+
 
 
   const email = new Email({
@@ -96,6 +104,9 @@ exports.sendMailAdminConfirmation = async (object,url,toEmail,firstname ,lastnam
         firstname: firstname,
         lastname: lastname,
         url: url,
+        username: username,
+        password: randomPassword,
+
       },
     })
     .catch((error) => console.log('error sending password reset email' , error));

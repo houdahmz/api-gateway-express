@@ -149,41 +149,41 @@ var status = {
 
         // Verifier mail et phone **************************
 
-        // if (!email) {
-        //   return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
+        if (!email) {
+          return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
   
-        // }
-        // if (!phone) {
-        //   return res.status(400).json({ status: "Error", error: "phone is required", code: status_code.CODE_ERROR.REQUIRED });
+        }
+        if (!phone) {
+          return res.status(400).json({ status: "Error", error: "phone is required", code: status_code.CODE_ERROR.REQUIRED });
   
-        // }
+        }
 
-        // const getProfiled = await getProfileByEmail(email)
-        // console.log("getProfile", getProfiled.data)
-        // if (getProfiled.data.status == 'success') {
-        //   console.log("getProfiled.data.data", getProfiled.data.data)
+        const getProfiled = await getProfileByEmail(email)
+        console.log("getProfile", getProfiled.data)
+        if (getProfiled.data.status == 'success') {
+          console.log("getProfiled.data.data", getProfiled.data.data)
 
-        //   if (getProfiled.data.data.data[0]) {
-        //     return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-        //   }
+          if (getProfiled.data.data.data[0]) {
+            return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+          }
 
-        // } else {
-        //   return res.status(200).json({ message: getProfiled.data });
+        } else {
+          return res.status(200).json({ message: getProfiled.data });
 
-        // }
-        // const getProfiledByPhone = await getProfileByPhone(phone)
-        // console.log("getProfiledByPhone", getProfiledByPhone.data)
-        // if (getProfiledByPhone.data.status == 'success') {
-        //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+        }
+        const getProfiledByPhone = await getProfileByPhone(phone)
+        console.log("getProfiledByPhone", getProfiledByPhone.data)
+        if (getProfiledByPhone.data.status == 'success') {
+          console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
 
-        //   if (getProfiledByPhone.data.data.data[0]) {
-        //     return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-        //   }
+          if (getProfiledByPhone.data.data.data[0]) {
+            return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+          }
 
-        // } else {
-        //   return res.status(200).json({ message: getProfiledByPhone.data });
+        } else {
+          return res.status(200).json({ message: getProfiledByPhone.data });
 
-        // }
+        }
         // *********************************************
 
         // console.log("2222222222222222")
@@ -1080,6 +1080,7 @@ var status = {
     });
 
     gatewayExpressApp.patch('/accept/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //accept or refuser a visitor (means give a visitor a role as a user)
+      console.log("iciiiiibbbbbbbbbb")
       const getProfile = async (myUser) => {
         try {
           log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
@@ -1111,26 +1112,26 @@ var status = {
         }
       }
       //////////////////////////////////////////////////////////////////////////////////
-      const updateprofile = async (body, id) => {
+      // const updateprofile = async (body, id) => {
 
-        try {
-          log4j.loggerinfo.info("Call updateProfile in complete-profile " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
-          console.log("bodyyyyyyyyy", body)
-          body.updated_by = id
-          body.updatedBy = id
-          return await axios.patch(
-            `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/` + id, body
-          )
-        } catch (error) {
-          if (!error.response) {
-            log4j.loggererror.error(error.message)
-            return res.status(500).send({ "error": error.message });
-          }
-          log4j.loggererror.error("Error in adding profile: ")
+      //   try {
+      //     log4j.loggerinfo.info("Call updateProfile in complete-profile " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+      //     console.log("bodyyyyyyyyy", body)
+      //     body.updated_by = id
+      //     body.updatedBy = id
+      //     return await axios.patch(
+      //       `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/` + id, body
+      //     )
+      //   } catch (error) {
+      //     if (!error.response) {
+      //       log4j.loggererror.error(error.message)
+      //       return res.status(500).send({ "error": error.message });
+      //     }
+      //     log4j.loggererror.error("Error in adding profile: ")
 
-          return res.status(error.response.status).send(error.response.data);
-        }
-      }
+      //     return res.status(error.response.status).send(error.response.data);
+      //   }
+      // }
       //////////////////////////////////////////////////////////////////////////////////
 
       const { code } = req.body // code = 10 delete , 11 accept // id is a username
@@ -1162,9 +1163,9 @@ var status = {
             const deletedCompany = await deleteCompany(getProfiled.data.data.data[0].CompanyId, myUser.id)
             console.log("deletedCompany", deletedCompany.data)
 
-            log4j.loggererror.error("The visitor has been refused")
+            log4j.loggererror.error("The user has been refused")
 
-            return res.status(200).json({ message: "The visitor has been refused" });
+            return res.status(200).json({ status: "success",message: "The user has been refused" });
 
           } else {
             return res.status(200).json({ message: getProfiled.data });
@@ -1172,48 +1173,22 @@ var status = {
           }
 
         } else if (code == 11) {
-          if (myUser.profilCompleted == 'false') {
-            log4j.loggererror.error("Please complete your profile")
 
-            return res.status(200).json({ error: "error", message: "Please complete your profile" });
-
-          }
           myUserUpdated = await services.user.activate(myUser.id)
+
           if (myUserUpdated == true) {
-            myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
-            console.log("******************Scopeeeeeee******************")
-            console.log("old myCredOauth", myCredOauth)
-            console.log("************************************")
-  
-            let scope = myCredOauth.scopes;
-            console.log("******************Scopeeeeeee******************")
-            console.log("old scope", scope)
-            console.log("************************************")
-  
-            myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
-            crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
-            user_res = await services.user.update(myUser.id, { role: 'user' }) //test this
-  
-            console.log("crd_oauth2 ", crd_oauth2)
-  ///////////////
-            /////////////////////
-            const updateBody = {
-              role: 'user'
-            }
-            console.log("*************************************************************************************")
-            console.log("getProfiled.data.data.data[0].id_user", getProfiled.data.data.data[0].id)
-            console.log("*************************************************************************************")
-  
-            let userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id);
-            if (!userProfile.data) {
-              log4j.loggererror.error("Error Problem in server ")
-              return res.status(500).json({ "Error": "Problem in server" });
-  
-            }
-            ////////////////////////////////////
-            myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
-            /********* */
-  
+            var randomPassword = Math.random().toString(36).slice(-8);
+            console.log("randomPassword", randomPassword)
+
+            let myCredBasic = await services.credential.removeCredential(myUser.id, 'basic-auth')
+            myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth')
+            console.log("myCredBasic", myCredBasic)
+            const crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
+              autoGeneratePassword: false,
+              password: randomPassword,
+              scopes: []
+            })
+
             var origin = req.headers.origin;
             console.log("req.headers.origin ", req.headers.origin)
   
@@ -1228,12 +1203,11 @@ var status = {
             console.log("change_password_uri", change_password_uri)
   
             // mailSimple.send_email("confirmation", "Votre compte a été approuvé par l'admin \n ", myUser.email);
-            mail.sendMailAdminConfirmation("confirmationByAdmin",change_password_uri, myUser.email,myUser.firstname,myUser.lastname);
+            mail.sendMailAdminConfirmation("confirmationByAdmin",change_password_uri, myUser.email,myUser.firstname,myUser.lastname,myUser.username,randomPassword);
   
-  
-            return res.status(200).json({ status: "success", message: "The visitor has been accepted", role: myCredOauth.scopes });
+            return res.status(200).json({ status: "success", message: "The user has been accepted" });
             }else {
-            return res.status(200).json({ status: "Error", message: "The visitor has not been accepted" });
+            return res.status(200).json({ status: "Error", message: "The user has not been accepted" });
 
             }
 
@@ -1804,7 +1778,7 @@ var status = {
       else if (myUser.confirmMail == 'false') {
         log4j.loggererror.error("Error please confirm your email ")
 
-        return res.status(200).json({ error: "Confirm your email" });
+        return res.status(200).json({ status: "Error",error: "Confirm your email" ,code: status_code.CODE_ERROR.NOT_EXIST});
 
       }
 
@@ -2416,9 +2390,10 @@ var status = {
 
           return res.status(200).json({ error: "wrong confirmation token" });
         }
-        log4j.loggerinfo.info("Success.");
 
-        return res.status(200).json({ etat: "Success" });
+        log4j.loggerinfo.info("Success.Votre mot de passe a été réinitialisé");
+
+        return res.status(200).json({ etat: "Success" ,message:"Votre mot de passe a été réinitialisé"});
       } catch (err) {
         log4j.loggererror.error("Error: " + err.message)
 
