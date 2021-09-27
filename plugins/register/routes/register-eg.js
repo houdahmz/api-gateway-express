@@ -147,41 +147,44 @@ var status = {
 
         // }
 
-        if (!email) {
-          return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
+        // Verifier mail et phone **************************
+
+        // if (!email) {
+        //   return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
   
-        }
-        if (!phone) {
-          return res.status(400).json({ status: "Error", error: "phone is required", code: status_code.CODE_ERROR.REQUIRED });
+        // }
+        // if (!phone) {
+        //   return res.status(400).json({ status: "Error", error: "phone is required", code: status_code.CODE_ERROR.REQUIRED });
   
-        }
+        // }
 
-        const getProfiled = await getProfileByEmail(email)
-        console.log("getProfile", getProfiled.data)
-        if (getProfiled.data.status == 'success') {
-          console.log("getProfiled.data.data", getProfiled.data.data)
+        // const getProfiled = await getProfileByEmail(email)
+        // console.log("getProfile", getProfiled.data)
+        // if (getProfiled.data.status == 'success') {
+        //   console.log("getProfiled.data.data", getProfiled.data.data)
 
-          if (getProfiled.data.data.data[0]) {
-            return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-          }
+        //   if (getProfiled.data.data.data[0]) {
+        //     return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+        //   }
 
-        } else {
-          return res.status(200).json({ message: getProfiled.data });
+        // } else {
+        //   return res.status(200).json({ message: getProfiled.data });
 
-        }
-        const getProfiledByPhone = await getProfileByPhone(phone)
-        console.log("getProfiledByPhone", getProfiledByPhone.data)
-        if (getProfiledByPhone.data.status == 'success') {
-          console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+        // }
+        // const getProfiledByPhone = await getProfileByPhone(phone)
+        // console.log("getProfiledByPhone", getProfiledByPhone.data)
+        // if (getProfiledByPhone.data.status == 'success') {
+        //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
 
-          if (getProfiledByPhone.data.data.data[0]) {
-            return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-          }
+        //   if (getProfiledByPhone.data.data.data[0]) {
+        //     return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+        //   }
 
-        } else {
-          return res.status(200).json({ message: getProfiledByPhone.data });
+        // } else {
+        //   return res.status(200).json({ message: getProfiledByPhone.data });
 
-        }
+        // }
+        // *********************************************
 
         // console.log("2222222222222222")
 
@@ -208,10 +211,6 @@ var status = {
 
         console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
 
-        console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
-        console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
-        console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
-
         myUser = await services.user.insert({
           isActive: false,
           confirmMail: false,
@@ -221,7 +220,7 @@ var status = {
           username: username,
           email: email,
           phone: phone,
-          role: "visitor",
+          role: "user",
           redirectUri: 'https://www.khallasli.com',
           confirm_token: myUserJwt
         })
@@ -281,7 +280,7 @@ var status = {
               profilCompleted: true,
               username: username,
               email: email,
-              role: "visitor",
+              role: "user",
 
             })
           } catch (error) {
@@ -306,7 +305,7 @@ var status = {
         })
         console.log("crd_basiiiiiiiiiiic", crd_basic)
 
-        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['visitor'] })
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
         console.log("crd_oauth222222222222", crd_oauth2)
 
         // ****************************create_profile *********************************
