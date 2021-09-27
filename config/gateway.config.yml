@@ -63,12 +63,17 @@ apiEndpoints:
       scopes: ['admin']
 
     - host: '*'
+      paths: /user-management/profile
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: '*'
       paths: /user-management/profile/by_userId/:id
       methods: ["GET"]
       scopes: ['user']
-      
+
     - host: '*'
-      paths: /user-management/profile*
+      paths: /user-management/profile/:id
       methods: ["DELETE","GET"]
       scopes: ['admin']
 
