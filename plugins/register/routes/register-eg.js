@@ -456,6 +456,20 @@ var status = {
         console.log("confirm_token", confirm_token)
         console.log("***********************************")
         //////////////////////////////////////////////////////////////////////////////////
+        const getProfile = async (myUser) => {
+          try {
+            log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+  
+            return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?id_user=` + myUser.id)
+          } catch (error) {
+            if (!error.response) {
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({ "error": error.message });
+            }
+            log4j.loggererror.error("Error in getProfile :" + error.response.data)
+            return res.status(error.response.status).send(error.response.data);
+          }
+        }
         //////////////////////////////////////////////////////////////////////////////////
 
         const updateprofile = async (body, id) => {
@@ -545,15 +559,17 @@ var status = {
 
         console.log("user_res", user_res)
         // user = await services.user.findByUsernameOrId(email)
+        /////////////////////////////
+        const getProfiled = await getProfile(myUser)
+        console.log("getProfile", getProfiled.data)
 
         //////////////////////////////////////////
         const updateBody = {
-          company: {
             confirmMail: true
-          }
         }
+        /////////////////////
         // updateBody.company.profilCompleted = true
-        let userProfile = await updateprofile(updateBody, user.id);
+        let userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id);
         if (!userProfile.data) {
           log4j.loggererror.error("Error Problem in server ")
           return res.status(500).json({ "Error": "Problem in server" });
@@ -1247,6 +1263,7 @@ var status = {
             const updateBody = {
               isActive: true
             }
+            console.log("aaaa update",getProfiled.data.data.data[0].id)
             let userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id);
 
 
