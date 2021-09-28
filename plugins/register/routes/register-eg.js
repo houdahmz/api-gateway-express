@@ -457,15 +457,16 @@ var status = {
         console.log("***********************************")
         //////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////
-        const updateProfileWithuserId = async (body, id) => { //with id user
+
+        const updateprofile = async (body, id) => {
 
           try {
-            log4j.loggerinfo.info("Call updateProfile in complete-profile " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/company/`);
+            log4j.loggerinfo.info("Call updateProfile in complete-profile " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
             console.log("bodyyyyyyyyy", body)
             body.updated_by = id
             body.updatedBy = id
             return await axios.patch(
-              `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/company/` + id, body
+              `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/` + id, body
             )
           } catch (error) {
             if (!error.response) {
@@ -473,10 +474,11 @@ var status = {
               return res.status(500).send({ "error": error.message });
             }
             log4j.loggererror.error("Error in adding profile: ")
-
+  
             return res.status(error.response.status).send(error.response.data);
           }
         }
+
         //////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////
 
@@ -551,7 +553,7 @@ var status = {
           }
         }
         // updateBody.company.profilCompleted = true
-        let userProfile = await updateProfileWithuserId(updateBody, user.id);
+        let userProfile = await updateprofile(updateBody, user.id);
         if (!userProfile.data) {
           log4j.loggererror.error("Error Problem in server ")
           return res.status(500).json({ "Error": "Problem in server" });
