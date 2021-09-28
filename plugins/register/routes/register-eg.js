@@ -560,7 +560,7 @@ var status = {
         console.log("user_res", user_res)
         // user = await services.user.findByUsernameOrId(email)
         /////////////////////////////
-        const getProfiled = await getProfile(myUser)
+        const getProfiled = await getProfile(user)
         console.log("getProfile", getProfiled.data)
 
         //////////////////////////////////////////
