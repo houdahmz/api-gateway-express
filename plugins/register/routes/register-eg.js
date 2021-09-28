@@ -1989,6 +1989,8 @@ var status = {
       console.log("******************userici****************")
 
       console.log("user", user.role)
+      console.log("useruseruseruser", user)
+
       console.log("*****************************************")
 
       /////////// Check if it is a visitor ////////////////////
