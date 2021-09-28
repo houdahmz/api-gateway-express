@@ -2003,7 +2003,7 @@ var status = {
         isActive: user.isActive,
         confirmMail: user.confirmMail,
         profilCompleted: user.profilCompleted,
-        role: user.role,
+        role: scope,
 
         phone: user.phone,
         createdAt: user.createdAt,
