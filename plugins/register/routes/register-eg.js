@@ -274,7 +274,8 @@ var status = {
           username: username,
           email: email,
           phone: phone,
-          role: "user",
+          role: "ROLE_USER",
+          team: false,
           redirectUri: 'https://www.khallasli.com',
           confirm_token: myUserJwt
         })
@@ -331,10 +332,11 @@ var status = {
 
               isActive: false,
               confirmMail: false,
+              team: false,
               profilCompleted: true,
               username: username,
               email: email,
-              role: "user",
+              role: "ROLE_USER",
 
             })
           } catch (error) {
@@ -629,6 +631,7 @@ var status = {
           username: username,
           email: email,
           phone: phone,
+          team: false,
           redirectUri: 'https://www.khallasli.com',
         })
 
@@ -645,6 +648,9 @@ var status = {
                 first_name: agentUser.firstname,
                 last_name: agentUser.lastname,
                 phone: agentUser.phone,
+                team: false,
+                email: agentUser.email,
+                isActive: true,
                 created_by: agentUser.id
 
               }
@@ -740,7 +746,7 @@ var status = {
       }
     });
 
-    gatewayExpressApp.post('/user-register', async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+    gatewayExpressApp.post('/team-register', async (req, res, next) => { // incomplete {add send mail with url /change_password} 
       try{
       const { firstname, username, lastname, email, phone, type_code } = req.body
 
@@ -842,9 +848,12 @@ var status = {
         firstname: firstname,
         lastname: lastname,
         username: username,
+
         email: email,
         phone: phone,
-        role: code,
+        role: "ROLE_"+code.toUpperCase(),
+        team: true,
+        
         redirectUri: 'https://www.khallasli.com',
         confirm_token: myUserJwt
       })
@@ -861,13 +870,14 @@ var status = {
             phone: myUser.phone,
             typeId: type,
             created_by: myUser.id,
-
+            
+            team: true,
             isActive: true,
             confirmMail: false,
             profilCompleted: true,
             username: username,
             email: email,
-            role: code,
+            role: "ROLE_"+code.toUpperCase(),
 
           })
         } catch (error) {
@@ -1124,7 +1134,7 @@ var status = {
 
 
 
-        return res.status(200).json({ status: "success", message: "The user has been updates", role: myCredOauth.scopes });
+        return res.status(200).json({ status: "success", message: "The user has been updates", role: "ROLE_"+myCredOauth.scopes.toUpperCase() });
 
       }
 
@@ -1207,7 +1217,7 @@ var status = {
         console.log("getProfile", getProfiled.data)
 
         if (code == 10) {
-          
+
           const deleted = services.user.remove(myUser.id);
           if (getProfiled.data.status == 'success') {
             console.log("CompanyId", getProfiled.data.data.data[0].CompanyId)
@@ -1326,6 +1336,7 @@ var status = {
           username: username,
           email: email,
           phone: phone,
+          team: true,
           redirectUri: 'https://www.khallasli.com',
         })
         ////////////
@@ -1963,15 +1974,15 @@ var status = {
         isActive: user.isActive,
         confirmMail: user.confirmMail,
         profilCompleted: user.profilCompleted,
-        role: user.role,
+        role: "ROLE_"+user.role.toUpperCase(),
 
         phone: user.phone,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       }
 
-      if (scope[0] == 'visitor') {
-        return res.status(token.status).json({ token: token.data, role: scope, user: userJsonVisistor, categoryWalletId: null });
+      if (scope[0] == 'ROLE_VISITOR') {
+        return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
       }
       // else
       // if(scope[0] == 'admin'){
@@ -2230,12 +2241,12 @@ var status = {
 
 
                 if (dataCategory.data.data) {
-                  return res.status(token.status).json({ token: token.data, role: scope, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0] });
+                  return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0] });
 
                 }
               }
 
-              return res.status(token.status).json({ token: token.data, role: scope, user: userJson, profile: data.data.data, categoryWalletId: null });
+              return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJson, profile: data.data.data, categoryWalletId: null });
 
             }
 
@@ -2254,7 +2265,7 @@ var status = {
         console.log("scope", scope)
         console.log("myUser", myUser)
 
-        return res.status(token.status).json({ token: token.data, role: scope, user: myUser });
+        return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: myUser });
 
 
       }
