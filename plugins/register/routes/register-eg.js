@@ -563,7 +563,9 @@ var status = {
         /////////////////////////////
         const getProfiled = await getProfile(user)
         console.log("getProfile", getProfiled.data)
-
+        if(getProfiled.data.data.data.length==0){
+          return res.status(200).json({ status: "Error",message: "profile does not existe with id_user",code: status_code.CODE_ERROR.NOT_EXIST  });
+        }
         //////////////////////////////////////////
         const updateBody = {
             confirmMail: true
@@ -863,7 +865,7 @@ var status = {
       const type = dataType.data.data.id
 
       myUser = await services.user.insert({
-        isActive: false,
+        isActive: true,
         confirmMail: false,
         profilCompleted: true,
         firstname: firstname,
@@ -929,6 +931,7 @@ var status = {
       // ****************************create_profile *********************************
 
       const userProfile = await creteProfile(myUser);
+      console.log("iciiiiiuserProfile",userProfile)
       if (!userProfile.data) {
         log4j.loggererror.error("Error Problem in server ")
         return res.status(500).json({ "Error": "Problem in server" });
