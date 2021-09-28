@@ -495,6 +495,7 @@ var status = {
 
         //////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////
+        console.log("user***-----", user)
 
 
         console.debug('confirmation', user, req.query, confirm_token, username)
@@ -569,6 +570,8 @@ var status = {
         }
         /////////////////////
         // updateBody.company.profilCompleted = true
+        console.log("getProfiled.data.data.data[0].id-----", getProfiled.data.data.data[0].id)
+
         let userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id);
         if (!userProfile.data) {
           log4j.loggererror.error("Error Problem in server ")
