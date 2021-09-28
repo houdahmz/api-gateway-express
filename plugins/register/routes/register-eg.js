@@ -771,7 +771,7 @@ var status = {
 
     gatewayExpressApp.post('/team-register', async (req, res, next) => { // incomplete {add send mail with url /change_password} 
       try{
-      const { firstname, username, lastname, email, phone, type_code } = req.body
+      const { firstname, username, lastname, email, phone, type_userId } = req.body
 
       if (!email) {
         return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
@@ -781,36 +781,37 @@ var status = {
         return res.status(400).json({ status: "Error", error: "phone is required", code: status_code.CODE_ERROR.REQUIRED });
 
       }
-      if (!type_code) {
-        return res.status(400).json({ status: "Error", error: "type_code is required", code: status_code.CODE_ERROR.REQUIRED });
+      if (!type_userId) {
+        return res.status(400).json({ status: "Error", error: "type_userId is required", code: status_code.CODE_ERROR.REQUIRED });
 
       }
-      // const getProfiled = await getProfileByEmail(email)
-      // console.log("getProfile", getProfiled.data)
-      // if (getProfiled.data.status == 'success') {
-      //   console.log("getProfiled.data.data", getProfiled.data.data)
+      
+      const getProfiled = await getProfileByEmail(email)
+      console.log("getProfile", getProfiled.data)
+      if (getProfiled.data.status == 'success') {
+        console.log("getProfiled.data.data", getProfiled.data.data)
 
-      //   if (getProfiled.data.data.data[0]) {
-      //     return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-      //   }
+        if (getProfiled.data.data.data[0]) {
+          return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+        }
 
-      // } else {
-      //   return res.status(200).json({ message: getProfiled.data });
+      } else {
+        return res.status(200).json({ message: getProfiled.data });
 
-      // }
-      // const getProfiledByPhone = await getProfileByPhone(phone)
-      // console.log("getProfiledByPhone", getProfiledByPhone.data)
-      // if (getProfiledByPhone.data.status == 'success') {
-      //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+      }
+      const getProfiledByPhone = await getProfileByPhone(phone)
+      console.log("getProfiledByPhone", getProfiledByPhone.data)
+      if (getProfiledByPhone.data.status == 'success') {
+        console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
 
-      //   if (getProfiledByPhone.data.data.data[0]) {
-      //     return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-      //   }
+        if (getProfiledByPhone.data.data.data[0]) {
+          return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+        }
 
-      // } else {
-      //   return res.status(200).json({ message: getProfiledByPhone.data });
+      } else {
+        return res.status(200).json({ message: getProfiledByPhone.data });
 
-      // }
+      }
 
       // console.log("2222222222222222")
 
@@ -839,9 +840,9 @@ var status = {
 
       const getType = async (code) => {
         try {
-          log4j.loggerinfo.info("Call getType: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code);
+          log4j.loggerinfo.info("Call getType: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/` + code);
 
-          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/` + code)
+          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/` + code)
         } catch (error) {
           if (!error.response) {
             log4j.loggererror.error(error.message)
@@ -853,7 +854,7 @@ var status = {
         }
       }
 
-      const dataType = await getType(type_code);
+      const dataType = await getType(type_userId);
       console.log("dataType.data.data", dataType.data)
       if (!dataType.data.data) {
         log4j.loggererror.error("Error Problem in server ")
