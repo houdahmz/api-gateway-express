@@ -855,15 +855,15 @@ var status = {
       }
 
       const dataType = await getType(type_userId);
-      console.log("dataType.data.data", dataType.data)
+      console.log("dataType.data.data", dataType.data.data.data)
       if (!dataType.data.data) {
         log4j.loggererror.error("Error Problem in server ")
         return res.status(500).json({ "Error": "Problem in server" });
 
       }
 
-      const code = dataType.data.data.type
-      const type = dataType.data.data.id
+      const code = dataType.data.data.data.type
+      const type = dataType.data.data.data.id
       console.log("aaaaaaaaaaa code ddd",code)
       // console.log("aaaaaaaaaaa code code.toUpperCase()",code.toUpperCase())
 
