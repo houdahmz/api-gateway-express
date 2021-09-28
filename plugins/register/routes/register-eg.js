@@ -864,6 +864,10 @@ var status = {
 
       const code = dataType.data.data.type
       const type = dataType.data.data.id
+      console.log("aaaaaaaaaaa code ddd",code)
+      // console.log("aaaaaaaaaaa code code.toUpperCase()",code.toUpperCase())
+
+      console.log("aaaaaaaaaaa code code.toUpperCase()",code.toUpperCase())
 
       myUser = await services.user.insert({
         isActive: true,
