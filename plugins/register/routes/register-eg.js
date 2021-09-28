@@ -884,6 +884,23 @@ var status = {
 
       const creteProfile = async (myUser) => {
         try {
+          console.log("aaacreteProfileaaa",{
+            id_user: myUser.id,
+            first_name: myUser.firstname,
+            last_name: myUser.lastname,
+            phone: myUser.phone,
+            typeId: type,
+            created_by: myUser.id,
+            
+            team: true,
+            isActive: true,
+            confirmMail: false,
+            profilCompleted: true,
+            username: username,
+            email: email,
+            role: "ROLE_"+code.toUpperCase(),
+
+          })
           log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
 
           return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
@@ -931,7 +948,7 @@ var status = {
       // ****************************create_profile *********************************
 
       const userProfile = await creteProfile(myUser);
-      console.log("iciiiiiuserProfile",userProfile)
+      console.log("iciiiiiuserProfile",userProfile.data)
       if (!userProfile.data) {
         log4j.loggererror.error("Error Problem in server ")
         return res.status(500).json({ "Error": "Problem in server" });
@@ -2003,7 +2020,7 @@ var status = {
         isActive: user.isActive,
         confirmMail: user.confirmMail,
         profilCompleted: user.profilCompleted,
-        role: scope,
+        role: scope[0],
 
         phone: user.phone,
         createdAt: user.createdAt,
