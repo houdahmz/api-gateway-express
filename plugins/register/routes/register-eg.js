@@ -1166,7 +1166,26 @@ var status = {
           return res.status(error.response.status).send(error.response.data);
         }
       }
+      const updateprofile = async (body, id) => {
 
+        try {
+          log4j.loggerinfo.info("Call updateProfile in complete-profile " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+          console.log("bodyyyyyyyyy", body)
+          body.updated_by = id
+          body.updatedBy = id
+          return await axios.patch(
+            `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/` + id, body
+          )
+        } catch (error) {
+          if (!error.response) {
+            log4j.loggererror.error(error.message)
+            return res.status(500).send({ "error": error.message });
+          }
+          log4j.loggererror.error("Error in adding profile: ")
+
+          return res.status(error.response.status).send(error.response.data);
+        }
+      }
       const { code } = req.body // code = 10 delete , 11 accept // id is a username
       console.log("Bodyyy in accepte endpint ", req.body)
       if (!code) {
@@ -1188,6 +1207,7 @@ var status = {
         console.log("getProfile", getProfiled.data)
 
         if (code == 10) {
+          
           const deleted = services.user.remove(myUser.id);
           if (getProfiled.data.status == 'success') {
             console.log("CompanyId", getProfiled.data.data.data[0].CompanyId)
@@ -1209,6 +1229,19 @@ var status = {
 
           myUserUpdated = await services.user.activate(myUser.id)
           if (myUserUpdated == true) {
+            //Update profile status///////////
+            const updateBody = {
+              isActive: true
+            }
+            let userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id);
+
+
+            if (!userProfile.data) {
+              log4j.loggererror.error("Error Problem in server ")
+              return res.status(500).json({ "Error": "Problem in server" });
+  
+            }
+
             ////generate pswd/////////
             var randomPassword = Math.random().toString(36).slice(-8);
             console.log("randomPassword", randomPassword)
