@@ -1134,7 +1134,9 @@ var status = {
 
 
 
-        return res.status(200).json({ status: "success", message: "The user has been updates", role: "ROLE_"+myCredOauth.scopes.toUpperCase() });
+        // return res.status(200).json({ status: "success", message: "The user has been updates", role: "ROLE_"+myCredOauth.scopes.toUpperCase() });
+        return res.status(200).json({ status: "success", message: "The user has been updates", role:myCredOauth.scopes });
+
 
       }
 
@@ -1982,7 +1984,9 @@ var status = {
       }
 
       if (scope[0] == 'ROLE_VISITOR') {
-        return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
+        // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
+        return res.status(token.status).json({ token: token.data, role: scope, user: userJsonVisistor, categoryWalletId: null });
+
       }
       // else
       // if(scope[0] == 'admin'){
@@ -2241,12 +2245,12 @@ var status = {
 
 
                 if (dataCategory.data.data) {
-                  return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0] });
+                  return res.status(token.status).json({ token: token.data, role: scope, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0] });
 
                 }
               }
 
-              return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJson, profile: data.data.data, categoryWalletId: null });
+              return res.status(token.status).json({ token: token.data, role: scope, user: userJson, profile: data.data.data, categoryWalletId: null });
 
             }
 
@@ -2265,7 +2269,7 @@ var status = {
         console.log("scope", scope)
         console.log("myUser", myUser)
 
-        return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: myUser });
+        return res.status(token.status).json({ token: token.data, role: scope, user: myUser });
 
 
       }
