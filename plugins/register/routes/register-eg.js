@@ -1988,7 +1988,7 @@ var status = {
       const user = await services.user.findByUsernameOrId(myUser.id)
       console.log("******************userici****************")
 
-      console.log("user", user)
+      console.log("user", user.role)
       console.log("*****************************************")
 
       /////////// Check if it is a visitor ////////////////////
@@ -2001,7 +2001,7 @@ var status = {
         isActive: user.isActive,
         confirmMail: user.confirmMail,
         profilCompleted: user.profilCompleted,
-        role: "ROLE_"+user.role.toUpperCase(),
+        role: user.role,
 
         phone: user.phone,
         createdAt: user.createdAt,
