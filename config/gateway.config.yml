@@ -884,7 +884,7 @@ apiEndpoints:
     - host: '*'
       paths: ['/users*']
       methods: ["POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['super_admin']
+      scopes: ['admin']
 
     - host: '*'
       paths: ['/users*']
