@@ -2056,6 +2056,7 @@ var status = {
 
             return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
           } catch (error) {
+            console.logg("aaaaaaa111111111111111111")
             if (!error.response) {
               log4j.loggererror.error(error.message)
               return res.status(500).send({ status: "Error", "error": error.message });
@@ -2190,6 +2191,8 @@ var status = {
           data = await getProfile(myUser.id)
 
         } catch (error) {
+          console.logg("aaaaaaa11111122222222222222222222222")
+
           console.log("error", error) //// tkt
           if (!error.response) {
             log4j.loggererror.error(error.message)
@@ -2227,6 +2230,8 @@ var status = {
                     dataCategory = await getCategoryFromWalletWithCode(code)
 
                   } catch (error) {
+            console.logg("aaaaaaa11111333333333333311")
+
                     console.log("error", error) //// tkt
                     if (!error.response) {
                       log4j.loggererror.error(error.message)
