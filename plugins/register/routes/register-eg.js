@@ -2031,7 +2031,9 @@ var status = {
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       }
-
+      scope.forEach(element => {
+        element = "ROLE_"+element.toUpperCase()
+      });
       if (scope[0] == 'ROLE_VISITOR') {
         // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
         return res.status(token.status).json({ token: token.data, role: scope, user: userJsonVisistor, categoryWalletId: null });
