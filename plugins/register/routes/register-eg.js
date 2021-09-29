@@ -2062,7 +2062,11 @@ var status = {
             }
             log4j.loggererror.error("Error in getting profile: " + error.response.data)
 
-            return res.status(error.response.status).send({ status: "Error", error: error.response.data });
+            return res.status(error.response.status).send({ 
+              status: "Error", 
+              message: error.response.data.message,
+              code : error.response.data.code
+             });
           }
         }
         ///////////
