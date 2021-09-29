@@ -336,7 +336,7 @@ var status = {
               profilCompleted: true,
               username: username,
               email: email,
-              role: "ROLE_POS",
+              role: "ROLE_USER",
 
             })
           } catch (error) {
@@ -361,7 +361,7 @@ var status = {
         })
         console.log("crd_basiiiiiiiiiiic", crd_basic)
 
-        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['pos'] })
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
         console.log("crd_oauth222222222222", crd_oauth2)
 
         // ****************************create_profile *********************************
@@ -1610,7 +1610,7 @@ var status = {
 
           console.log("myCredOauth", myCredOauth.scopes)
 
-          let endpointScopes = "pos";
+          let endpointScopes = "user";
 
           if (myCredOauth.scopes) {
             if (myCredOauth.scopes[0] == endpointScopes) {

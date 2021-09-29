@@ -30,27 +30,27 @@ apiEndpoints:
     - host: '*'
       paths: /admin/statsmobile
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /user-management/wallet/extrait
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /user-management/wallet/extrait/pdf
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /wallet/history/pdf
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /user-management/user/profile
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /user-management/user/:id
@@ -70,7 +70,7 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/profile/by_userId/:id
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /user-management/profile/:id
@@ -80,17 +80,17 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/profile*
       methods: ["PUT","PATCH"]
-      scopes: ['pos','admin',"visitor"]
+      scopes: ['user','admin',"visitor"]
 
     - host: '*'
       paths: /user-management/company/:id
       methods: ["PUT","PATCH"]
-      scopes: ['pos','admin',"visitor"]
+      scopes: ['user','admin',"visitor"]
 
     - host: '*'
       paths: /user-management/company/profile-by-company
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /user-management/company/import
@@ -110,7 +110,7 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/activity/:id
       methods: ["GET"]
-      scopes: ['pos',"admin"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /user-management/activity
@@ -125,12 +125,12 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/type-user
       methods: ["GET"]
-      scopes: ['pos',"admin","visitor"]
+      scopes: ['user',"admin","visitor"]
 
     - host: '*'
       paths: /user-management/type-user/:id
       methods: ["GET"]
-      scopes: ['pos',"admin"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /user-management/type-user
@@ -140,12 +140,12 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/region
       methods: ["GET"]
-      scopes: ['pos',"admin"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /user-management/region/:id
       methods: ["GET"]
-      scopes: ['pos',"admin"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /user-management/region
@@ -194,7 +194,7 @@ apiEndpoints:
     - host: '*'
       paths: '/voucher/transaction'
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: '/voucher/transaction'
@@ -204,7 +204,7 @@ apiEndpoints:
     - host: '*'
       paths: '/voucher/transaction/by_user/:id'
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
 # valider et refuser les commandes
     - host: '*'
       paths: '/voucher/transaction/status/:id'
@@ -214,12 +214,12 @@ apiEndpoints:
     - host: '*'
       paths: /voucher/facial
       methods: ["GET"]
-      scopes: ['pos',"admin"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/facial/:id
       methods: ["GET"]
-      scopes: ['pos',"admin"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/facial*
@@ -234,12 +234,12 @@ apiEndpoints:
     - host: '*'
       paths: /voucher/operator
       methods: ["GET"]
-      scopes: ['pos',"admin"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/operator/:id
       methods: ["GET"]
-      scopes: ['pos',"admin"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/operator*
@@ -249,12 +249,12 @@ apiEndpoints:
     - host: '*'
       paths: /voucher/settings
       methods: ["GET"]
-      scopes: ['pos',"admin"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/settings/:id
       methods: ["GET"]
-      scopes: ['pos',"admin"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/settings*
@@ -308,7 +308,7 @@ apiEndpoints:
     - host: '*'
       paths: '/topUpKh/transaction'
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: '/topUpKh/transaction'
@@ -318,7 +318,7 @@ apiEndpoints:
     - host: '*'
       paths: '/topUpKh/transaction/by_user'
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /topUpKh/transaction/:id
@@ -420,7 +420,7 @@ apiEndpoints:
     - host: '*'
       paths: /home/contact_user
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /home/contact_user*
@@ -476,28 +476,28 @@ apiEndpoints:
     - host: '*'
       paths: /paymee/cashin
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths:  ['/paymee/accountname/:id']
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /paymee/transactions
-      scopes: ['pos']
+      scopes: ['user']
   
   poste:
 
     - host: '*'
       paths: /poste/affiliation/:id
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /poste/affiliation
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
     - host: '*'
       paths: /poste/affiliation-commercant
       methods: ["POST","GET"]
@@ -505,12 +505,12 @@ apiEndpoints:
     - host: '*'
       paths: /poste/bill-payment
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /poste/recharge-card
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths: /poste/balance
@@ -520,13 +520,13 @@ apiEndpoints:
     - host: '*'
       paths: /poste/unsubscribe*
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
     - host: '*'
       paths: /poste/card*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
       scopes: ['admin']
     - host: '*'
-      paths: /poste/alimentation-pos*
+      paths: /poste/alimentation-user*
       methods: ["POST"]
       scopes: ['admin']
     - host: '*'
@@ -540,7 +540,7 @@ apiEndpoints:
     - host: '*'
       paths: /poste/affiliation/user*
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
     - host: '*'
       paths: /poste/recharge
       methods: ["GET"]
@@ -548,7 +548,7 @@ apiEndpoints:
     - host: '*'
       paths: /poste/recharge/user*
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
     - host: '*'
       paths: /poste/bill-payment
       methods: ["GET"]
@@ -556,7 +556,7 @@ apiEndpoints:
     - host: '*'
       paths: /poste/bill-payment/user*
       methods: ["GET"]
-      scopes: ['pos']  
+      scopes: ['user']  
     - host: '*'
       paths: /poste/transaction-transfer
       methods: ["GET"]
@@ -565,12 +565,12 @@ apiEndpoints:
     - host: '*'
       paths: /topnet/payment*
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
 
     - host: '*'
       paths:  /topnet/transaction/user*
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
     - host: '*'
       paths:  /topnet/transaction*
       methods: ["GET"]
@@ -578,7 +578,7 @@ apiEndpoints:
     - host: '*'
       paths: /topnet/bill*
       methods: ["GET"]
-      scopes: ['pos']
+      scopes: ['user']
   
   agent-register:
     - host: '*'
@@ -595,12 +595,12 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/supplier-service/:id
       methods: ["GET"]
-      scopes: ['pos','admin']   
+      scopes: ['user','admin']   
 
     - host: '*'
       paths: /wallet/supplier-service
       methods: ["GET"]
-      scopes: ['admin','pos'] 
+      scopes: ['admin','user'] 
 
     - host: '*'
       paths: /wallet/supplier
@@ -621,7 +621,7 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/supplier/*
       methods: ["PATCH"]
-      scopes: ['pos'] 
+      scopes: ['user'] 
     - host: '*'
       paths: /wallet/supplier/*
       methods: ["DELETE"]
@@ -767,7 +767,7 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/feed
       methods: ["POST"]
-      scopes: ['pos']
+      scopes: ['user']
     - host: '*'
       paths: /wallet/feed/type
       methods: ["POST"]
@@ -775,19 +775,19 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/feed
       methods: ["GET"]
-      scopes: ['pos','admin']
+      scopes: ['user','admin']
     - host: '*'
       paths: /wallet/feed/type
       methods: ["GET"]
-      scopes: ['pos','admin']   
+      scopes: ['user','admin']   
     - host: '*'
       paths: /wallet/feed/type/*
       methods: ["GET"]
-      scopes: ['pos','admin']  
+      scopes: ['user','admin']  
     - host: '*'
       paths: /wallet/feed/type/*
       methods: ["PUT"]
-      scopes: ['admin','pos']
+      scopes: ['admin','user']
     - host: '*'
       paths: /wallet/feed/type/*
       methods: ["PATCH"]
@@ -799,7 +799,7 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/feed*
       methods: ["GET"]
-      scopes: ['pos','admin']
+      scopes: ['user','admin']
     - host: '*'
       paths: /wallet/feed*
       methods: ["PUT"]
@@ -857,7 +857,7 @@ apiEndpoints:
     - host: '*'
       paths: /wallet
       methods: ["GET"]
-      scopes: ['admin','pos'] 
+      scopes: ['admin','user'] 
     - host: '*'
       paths: /wallet
       methods: ["POST"]
@@ -869,11 +869,11 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/:id
       methods: ["GET"]
-      scopes: ['admin','pos']    
+      scopes: ['admin','user']    
     - host: '*'
       paths: /wallet/history
       methods: ["GET"]
-      scopes: ['admin','pos']       
+      scopes: ['admin','user']       
                                   
   api:
     - host: '*'
