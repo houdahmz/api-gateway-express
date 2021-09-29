@@ -212,32 +212,32 @@ var status = {
   
         }
 
-        const getProfiled = await getProfileByEmail(email)
-        console.log("getProfile", getProfiled.data)
-        if (getProfiled.data.status == 'success') {
-          console.log("getProfiled.data.data", getProfiled.data.data)
+        // const getProfiled = await getProfileByEmail(email)
+        // console.log("getProfile", getProfiled.data)
+        // if (getProfiled.data.status == 'success') {
+        //   console.log("getProfiled.data.data", getProfiled.data.data)
 
-          if (getProfiled.data.data.data[0]) {
-            return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-          }
+        //   if (getProfiled.data.data.data[0]) {
+        //     return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+        //   }
 
-        } else {
-          return res.status(200).json({ message: getProfiled.data });
+        // } else {
+        //   return res.status(200).json({ message: getProfiled.data });
 
-        }
-        const getProfiledByPhone = await getProfileByPhone(phone)
-        console.log("getProfiledByPhone", getProfiledByPhone.data)
-        if (getProfiledByPhone.data.status == 'success') {
-          console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+        // }
+        // const getProfiledByPhone = await getProfileByPhone(phone)
+        // console.log("getProfiledByPhone", getProfiledByPhone.data)
+        // if (getProfiledByPhone.data.status == 'success') {
+        //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
 
-          if (getProfiledByPhone.data.data.data[0]) {
-            return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-          }
+        //   if (getProfiledByPhone.data.data.data[0]) {
+        //     return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+        //   }
 
-        } else {
-          return res.status(200).json({ message: getProfiledByPhone.data });
+        // } else {
+        //   return res.status(200).json({ message: getProfiledByPhone.data });
 
-        }
+        // }
         // *********************************************
 
         // console.log("2222222222222222")
@@ -274,7 +274,7 @@ var status = {
           username: username,
           email: email,
           phone: phone,
-          role: "ROLE_POS",
+          role: "ROLE_USER",
           team: false,
           redirectUri: 'https://www.khallasli.com',
           confirm_token: myUserJwt
@@ -2193,7 +2193,11 @@ var status = {
           }
           log4j.loggererror.error("Error in getting profile: " + error.response.data)
 
-          return res.status(error.response.status).send({ status: "Error", error: error.response.data });
+          return res.status(error.response.status).send({ 
+            status: "Error", 
+            message: error.response.data.message,
+            code : error.response.data.code
+ });
 
         }
         /********************************************************************************************** */
@@ -2226,7 +2230,11 @@ var status = {
                     }
                     log4j.loggererror.error("Error in getting profile: " + error.response.data)
 
-                    return res.status(error.response.status).send({ status: "Error", error: error.response.data });
+                    return res.status(error.response.status).send({ 
+                      status: "Error", 
+                      message: error.response.data.message,
+                      code : error.response.data.code
+                   });
 
                   }
                 }

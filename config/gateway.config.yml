@@ -876,9 +876,20 @@ apiEndpoints:
       scopes: ['admin','user']       
                                   
   api:
+
     - host: '*'
-      paths: ['/scopes*','/credentials*','/apps*','/api-endpoints*']
+      paths: ['/scopes*']
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: ['/credentials*','/apps*','/api-endpoints*']
       methods: ["GET","POST","PUT","DELETE","PATCH",PUT]
+      scopes: ['super_admin']
+
+    - host: '*'
+      paths: ['/scopes*']
+      methods: ["POST","PUT","DELETE","PATCH",PUT]
       scopes: ['super_admin']
 
     - host: '*'
