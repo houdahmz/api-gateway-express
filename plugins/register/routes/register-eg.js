@@ -2031,12 +2031,15 @@ var status = {
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       }
+      var roles = []
       scope.forEach(element => {
         element = "ROLE_"+element.toUpperCase()
+        roles.push(element)
       });
-      if (scope[0] == 'ROLE_VISITOR') {
+      console.log("rolessss",roles)
+      if (roles[0] == 'ROLE_VISITOR') {
         // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
-        return res.status(token.status).json({ token: token.data, role: scope, user: userJsonVisistor, categoryWalletId: null });
+        return res.status(token.status).json({ token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null });
 
       }
       // else
@@ -2296,12 +2299,12 @@ var status = {
 
 
                 if (dataCategory.data.data) {
-                  return res.status(token.status).json({ token: token.data, role: scope, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0] });
+                  return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0] });
 
                 }
               }
 
-              return res.status(token.status).json({ token: token.data, role: scope, user: userJson, profile: data.data.data, categoryWalletId: null });
+              return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: null });
 
             }
 
@@ -2320,7 +2323,7 @@ var status = {
         console.log("scope", scope)
         console.log("myUser", myUser)
 
-        return res.status(token.status).json({ token: token.data, role: scope, user: myUser });
+        return res.status(token.status).json({ token: token.data, role: roles, user: myUser });
 
 
       }
