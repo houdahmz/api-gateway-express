@@ -877,7 +877,7 @@ apiEndpoints:
                                   
   api:
     - host: '*'
-      paths: ['/scopes*','/credentials*','/apps*']
+      paths: ['/scopes*','/credentials*','/apps*','/api-endpoints*']
       methods: ["GET","POST","PUT","DELETE","PATCH",PUT]
       scopes: ['admin']
 
