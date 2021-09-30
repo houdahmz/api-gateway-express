@@ -31,6 +31,10 @@
       "type": "string"
     
     },
+    "demand": {
+      "type": "string"
+    
+    },
     "profilCompleted": {
       "type": "string"
     
