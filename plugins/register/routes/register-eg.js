@@ -38,45 +38,8 @@ const jsonParser = require('express').json();
 const urlEncodedParser = require("express").urlencoded({ extended: true });
 const { PassThrough } = require("stream");
 
-
-const varlb = require("../../../config/var.config");
 const status_code = require("../config")
-const data = [
-  {
-    VISITOR :  'visitor'
-  }
-  ,
-  {
 
-    AGENT : 'agent' 
-  }
-  ,//CREATED BY PDV
-  {
-
-    USER : 'user'
-  }
-  ,//PDV
-  {
-
-    ADMIN : 'admin'
-  }
-  ,
-  {
-
-    SUPPORT :   'support'
-  }
-  ,
-  {
-
-    COMMERCIAL :   'commercial' 
-  }
-  ,
-  {
-
-    COMPTABLE :   'comptable' ,
-
-  }
-]
 const bodyParser = require("body-parser");
 const app = express();
 var corsOptions = {
@@ -86,7 +49,7 @@ var status = {
   "incompleted": 0,
   "completed": 1
 }
-  require("body-parser").urlencoded({ limit: "50mb", extended: true }),
+require("body-parser").urlencoded({ limit: "50mb", extended: true }),
   require("body-parser").json({ limit: "50mb", extended: true }),
   require("express").json({ limit: "50mb", extended: true }), //-- use express.json
   require("express").urlencoded({ limit: "50mb", extended: true }), //-- use express.urlencoded
@@ -130,60 +93,55 @@ var status = {
         return res.status(error.response.status).send(error.response.data);
       }
     }
-      //////////////////////////////////////////////////////////////////////////////////
-      const addWallet = async (body) => {
+    //////////////////////////////////////////////////////////////////////////////////
+    const addWallet = async (body) => {
 
-        try {
-          log4j.loggerinfo.info("Call addWallet in wallet " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet`);
-          console.log("bodyyyyyyyyy", body)
-          // body.updated_by = id
-          // body.updatedBy = id
-          return await axios.post(
-            `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet` , body
-          )
-        } catch (error) {
-          console.log("error",error)
-          console.log("error.response",error.response)
-          console.log("error.response.data",error.response.data)
-          console.log("error.message",error.message)
+      try {
+        log4j.loggerinfo.info("Call addWallet in wallet " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet`);
+        console.log("bodyyyyyyyyy", body)
+        // body.updated_by = id
+        // body.updatedBy = id
+        return await axios.post(
+          `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet`, body
+        )
+      } catch (error) {
 
-
-          if (!error.response) {
-            const message = {
-              data : error.response
-            }
-            log4j.loggererror.error(error.message)
-            return message
-          }else {
-            const message = {
-              status:error.response.status,
-              data : error.response.data
-            }
-          log4j.loggererror.error("Error in addWallet: ,error",error)
+        if (!error.response) {
+          const message = {
+            data: error.response
+          }
+          log4j.loggererror.error(error.message)
+          return message
+        } else {
+          const message = {
+            status: error.response.status,
+            data: error.response.data
+          }
+          log4j.loggererror.error("Error in addWallet: ,error", error)
           // return res.status(error.response.status).send(error.response.data);
-            return message
-          }
-
-
+          return message
         }
+
+
       }
-      //////////////////////////////////////////////////////////////////////////////////
-      const getCurrency = async () => {
-        try {
-          log4j.loggerinfo.info("Call getCurrency: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/currency` );
+    }
+    //////////////////////////////////////////////////////////////////////////////////
+    const getCurrency = async () => {
+      try {
+        log4j.loggerinfo.info("Call getCurrency: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/currency`);
 
-          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/currency` )
-        } catch (error) {
-          if (!error.response) {
-            log4j.loggererror.error(error.message)
-            return res.status(500).send({ "error": error.message });
-          }
-          log4j.loggererror.error("Error in getCurrency: " + error.response.data)
-
-          return res.status(error.response.status).send(error.response.data);
+        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/currency`)
+      } catch (error) {
+        if (!error.response) {
+          log4j.loggererror.error(error.message)
+          return res.status(500).send({ "error": error.message });
         }
+        log4j.loggererror.error("Error in getCurrency: " + error.response.data)
+
+        return res.status(error.response.status).send(error.response.data);
       }
-      ///////////////////////////////////////////////////////////////////////////
+    }
+    ///////////////////////////////////////////////////////////////////////////
 
     gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
       try {
@@ -205,52 +163,40 @@ var status = {
 
         if (!email) {
           return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
-  
+
         }
         if (!phone) {
           return res.status(400).json({ status: "Error", error: "phone is required", code: status_code.CODE_ERROR.REQUIRED });
-  
+
         }
 
-        // const getProfiled = await getProfileByEmail(email)
-        // console.log("getProfile", getProfiled.data)
-        // if (getProfiled.data.status == 'success') {
-        //   console.log("getProfiled.data.data", getProfiled.data.data)
+        const getProfiled = await getProfileByEmail(email)
+        console.log("getProfile", getProfiled.data)
+        if (getProfiled.data.status == 'success') {
+          console.log("getProfiled.data.data", getProfiled.data.data)
 
-        //   if (getProfiled.data.data.data[0]) {
-        //     return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-        //   }
+          if (getProfiled.data.data.data[0]) {
+            return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+          }
 
-        // } else {
-        //   return res.status(200).json({ message: getProfiled.data });
+        } else {
+          return res.status(200).json({ message: getProfiled.data });
 
-        // }
-        // const getProfiledByPhone = await getProfileByPhone(phone)
-        // console.log("getProfiledByPhone", getProfiledByPhone.data)
-        // if (getProfiledByPhone.data.status == 'success') {
-        //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+        }
+        const getProfiledByPhone = await getProfileByPhone(phone)
+        console.log("getProfiledByPhone", getProfiledByPhone.data)
+        if (getProfiledByPhone.data.status == 'success') {
+          console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
 
-        //   if (getProfiledByPhone.data.data.data[0]) {
-        //     return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-        //   }
+          if (getProfiledByPhone.data.data.data[0]) {
+            return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+          }
 
-        // } else {
-        //   return res.status(200).json({ message: getProfiledByPhone.data });
+        } else {
+          return res.status(200).json({ message: getProfiledByPhone.data });
 
-        // }
-        // *********************************************
+        }
 
-        // console.log("2222222222222222")
-
-        // let teeeest = await services.user.findAll()
-        // console.log("333333333333")
-
-        // let test = await services.user.findByUsernameOrId(username)
-
-        // let test = await services.user.getEmail(email)
-        // console.log("testttttttttttttttttttt1111111")
-
-        // console.log("testttttttttttttttttttt",test)
 
         var randomPassword = Math.random().toString(36).slice(-8);
         console.log("randomPassword", randomPassword)
@@ -359,10 +305,8 @@ var status = {
           password: randomPassword,
           scopes: []
         })
-        console.log("crd_basiiiiiiiiiiic", crd_basic)
 
         crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
-        console.log("crd_oauth222222222222", crd_oauth2)
 
         // ****************************create_profile *********************************
         const body = {
@@ -401,11 +345,6 @@ var status = {
           redirectUri: `${env.baseURL}:5000/api/profile`
         }, myUser.id)
 
-        console.log("email", username)
-        console.log("password", randomPassword)
-        console.log("crd_oauth2.id", crd_oauth2.id)
-        console.log("crd_oauth2.secret", crd_oauth2.secret)
-
         var origin = req.headers.origin;
         console.log("req.headers.origin ", req.headers.origin)
 
@@ -420,19 +359,10 @@ var status = {
 
         //here je vais envoyer un mail
         const confirm_uri = `${url}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
-        mail.sendMail("Confirmation of your registration", "Veuillez cliquer sur lien pour confirmer votre mail \n ", confirm_uri, req.body.email, username,firstname ,lastname,randomPassword);
-
-        const change_password_uri = `${url}/change-password`;
-
-        // mail.sendChangePassword("Change password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " ) \n ", change_password_uri, req.body.email, username, randomPassword);
-
-        // console.log("change_password_uri", change_password_uri)
+        mail.sendMail("Confirmation of your registration", "Veuillez cliquer sur lien pour confirmer votre mail \n ", confirm_uri, req.body.email, username, firstname, lastname, randomPassword);
 
         console.log("confirm_uri", confirm_uri)
 
-        // mail.send_email("confirmation", "Veuillez cliquer sur lien pour completer votre compte \n " + confirm_uri,req.body.email);
-        // mail.sendMailConfirm("imen.hassine96@gmail.com",myUserJwt);
-        //console.log("mail",mail)
         log4j.loggerinfo.info("Success, mail has been sent to : " + email);
         return res.status(201).json({ etat: "Success", message: "Check your email : " + email });
       } catch (err) {
@@ -445,9 +375,6 @@ var status = {
       try {
         console.log("/registration-confirm")
         const { username, confirm_token } = req.query
-        console.log("/req.query", req.query)
-        console.log("/req.body", req.body)
-
 
         const user = await services.user.findByUsernameOrId(username)
         console.log("***********************************")
@@ -459,7 +386,7 @@ var status = {
         const getProfile = async (myUser) => {
           try {
             log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
-  
+
             return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?id_user=` + myUser.id)
           } catch (error) {
             if (!error.response) {
@@ -487,16 +414,13 @@ var status = {
               log4j.loggererror.error(error.message)
               return res.status(500).send({ "error": error.message });
             }
-            log4j.loggererror.error("Error in adding profile: ")
-  
+            log4j.loggererror.error("Error in updatinh profile: ")
+
             return res.status(error.response.status).send(error.response.data);
           }
         }
 
         //////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////
-        console.log("user***-----", user)
-
 
         console.debug('confirmation', user, req.query, confirm_token, username)
         if (user == false) { // username does not exist
@@ -550,25 +474,21 @@ var status = {
 
           return res.status(400).json({ error: error.message });
         }
-        // user_res = await services.user.activate(user.id)
         console.log("user_res")
 
-        // user_res = await services.user.update(user.id, { confirmMail: 'true',confirm_token: "" }) //test this
         user_res = await services.user.update(user.id, { confirmMail: 'true' }) //test this
-        // user_res = await services.user.update(user.id, { confirm_token: '' }) //test this
-
 
         console.log("user_res", user_res)
         // user = await services.user.findByUsernameOrId(email)
         /////////////////////////////
         const getProfiled = await getProfile(user)
         console.log("getProfile", getProfiled.data)
-        if(getProfiled.data.data.data.length==0){
-          return res.status(200).json({ status: "Error",message: "profile does not existe with id_user",code: status_code.CODE_ERROR.NOT_EXIST  });
+        if (getProfiled.data.data.data.length == 0) {
+          return res.status(200).json({ status: "Error", message: "profile does not existe with id_user", code: status_code.CODE_ERROR.NOT_EXIST });
         }
         //////////////////////////////////////////
         const updateBody = {
-            confirmMail: true
+          confirmMail: true
         }
         /////////////////////
         // updateBody.company.profilCompleted = true
@@ -584,7 +504,7 @@ var status = {
         return res.status(200).json({ etat: "Success" });
 
       } catch (err) {
-        log4j.loggererror.error("Error in adding profile: " + err.message) //ici
+        log4j.loggererror.error("Error : " + err.message) //ici
 
         return res.status(422).json({ error: err.message })
       }
@@ -770,250 +690,220 @@ var status = {
     });
 
     gatewayExpressApp.post('/team-register', async (req, res, next) => { // incomplete {add send mail with url /change_password} 
-      try{
-      const { firstname, username, lastname, email, phone, type_userId } = req.body
+      try {
+        const { firstname, username, lastname, email, phone, type_userId } = req.body
 
-      if (!email) {
-        return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
+        if (!email) {
+          return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
 
-      }
-      if (!phone) {
-        return res.status(400).json({ status: "Error", error: "phone is required", code: status_code.CODE_ERROR.REQUIRED });
-
-      }
-      if (!type_userId) {
-        return res.status(400).json({ status: "Error", error: "type_userId is required", code: status_code.CODE_ERROR.REQUIRED });
-
-      }
-      
-      // const getProfiled = await getProfileByEmail(email)
-      // console.log("getProfile", getProfiled.data)
-      // if (getProfiled.data.status == 'success') {
-      //   console.log("getProfiled.data.data", getProfiled.data.data)
-
-      //   if (getProfiled.data.data.data[0]) {
-      //     return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-      //   }
-
-      // } else {
-      //   return res.status(200).json({ message: getProfiled.data });
-
-      // }
-      // const getProfiledByPhone = await getProfileByPhone(phone)
-      // console.log("getProfiledByPhone", getProfiledByPhone.data)
-      // if (getProfiledByPhone.data.status == 'success') {
-      //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
-
-      //   if (getProfiledByPhone.data.data.data[0]) {
-      //     return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-      //   }
-
-      // } else {
-      //   return res.status(200).json({ message: getProfiledByPhone.data });
-
-      // }
-
-      // console.log("2222222222222222")
-
-      // let teeeest = await services.user.findAll()
-      // console.log("333333333333")
-
-      // let test = await services.user.findByUsernameOrId(username)
-
-      // let test = await services.user.getEmail(email)
-      // console.log("testttttttttttttttttttt1111111")
-
-      // console.log("testttttttttttttttttttt",test)
-
-      var randomPassword = Math.random().toString(36).slice(-8);
-      console.log("randomPassword", randomPassword)
-
-      const myUserJwt = await jwt.sign({ username: username, password: randomPassword }, `${env.JWT_SECRET}`, {
-        issuer: 'express-gateway',
-        audience: 'something',
-        expiresIn: 180000,
-        subject: '3pXQjeklS3cFf8OCJw9B22',
-        algorithm: 'HS256'
-      });
-
-      console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
-
-      const getType = async (code) => {
-        try {
-          log4j.loggerinfo.info("Call getType: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/` + code);
-
-          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/` + code)
-        } catch (error) {
-          if (!error.response) {
-            log4j.loggererror.error(error.message)
-            return res.status(500).send({ "error": error.message });
-          }
-          log4j.loggererror.error("Error in getType: " + error.response.data)
-
-          return res.status(error.response.status).send(error.response.data);
         }
-      }
+        if (!phone) {
+          return res.status(400).json({ status: "Error", error: "phone is required", code: status_code.CODE_ERROR.REQUIRED });
 
-      const dataType = await getType(type_userId);
-      console.log("dataType.data.data", dataType.data.data.data)
-      if (!dataType.data.data) {
-        log4j.loggererror.error("Error Problem in server ")
-        return res.status(500).json({ "Error": "Problem in server" });
-
-      }
-
-      const code = dataType.data.data.data.type
-      const type = dataType.data.data.data.id
-      console.log("aaaaaaaaaaa code ddd",code)
-      // console.log("aaaaaaaaaaa code code.toUpperCase()",code.toUpperCase())
-
-      console.log("aaaaaaaaaaa code code.toUpperCase()",code.toUpperCase())
-
-      myUser = await services.user.insert({
-        isActive: true,
-        confirmMail: false,
-        profilCompleted: true,
-        firstname: firstname,
-        lastname: lastname,
-        username: username,
-
-        email: email,
-        phone: phone,
-        role: "ROLE_"+code.toUpperCase(),
-        team: true,
-        
-        redirectUri: 'https://www.khallasli.com',
-        confirm_token: myUserJwt
-      })
-      console.log("myUser", myUser)
-
-      const creteProfile = async (myUser) => {
-        try {
-          console.log("aaacreteProfileaaa",{
-            id_user: myUser.id,
-            first_name: myUser.firstname,
-            last_name: myUser.lastname,
-            phone: myUser.phone,
-            typeId: type,
-            created_by: myUser.id,
-            
-            team: true,
-            isActive: true,
-            confirmMail: false,
-            profilCompleted: true,
-            username: username,
-            email: email,
-            role: "ROLE_"+code.toUpperCase(),
-
-          })
-          log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
-
-          return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
-            id_user: myUser.id,
-            first_name: myUser.firstname,
-            last_name: myUser.lastname,
-            phone: myUser.phone,
-            typeId: type,
-            created_by: myUser.id,
-            
-            team: true,
-            isActive: true,
-            confirmMail: false,
-            profilCompleted: true,
-            username: username,
-            email: email,
-            role: "ROLE_"+code.toUpperCase(),
-
-          })
-        } catch (error) {
-          if (!error.response) {
-            log4j.loggererror.error(error.message)
-            return res.status(500).send({ "error": error.message });
-          }
-          log4j.loggererror.error("Error in createProfile :" + error.response.data)
-
-          const deleted = services.user.remove(myUser.id);
-
-          return res.status(error.response.status).send(error.response.data);
         }
+        if (!type_userId) {
+          return res.status(400).json({ status: "Error", error: "type_userId is required", code: status_code.CODE_ERROR.REQUIRED });
+
+        }
+
+        const getProfiled = await getProfileByEmail(email)
+        console.log("getProfile", getProfiled.data)
+        if (getProfiled.data.status == 'success') {
+          console.log("getProfiled.data.data", getProfiled.data.data)
+
+          if (getProfiled.data.data.data[0]) {
+            return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+          }
+
+        } else {
+          return res.status(200).json({ message: getProfiled.data });
+
+        }
+        const getProfiledByPhone = await getProfileByPhone(phone)
+        console.log("getProfiledByPhone", getProfiledByPhone.data)
+        if (getProfiledByPhone.data.status == 'success') {
+          console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+
+          if (getProfiledByPhone.data.data.data[0]) {
+            return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+          }
+
+        } else {
+          return res.status(200).json({ message: getProfiledByPhone.data });
+
+        }
+
+        var randomPassword = Math.random().toString(36).slice(-8);
+        console.log("randomPassword", randomPassword)
+
+        const myUserJwt = await jwt.sign({ username: username, password: randomPassword }, `${env.JWT_SECRET}`, {
+          issuer: 'express-gateway',
+          audience: 'something',
+          expiresIn: 180000,
+          subject: '3pXQjeklS3cFf8OCJw9B22',
+          algorithm: 'HS256'
+        });
+
+        console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
+
+        const getType = async (code) => {
+          try {
+            log4j.loggerinfo.info("Call getType: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/` + code);
+
+            return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/` + code)
+          } catch (error) {
+            if (!error.response) {
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({ "error": error.message });
+            }
+            log4j.loggererror.error("Error in getType: " + error.response.data)
+
+            return res.status(error.response.status).send(error.response.data);
+          }
+        }
+
+        const dataType = await getType(type_userId);
+        console.log("dataType.data.data", dataType.data.data.data)
+        if (!dataType.data.data) {
+          log4j.loggererror.error("Error Problem in server ")
+          return res.status(500).json({ "Error": "Problem in server" });
+
+        }
+
+        const code = dataType.data.data.data.type
+        const type = dataType.data.data.data.id
+
+        myUser = await services.user.insert({
+          isActive: true,
+          confirmMail: false,
+          profilCompleted: true,
+          firstname: firstname,
+          lastname: lastname,
+          username: username,
+
+          email: email,
+          phone: phone,
+          role: "ROLE_" + code.toUpperCase(),
+          team: true,
+
+          redirectUri: 'https://www.khallasli.com',
+          confirm_token: myUserJwt
+        })
+        console.log("myUser", myUser)
+
+        const creteProfile = async (myUser) => {
+          try {
+            console.log("aaacreteProfileaaa", {
+              id_user: myUser.id,
+              first_name: myUser.firstname,
+              last_name: myUser.lastname,
+              phone: myUser.phone,
+              typeId: type,
+              created_by: myUser.id,
+
+              team: true,
+              isActive: true,
+              confirmMail: false,
+              profilCompleted: true,
+              username: username,
+              email: email,
+              role: "ROLE_" + code.toUpperCase(),
+
+            })
+            log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+
+            return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
+              id_user: myUser.id,
+              first_name: myUser.firstname,
+              last_name: myUser.lastname,
+              phone: myUser.phone,
+              typeId: type,
+              created_by: myUser.id,
+
+              team: true,
+              isActive: true,
+              confirmMail: false,
+              profilCompleted: true,
+              username: username,
+              email: email,
+              role: "ROLE_" + code.toUpperCase(),
+
+            })
+          } catch (error) {
+            if (!error.response) {
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({ "error": error.message });
+            }
+            log4j.loggererror.error("Error in createProfile :" + error.response.data)
+
+            const deleted = services.user.remove(myUser.id);
+
+            return res.status(error.response.status).send(error.response.data);
+          }
+        }
+
+
+
+        crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
+          autoGeneratePassword: false,
+          password: randomPassword,
+          scopes: []
+        })
+        console.log("crd_basiiiiiiiiiiic", crd_basic)
+
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: [code] })
+        console.log("crd_oauth222222222222", crd_oauth2)
+
+        // ****************************create_profile *********************************
+
+        const userProfile = await creteProfile(myUser);
+        console.log("iciiiiiuserProfile", userProfile.data)
+        if (!userProfile.data) {
+          log4j.loggererror.error("Error Problem in server ")
+          return res.status(500).json({ "Error": "Problem in server" });
+
+        }
+
+
+        // console.log("aaaa", userProfile)
+        if (userProfile.data.status == "error") {
+          // services.user.remove()
+          log4j.loggererror.error("Error  : " + userProfile.data)
+
+          //console.log("aaaa iciii ",myUser.id)
+          return res.status(400).json(userProfile.data);
+        }
+
+        // create 
+
+        myProfile = await services.application.insert({
+          name: "complete_profile" + myUser.id,
+          redirectUri: `${env.baseURL}:5000/api/profile`
+        }, myUser.id)
+
+        // const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
+        if (origin) {
+          var url = origin
+        } else {
+          var url = `${env.baseURL}:${env.HTTP_PORT}`
+        }
+
+        const confirm_uri = `${url}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
+        mail.sendMail("Confirmation", "Veuillez cliquer sur lien pour confirmer votre mail \n ", confirm_uri, req.body.email, username);
+
+        const change_password_uri = `${url}/change-password`;
+
+        mail.sendChangePassword("Change password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " ) \n ", change_password_uri, req.body.email, username, randomPassword);
+
+        console.log("confirm_uri", confirm_uri)
+        console.log("change_password_uri", change_password_uri)
+
+        log4j.loggerinfo.info("Success, mail has been sent to : " + email);
+        return res.status(201).json({ etat: "Success", message: "Check your email : " + email });
+      } catch (err) {
+        log4j.loggererror.error("Error :" + err.message)
+        return res.status(422).json({ error: err.message })
       }
-
-
-
-      crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
-        autoGeneratePassword: false,
-        password: randomPassword,
-        scopes: []
-      })
-      console.log("crd_basiiiiiiiiiiic", crd_basic)
-
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: [code] })
-      console.log("crd_oauth222222222222", crd_oauth2)
-
-      // ****************************create_profile *********************************
-
-      const userProfile = await creteProfile(myUser);
-      console.log("iciiiiiuserProfile",userProfile.data)
-      if (!userProfile.data) {
-        log4j.loggererror.error("Error Problem in server ")
-        return res.status(500).json({ "Error": "Problem in server" });
-
-      }
-
-
-      // console.log("aaaa", userProfile)
-      if (userProfile.data.status == "error") {
-        // services.user.remove()
-        log4j.loggererror.error("Error in adding profile: " + userProfile.data)
-
-        //console.log("aaaa iciii ",myUser.id)
-        return res.status(400).json(userProfile.data);
-      }
-
-      // create 
-
-      myProfile = await services.application.insert({
-        name: "complete_profile" + myUser.id,
-        redirectUri: `${env.baseURL}:5000/api/profile`
-      }, myUser.id)
-
-      console.log("email", username)
-      console.log("password", randomPassword)
-      console.log("crd_oauth2.id", crd_oauth2.id)
-      console.log("crd_oauth2.secret", crd_oauth2.secret)
-
-      var origin = req.headers.origin;
-      console.log("req.headers.origin ", req.headers.origin)
-
-      // const confirm_uri = `${env.baseURL}:${env.HTTP_PORT}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
-      if (origin) {
-        var url = origin
-      } else {
-        var url = `${env.baseURL}:${env.HTTP_PORT}`
-      }
-
-      // const confirm_uri = `${url}/signin?username=` + username + "&" + "confirm_token=" + myUserJwt;
-
-      //here je vais envoyer un mail
-      const confirm_uri = `${url}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
-      mail.sendMail("Confirmation", "Veuillez cliquer sur lien pour confirmer votre mail \n ", confirm_uri, req.body.email, username);
-
-      const change_password_uri = `${url}/change-password`;
-
-      mail.sendChangePassword("Change password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " ) \n ", change_password_uri, req.body.email, username, randomPassword);
-
-      console.log("confirm_uri", confirm_uri)
-      console.log("change_password_uri", change_password_uri)
-
-      // mail.send_email("confirmation", "Veuillez cliquer sur lien pour completer votre compte \n " + confirm_uri,req.body.email);
-      // mail.sendMailConfirm("imen.hassine96@gmail.com",myUserJwt);
-      //console.log("mail",mail)
-      log4j.loggerinfo.info("Success, mail has been sent to : " + email);
-      return res.status(201).json({ etat: "Success", message: "Check your email : " + email });
-    } catch (err) {
-      log4j.loggererror.error("Error :" + err.message)
-      return res.status(422).json({ error: err.message })
-    }
     });
 
     gatewayExpressApp.patch('/activate/:id', async (req, res, next) => { //endpoint pour activer
@@ -1070,8 +960,6 @@ var status = {
         }
       }
       //////////////////////////////////////////////////////////////////////////////////
-
-      /////////////////////////////
 
       const getProfiled = await getProfile(req.params.id)
       console.log("getProfile", getProfiled.data)
@@ -1178,22 +1066,15 @@ var status = {
 
         myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
 
-
-
-        // return res.status(200).json({ status: "success", message: "The user has been updates", role: "ROLE_"+myCredOauth.scopes.toUpperCase() });
-        return res.status(200).json({ status: "success", message: "The user has been updates", role:myCredOauth.scopes });
+        return res.status(200).json({ status: "success", message: "The user has been updates", role: myCredOauth.scopes });
 
 
       }
-
-
-
 
     });
 
     gatewayExpressApp.patch('/accept/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //accept or refuser a visitor (means give a visitor a role as a user)
       //accept or refuse a pdv 
-      console.log("iciiiiibbbbbbbbbb")
       const getProfile = async (myUser) => {
         try {
           log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
@@ -1276,7 +1157,7 @@ var status = {
 
             log4j.loggererror.error("The user has been refused")
 
-            return res.status(200).json({ status: "success",message: "The user has been refused" });
+            return res.status(200).json({ status: "success", message: "The user has been refused" });
 
           } else {
             return res.status(200).json({ message: getProfiled.data });
@@ -1291,14 +1172,14 @@ var status = {
             const updateBody = {
               isActive: true
             }
-            console.log("aaaa update",getProfiled.data.data.data[0].id)
+            console.log("aaaa update", getProfiled.data.data.data[0].id)
             let userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id);
 
 
             if (!userProfile.data) {
               log4j.loggererror.error("Error Problem in server ")
               return res.status(500).json({ "Error": "Problem in server" });
-  
+
             }
 
             ////generate pswd/////////
@@ -1315,53 +1196,53 @@ var status = {
             })
             /////get currency///////////
             const dataCurrency = await getCurrency();
-            console.log("dataCurrency",dataCurrency.data)
+            console.log("dataCurrency", dataCurrency.data)
             if (!dataCurrency.data.data) {
               log4j.loggererror.error("Error Problem in server ")
               return res.status(500).json({ "Error": "Problem in server" });
-    
+
             }
             const currencyId = dataCurrency.data.data.items[0].id
             /////add wallet///////////
             const companyId = getProfiled.data.data.data[0].CompanyId
 
             const dataWallet = await addWallet({
-              balance:"0",
-              companyId:companyId,
-              currencyId:currencyId,
-              createdBy:req.body.createdBy,
+              balance: "0",
+              companyId: companyId,
+              currencyId: currencyId,
+              createdBy: req.body.createdBy,
 
-          
+
             });
 
-            console.log("dataWaccccccllet",dataWallet)
+            console.log("dataWallet", dataWallet)
 
-            if(dataWallet.data.status == "error"){
-            return res.status(dataWallet.status).json({ status: dataWallet.data.status, message:dataWallet.data.message });
+            if (dataWallet.data.status == "error") {
+              return res.status(dataWallet.status).json({ status: dataWallet.data.status, message: dataWallet.data.message });
 
             }
-            
+
             var origin = req.headers.origin;
             console.log("req.headers.origin ", req.headers.origin)
-  
+
             if (origin) {
               var url = origin
             } else {
               var url = `${env.baseURL}:${env.HTTP_PORT}`
             }
-    
+
             const change_password_uri = `${url}/change-password`;
-    
+
             console.log("change_password_uri", change_password_uri)
-  
+
             // mailSimple.send_email("confirmation", "Votre compte a été approuvé par l'admin \n ", myUser.email);
-            mail.sendMailAdminConfirmation("confirmationByAdmin",change_password_uri, myUser.email,myUser.firstname,myUser.lastname,myUser.username,randomPassword);
-  
+            mail.sendMailAdminConfirmation("confirmationByAdmin", change_password_uri, myUser.email, myUser.firstname, myUser.lastname, myUser.username, randomPassword);
+
             return res.status(200).json({ status: "success", message: "The user has been accepted" });
-            }else {
+          } else {
             return res.status(200).json({ status: "Error", message: "The user has not been accepted" });
 
-            }
+          }
 
         }
 
@@ -1493,14 +1374,14 @@ var status = {
 
         myUser = await services.user.findByUsernameOrId(req.params.id)
         console.log("myUser", myUser)
-  
+
         if (myUser == false) {
           log4j.loggererror.error("User does not exist")
           return res.status(200).json({ status: "error", message: "The user does not exist" });
-        }else {
+        } else {
           var origin = req.headers.origin;
           console.log("req.headers.origin ", req.headers.origin)
-    
+
           if (origin) {
             var url = origin
           } else {
@@ -1512,7 +1393,7 @@ var status = {
 
           let myCredBasic = await services.credential.removeCredential(myUser.id, 'basic-auth')
           myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth')
-  
+
           const crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
             autoGeneratePassword: false,
             password: randomPassword,
@@ -1521,20 +1402,20 @@ var status = {
 
           const change_password_uri = `${url}/change-password`;
 
-          mail.sendMailFromAdmin(myUser.email,myUser.username,myUser.firstname,myUser.lastname,randomPassword,change_password_uri)
-  
+          mail.sendMailFromAdmin(myUser.email, myUser.username, myUser.firstname, myUser.lastname, randomPassword, change_password_uri)
+
           return res.status(200).json({ etat: "Success", message: "Admin has been successfuly created, we have sent an email to " + myUser.email + " to set a new password" });
 
         }
 
-        
+
 
 
 
       } catch (err) {
         log4j.loggererror.error("Error resending mail: " + err.message)
 
-        return res.status(400).json({etat: "Error", error: err.message })
+        return res.status(400).json({ etat: "error", error: err.message })
       }
     });
 
@@ -2083,10 +1964,10 @@ var status = {
       }
       var roles = []
       scope.forEach(element => {
-        element = "ROLE_"+element.toUpperCase()
+        element = "ROLE_" + element.toUpperCase()
         roles.push(element)
       });
-      console.log("rolessss",roles)
+      console.log("rolessss", roles)
       if (roles[0] == 'ROLE_VISITOR') {
         // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
         return res.status(token.status).json({ token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null });
@@ -2113,11 +1994,11 @@ var status = {
             }
             log4j.loggererror.error("Error in getting profile: " + error.response.data)
 
-            return res.status(error.response.status).send({ 
-              status: "Error", 
+            return res.status(error.response.status).send({
+              status: "Error",
               message: error.response.data.message,
-              code : error.response.data.code
-             });
+              code: error.response.data.code
+            });
           }
         }
         ///////////
@@ -2250,11 +2131,11 @@ var status = {
           }
           log4j.loggererror.error("Error in getting profile: " + error.response.data)
 
-          return res.status(error.response.status).send({ 
-            status: "Error", 
+          return res.status(error.response.status).send({
+            status: "Error",
             message: error.response.data.message,
-            code : error.response.data.code
- });
+            code: error.response.data.code
+          });
 
         }
         /********************************************************************************************** */
@@ -2280,7 +2161,7 @@ var status = {
                     dataCategory = await getCategoryFromWalletWithCode(code)
 
                   } catch (error) {
-            console.log("aaaaaaa11111333333333333311")
+                    console.log("aaaaaaa11111333333333333311")
 
                     console.log("error", error) //// tkt
                     if (!error.response) {
@@ -2289,11 +2170,11 @@ var status = {
                     }
                     log4j.loggererror.error("Error in getting profile: " + error.response.data)
 
-                    return res.status(error.response.status).send({ 
-                      status: "Error", 
+                    return res.status(error.response.status).send({
+                      status: "Error",
                       message: error.response.data.message,
-                      code : error.response.data.code
-                   });
+                      code: error.response.data.code
+                    });
 
                   }
                 }
@@ -2518,7 +2399,7 @@ var status = {
         const confirm_uri = `${url}/reset-password?username=` + username + "&" + "token=" + myUserJwt;
         console.log("confirm_uri", confirm_uri)
         //here je vais envoyer un mail
-        mail.sendPasswordReset("Reset password", confirm_uri, user.email,user.firstname,user.lastname)
+        mail.sendPasswordReset("Reset password", confirm_uri, user.email, user.firstname, user.lastname)
         // mailSimple.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe " + confirm_uri + " \n Link valable pour 5 heures", user.email);
         log4j.loggerinfo.info("Success check your email : " + user.email);
 
@@ -2623,7 +2504,7 @@ var status = {
 
         log4j.loggerinfo.info("Success.Votre mot de passe a été réinitialisé");
 
-        return res.status(200).json({ etat: "Success" ,message:"Votre mot de passe a été réinitialisé"});
+        return res.status(200).json({ etat: "Success", message: "Votre mot de passe a été réinitialisé" });
       } catch (err) {
         log4j.loggererror.error("Error: " + err.message)
 
@@ -2661,10 +2542,7 @@ var status = {
         }
 
         let myCredBasicA = await services.credential.getCredential(user.id, 'basic-auth')
-        console.log("myCredBasicssssssss", myCredBasicA)
-
-
-
+        console.log("myCredBasicA", myCredBasicA)
 
 
         let myCredBasic = await services.credential.getCredential(user.id, 'basic-auth')
@@ -2693,7 +2571,6 @@ var status = {
 
 
         }
-
 
 
       } catch (err) {
