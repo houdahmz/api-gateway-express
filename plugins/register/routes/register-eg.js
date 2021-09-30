@@ -212,32 +212,32 @@ var status = {
   
         }
 
-        const getProfiled = await getProfileByEmail(email)
-        console.log("getProfile", getProfiled.data)
-        if (getProfiled.data.status == 'success') {
-          console.log("getProfiled.data.data", getProfiled.data.data)
+        // const getProfiled = await getProfileByEmail(email)
+        // console.log("getProfile", getProfiled.data)
+        // if (getProfiled.data.status == 'success') {
+        //   console.log("getProfiled.data.data", getProfiled.data.data)
 
-          if (getProfiled.data.data.data[0]) {
-            return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-          }
+        //   if (getProfiled.data.data.data[0]) {
+        //     return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+        //   }
 
-        } else {
-          return res.status(200).json({ message: getProfiled.data });
+        // } else {
+        //   return res.status(200).json({ message: getProfiled.data });
 
-        }
-        const getProfiledByPhone = await getProfileByPhone(phone)
-        console.log("getProfiledByPhone", getProfiledByPhone.data)
-        if (getProfiledByPhone.data.status == 'success') {
-          console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+        // }
+        // const getProfiledByPhone = await getProfileByPhone(phone)
+        // console.log("getProfiledByPhone", getProfiledByPhone.data)
+        // if (getProfiledByPhone.data.status == 'success') {
+        //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
 
-          if (getProfiledByPhone.data.data.data[0]) {
-            return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-          }
+        //   if (getProfiledByPhone.data.data.data[0]) {
+        //     return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+        //   }
 
-        } else {
-          return res.status(200).json({ message: getProfiledByPhone.data });
+        // } else {
+        //   return res.status(200).json({ message: getProfiledByPhone.data });
 
-        }
+        // }
         // *********************************************
 
         // console.log("2222222222222222")
@@ -786,32 +786,32 @@ var status = {
 
       }
       
-      const getProfiled = await getProfileByEmail(email)
-      console.log("getProfile", getProfiled.data)
-      if (getProfiled.data.status == 'success') {
-        console.log("getProfiled.data.data", getProfiled.data.data)
+      // const getProfiled = await getProfileByEmail(email)
+      // console.log("getProfile", getProfiled.data)
+      // if (getProfiled.data.status == 'success') {
+      //   console.log("getProfiled.data.data", getProfiled.data.data)
 
-        if (getProfiled.data.data.data[0]) {
-          return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-        }
+      //   if (getProfiled.data.data.data[0]) {
+      //     return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+      //   }
 
-      } else {
-        return res.status(200).json({ message: getProfiled.data });
+      // } else {
+      //   return res.status(200).json({ message: getProfiled.data });
 
-      }
-      const getProfiledByPhone = await getProfileByPhone(phone)
-      console.log("getProfiledByPhone", getProfiledByPhone.data)
-      if (getProfiledByPhone.data.status == 'success') {
-        console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+      // }
+      // const getProfiledByPhone = await getProfileByPhone(phone)
+      // console.log("getProfiledByPhone", getProfiledByPhone.data)
+      // if (getProfiledByPhone.data.status == 'success') {
+      //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
 
-        if (getProfiledByPhone.data.data.data[0]) {
-          return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-        }
+      //   if (getProfiledByPhone.data.data.data[0]) {
+      //     return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+      //   }
 
-      } else {
-        return res.status(200).json({ message: getProfiledByPhone.data });
+      // } else {
+      //   return res.status(200).json({ message: getProfiledByPhone.data });
 
-      }
+      // }
 
       // console.log("2222222222222222")
 
@@ -1024,7 +1024,7 @@ var status = {
         return res.status(200).json({ error: "Code can not be empty (set 10 to desactivate or 11 to activate a user" });
 
       }
-      myUser = await services.user.find(req.params.id)
+      myUser = await services.user.findByUsernameOrId(req.params.id)
       console.log("myUser", myUser)
 
       if (myUser == false) {
@@ -1487,6 +1487,56 @@ var status = {
       }
     });
 
+    gatewayExpressApp.get('/resend-mail/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //resend mail of creation pdv by admin
+      try {
+        console.log("/resend-mail")
+
+        myUser = await services.user.findByUsernameOrId(req.params.id)
+        console.log("myUser", myUser)
+  
+        if (myUser == false) {
+          log4j.loggererror.error("User does not exist")
+          return res.status(200).json({ status: "error", message: "The user does not exist" });
+        }else {
+          var origin = req.headers.origin;
+          console.log("req.headers.origin ", req.headers.origin)
+    
+          if (origin) {
+            var url = origin
+          } else {
+            var url = `${env.baseURL}:${env.HTTP_PORT}`
+          }
+
+          var randomPassword = Math.random().toString(36).slice(-8);
+          console.log("randomPassword", randomPassword)
+
+          let myCredBasic = await services.credential.removeCredential(myUser.id, 'basic-auth')
+          myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth')
+  
+          const crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
+            autoGeneratePassword: false,
+            password: randomPassword,
+            scopes: []
+          })
+
+          const change_password_uri = `${url}/change-password`;
+
+          mail.sendMailFromAdmin(myUser.email,myUser.username,myUser.firstname,myUser.lastname,randomPassword,change_password_uri)
+  
+          return res.status(200).json({ etat: "Success", message: "Admin has been successfuly created, we have sent an email to " + myUser.email + " to set a new password" });
+
+        }
+
+        
+
+
+
+      } catch (err) {
+        log4j.loggererror.error("Error resending mail: " + err.message)
+
+        return res.status(400).json({etat: "Error", error: err.message })
+      }
+    });
 
     async function verifyToken(req, res, next) {
 
@@ -2354,6 +2404,7 @@ var status = {
       return res.status(200).json(test);
 
     });
+
     gatewayExpressApp.post('/api/refreshToken', async (req, res, next) => { // still incomplete
       const { client_id, refresh_token } = req.body
 

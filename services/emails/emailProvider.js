@@ -202,3 +202,43 @@ exports.sendChangePassword = async (object,text,url,toEmail,username,randomPassw
     })
     .catch((error) => console.log('error sending change password email',error));
 };
+
+exports.sendMailFromAdmin = async (toEmail,username,firstname ,lastname,randomPassword,url) => {
+  console.log("toEmail",toEmail)
+  console.log("emailConfig.username",emailConfig.username)
+  console.log("emailConfig.password",emailConfig.password)
+  console.log("url",url)
+
+  const email = new Email({
+    views: { root: __dirname },
+    message: {
+      from: 'support@your-app.com',
+    },
+    // uncomment below to send emails in development/test env:
+    send: true,
+    transport: transporter,
+  });
+
+  email
+    .send({
+      template: 'resendMail',
+      message: {
+        to: toEmail,
+
+      },
+      locals: {
+        productName: 'Khallasli',
+        // passwordResetUrl should be a URL to your app that displays a view where they
+        // can enter a new password along with passing the confirmToken in the params
+        username: username,
+        firstname: firstname,
+        lastname: lastname,
+        email: toEmail,
+        password: randomPassword,
+        url: url,
+
+
+      },
+    })
+    .catch((error) => console.log('error sending email' , error));
+};
