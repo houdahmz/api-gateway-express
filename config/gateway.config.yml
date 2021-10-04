@@ -773,9 +773,13 @@ apiEndpoints:
       methods: ["POST"]
       scopes: ['admin']
     - host: '*'
+      paths: /wallet/feed/by_user
+      methods: ["GET"]
+      scopes: ['user']
+    - host: '*'
       paths: /wallet/feed
       methods: ["GET"]
-      scopes: ['user','admin']
+      scopes: ['admin']
     - host: '*'
       paths: /wallet/feed/type
       methods: ["GET"]

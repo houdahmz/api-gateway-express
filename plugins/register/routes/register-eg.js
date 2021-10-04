@@ -826,7 +826,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
               profilCompleted: true,
               username: username,
               email: email,
-              role: "ROLE_" + code.toUpperCase(),
+              role: "ROLE_" + "super_admin".toUpperCase(),
 
             })
           } catch (error) {
@@ -851,7 +851,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         })
         console.log("crd_basiiiiiiiiiiic", crd_basic)
 
-        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: [code] })
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['super_admin'] })
         console.log("crd_oauth222222222222", crd_oauth2)
 
         // ****************************create_profile *********************************
