@@ -212,16 +212,16 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
 
         myUser = await services.user.insert({
-          isActive: true,
-          confirmMail: true,
+          isActive: false,
+          confirmMail: false,
           profilCompleted: true,
           firstname: firstname,
           lastname: lastname,
           username: username,
           email: email,
           phone: phone,
-          role: "ROLE_SUPER_ADMIN",
-          team: true,
+          role: "ROLE_USER",
+          team: false,
           redirectUri: 'https://www.khallasli.com',
           confirm_token: myUserJwt
         })
@@ -306,7 +306,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
           scopes: []
         })
 
-        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['super_admin'] })
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
 
         // ****************************create_profile *********************************
         const body = {
