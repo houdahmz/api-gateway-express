@@ -49,6 +49,12 @@ var status = {
   "incompleted": 0,
   "completed": 1
 }
+const listOfStatus = {
+  1: "pending",
+  2: "refused",
+  3: "done"
+}
+
 require("body-parser").urlencoded({ limit: "50mb", extended: true }),
   require("body-parser").json({ limit: "50mb", extended: true }),
   require("express").json({ limit: "50mb", extended: true }), //-- use express.json
@@ -222,6 +228,8 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
           phone: phone,
           role: "ROLE_USER",
           team: false,
+          demand: "1",
+
           redirectUri: 'https://www.khallasli.com',
           confirm_token: myUserJwt
         })
@@ -279,6 +287,8 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
               isActive: false,
               confirmMail: false,
               team: false,
+              demand: "1",
+
               profilCompleted: true,
               username: username,
               email: email,
@@ -575,6 +585,7 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
           email: email,
           phone: phone,
           team: false,
+
           redirectUri: 'https://www.khallasli.com',
         })
 
@@ -1142,18 +1153,44 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
       }
       else {
 
+        if (myUser.demand == "2") { //refuse demand
+          log4j.loggererror.error("user already refused")
+          return res.status(200).json({ status: "error", message: "user already refused",code: status_code.CODE_ERROR.ALREADY_REFUSED});
+        }
+        if (myUser.demand == "3") {
+          log4j.loggererror.error("user already accepted") //demand is already accepted
+          return res.status(200).json({ status: "error", message: "user already accepted",code: status_code.CODE_ERROR.ALREADY_ACCEPTED });
+        }
+
         const getProfiled = await getProfile(myUser)
         console.log("getProfile", getProfiled.data)
 
-        if (code == 10) {
+        if (code == 10) { //refuse
 
-          const deleted = services.user.remove(myUser.id);
+
+
+          // const deleted = services.user.remove(myUser.id);
           if (getProfiled.data.status == 'success') {
             console.log("CompanyId", getProfiled.data.data.data[0].CompanyId)
             console.log("myUser.id", myUser.id)
 
-            const deletedCompany = await deleteCompany(getProfiled.data.data.data[0].CompanyId, myUser.id)
-            console.log("deletedCompany", deletedCompany.data)
+            // const deletedCompany = await deleteCompany(getProfiled.data.data.data[0].CompanyId, myUser.id)
+            // console.log("deletedCompany", deletedCompany.data)
+            // user_res = await services.user.update(user.id, { confirmMail: 'true' }) //test this
+
+            user_res = await services.user.update(myUser.id, { demand: '2' })
+            const updateBody = {
+              demand: "2",
+            }
+            console.log("aaaa update", getProfiled.data.data.data[0].id)
+            let userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id);
+
+
+            if (!userProfile.data) {
+              log4j.loggererror.error("Error Problem in server ")
+              return res.status(500).json({ "Error": "Problem in server" });
+
+            }
 
             log4j.loggererror.error("The user has been refused")
 
@@ -1164,13 +1201,17 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
           }
 
-        } else if (code == 11) {
+        } else if (code == 11) { //accept user
 
           myUserUpdated = await services.user.activate(myUser.id)
           if (myUserUpdated == true) {
             //Update profile status///////////
+
+            user_res = await services.user.update(myUser.id, { demand: '3' }) //test this
+
             const updateBody = {
-              isActive: true
+              isActive: true,
+              demand: "3",
             }
             console.log("aaaa update", getProfiled.data.data.data[0].id)
             let userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id);
@@ -1872,6 +1913,18 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
       //   return res.status(200).json({ error: "user profile is incompleted." });
 
       // }
+      else if (myUser.demand == "1") {
+        log4j.loggerinfo.info("user is on pending. please wait for the administrator's agreement ");
+
+        return res.status(200).json({ status: "Error", error: "user is on pending. please wait for the administrator's agreement ", code: status_code.CODE_ERROR.USER_ON_PENDING });
+
+      }
+      else if (myUser.demand == "2") {
+        log4j.loggerinfo.info("user is refused by the administrator ");
+
+        return res.status(200).json({ status: "Error", error: "user is refused by the administrator ", code: status_code.CODE_ERROR.USER_REFUSED });
+
+      }
       else if (myUser.isActive == false) {
         log4j.loggerinfo.info("Error user is desactivated. please wait for the administrator's agreement ");
 
