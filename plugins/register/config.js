@@ -11,6 +11,13 @@ module.exports = {
         USER_DESACTIVATE : 2007,
         INCORRECT_PASSWORD : 2008,
         CONFIRM_MAIL : 2009,
+        USER_ON_PENDING : 2010,
+        USER_REFUSED : 2011,
+        ALREADY_ACCEPTED : 2012,
+        ALREADY_REFUSED : 2013,
+
+
+
 
 
 
