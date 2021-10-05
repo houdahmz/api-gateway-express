@@ -38,14 +38,14 @@ session:
   resave: false
   saveUninitialized: false
 accessTokens:
-  timeToExpiry: 900
+  timeToExpiry: 3600
   tokenType: 'jwt'
   issuer: 'express-gateway'
   audience: 'something'
   subject: '3pXQjeklS3cFf8OCJw9B22'
   secretOrPrivateKey: '54v3WJGBcFPh3TFgZSzovw'
 refreshTokens:
-  timeToExpiry: 900
+  timeToExpiry: 3600
 authorizationCodes:
   timeToExpiry: 300000
 
