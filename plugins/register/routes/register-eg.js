@@ -1945,387 +1945,395 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
       }
 
       myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
-      let scope = myCredOauth.scopes;
-      console.log("******************Scopeeeeeee******************")
-
-      console.log("scope", scope)
-      console.log("************************************")
-
-      myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: scope })
-      console.log("crd_oauth2 ", crd_oauth2)
-
-
-      const getToken = async (username, password, client_id, client_secret) => {
-        try {
-          log4j.loggerinfo.info("Call getToken");
-
-          return await axios.post(`${env.baseURL}:${env.HTTP_PORT}/oauth2/token`, {
-            grant_type: "password",
-            username: username,
-            password: password,
-            client_id: client_id,
-            client_secret: client_secret
-          })
-        } catch (error) {
-          if (!error.response) {
-            log4j.loggererror.error(error.message)
-            return res.status(500).send({ "error": error.message });
-          }
-          log4j.loggererror.error("Error in getToken: " + error.response.data)
-
-          return res.status(error.response.status).send({ status: "Error", error: error.response.data });
-        }
-      }
-      // here should get the token and applique invoke before generating a new one
-      let token;
-      try {
-
-        token = await getToken(username, password, crd_oauth2.id, crd_oauth2.secret)
-
-      } catch (error) {
-        log4j.loggererror.error("Error :" + error.message)
-
-        console.log("Error", error.message)
-        return res.status(500).send({ status: "Error", "error": error.message });
-
-      }
-      /////////////////////////////Get user info by username //////////////////////////////////
-      const user = await services.user.findByUsernameOrId(myUser.id)
-      console.log("******************userici****************")
-
-      console.log("user", user.role)
-      console.log("useruseruseruser", user)
-
-      console.log("*****************************************")
-
-      /////////// Check if it is a visitor ////////////////////
-      let userJsonVisistor = {
-        id: user.id,
-        username: user.username,
-        lastname: user.lastname,
-        firstname: user.firstname,
-        email: user.email,
-        isActive: user.isActive,
-        confirmMail: user.confirmMail,
-        profilCompleted: user.profilCompleted,
-        role: scope[0],
-
-        phone: user.phone,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      }
-      var roles = []
-      scope.forEach(element => {
-        element = "ROLE_" + element.toUpperCase()
-        roles.push(element)
-      });
-      console.log("rolessss", roles)
-      if (roles[0] == 'ROLE_VISITOR') {
-        // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
-        return res.status(token.status).json({ token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null });
-
-      }
-      // else
-      // if(scope[0] == 'admin'){
-      //   return res.status(token.status).json({ token: token.data, role: scope ,user: userJsonVisistor , categoryWalletId: null});
-      // }
-      else {
-
-
-        ///////////////////////////////////////////////////////////////////////////
-        const getProfile = async (id) => {
+      if(myCredOauth){
+        let scope = myCredOauth.scopes;
+        console.log("******************Scopeeeeeee******************")
+  
+        console.log("scope", scope)
+        console.log("************************************")
+  
+        myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
+        crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: scope })
+        console.log("crd_oauth2 ", crd_oauth2)
+  
+  
+        const getToken = async (username, password, client_id, client_secret) => {
           try {
-            log4j.loggerinfo.info("Call getProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id);
-
-            return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
-          } catch (error) {
-            console.log("aaaaaaa111111111111111111")
-            if (!error.response) {
-              log4j.loggererror.error(error.message)
-              return res.status(500).send({ status: "Error", "error": error.message });
-            }
-            log4j.loggererror.error("Error in getting profile: " + error.response.data)
-
-            return res.status(error.response.status).send({
-              status: "Error",
-              message: error.response.data.message,
-              code: error.response.data.code
-            });
-          }
-        }
-        ///////////
-        const getCategoryFromWalletWithCode = async (code) => {
-          try {
-            log4j.loggerinfo.info("Call getcategory: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category/`);
-
-            return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category?name=` + code)
+            log4j.loggerinfo.info("Call getToken");
+  
+            return await axios.post(`${env.baseURL}:${env.HTTP_PORT}/oauth2/token`, {
+              grant_type: "password",
+              username: username,
+              password: password,
+              client_id: client_id,
+              client_secret: client_secret
+            })
           } catch (error) {
             if (!error.response) {
               log4j.loggererror.error(error.message)
               return res.status(500).send({ "error": error.message });
             }
-            log4j.loggererror.error("Error in getting getcategory: " + error.response.data)
-
+            log4j.loggererror.error("Error in getToken: " + error.response.data)
+  
             return res.status(error.response.status).send({ status: "Error", error: error.response.data });
           }
         }
-        ///////////
-        /************************** */
-        var md = new MobileDetect(req.headers['user-agent']);
-        // var m = new MobileDetect(window.navigator.userAgent);
-        console.log("md", md);
-        // console.log("m", m);
-        const md1 = new MobileDetect(req.get('User-Agent'));
-        res.locals.isMobile = md1.mobile();
-        console.log("md1", md1);
-
-        console.log("md.os(), md.os()", md.os());
-        if (md.os() === "iOS") {
-          console.log("is ios");
-        } else if (md.os() === "AndroidOS") {
-          console.log("is android");
-
-        } else if (md.os() === "AndroidOS") {
-          console.log("is android");
-        }
-
-        var ip = (typeof req.headers['x-forwarded-for'] === 'string'
-          && req.headers['x-forwarded-for'].split(',').shift()) ||
-          req.connection.remoteAddress ||
-          req.socket.remoteAddress ||
-          req.connection.socket.remoteAddress
-        console.log("ip", ip)
-        console.log("req.connection.remoteAddress", req.connection.remoteAddress)
-        // console.log("lookup",lookup(ip)); // location of the user
-
-        console.log("os.platform()", os.platform())
-        console.log("os.release()", os.release())
-        console.log("os.type()", os.type()); // "Windows_NT"
-
-        console.log("req.device.type.toUpperCase()", req.device.type.toUpperCase())
-        // console.log("iplocate",iplocate(ip)); // location of the user
-        // console.log("iplocate",iplocate(ip).country); // location of the user
-        // console.log(iplocate(ip)); // location of the user
-        console.log("ipaddre", ipF.address());
-        let addr = ipF.address()
-        console.log("aaaaaaaaaaaaaaaaaaaa", addr)
-
-        const publicIpAdd = await publicIp.v4();
-        console.log("publicIpAdd", publicIpAdd)
-        //////////////////////
-        // let results;
-        // try {
-        //    results = await iplocate(publicIpAdd) 
-        //   console.log("results",results)
-
-        // } catch (error) {
-        //   console.log("error",error)
-
-        // }
-
-        // iplocate(ip).then(function(results) {
-        //    console.log("IP Address: " + results.ip);
-        //    console.log("Country: " + results.country + " (" + results.country_code + ")");
-        //    console.log("Continent: " + results.continent);
-        //    console.log("Organisation: " + results.org + " (" + results.asn + ")");
-
-        //    console.log(JSON.stringify(results, null, 2));
-        //  });
-
-        var source = req.headers['user-agent']
-        var ua = useragent.parse(source);
-        console.log("ua", ua)
-        var isMobile = ua.isMobile
-        console.log("isMobile", isMobile)
-
-        let userUpdated = await services.user.update(myUser.id, {
-          ip: publicIpAdd,
-          os: os.platform(),
-          source: ua.source,
-          // // geoip: lookup(ip),
-          // country:results.country,
-          // city:results.city,
-          // latitude:results.latitude,
-          // longitude:results.longitude,
-
-          last_login: new Date().toString()
-        })
-        console.log("userUpdated", userUpdated)
-        ///////////////////////
-
-        var interfaces = os.networkInterfaces();
-        var addresses = [];
-        for (var k in interfaces) {
-          for (var k2 in interfaces[k]) {
-            var address = interfaces[k][k2];
-            if (address.family === 'IPv4' && !address.internal) {
-              addresses.push(address.address);
-            }
-          }
-        }
-
-        console.log("addresses", addresses);
-        ////////////////////////////
-
-        /**************************** */
-
-        var data;
+        // here should get the token and applique invoke before generating a new one
+        let token;
         try {
-          data = await getProfile(myUser.id)
-
+  
+          token = await getToken(username, password, crd_oauth2.id, crd_oauth2.secret)
+  
         } catch (error) {
-          console.log("aaaaaaa11111122222222222222222222222")
-
-          console.log("error", error) //// tkt
-          if (!error.response) {
-            log4j.loggererror.error(error.message)
-            return res.status(500).send({ "error": error.message });
-          }
-          log4j.loggererror.error("Error in getting profile: " + error.response.data)
-
-          return res.status(error.response.status).send({
-            status: "Error",
-            message: error.response.data.message,
-            code: error.response.data.code
-          });
-
+          log4j.loggererror.error("Error :" + error.message)
+  
+          console.log("Error", error.message)
+          return res.status(500).send({ status: "Error", "error": error.message });
+  
         }
-        /********************************************************************************************** */
-        // console.log("data",data)
-        console.log("*********************************")
-        console.log("*********************************")
-        console.log("**************/////////////////////*******************")
-        var dataCategory;
-
-        if (data.data) {
-          console.log("iciiiiiiiiiiiiiiiiiiii", data.data)
-
-          if (data.data.data) {
-            console.log("data.data.data", data.data.data)
-            if (data.data.data.Company) {
-              if (data.data.data.Company.Category) {
-                console.log("data.data.data.Company", data.data.data.Company)
-
-                console.log("data.data.data.Category", data.data.data.Company.Category)
-                if (data.data.data.Company.Category) {
-                  var code = data.data.data.Company.Category.code
-                  try {
-                    dataCategory = await getCategoryFromWalletWithCode(code)
-
-                  } catch (error) {
-                    console.log("aaaaaaa11111333333333333311")
-
-                    console.log("error", error) //// tkt
-                    if (!error.response) {
-                      log4j.loggererror.error(error.message)
-                      return res.status(500).send({ "error": error.message });
-                    }
-                    log4j.loggererror.error("Error in getting profile: " + error.response.data)
-
-                    return res.status(error.response.status).send({
-                      status: "Error",
-                      message: error.response.data.message,
-                      code: error.response.data.code
-                    });
-
-                  }
-                }
-
-              }
-            }
-
-
-          }
-        }
-        /************************************************************************************** */
-        console.log("dataCategory", dataCategory)
-
-        /************************************************************************************** */
-
-        console.log("Date.now()", Date.now())
-        let name = "complete_profile" + Date.now()
-        // userApp = await services.application.find(name)
-
-
-        myApp = await services.application.insert({
-          name: "user_app" + Date.now(),
-          ip: user.ip,
-          source: user.source,
-          os: user.os,
-          latitude: user.latitude,
-          longitude: user.longitude,
-          city: user.city,
-          country: user.country
-        }, myUser.id)
-
-        userApp = await services.application.find(name)
-        console.log("userapp", userApp)
-        console.log("myApp", myApp)
-
-        let userJson = {
+        /////////////////////////////Get user info by username //////////////////////////////////
+        const user = await services.user.findByUsernameOrId(myUser.id)
+        console.log("******************userici****************")
+  
+        console.log("user", user.role)
+        console.log("useruseruseruser", user)
+  
+        console.log("*****************************************")
+  
+        /////////// Check if it is a visitor ////////////////////
+        let userJsonVisistor = {
           id: user.id,
           username: user.username,
           lastname: user.lastname,
           firstname: user.firstname,
           email: user.email,
           isActive: user.isActive,
+          confirmMail: user.confirmMail,
+          profilCompleted: user.profilCompleted,
+          role: scope[0],
+  
           phone: user.phone,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
-          application: {
-            id: myApp.id,
+        }
+        var roles = []
+        scope.forEach(element => {
+          element = "ROLE_" + element.toUpperCase()
+          roles.push(element)
+        });
+        console.log("rolessss", roles)
+        if (roles[0] == 'ROLE_VISITOR') {
+          // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
+          return res.status(token.status).json({ token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null });
+  
+        }
+        // else
+        // if(scope[0] == 'admin'){
+        //   return res.status(token.status).json({ token: token.data, role: scope ,user: userJsonVisistor , categoryWalletId: null});
+        // }
+        else {
+  
+  
+          ///////////////////////////////////////////////////////////////////////////
+          const getProfile = async (id) => {
+            try {
+              log4j.loggerinfo.info("Call getProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id);
+  
+              return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
+            } catch (error) {
+              console.log("aaaaaaa111111111111111111")
+              if (!error.response) {
+                log4j.loggererror.error(error.message)
+                return res.status(500).send({ status: "Error", "error": error.message });
+              }
+              log4j.loggererror.error("Error in getting profile: " + error.response.data)
+  
+              return res.status(error.response.status).send({
+                status: "Error",
+                message: error.response.data.message,
+                code: error.response.data.code
+              });
+            }
+          }
+          ///////////
+          const getCategoryFromWalletWithCode = async (code) => {
+            try {
+              log4j.loggerinfo.info("Call getcategory: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category/`);
+  
+              return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category?name=` + code)
+            } catch (error) {
+              if (!error.response) {
+                log4j.loggererror.error(error.message)
+                return res.status(500).send({ "error": error.message });
+              }
+              log4j.loggererror.error("Error in getting getcategory: " + error.response.data)
+  
+              return res.status(error.response.status).send({ status: "Error", error: error.response.data });
+            }
+          }
+          ///////////
+          /************************** */
+          var md = new MobileDetect(req.headers['user-agent']);
+          // var m = new MobileDetect(window.navigator.userAgent);
+          console.log("md", md);
+          // console.log("m", m);
+          const md1 = new MobileDetect(req.get('User-Agent'));
+          res.locals.isMobile = md1.mobile();
+          console.log("md1", md1);
+  
+          console.log("md.os(), md.os()", md.os());
+          if (md.os() === "iOS") {
+            console.log("is ios");
+          } else if (md.os() === "AndroidOS") {
+            console.log("is android");
+  
+          } else if (md.os() === "AndroidOS") {
+            console.log("is android");
+          }
+  
+          var ip = (typeof req.headers['x-forwarded-for'] === 'string'
+            && req.headers['x-forwarded-for'].split(',').shift()) ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress
+          console.log("ip", ip)
+          console.log("req.connection.remoteAddress", req.connection.remoteAddress)
+          // console.log("lookup",lookup(ip)); // location of the user
+  
+          console.log("os.platform()", os.platform())
+          console.log("os.release()", os.release())
+          console.log("os.type()", os.type()); // "Windows_NT"
+  
+          console.log("req.device.type.toUpperCase()", req.device.type.toUpperCase())
+          // console.log("iplocate",iplocate(ip)); // location of the user
+          // console.log("iplocate",iplocate(ip).country); // location of the user
+          // console.log(iplocate(ip)); // location of the user
+          console.log("ipaddre", ipF.address());
+          let addr = ipF.address()
+          console.log("aaaaaaaaaaaaaaaaaaaa", addr)
+  
+          const publicIpAdd = await publicIp.v4();
+          console.log("publicIpAdd", publicIpAdd)
+          //////////////////////
+          // let results;
+          // try {
+          //    results = await iplocate(publicIpAdd) 
+          //   console.log("results",results)
+  
+          // } catch (error) {
+          //   console.log("error",error)
+  
+          // }
+  
+          // iplocate(ip).then(function(results) {
+          //    console.log("IP Address: " + results.ip);
+          //    console.log("Country: " + results.country + " (" + results.country_code + ")");
+          //    console.log("Continent: " + results.continent);
+          //    console.log("Organisation: " + results.org + " (" + results.asn + ")");
+  
+          //    console.log(JSON.stringify(results, null, 2));
+          //  });
+  
+          var source = req.headers['user-agent']
+          var ua = useragent.parse(source);
+          console.log("ua", ua)
+          var isMobile = ua.isMobile
+          console.log("isMobile", isMobile)
+  
+          let userUpdated = await services.user.update(myUser.id, {
+            ip: publicIpAdd,
+            os: os.platform(),
+            source: ua.source,
+            // // geoip: lookup(ip),
+            // country:results.country,
+            // city:results.city,
+            // latitude:results.latitude,
+            // longitude:results.longitude,
+  
+            last_login: new Date().toString()
+          })
+          console.log("userUpdated", userUpdated)
+          ///////////////////////
+  
+          var interfaces = os.networkInterfaces();
+          var addresses = [];
+          for (var k in interfaces) {
+            for (var k2 in interfaces[k]) {
+              var address = interfaces[k][k2];
+              if (address.family === 'IPv4' && !address.internal) {
+                addresses.push(address.address);
+              }
+            }
+          }
+  
+          console.log("addresses", addresses);
+          ////////////////////////////
+  
+          /**************************** */
+  
+          var data;
+          try {
+            data = await getProfile(myUser.id)
+  
+          } catch (error) {
+            console.log("aaaaaaa11111122222222222222222222222")
+  
+            console.log("error", error) //// tkt
+            if (!error.response) {
+              log4j.loggererror.error(error.message)
+              return res.status(500).send({ "error": error.message });
+            }
+            log4j.loggererror.error("Error in getting profile: " + error.response.data)
+  
+            return res.status(error.response.status).send({
+              status: "Error",
+              message: error.response.data.message,
+              code: error.response.data.code
+            });
+  
+          }
+          /********************************************************************************************** */
+          // console.log("data",data)
+          console.log("*********************************")
+          console.log("*********************************")
+          console.log("**************/////////////////////*******************")
+          var dataCategory;
+  
+          if (data.data) {
+            console.log("iciiiiiiiiiiiiiiiiiiii", data.data)
+  
+            if (data.data.data) {
+              console.log("data.data.data", data.data.data)
+              if (data.data.data.Company) {
+                if (data.data.data.Company.Category) {
+                  console.log("data.data.data.Company", data.data.data.Company)
+  
+                  console.log("data.data.data.Category", data.data.data.Company.Category)
+                  if (data.data.data.Company.Category) {
+                    var code = data.data.data.Company.Category.code
+                    try {
+                      dataCategory = await getCategoryFromWalletWithCode(code)
+  
+                    } catch (error) {
+                      console.log("aaaaaaa11111333333333333311")
+  
+                      console.log("error", error) //// tkt
+                      if (!error.response) {
+                        log4j.loggererror.error(error.message)
+                        return res.status(500).send({ "error": error.message });
+                      }
+                      log4j.loggererror.error("Error in getting profile: " + error.response.data)
+  
+                      return res.status(error.response.status).send({
+                        status: "Error",
+                        message: error.response.data.message,
+                        code: error.response.data.code
+                      });
+  
+                    }
+                  }
+  
+                }
+              }
+  
+  
+            }
+          }
+          /************************************************************************************** */
+          console.log("dataCategory", dataCategory)
+  
+          /************************************************************************************** */
+  
+          console.log("Date.now()", Date.now())
+          let name = "complete_profile" + Date.now()
+          // userApp = await services.application.find(name)
+  
+  
+          myApp = await services.application.insert({
+            name: "user_app" + Date.now(),
             ip: user.ip,
             source: user.source,
             os: user.os,
-            last_login: user.last_login,
             latitude: user.latitude,
             longitude: user.longitude,
             city: user.city,
             country: user.country
-          }
-        }
-
-        if (token) {
-          if (token.status == 200) {
-            if (data.status == 200) {
-              log4j.loggerinfo.info("Succes in getting token.");
-              if (dataCategory) {
-                console.log("dataCategory.data", dataCategory.data)
-
-                console.log("dataCategory.data", dataCategory.data)
-                console.log("dataCategory.data.data", dataCategory.data.data)
-
-
-
-
-                if (dataCategory.data.data) {
-                  return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0] });
-
-                }
-              }
-
-              return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: null });
-
+          }, myUser.id)
+  
+          userApp = await services.application.find(name)
+          console.log("userapp", userApp)
+          console.log("myApp", myApp)
+  
+          let userJson = {
+            id: user.id,
+            username: user.username,
+            lastname: user.lastname,
+            firstname: user.firstname,
+            email: user.email,
+            isActive: user.isActive,
+            phone: user.phone,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+            application: {
+              id: myApp.id,
+              ip: user.ip,
+              source: user.source,
+              os: user.os,
+              last_login: user.last_login,
+              latitude: user.latitude,
+              longitude: user.longitude,
+              city: user.city,
+              country: user.country
             }
-
           }
+  
+          if (token) {
+            if (token.status == 200) {
+              if (data.status == 200) {
+                log4j.loggerinfo.info("Succes in getting token.");
+                if (dataCategory) {
+                  console.log("dataCategory.data", dataCategory.data)
+  
+                  console.log("dataCategory.data", dataCategory.data)
+                  console.log("dataCategory.data.data", dataCategory.data.data)
+  
+  
+  
+  
+                  if (dataCategory.data.data) {
+                    return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0] });
+  
+                  }
+                }
+  
+                return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: null });
+  
+              }
+  
+            }
+          }
+          else {
+            log4j.loggererror.error("Error in getting profile")
+            return res.status(500).send("error");
+  
+          }
+  
+          log4j.loggerinfo.info("Getting token");
+          console.log("token.status", token.status)
+          console.log("token", token.data)
+  
+          console.log("scope", scope)
+          console.log("myUser", myUser)
+  
+          return res.status(token.status).json({ token: token.data, role: roles, user: myUser });
+  
+  
         }
-        else {
-          log4j.loggererror.error("Error in getting profile")
-          return res.status(500).send("error");
+  
+      }
+      else{
 
-        }
-
-        log4j.loggerinfo.info("Getting token");
-        console.log("token.status", token.status)
-        console.log("token", token.data)
-
-        console.log("scope", scope)
-        console.log("myUser", myUser)
-
-        return res.status(token.status).json({ token: token.data, role: roles, user: myUser });
-
+        return res.status(200).json({ status: "Error", error: "User has no role", code: status_code.CODE_ERROR.HAS_NO_ROLE });
 
       }
 

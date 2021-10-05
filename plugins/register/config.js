@@ -15,6 +15,8 @@ module.exports = {
         USER_REFUSED : 2011,
         ALREADY_ACCEPTED : 2012,
         ALREADY_REFUSED : 2013,
+        HAS_NO_ROLE : 2014,
+
 
 
 
