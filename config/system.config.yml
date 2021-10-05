@@ -38,19 +38,19 @@ session:
   resave: false
   saveUninitialized: false
 accessTokens:
-  timeToExpiry: 7200000
+  timeToExpiry: 900
   tokenType: 'jwt'
   issuer: 'express-gateway'
   audience: 'something'
   subject: '3pXQjeklS3cFf8OCJw9B22'
   secretOrPrivateKey: '54v3WJGBcFPh3TFgZSzovw'
 refreshTokens:
-  timeToExpiry: 7200000
+  timeToExpiry: 900
 authorizationCodes:
   timeToExpiry: 300000
 
   # timeToExpiry: 7200000   en seconde cad 83jrs
-  # timeToExpiry: 7200   en seconde cad 2jrs
+  # timeToExpiry: 7200   en seconde cad 2h
 
 
 
