@@ -2348,12 +2348,8 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
     });
 
     gatewayExpressApp.post('/api/refreshToken', async (req, res, next) => { // still incomplete
-      const { client_id, refresh_token } = req.body
-
-      myCredOauth = await services.credential.getCredential(client_id, 'oauth2')
-      myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
-      crd_oauth2 = await services.credential.insertCredential(client_id, 'oauth2')
-      console.log("crd_oauth2 ", crd_oauth2)
+      const { client_id,client_secret, refresh_token } = req.body
+      console.log("************token *******************")
 
       const getRefreshToken = async (client_id, client_secret, refresh_token) => {
         try {
@@ -2369,6 +2365,26 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
         }
       }
+
+      const token = getRefreshToken(client_id,client_secret,refresh_token)
+      console.log("token ", token.data)
+
+      console.log("token.data.access_token ", token.data.access_token)
+
+      console.log("token ", token)
+
+      return res.status(200).json({token: token.data});
+
+
+      myCredOauth = await services.credential.getCredential(client_id, 'oauth2')
+      myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
+      crd_oauth2 = await services.credential.insertCredential(client_id, 'oauth2')
+      console.log("crd_oauth2 ", crd_oauth2)
+
+      console.log("crd_oauth2 ", myCredOauth)
+
+
+
       // const refresh_token = getRefreshToken(client_id,crd_oauth2.secret,refresh_token)
 
       // const refresh_token = req.body.refresh_token
