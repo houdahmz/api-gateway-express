@@ -325,7 +325,37 @@ apiEndpoints:
       paths: /topUpKh/transaction/:id
       methods: ["GET","DELETE"]
       scopes: ['admin']
-  
+ 
+    - host: '*'
+      paths: '/topUpKh/type'
+      methods: ["POST"]
+      scopes: ['user']
+
+    - host: '*'
+      paths: '/topUpKh/type'
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /topUpKh/type/:id
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: '/topUpKh/operator'
+      methods: ["POST"]
+      scopes: ['user']
+
+    - host: '*'
+      paths: '/topUpKh/operator'
+      methods: ["GET"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /topUpKh/operator/:id
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
   open:
 
     - host: '*'
