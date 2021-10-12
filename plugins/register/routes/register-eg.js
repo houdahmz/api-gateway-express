@@ -458,9 +458,9 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         const myUserJwt = await jwt.sign({ username: username, password: randomPassword }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
           audience: 'something',
-          expiresIn: 180000,
-          subject: '3pXQjeklS3cFf8OCJw9B22',
-          algorithm: 'HS256'
+          expiresIn: `${env.JWT_TIME}`,
+          subject: `${env.JWT_SUBJECT}`,
+          algorithm: `${env.ALGORITHM}`
         });
 
         console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
@@ -902,9 +902,9 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         const myUserJwt = await jwt.sign({ username: username, password: randomPassword }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
           audience: 'something',
-          expiresIn: 180000,
-          subject: '3pXQjeklS3cFf8OCJw9B22',
-          algorithm: 'HS256'
+          expiresIn: `${env.JWT_TIME}`,
+          subject: `${env.JWT_SUBJECT}`,
+          algorithm: `${env.ALGORITHM}`
         });
 
         console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
@@ -2425,9 +2425,9 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
         const myUserJwt = await jwt.sign({ username: username }, `${env.JWT_SECRET}`, {
           issuer: 'express-gateway',
           audience: 'something',
-          expiresIn: 18000,
-          subject: '3pXQjeklS3cFf8OCJw9B22',
-          algorithm: 'HS256'
+          expiresIn: `${env.JWT_TIME}`,
+          subject: `${env.JWT_SUBJECT}`,
+          algorithm: `${env.ALGORITHM}`
         });
         console.log("aaa", myUserJwt)
 

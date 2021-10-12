@@ -3,7 +3,7 @@ http:
   # host: https://refonte-api.khallasli.com
 admin: 
   port: 9876
- # port: ${HTTP_PORT_ADMIN:9876}
+  # port: ${HTTP_PORT_ADMIN:9876}
   host: localhost 
 
 apiEndpoints:
@@ -985,8 +985,8 @@ pipelines:
   #             jwt:
   #               issuer: express-gateway
   #               audience: something
-  #               subject: 3pXQjeklS3cFf8OCJw9B22
-  #               secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+  #               subject: ${JWT_SUBJECT}
+  #               secretOrPublicKey: ${JWT_SECRET}
   #               checkCredentialExistence: false
   #     - validate-user:
   #     - request-transformer:
@@ -1016,8 +1016,8 @@ pipelines:
               jwt:
                 issuer: express-gateway
                 audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
       - validate-user:
       # - request-transformer:
@@ -1078,8 +1078,8 @@ pipelines:
   #         jwt:
   #           issuer: express-gateway
   #           audience: something
-  #           subject: 3pXQjeklS3cFf8OCJw9B22
-  #           secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+  #           subject: ${JWT_SUBJECT}
+  #           secretOrPublicKey: ${JWT_SECRET}
   #           checkCredentialExistence: false
   #   - validate-user:
   #   - request-transformer:
@@ -1117,8 +1117,8 @@ pipelines:
               jwt:
                 issuer: express-gateway
                 audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
       - validate-user:
       - middleware:
@@ -1148,8 +1148,8 @@ pipelines:
               jwt:
                 issuer: express-gateway
                 audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
       - validate-user:
       - middleware:
@@ -1179,8 +1179,8 @@ pipelines:
               jwt:
                 issuer: express-gateway
                 audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
       - validate-user:
       - request-transformer:
@@ -1210,8 +1210,8 @@ pipelines:
               jwt:
                 issuer: express-gateway
                 audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
       - validate-user:
       - request-transformer:
@@ -1241,8 +1241,8 @@ pipelines:
               jwt:
                 issuer: express-gateway
                 audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
       - validate-user:
       - middleware:
@@ -1289,8 +1289,8 @@ pipelines:
               jwt:
                 issuer: express-gateway
                 audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
       - validate-user:
       - request-transformer:
@@ -1319,8 +1319,8 @@ pipelines:
               jwt:
                 issuer: express-gateway
                 audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
       - validate-user:
       - middleware:
@@ -1350,8 +1350,8 @@ pipelines:
               jwt:
                 issuer: express-gateway
                 audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
       - validate-user:
       - middleware:
@@ -1380,8 +1380,8 @@ pipelines:
               jwt:
                 issuer: express-gateway
                 audience: something
-                subject: 3pXQjeklS3cFf8OCJw9B22
-                secretOrPublicKey: 54v3WJGBcFPh3TFgZSzovw
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
       - validate-user:
       - middleware:

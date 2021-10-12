@@ -6,8 +6,8 @@
 db:
   redis:
     #host: localhost
-    host: 127.0.0.1
-    port: 6379
+    host: ${REDIS_HOST}
+    port: ${REDIS_DB}
     namespace: EG
 #plugins:
   # express-gateway-plugin-example:
@@ -16,8 +16,8 @@ db:
 
   # Express gateway does not store passwords in plain text. It converts hashes them. This section controlls how passwords are converted.
 crypto:
-  cipherKey: sensitiveKey
-  algorithm: aes256
+  cipherKey: ${CIPHERKEY}
+  algorithm: ${ALGORITHMDB}
   saltRounds: 10
 
 # Express Gateway does not need session to work. The only part that requires it is Authorization Code flow of OAuth 2.0 built in server.
@@ -38,12 +38,12 @@ session:
   resave: false
   saveUninitialized: false
 accessTokens:
-  timeToExpiry: 7200
+  timeToExpiry: ${TOKEN_TIME}
   tokenType: 'jwt'
   issuer: 'express-gateway'
   audience: 'something'
-  subject: '3pXQjeklS3cFf8OCJw9B22'
-  secretOrPrivateKey: '54v3WJGBcFPh3TFgZSzovw'
+  subject: ${JWT_SUBJECT}
+  secretOrPrivateKey: ${JWT_SECRET}
 refreshTokens:
   timeToExpiry: 3600
 authorizationCodes:
