@@ -1,12 +1,9 @@
 const services = require('express-gateway/lib/services/')
 const utils = require('express-gateway/lib/services/utils')
-const superagent = require('superagent');
 const axios = require('axios');
 const mail = require("../../../services/emails/emailProvider");
 const mailSimple = require("./mailer.config.js")
 
-const { user } = require('express-gateway/lib/services/');
-const CircularJSON = require('circular-json');
 const util = require("../helpers/utils");
 
 const jwt = require('jsonwebtoken');
@@ -35,10 +32,6 @@ const cors = require("cors");
 
 // const bodyParser = require("body-parser");
 const express = require('express');
-const jsonParser = require('express').json();
-const urlEncodedParser = require("express").urlencoded({ extended: true });
-const { PassThrough } = require("stream");
-
 const status_code = require("../config")
 
 const bodyParser = require("body-parser");
@@ -46,20 +39,6 @@ const app = express();
 var corsOptions = {
   origin: "*"
 };
-var status = {
-  "incompleted": 0,
-  "completed": 1
-}
-const listOfStatus = {
-  1: "pending",
-  2: "refused",
-  3: "done"
-}
-
-require("body-parser").urlencoded({ limit: "50mb", extended: true }),
-  require("body-parser").json({ limit: "50mb", extended: true }),
-  require("express").json({ limit: "50mb", extended: true }), //-- use express.json
-  require("express").urlencoded({ limit: "50mb", extended: true }), //-- use express.urlencoded
 
   module.exports = function (gatewayExpressApp) {
     // gatewayExpressApp.use(bodyParser.json())
@@ -2100,6 +2079,12 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
           return res.status(token.status).json({ token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null });
           
         }
+        if (roles[0] == 'ROLE_SUPER_ADMIN') {
+          // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
+          return res.status(token.status).json({ token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null });
+          
+        }
+
         // else
         // if(scope[0] == 'admin'){
         //   return res.status(token.status).json({ token: token.data, role: scope ,user: userJsonVisistor , categoryWalletId: null});
@@ -3109,79 +3094,79 @@ require("body-parser").urlencoded({ limit: "50mb", extended: true }),
 
     });
 
-    gatewayExpressApp.get('/registre', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // still incomplete
+    // gatewayExpressApp.get('/registre', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // still incomplete
 
 
-      try {
+    //   try {
 
-        //////////////////////////Wallet///////////////////////
+    //     //////////////////////////Wallet///////////////////////
 
-        log4j.loggerinfo.info("Call wallet get solde all: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`);
-        const amountWallet = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`, {
-          params: {
-            yearB: req.query.yearB,
-            dayB: req.query.dayB
-          }
-        })
-        // console.log("amountPaymee",amountPaymee)
-        console.log("amountWallet.data", amountWallet.data)
-        if (!amountWallet.data) {
-          return res.status("500").json("Error: Call wallet get solde all");
-        }
-        var amountTotalWallet = 0
-        if (amountWallet.data.status == 'success') {
-          amountTotalWallet = amountWallet.data.data
-        }
-        console.log("amountTotalWallet", amountTotalWallet)
+    //     log4j.loggerinfo.info("Call wallet get solde all: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`);
+    //     const amountWallet = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`, {
+    //       params: {
+    //         yearB: req.query.yearB,
+    //         dayB: req.query.dayB
+    //       }
+    //     })
+    //     // console.log("amountPaymee",amountPaymee)
+    //     console.log("amountWallet.data", amountWallet.data)
+    //     if (!amountWallet.data) {
+    //       return res.status("500").json("Error: Call wallet get solde all");
+    //     }
+    //     var amountTotalWallet = 0
+    //     if (amountWallet.data.status == 'success') {
+    //       amountTotalWallet = amountWallet.data.data
+    //     }
+    //     console.log("amountTotalWallet", amountTotalWallet)
 
-        //////////////////////////voucher///////////////////////
+    //     //////////////////////////voucher///////////////////////
 
-        log4j.loggerinfo.info("Call voucher get stock voucher: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`);
-        const stockVoucher = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`, {
-          params: {
-            // status: "1100",
-            // dayB: req.query.dayB
-          }
-        })
-        // console.log("amountPaymee",amountPaymee)
+    //     log4j.loggerinfo.info("Call voucher get stock voucher: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`);
+    //     const stockVoucher = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`, {
+    //       params: {
+    //         // status: "1100",
+    //         // dayB: req.query.dayB
+    //       }
+    //     })
+    //     // console.log("amountPaymee",amountPaymee)
 
-        console.log("amountWallet.data", stockVoucher.data)
-        if (!stockVoucher) {
-          return res.status("500").json("Error: Call wallet get solde all");
-        }
-        var stockTotalVoucher = 0
-        if (stockVoucher.data.status == 'success') {
+    //     console.log("amountWallet.data", stockVoucher.data)
+    //     if (!stockVoucher) {
+    //       return res.status("500").json("Error: Call wallet get solde all");
+    //     }
+    //     var stockTotalVoucher = 0
+    //     if (stockVoucher.data.status == 'success') {
 
-          for (let index = 0; index < stockVoucher.data.data.length; index++) {
-            const element = stockVoucher.data.data[index];
-            for (let j = 0; j < element.facial.length; j++) {
-              const elt = element.facial[j];
-              stockTotalVoucher = elt.countAll + stockTotalVoucher
+    //       for (let index = 0; index < stockVoucher.data.data.length; index++) {
+    //         const element = stockVoucher.data.data[index];
+    //         for (let j = 0; j < element.facial.length; j++) {
+    //           const elt = element.facial[j];
+    //           stockTotalVoucher = elt.countAll + stockTotalVoucher
 
-            }
-          }
+    //         }
+    //       }
 
-          // stockTotalVoucher = stockVoucher.data.data.totalPages
-        }
-        console.log("stockTotalVoucher", stockTotalVoucher)
+    //       // stockTotalVoucher = stockVoucher.data.data.totalPages
+    //     }
+    //     console.log("stockTotalVoucher", stockTotalVoucher)
 
-        const responseST_W = {
-          "totale_wallet": amountTotalWallet,
-          "stock": stockTotalVoucher
-        }
+    //     const responseST_W = {
+    //       "totale_wallet": amountTotalWallet,
+    //       "stock": stockTotalVoucher
+    //     }
 
-        return res.status(200).send(responseST_W);
+    //     return res.status(200).send(responseST_W);
 
 
-      } catch (error) {
-        if (!error.response) {
-          log4j.loggererror.error(error.message)
-          return res.status(500).send({ "error": error.message });
-        }
-        log4j.loggererror.error("Error: ")
-        return res.status(error.response.status).send(error.response.data);
-      }
+    //   } catch (error) {
+    //     if (!error.response) {
+    //       log4j.loggererror.error(error.message)
+    //       return res.status(500).send({ "error": error.message });
+    //     }
+    //     log4j.loggererror.error("Error: ")
+    //     return res.status(error.response.status).send(error.response.data);
+    //   }
 
-    });
+    // });
 
   };

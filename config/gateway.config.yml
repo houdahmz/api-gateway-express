@@ -309,7 +309,7 @@ apiEndpoints:
     - host: '*'
       paths: '/topUpKh/transaction'
       methods: ["POST"]
-      scopes: ['user']
+      scopes: ['admin']
 
     - host: '*'
       paths: '/topUpKh/transaction'
@@ -329,12 +329,12 @@ apiEndpoints:
     - host: '*'
       paths: '/topUpKh/type'
       methods: ["POST"]
-      scopes: ['user']
+      scopes: ['admin']
 
     - host: '*'
       paths: '/topUpKh/type'
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','user']
 
     - host: '*'
       paths: /topUpKh/type/:id
@@ -344,12 +344,12 @@ apiEndpoints:
     - host: '*'
       paths: '/topUpKh/operator'
       methods: ["POST"]
-      scopes: ['user']
+      scopes: ['admin']
 
     - host: '*'
       paths: '/topUpKh/operator'
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','user']
 
     - host: '*'
       paths: /topUpKh/operator/:id
@@ -920,22 +920,22 @@ apiEndpoints:
     - host: '*'
       paths: ['/credentials*','/apps*','/api-endpoints*']
       methods: ["GET","POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['super_admin']
+      scopes: ['admin']
 
     - host: '*'
       paths: ['/scopes*']
       methods: ["POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['super_admin']
+      scopes: ['admin']
 
     - host: '*'
       paths: ['/users*']
       methods: ["POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['super_admin']
+      scopes: ['admin']
 
     - host: '*'
       paths: ['/users*']
       methods: ["GET"]
-      scopes: ['super_admin']
+      scopes: ['admin']
 
 serviceEndpoints:
   api_management:

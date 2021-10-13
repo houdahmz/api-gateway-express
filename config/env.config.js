@@ -10,7 +10,10 @@ const JWT_SUBJECT = process.env.JWT_SUBJECT;
 const JWT_TIME = process.env.JWT_TIME;
 const baseURL = process.env.baseURL;
 
-
+const USERADMIN = process.env.USERADMIN;
+const PASSWORD = process.env.PASSWORD;
+const EMAIL = process.env.EMAIL;
+const PHONE = process.env.PHONE;
 
 
 module.exports = {
@@ -20,6 +23,11 @@ module.exports = {
     JWT_SUBJECT: JWT_SUBJECT,
     JWT_TIME: JWT_TIME,
     ALGORITHM: ALGORITHM,
+
+    USERADMIN: USERADMIN,
+    PASSWORD: PASSWORD,
+    EMAIL: EMAIL,
+    PHONE: PHONE,
 
     HTTP_PORT_API_MANAGEMENT: HTTP_PORT_API_MANAGEMENT,
     HTTP_PORT_ADMIN: HTTP_PORT_ADMIN,
