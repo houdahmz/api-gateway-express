@@ -349,7 +349,7 @@ apiEndpoints:
     - host: '*'
       paths: '/topUpKh/operator'
       methods: ["GET"]
-      scopes: ['admin','user']
+      scopes: ['admin']
 
     - host: '*'
       paths: /topUpKh/operator/:id
@@ -697,6 +697,27 @@ apiEndpoints:
       paths: /wallet/service
       methods: ["GET"]
       scopes: ['admin']
+
+    - host: '*'
+      paths: /wallet/service_user/update
+      methods: ["POST"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /wallet/service_user*
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin']
+
+    - host: '*'
+      paths: /wallet/service_user/:id
+      methods: ["GET"]
+      scopes: ['user','admin']   
+
+    - host: '*'
+      paths: /wallet/service_user
+      methods: ["GET"]
+      scopes: ['admin','user'] 
+
     - host: '*'
       paths: /wallet/service*
       methods: ["GET"]
@@ -920,22 +941,22 @@ apiEndpoints:
     - host: '*'
       paths: ['/credentials*','/apps*','/api-endpoints*']
       methods: ["GET","POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['admin']
+      scopes: ['super_admin']
 
     - host: '*'
       paths: ['/scopes*']
       methods: ["POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['admin']
+      scopes: ['super_admin']
 
     - host: '*'
       paths: ['/users*']
       methods: ["POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['admin']
+      scopes: ['super_admin']
 
     - host: '*'
       paths: ['/users*']
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['super_admin']
 
 serviceEndpoints:
   api_management:
