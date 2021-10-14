@@ -55,7 +55,7 @@ module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
     try {
       const { firstname, username, lastname, email, phone, } = req.body
-      const { image, patent, photo, cin, commercial_register, city, zip_code, adresse, activity, updated_by, id_commercial } = req.body
+      const { image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, updated_by, id_commercial } = req.body
 
       // // Validate against a password string
       // if (validation.validatePassword(password) == false) {
@@ -154,6 +154,7 @@ module.exports = function (gatewayExpressApp) {
         patent: patent,
         photo: photo,
         cin: cin,
+        pos: pos,
         commercial_register: commercial_register,
         city: city,
         zip_code: zip_code,
@@ -2289,6 +2290,7 @@ module.exports = function (gatewayExpressApp) {
       })
       console.log("Admin already exist.");
 
+  // manque la creation de scope super_admin
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: env.PASSWORD,
