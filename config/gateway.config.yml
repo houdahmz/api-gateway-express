@@ -11,22 +11,22 @@ apiEndpoints:
     - host: '*'
       paths: /topup/operator*
       methods: ["POST","PATCH","GET","PUT","DELETE"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /topup/simcard*
       methods: ["POST","PATCH","GET","PUT","DELETE"]
-      scopes: ['admin'] 
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /topup/serialeport*
       methods: ["POST","PATCH","GET","PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
       
 
   profile:
     - host: '*'
       paths: /admin/company*
       methods: ["POST","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /admin/statsmobile
@@ -56,17 +56,17 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/user/:id
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/profile/export
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/profile
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/profile/by_userId/:id
@@ -76,17 +76,17 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/profile/:id
       methods: ["DELETE","GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/profile*
       methods: ["PUT","PATCH"]
-      scopes: ['user','admin',"visitor"]
+      scopes: ['user','admin','super_admin',"visitor"]
 
     - host: '*'
       paths: /user-management/company/:id
       methods: ["PUT","PATCH"]
-      scopes: ['user','admin',"visitor"]
+      scopes: ['user','admin','super_admin',"visitor"]
 
     - host: '*'
       paths: /user-management/company/profile-by-company
@@ -96,17 +96,17 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/company/import
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/history/*
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/image*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/activity/:id
@@ -116,12 +116,12 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/activity
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/type-user/by_code/:id
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/type-user
@@ -136,7 +136,7 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/type-user
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/region
@@ -151,7 +151,7 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/region
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/getUserByRegion
@@ -161,22 +161,22 @@ apiEndpoints:
     - host: '*'
       paths: /user-management/category*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/document*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/company*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/activity-company*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
   voucher:
 
@@ -185,12 +185,12 @@ apiEndpoints:
     - host: '*'
       paths: /voucher/document
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/document/:id
       methods: ["DELETE","GET","PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/voucher/transaction'
@@ -200,7 +200,7 @@ apiEndpoints:
     - host: '*'
       paths: '/voucher/transaction'
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/voucher/transaction/by_user/:id'
@@ -210,7 +210,7 @@ apiEndpoints:
     - host: '*'
       paths: '/voucher/transaction/status/:id'
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/facial
@@ -225,12 +225,12 @@ apiEndpoints:
     - host: '*'
       paths: /voucher/facial*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     # - host: '*'
     #   paths: /voucher/voucher*
     #   methods: ["POST"]
-    #   scopes: ['admin']
+    #   scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/operator
@@ -245,7 +245,7 @@ apiEndpoints:
     - host: '*'
       paths: /voucher/operator*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/settings
@@ -260,61 +260,61 @@ apiEndpoints:
     - host: '*'
       paths: /voucher/settings*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/transactionByAdmin/:id
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     # - host: '*'
     #   paths: /voucher/document*
     #   methods: ["POST","DELETE","PUT","PATCH","GET"]
-    #   scopes: ['admin']
+    #   scopes: ['admin','super_admin']
 
     # - host: '*'
     #   paths: /voucher/transaction/
     #   methods: ["GET"]
-    #   scopes: ['admin']
+    #   scopes: ['admin','super_admin']
 
 # add voucher 
     - host: '*'
       paths: /voucher
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/ooredoo
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
 
     - host: '*'
       paths: /voucher/:id
       methods: ["GET","DELETE"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
   topupKh:
 
     - host: '*'
       paths: '/topUpKh/stats'
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/topUpKh/transaction'
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/topUpKh/transaction'
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/topUpKh/transaction/by_user'
@@ -324,37 +324,37 @@ apiEndpoints:
     - host: '*'
       paths: /topUpKh/transaction/:id
       methods: ["GET","DELETE"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
  
     - host: '*'
       paths: '/topUpKh/type'
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/topUpKh/type'
       methods: ["GET"]
-      scopes: ['admin','user']
+      scopes: ['admin','super_admin','user']
 
     - host: '*'
       paths: /topUpKh/type/:id
       methods: ["GET","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/topUpKh/operator'
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/topUpKh/operator'
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /topUpKh/operator/:id
       methods: ["GET","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
   open:
 
@@ -456,52 +456,52 @@ apiEndpoints:
     - host: '*'
       paths: /home/contact_user*
       methods: ["GET","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/contact*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
       
     - host: '*'
       paths: /home/block*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/header*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/logo*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/regard*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/partner*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/feature*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/image*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/serivce*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
   paymee:
     - host: '*'
@@ -532,7 +532,7 @@ apiEndpoints:
     - host: '*'
       paths: /poste/affiliation-commercant
       methods: ["POST","GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/bill-payment
       methods: ["POST"]
@@ -546,7 +546,7 @@ apiEndpoints:
     - host: '*'
       paths: /poste/balance
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /poste/unsubscribe*
@@ -555,19 +555,19 @@ apiEndpoints:
     - host: '*'
       paths: /poste/card*
       methods: ["GET","POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/alimentation-user*
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/collect-fond*
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/affiliation
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/affiliation/user*
       methods: ["GET"]
@@ -575,7 +575,7 @@ apiEndpoints:
     - host: '*'
       paths: /poste/recharge
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/recharge/user*
       methods: ["GET"]
@@ -583,7 +583,7 @@ apiEndpoints:
     - host: '*'
       paths: /poste/bill-payment
       methods: ["GET"]
-      scopes: ['admin']  
+      scopes: ['admin','super_admin']  
     - host: '*'
       paths: /poste/bill-payment/user*
       methods: ["GET"]
@@ -591,7 +591,7 @@ apiEndpoints:
     - host: '*'
       paths: /poste/transaction-transfer
       methods: ["GET"]
-      scopes: ['admin'] 
+      scopes: ['admin','super_admin'] 
   topnet:
     - host: '*'
       paths: /topnet/payment*
@@ -605,7 +605,7 @@ apiEndpoints:
     - host: '*'
       paths:  /topnet/transaction*
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /topnet/bill*
       methods: ["GET"]
@@ -621,34 +621,34 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/supplier-service*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/supplier-service/:id
       methods: ["GET"]
-      scopes: ['user','admin']   
+      scopes: ['user','admin','super_admin']   
 
     - host: '*'
       paths: /wallet/supplier-service
       methods: ["GET"]
-      scopes: ['admin','user'] 
+      scopes: ['admin','super_admin','user'] 
 
     - host: '*'
       paths: /wallet/supplier
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/supplier
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/supplier*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/supplier*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/supplier/*
       methods: ["PATCH"]
@@ -656,164 +656,164 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/supplier/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['admin','super_admin']                       
     - host: '*'
       paths: /wallet/supplier
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/reimbursed
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/reimbursed
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/reimbursed*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/reimbursed*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/reimbursed/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/reimbursed/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['admin','super_admin']                       
     - host: '*'
       paths: /wallet/reimbursed
       methods: ["POST"]
-      scopes: ['admin']  
+      scopes: ['admin','super_admin']  
     - host: '*'
       paths: /wallet/service
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/service
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/service_user/update
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/service_user*
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/service_user/:id
       methods: ["GET"]
-      scopes: ['user','admin']   
+      scopes: ['user','admin','super_admin']   
 
     - host: '*'
       paths: /wallet/service_user
       methods: ["GET"]
-      scopes: ['admin','user'] 
+      scopes: ['admin','super_admin','user'] 
 
     - host: '*'
       paths: /wallet/service*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/service*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/service/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/service/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['admin','super_admin']                       
     - host: '*'
       paths: /wallet/service
       methods: ["POST"]
-      scopes: ['admin']    
+      scopes: ['admin','super_admin']    
     - host: '*'
       paths: /wallet/category
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/category
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/category*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/category*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/category/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/category/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['admin','super_admin']                       
     - host: '*'
       paths: /wallet/category  
     - host: '*'
       paths: /wallet/document
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/document
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/document*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/document*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/document/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/document/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['admin','super_admin']                       
     - host: '*'
       paths: /wallet/document     
     - host: '*'
       paths: /wallet/currency
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/currency
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/currency*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/currency*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/currency/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/currency/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['admin','super_admin']                       
     - host: '*'
       paths: /wallet/currency   
     - host: '*'
@@ -823,7 +823,7 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/feed/type
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/feed/by_user
       methods: ["GET"]
@@ -831,112 +831,112 @@ apiEndpoints:
     - host: '*'
       paths: /wallet/feed
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/feed/type
       methods: ["GET"]
-      scopes: ['user','admin']   
+      scopes: ['user','admin','super_admin']   
     - host: '*'
       paths: /wallet/feed/type/*
       methods: ["GET"]
-      scopes: ['user','admin']  
+      scopes: ['user','admin','super_admin']  
     - host: '*'
       paths: /wallet/feed/type/*
       methods: ["PUT"]
-      scopes: ['admin','user']
+      scopes: ['admin','super_admin','user']
     - host: '*'
       paths: /wallet/feed/type/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/feed/type/*
       methods: ["DELETE"]
-      scopes: ['admin']  
+      scopes: ['admin','super_admin']  
     - host: '*'
       paths: /wallet/feed*
       methods: ["GET"]
-      scopes: ['user','admin']
+      scopes: ['user','admin','super_admin']
     - host: '*'
       paths: /wallet/feed*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/feed/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/feed/*
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['admin','super_admin']                       
    
     - host: '*'
       paths: /wallet/intervenant/:id
       methods: ["GET","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/intervenant
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['admin','super_admin']   
 
     - host: '*'
       paths: /wallet/intervenant
       methods: ["POST","DELETE","PUT","PATCH"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/commission
       methods: ["POST"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/commission
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/commission*
       methods: ["GET"]
-      scopes: ['admin']   
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/commission*
       methods: ["PUT"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/commission/*
       methods: ["PATCH"]
-      scopes: ['admin'] 
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/commission/:id
       methods: ["DELETE"]
-      scopes: ['admin']                       
+      scopes: ['admin','super_admin']                       
     - host: '*'
       paths: /wallet/commission  
     - host: '*'
       paths: /wallet
       methods: ["GET"]
-      scopes: ['admin','user'] 
+      scopes: ['admin','super_admin','user'] 
     - host: '*'
       paths: /wallet
       methods: ["POST"]
-      scopes: ['admin']   
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/:id
       methods: ["PUT","PATCH","DELETE"]
-      scopes: ['admin']  
+      scopes: ['admin','super_admin']  
     - host: '*'
       paths: /wallet/:id
       methods: ["GET"]
-      scopes: ['admin','user']    
+      scopes: ['admin','super_admin','user']    
     - host: '*'
       paths: /wallet/history
       methods: ["GET"]
-      scopes: ['admin','user']       
+      scopes: ['admin','super_admin','user']       
                                   
   api:
 
     - host: '*'
       paths: ['/scopes*']
       methods: ["GET"]
-      scopes: ['admin']
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: ['/credentials*','/apps*','/api-endpoints*']
