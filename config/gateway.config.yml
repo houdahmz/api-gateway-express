@@ -4,7 +4,7 @@ http:
 admin: 
   port: 9876
   # port: ${HTTP_PORT_ADMIN:9876}
-  host: localhost 
+  host: 192.168.12.115 
 
 apiEndpoints:
   topup:
