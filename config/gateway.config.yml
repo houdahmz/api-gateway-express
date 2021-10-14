@@ -4,7 +4,7 @@ http:
 admin: 
   port: 9876
   # port: ${HTTP_PORT_ADMIN:9876}
-  host: 192.168.12.115 
+  host: localhost 
 
 apiEndpoints:
   topup:
@@ -931,33 +931,6 @@ apiEndpoints:
       methods: ["GET"]
       scopes: ['admin','user']       
                                   
-  api:
-
-    - host: '*'
-      paths: ['/scopes*']
-      methods: ["GET"]
-      scopes: ['admin']
-
-    - host: '*'
-      paths: ['/credentials*','/apps*','/api-endpoints*']
-      methods: ["GET","POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['super_admin']
-
-    - host: '*'
-      paths: ['/scopes*']
-      methods: ["POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['super_admin']
-
-    - host: '*'
-      paths: ['/users*']
-      methods: ["POST","PUT","DELETE","PATCH",PUT]
-      scopes: ['super_admin']
-
-    - host: '*'
-      paths: ['/users*']
-      methods: ["GET"]
-      scopes: ['super_admin']
-
 serviceEndpoints:
   api_management:
     url: http://localhost:${HTTP_PORT_API_MANAGEMENT:-4000}/api-management
