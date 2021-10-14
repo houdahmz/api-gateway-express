@@ -1305,6 +1305,11 @@ pipelines:
           - action:
               message: "api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}"
       - cors:              
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
       - log:
           - action:
               message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
