@@ -1436,9 +1436,7 @@ module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.get('/stats', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // still incomplete
 
     try {
-
       //////////////////////////topup///////////////////////
-
       log4j.loggerinfo.info("Call wallet get stock topup: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`);
       const statTopup = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`, {
         params: {
@@ -1474,8 +1472,6 @@ module.exports = function (gatewayExpressApp) {
         arrayStatsRegion = statsRegion.data.data
       }
       console.log("amountTotalWallet", arrayStatsRegion)
-
-
       log4j.loggerinfo.info("Call paymee: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
       const amountPaymee = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`, {
         params: {
@@ -1569,11 +1565,9 @@ module.exports = function (gatewayExpressApp) {
 
       console.log("statTopup", statTopup.data)
       console.log("eeeeeefffff")
-
       console.log("statTopup", statTopup)
       console.log("statTopup.data", statTopup.data)
       console.log("statTopup.data.data", statTopup.data.data)
-
 
       return res.status(200).json({
         "Services": {
@@ -1592,11 +1586,6 @@ module.exports = function (gatewayExpressApp) {
 
       });
 
-
-
-
-
-
     } catch (error) {
       if (!error.response) {
         log4j.loggererror.error(error.message)
@@ -1610,14 +1599,11 @@ module.exports = function (gatewayExpressApp) {
 
 
   gatewayExpressApp.get('/stats/byUser', verifyTokenUser, async (req, res, next) => { // still incomplete
-
-
     try {
       console.log("------------------------")
       console.log("----------req.body.userId-------------- ", req.body.userId)
       req.query.userId = req.body.userId
       console.log("----------req.query.userId-------------- ", req.query.userId)
-
       console.log("------------------------")
       //////////////////////////topup///////////////////////
 
@@ -1769,9 +1755,6 @@ module.exports = function (gatewayExpressApp) {
       console.log("statTopup.data", statTopup.data)
       console.log("statTopup.data.data", statTopup.data.data)
 
-
-
-
       return res.status(200).json({
         "Services": {
           "paymee": amountPaymee.data.data,
@@ -1789,11 +1772,6 @@ module.exports = function (gatewayExpressApp) {
 
       });
 
-
-
-
-
-
     } catch (error) {
       if (!error.response) {
         log4j.loggererror.error(error.message)
@@ -1806,8 +1784,6 @@ module.exports = function (gatewayExpressApp) {
   });
 
   gatewayExpressApp.get('/stock_wallet', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // still incomplete
-
-
     try {
 
       //////////////////////////Wallet///////////////////////
