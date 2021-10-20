@@ -671,22 +671,6 @@ module.exports = function (gatewayExpressApp) {
 
   gatewayExpressApp.patch('/accept/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //accept or refuser a visitor (means give a visitor a role as a user)
     //accept or refuse a pdv 
-    const deleteCompany = async (idCompany, deletedByUser) => {
-      try {
-        console.log("idCompany", idCompany)
-        console.log("deletedByUser", deletedByUser)
-        log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
-        // const bodyCompany
-        return await axios.delete(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/` + idCompany, { data: req.body })
-      } catch (error) {
-        if (!error.response) {
-          log4j.loggererror.error(error.message)
-          return res.status(500).send({ "error": error.message });
-        }
-        log4j.loggererror.error("Error in deleteProfile :" + error.response.data)
-        return res.status(error.response.status).send(error.response.data);
-      }
-    }
     const { code } = req.body // code = 10 delete , 11 accept // id is a username
     console.log("Body in accepte endpint ", req.body)
     if (!code) {
@@ -1280,50 +1264,6 @@ module.exports = function (gatewayExpressApp) {
 
 
   }
-
-  gatewayExpressApp.get('/api/logout', async (req, res, next) => { // still incomplete
-    console.log('heere', req.headers.authorization)
-    const test = await services.token.getTokenObject(req.headers.authorization)
-
-    return res.status(200).json(test);
-
-  });
-
-  gatewayExpressApp.post('/api/refreshToken', async (req, res, next) => { // still incomplete
-    const { client_id, client_secret, refresh_token } = req.body
-    console.log("************token *******************")
-
-    const getRefreshToken = async (client_id, client_secret, refresh_token) => {
-      try {
-        return await axios.post(`${env.baseURL}:${env.HTTP_PORT}/oauth2/token`, {
-          grant_type: "refresh_token",
-          refresh_token: refresh_token,
-          client_id: client_id,
-          client_secret: client_secret
-        })
-      } catch (error) {
-        console.error("error")
-        return res.status(400).json("error", error);
-
-      }
-    }
-    const token = getRefreshToken(client_id, client_secret, refresh_token)
-    console.log("token ", token.data)
-    console.log("token.data.access_token ", token.data.access_token)
-    console.log("token ", token)
-    return res.status(200).json({ token: token.data });
-    // myCredOauth = await services.credential.getCredential(client_id, 'oauth2')
-    // myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
-    // crd_oauth2 = await services.credential.insertCredential(client_id, 'oauth2')
-    // console.log("crd_oauth2 ", crd_oauth2)
-    // console.log("crd_oauth2 ", myCredOauth)
-    // const refresh_token = getRefreshToken(client_id,crd_oauth2.secret,refresh_token)
-    // const refresh_token = req.body.refresh_token
-    const test = await services.token.getTokenObject(refresh_token)
-    console.log("test", test)
-    return res.status(200).json(test);
-  });
-
   gatewayExpressApp.post('/forgot-password', async (req, res, next) => { 
     ///////////////////Email////////////////////////
     const email = req.body.email
@@ -1493,33 +1433,6 @@ module.exports = function (gatewayExpressApp) {
     }
   });
 
-  gatewayExpressApp.post('/api/test_password', async (req, res, done) => { // still 
-
-    const validateConsumer = await authService.validateConsumer(req.body.consumerId);
-    const user = await authService.authenticateCredential(req.body.username, req.body.password, 'basic-auth');
-    const createJWT = await tokenService.createJWT({ consumerId: req.body.consumerId, scopes: req.body.scopes })
-    const saveJWT = await tokenService.save({ consumerId: req.body.consumerId, scopes: req.body.scopes }, { refreshTokenOnly: true })
-    const tokenCriteria = {
-      consumerId: req.body.consumerId,
-      authenticatedUser: user.id
-    };
-    const token = await tokenService.findOrSave(tokenCriteria, { includeRefreshToken: true })
-
-    console.log("validateConsumer", validateConsumer)
-    console.log("user", user)
-    console.log("createJWT", createJWT)
-    console.log("saveJWT", saveJWT)
-    console.log("findOrSaveJWT", token)
-    console.log("findOrSaveJWT", token)
-    return res.status(200).json("token");
-
-  });
-
-  gatewayExpressApp.get('/api/logout', async (req, res, next) => { // still incomplete
-    console.log('heere', req.headers.authorization)
-    const test = await services.token.getTokenObject(req.headers.authorization)
-    return res.status(200).json(test);
-  });
   gatewayExpressApp.get('/stats', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // still incomplete
 
     try {
