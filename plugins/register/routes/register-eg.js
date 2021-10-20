@@ -28,6 +28,7 @@ const app = express();
 var corsOptions = {
   origin: "*"
 };
+const expiresIn = 3.6*1000*1000; //in ms //equals to 1 hour 
 
 module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
@@ -95,7 +96,7 @@ module.exports = function (gatewayExpressApp) {
       const myUserJwt = await jwt.sign({ username: username, password: randomPassword }, `${env.JWT_SECRET}`, {
         issuer: 'express-gateway',
         audience: 'something',
-        expiresIn: `18000`,
+        expiresIn: expiresIn,
         subject: `${env.JWT_SUBJECT}`,
         algorithm: `${env.ALGORITHM}`
       });
@@ -443,7 +444,7 @@ module.exports = function (gatewayExpressApp) {
       const myUserJwt = await jwt.sign({ username: username, password: randomPassword }, `${env.JWT_SECRET}`, {
         issuer: 'express-gateway',
         audience: 'something',
-        expiresIn: `18000`,
+        expiresIn: expiresIn,
         subject: `${env.JWT_SUBJECT}`,
         algorithm: `${env.ALGORITHM}`
       });
@@ -1349,7 +1350,7 @@ module.exports = function (gatewayExpressApp) {
       const myUserJwt = await jwt.sign({ username: username }, `${env.JWT_SECRET}`, {
         issuer: 'express-gateway',
         audience: 'something',
-        expiresIn: `18000`,
+        expiresIn: expiresIn,
         subject: `${env.JWT_SUBJECT}`,
         algorithm: `${env.ALGORITHM}`
       });
