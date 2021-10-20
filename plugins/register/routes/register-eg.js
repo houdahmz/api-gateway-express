@@ -3,31 +3,17 @@ const utils = require('express-gateway/lib/services/utils')
 const axios = require('axios');
 const mail = require("../../../services/emails/emailProvider");
 const mailSimple = require("./mailer.config.js")
-
 const util = require("../helpers/utils");
-
 const jwt = require('jsonwebtoken');
 const env = require("../../../config/env.config");
-// const validation = require("./validation");
 const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
 const authService = services.auth;
-
 const log4j = require("../../../config/configLog4js.js");
 const validation = require("../middleware/validation")
 const os = require('os');
-var ipF = require("ip");
-const publicIp = require('public-ip');
 useragent = require('express-useragent');
 var device = require('express-device');
-var MobileDetect = require('mobile-detect');
-const { lookup } = require('geoip-lite');
-const iplocate = require("node-iplocate");
-
-const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
-const secretOrPrivateKey = config.systemConfig.accessTokens.secretOrPrivateKey
-const fs = require('fs');
-const PUB_KEY = fs.readFileSync("./config/public.pem", 'utf8');
 const cors = require("cors");
 const {
   createAdminProfile, getProfileByPhone, getProfileByEmail, addWallet, getType, getTypeById, getToken, getProfileByUsername, updateprofileConfirm, getCategoryFromWalletWithCode, getProfile, getCurrency, creteProfile, updateprofile, getWallet, updateprofileByAdmin
@@ -36,7 +22,7 @@ const {
 // const bodyParser = require("body-parser");
 const express = require('express');
 const status_code = require("../config")
-
+console.log("aaaaertyyuu")
 const bodyParser = require("body-parser");
 const app = express();
 var corsOptions = {
@@ -44,15 +30,13 @@ var corsOptions = {
 };
 
 module.exports = function (gatewayExpressApp) {
-  // gatewayExpressApp.use(bodyParser.json())
   gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
   gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-
   gatewayExpressApp.use(cors(corsOptions));
   gatewayExpressApp.use(device.capture());
 
   //////////////////////////////////////////////////////////////////////////////////
-  gatewayExpressApp.post('/register', async (req, res, next) => { // code=10 for pdv where he has /api/completed-register
+  gatewayExpressApp.post('/register', async (req, res, next) => { 
     try {
       const { firstname, username, lastname, email, phone, } = req.body
       const { image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, updated_by, id_commercial } = req.body
@@ -67,20 +51,16 @@ module.exports = function (gatewayExpressApp) {
       //   return res.status(400).json({status:"Error",error: "password does not much"});
 
       // }
-
-      // Verifier mail et phone **************************
-
+      /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
       if (!email) {
         util.setError(400, "email is required", status_code.CODE_ERROR.EMPTY);
         return util.send(res);
-
       }
       if (!phone) {
         util.setError(400, "phone is required", status_code.CODE_ERROR.EMPTY);
         return util.send(res);
-
       }
-
+      /////////////////////////////Check email unique or not/////////////////////////////////////////////////////
       const getProfiled = await getProfileByEmail(email, res)
       console.log("getProfile", getProfiled.data)
       if (getProfiled.data.status == 'success') {
@@ -93,6 +73,7 @@ module.exports = function (gatewayExpressApp) {
         util.setError(200, getProfiled.data, status_code.CODE_ERROR.EMPTY); //code
         return util.send(res);
       }
+      /////////////////////////////Check phone unique or not/////////////////////////////////////////////////////
       const getProfiledByPhone = await getProfileByPhone(phone, res)
       console.log("getProfiledByPhone", getProfiledByPhone.data)
       if (getProfiledByPhone.data.status == 'success') {
@@ -105,6 +86,7 @@ module.exports = function (gatewayExpressApp) {
         util.setError(200, getProfiledByPhone.data, status_code.CODE_ERROR.EMPTY); //code
         return util.send(res);
       }
+      /////////////////////////////generate random password/////////////////////////////////////////////////////
       var randomPassword = Math.random().toString(36).slice(-8);
       console.log("randomPassword", randomPassword)
       console.log("randomPassword", env.JWT_TIME)
@@ -118,6 +100,7 @@ module.exports = function (gatewayExpressApp) {
         algorithm: `${env.ALGORITHM}`
       });
       console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
+      /////////////////////////////create user/////////////////////////////////////////////////////
       myUser = await services.user.insert({
         isActive: false,
         confirmMail: false,
@@ -141,13 +124,15 @@ module.exports = function (gatewayExpressApp) {
         util.setError(500, "Internal Server Error", status_code.CODE_ERROR.SERVER);
         return util.send(res);
       }
+      /////////////////////////////create basic-auth credential for authentication/////////////////////////////////////////////////////
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: randomPassword,
         scopes: []
       })
+      /////////////////////////////create basic-auth credential for authorization with scope/////////////////////////////////////////////////////
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
-      // ****************************create_profile *********************************
+      /////////////////////////////create profile/////////////////////////////////////////////////////
       console.log("photooooooooooooooos", photo)
       const body = {
         image: image,
@@ -170,17 +155,16 @@ module.exports = function (gatewayExpressApp) {
       }
       // console.log("aaaa", userProfile)
       if (userProfile.data.status == "error") {
-        // services.user.remove()
         log4j.loggererror.error("Error in adding profile: " + userProfile.data)
-        //console.log("aaaa iciii ",myUser.id)
         util.setError(400, userProfile.data);
         return util.send(res);
       }
+      /////////////////////////////create application contains his login info(last_login/from which device/////////////////////////////////////////////////////
       myProfile = await services.application.insert({
         name: "complete_profile" + myUser.id,
         redirectUri: `${env.baseURL}:5000/api/profile`
       }, myUser.id)
-
+      /////////////////////////////Send mails/////////////////////////////////////////////////////
       var origin = req.headers.origin;
       console.log("req.headers.origin ", req.headers.origin)
       if (origin) {
@@ -191,6 +175,7 @@ module.exports = function (gatewayExpressApp) {
       const confirm_uri = `${url}/registration-confirm?username=` + username + "&" + "confirm_token=" + myUserJwt;
       mail.sendMail("Confirmation of your registration", "Veuillez cliquer sur lien pour confirmer votre mail \n ", confirm_uri, req.body.email, username, firstname, lastname, randomPassword);
       console.log("confirm_uri", confirm_uri)
+      
       log4j.loggerinfo.info("Success, mail has been sent to : " + email);
       return res.status(201).json({ etat: "Success", message: "Check your email : " + email });
     } catch (err) {
@@ -419,6 +404,7 @@ module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.post('/team-register', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // incomplete {add send mail with url /change_password} 
     try {
       const { firstname, username, lastname, email, phone, type_userId } = req.body
+      /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
       if (!email) {
         return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
       }
@@ -428,7 +414,7 @@ module.exports = function (gatewayExpressApp) {
       if (!type_userId) {
         return res.status(400).json({ status: "Error", error: "type_userId is required", code: status_code.CODE_ERROR.REQUIRED });
       }
-
+      /////////////////////////////Check email unique or not/////////////////////////////////////////////////////
       const getProfiled = await getProfileByEmail(email, res)
       console.log("getProfile", getProfiled.data)
       if (getProfiled.data.status == 'success') {
@@ -440,6 +426,7 @@ module.exports = function (gatewayExpressApp) {
       } else {
         return res.status(200).json({ message: getProfiled.data });
       }
+      /////////////////////////////Check phone unique or not/////////////////////////////////////////////////////
       const getProfiledByPhone = await getProfileByPhone(phone, res)
       console.log("getProfiledByPhone", getProfiledByPhone.data)
       if (getProfiledByPhone.data.status == 'success') {
@@ -450,6 +437,7 @@ module.exports = function (gatewayExpressApp) {
       } else {
         return res.status(200).json({ message: getProfiledByPhone.data });
       }
+      /////////////////////////////generate random password/////////////////////////////////////////////////////
       var randomPassword = Math.random().toString(36).slice(-8);
       console.log("randomPassword", randomPassword)
       const myUserJwt = await jwt.sign({ username: username, password: randomPassword }, `${env.JWT_SECRET}`, {
@@ -468,6 +456,7 @@ module.exports = function (gatewayExpressApp) {
       }
       const code = dataType.data.data.data.type
       const type = dataType.data.data.data.id
+      /////////////////////////////create user/////////////////////////////////////////////////////
       myUser = await services.user.insert({
         isActive: true,
         confirmMail: false,
@@ -532,15 +521,17 @@ module.exports = function (gatewayExpressApp) {
           return res.status(error.response.status).send(error.response.data);
         }
       }
+      /////////////////////////////create basic-auth credential for authentication/////////////////////////////////////////////////////
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: randomPassword,
         scopes: []
       })
       console.log("crd_basic", crd_basic)
+      /////////////////////////////create basic-auth credential for authorization with scope/////////////////////////////////////////////////////
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: [code] })
       console.log("crd_oauth2", crd_oauth2)
-      // ****************************create_profile *********************************
+      /////////////////////////////create profile/////////////////////////////////////////////////////
       const userProfile = await creteProfile(myUser);
       console.log("iciiiiiuserProfile", userProfile.data)
       if (!userProfile.data) {
@@ -551,11 +542,12 @@ module.exports = function (gatewayExpressApp) {
         log4j.loggererror.error("Error  : " + userProfile.data)
         return res.status(400).json(userProfile.data);
       }
-      // create 
+      /////////////////////////////create application contains his login info(last_login/from which device/////////////////////////////////////////////////////
       myProfile = await services.application.insert({
         name: "complete_profile" + myUser.id,
         redirectUri: `${env.baseURL}:5000/api/profile`
       }, myUser.id)
+      /////////////////////////////Send mails/////////////////////////////////////////////////////
       var origin = req.headers.origin;
       console.log("req.headers.origin ", req.headers.origin)
       if (origin) {
@@ -569,6 +561,7 @@ module.exports = function (gatewayExpressApp) {
       mail.sendChangePassword("Change password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " ) \n ", change_password_uri, req.body.email, username, randomPassword);
       console.log("confirm_uri", confirm_uri)
       console.log("change_password_uri", change_password_uri)
+
       log4j.loggerinfo.info("Success, mail has been sent to : " + email);
       return res.status(201).json({ etat: "Success", message: "Check your email : " + email });
     } catch (err) {
@@ -577,28 +570,28 @@ module.exports = function (gatewayExpressApp) {
     }
   });
 
-  gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //endpoint pour activer
+  gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //endpoint for activate (isActivate)
     const { code } = req.body // code = 10 desactive , 11 active // id is a username
     if (!code) {
-      log4j.loggererror.error("Unkown error.")
-      return res.status(200).json({ error: "Code can not be empty (set 10 to desactivate or 11 to activate a user" });
+      log4j.loggererror.error("Code can not be empty (set 10 to desactivate or 11 to activate) a user")
+      util.setError(200, "Code can not be empty (set 10 to desactivate or 11 to activate) a user", status_code.CODE_ERROR.EMPTY);
+      return util.send(res);
     }
     myUser = await services.user.findByUsernameOrId(req.params.id)
     console.log("myUser", myUser)
     if (myUser == false) {
-      log4j.loggererror.error("Unkown error.")
+      log4j.loggererror.error("The user does not exist.")
       return res.status(200).json({ message: "The user does not exist" });
     }
-    /************************************ */
+    //////////////////////////////Get profile///////////////////////////////////
     const getProfiled = await getProfileByUsername(req.params.id, res)
     console.log("getProfile", getProfiled.data)
     if (getProfiled.data.status == 'success') {
       console.log("myUser.id", myUser.id)
+      //////////////////////////////Desactivate a user///////////////////////////////////
       if (code == 10) {
         myUser = await services.user.deactivate(myUser.id)
         if (myUser == true) {
-          log4j.loggererror.error("Unkown error.")
-          /////////////////////
           console.log("id", getProfiled.data.data.data[0].id)
           const updateBody = {
             isActive: false
@@ -606,6 +599,7 @@ module.exports = function (gatewayExpressApp) {
           console.log("*************************************************************************************")
           console.log("getProfiled.data.data.data[0].id_user", getProfiled.data.data.data[0].id)
           console.log("*************************************************************************************")
+          //////////////////////////////Update the status of user///////////////////////////////////
           let userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id, res);
           if (!userProfile.data) {
             log4j.loggererror.error("Error Problem in server ")
@@ -614,7 +608,9 @@ module.exports = function (gatewayExpressApp) {
           ////////////////////////////////////
           return res.status(200).json({ message: "The user has been desactivated" });
         }
-      } else if (code == 11) {
+      } 
+      //////////////////////////////Activate a user///////////////////////////////////
+      else if (code == 11) {
         myUser = await services.user.activate(myUser.id)
         if (myUser == true) {
           log4j.loggererror.error("Unkown error.")
@@ -626,6 +622,7 @@ module.exports = function (gatewayExpressApp) {
           console.log("*************************************************************************************")
           console.log("getProfiled.data.data.data[0].id_user", getProfiled.data.data.data[0].id)
           console.log("*************************************************************************************")
+          //////////////////////////////Update the status of user///////////////////////////////////
           let userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id, res);
           if (!userProfile.data) {
             log4j.loggererror.error("Error Problem in server ")
@@ -645,9 +642,10 @@ module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.patch('/update_role/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => {
     const { role } = req.body // code = 10 desactive , 11 active // id is a username
     if (!role) {
-      log4j.loggererror.error("Unkown error.")
+      log4j.loggererror.error("role can not be empty.")
       return res.status(200).json({ error: "role can not be empty " });
     }
+    //////////////////////////////Get user///////////////////////////////////
     myUser = await services.user.find(req.params.id)
     console.log("myUser", myUser)
     if (myUser == false) {
@@ -656,13 +654,9 @@ module.exports = function (gatewayExpressApp) {
     }
     else {
       myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
-      console.log("******************Scopeeeeeee******************")
       console.log("old myCredOauth", myCredOauth)
-      console.log("************************************")
       let scope = myCredOauth.scopes;
-      console.log("******************Scopeeeeeee******************")
       console.log("old scope", scope)
-      console.log("************************************")
       myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
       let roles = []
       roles[0] = role
@@ -693,11 +687,12 @@ module.exports = function (gatewayExpressApp) {
       }
     }
     const { code } = req.body // code = 10 delete , 11 accept // id is a username
-    console.log("Bodyyy in accepte endpint ", req.body)
+    console.log("Body in accepte endpint ", req.body)
     if (!code) {
       log4j.loggererror.error("Role can not be empty")
       return res.status(200).json({ error: "Role can not be empty " });
     }
+    //////////////////////////////Get user///////////////////////////////////
     myUser = await services.user.find(req.params.id)
     console.log("myUser", myUser)
     if (myUser == false) {
@@ -713,9 +708,10 @@ module.exports = function (gatewayExpressApp) {
         log4j.loggererror.error("user already accepted") //demand is already accepted
         return res.status(200).json({ status: "error", message: "user already accepted", code: status_code.CODE_ERROR.ALREADY_ACCEPTED });
       }
+      //////////////////////////////Get profile///////////////////////////////////
       const getProfiled = await getProfile(myUser.id, res)
       console.log("getProfile", getProfiled.data)
-      if (code == 10) { //refuse
+      if (code == 10) { //refuse user
         if (getProfiled.data.status == 'success') {
           console.log("CompanyId", getProfiled.data.data.CompanyId)
           console.log("myUser.id", myUser.id)
@@ -779,6 +775,7 @@ module.exports = function (gatewayExpressApp) {
           if (dataWallet.data.status == "error") {
             return res.status(dataWallet.status).json({ status: dataWallet.data.status, message: dataWallet.data.message });
           }
+          //////////////////////////////Send mail///////////////////////////////////
           var origin = req.headers.origin;
           console.log("req.headers.origin ", req.headers.origin)
           if (origin) {
@@ -814,7 +811,7 @@ module.exports = function (gatewayExpressApp) {
 
         redirectUri: 'https://www.khallasli.com',
       })
-      ////////////
+      ////////////Generate a random password///////////////////////////////////////
       var randomPassword = Math.random().toString(36).slice(-8);
       console.log("randomPassword", randomPassword)
       //////////////
@@ -829,7 +826,7 @@ module.exports = function (gatewayExpressApp) {
         log4j.loggererror.error("Error Problem in server ")
         return res.status(500).send({ status: "Error", error: "Internal Server Error", code: status_code.CODE_ERROR.SERVER });
       }
-      console.log("aaaaaaaaaa userProfile", userProfile.response)
+      console.log("userProfile", userProfile.response)
       if (userProfile.data.status == "error") {
         log4j.loggererror.error("Error in adding profile: " + userProfile.data)
         return res.status(200).json(userProfile.data);
@@ -846,6 +843,7 @@ module.exports = function (gatewayExpressApp) {
       console.log("password", randomPassword)
       console.log("crd_oauth2.id", crd_oauth2.id)
       console.log("crd_oauth2.secret", crd_oauth2.secret)
+      //////////////////////////////Send mail///////////////////////////////////
       var origin = req.headers.origin;
       if (origin) {
         var url = origin
@@ -882,6 +880,7 @@ module.exports = function (gatewayExpressApp) {
         var randomPassword = Math.random().toString(36).slice(-8);
         console.log("randomPassword", randomPassword)
         let myCredBasic = await services.credential.removeCredential(myUser.id, 'basic-auth')
+        console.log("myCredBasic",myCredBasic)
         myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth')
         const crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
           autoGeneratePassword: false,
@@ -1281,305 +1280,6 @@ module.exports = function (gatewayExpressApp) {
 
   }
 
-
-
-  gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
-    console.log("*********************************", req.body)
-    console.log("/api/login")
-    const { username, password } = req.body
-    console.log("password", password)
-    console.log("username", username)
-    myUser = await services.user.find(username)
-    console.log("myUser", myUser)
-    if (myUser == false) {
-      log4j.loggerinfo.info("Error username does not exist.");
-      util.setError(200, "username does not exist", status_code.CODE_ERROR.NOT_EXIST);
-      return util.send(res);
-    }
-    else if (myUser.demand == "1") {
-      log4j.loggerinfo.info("user is on pending. please wait for the administrator's agreement ");
-      util.setError(200, "user is on pending. please wait for the administrator's agreement", status_code.CODE_ERROR.USER_ON_PENDING);
-      return util.send(res);
-    }
-    else if (myUser.demand == "2") {
-      log4j.loggerinfo.info("user is refused by the administrator ");
-      util.setError(200, "user is refused by the administrator", status_code.CODE_ERROR.USER_REFUSED);
-      return util.send(res);
-    }
-    else if (myUser.isActive == false) {
-      log4j.loggerinfo.info("Error user is desactivated. please wait for the administrator's agreement ");
-      util.setError(200, "user is desactivated. please wait for the administrator's agreement", status_code.CODE_ERROR.USER_DESACTIVATE);
-      return util.send(res);
-    }
-    myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth')
-    console.log("myCredBasic ", myCredBasic)
-    const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password)
-    if (!passBooleanTrue) {
-      log4j.loggererror.error("Error Wrong password")
-      util.setError(200, "Wrong password", status_code.CODE_ERROR.INCORRECT_PASSWORD);
-      return util.send(res);
-    }
-    myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2')
-    if (myCredOauth) {
-      let scope = myCredOauth.scopes;
-      console.log("******************Scopeeeeeee******************")
-      console.log("scope", scope)
-      console.log("************************************")
-      myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: scope })
-      console.log("crd_oauth2 ", crd_oauth2)
-      // here should get the token and applique invoke before generating a new one
-      let token;
-      try {
-        token = await getToken(username, password, crd_oauth2.id, crd_oauth2.secret, res)
-      } catch (error) {
-        log4j.loggererror.error("Error :" + error.message)
-        util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
-        return util.send(res);
-      }
-      /////////////////////////////Get user info by username //////////////////////////////////
-      const user = await services.user.findByUsernameOrId(myUser.id)
-      console.log("******************userici****************")
-      console.log("user", user.role)
-      console.log("useruseruseruser", user)
-      console.log("*****************************************")
-      /////////// Check if it is a visitor ////////////////////
-      let userJsonVisistor = {
-        id: user.id,
-        username: user.username,
-        lastname: user.lastname,
-        firstname: user.firstname,
-        email: user.email,
-        isActive: user.isActive,
-        confirmMail: user.confirmMail,
-        profilCompleted: user.profilCompleted,
-        role: scope[0],
-
-        phone: user.phone,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      }
-      var roles = []
-      scope.forEach(element => {
-        element = "ROLE_" + element.toUpperCase()
-        roles.push(element)
-      });
-      console.log("rolessss", roles)
-      if (roles[0] == 'ROLE_VISITOR') {
-        // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
-        return res.status(token.status).json({ token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null });
-      }
-      if (roles[0] == 'ROLE_SUPER_ADMIN') {
-        // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
-        return res.status(token.status).json({ token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null });
-      }
-      // else
-      // if(scope[0] == 'admin'){
-      //   return res.status(token.status).json({ token: token.data, role: scope ,user: userJsonVisistor , categoryWalletId: null});
-      // }
-      else {
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /************************** */
-        var md = new MobileDetect(req.headers['user-agent']);
-        // var m = new MobileDetect(window.navigator.userAgent);
-        console.log("md", md);
-        // console.log("m", m);
-        const md1 = new MobileDetect(req.get('User-Agent'));
-        res.locals.isMobile = md1.mobile();
-        console.log("md1", md1);
-
-        console.log("md.os(), md.os()", md.os());
-        if (md.os() === "iOS") {
-          console.log("is ios");
-        } else if (md.os() === "AndroidOS") {
-          console.log("is android");
-
-        } else if (md.os() === "AndroidOS") {
-          console.log("is android");
-        }
-
-        var ip = (typeof req.headers['x-forwarded-for'] === 'string'
-          && req.headers['x-forwarded-for'].split(',').shift()) ||
-          req.connection.remoteAddress ||
-          req.socket.remoteAddress ||
-          req.connection.socket.remoteAddress
-        console.log("ip", ip)
-        console.log("req.connection.remoteAddress", req.connection.remoteAddress)
-        // console.log("lookup",lookup(ip)); // location of the user
-        console.log("os.platform()", os.platform())
-        console.log("os.release()", os.release())
-        console.log("os.type()", os.type()); // "Windows_NT"
-        console.log("req.device.type.toUpperCase()", req.device.type.toUpperCase())
-        // console.log("iplocate",iplocate(ip)); // location of the user
-        // console.log("iplocate",iplocate(ip).country); // location of the user
-        // console.log(iplocate(ip)); // location of the user
-        console.log("ipaddre", ipF.address());
-        let addr = ipF.address()
-        console.log("aaaaaaaaaaaaaaaaaaaa", addr)
-        const publicIpAdd = await publicIp.v4();
-        console.log("publicIpAdd", publicIpAdd)
-        //////////////////////
-        // let results;
-        // try {
-        //    results = await iplocate(publicIpAdd) 
-        //   console.log("results",results)
-        // } catch (error) {
-        //   console.log("error",error)
-        // }
-        // iplocate(ip).then(function(results) {
-        //    console.log("IP Address: " + results.ip);
-        //    console.log("Country: " + results.country + " (" + results.country_code + ")");
-        //    console.log("Continent: " + results.continent);
-        //    console.log("Organisation: " + results.org + " (" + results.asn + ")");
-        //    console.log(JSON.stringify(results, null, 2));
-        //  });
-        var source = req.headers['user-agent']
-        var ua = useragent.parse(source);
-        console.log("ua", ua)
-        var isMobile = ua.isMobile
-        console.log("isMobile", isMobile)
-        let userUpdated = await services.user.update(myUser.id, {
-          ip: publicIpAdd,
-          os: os.platform(),
-          source: ua.source,
-          // // geoip: lookup(ip),
-          // country:results.country,
-          // city:results.city,
-          // latitude:results.latitude,
-          // longitude:results.longitude,
-          last_login: new Date().toString()
-        })
-        console.log("userUpdated", userUpdated)
-        ///////////////////////
-        var interfaces = os.networkInterfaces();
-        var addresses = [];
-        for (var k in interfaces) {
-          for (var k2 in interfaces[k]) {
-            var address = interfaces[k][k2];
-            if (address.family === 'IPv4' && !address.internal) {
-              addresses.push(address.address);
-            }
-          }
-        }
-        console.log("addresses", addresses);
-        ////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        var data;
-        try {
-          data = await getProfile(myUser.id, res)
-        } catch (error) {
-          console.log("error", error) //// tkt
-          if (!error.response) {
-            log4j.loggererror.error(error.message)
-            util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
-            return util.send(res);
-          }
-          log4j.loggererror.error("Error in getting profile: " + error.response.data)
-          util.setError(error.response.status, error.response.data.message, error.response.data.code);
-          return util.send(res);
-        }
-        /********************************************************************************************** */
-        // console.log("data",data)
-        console.log("*********************************")
-        console.log("**************/////////////////////*******************")
-        var dataCategory;
-        if (data.data) {
-          if (data.data.data) {
-            if (data.data.data.Company) {
-              if (data.data.data.Company.Category) {
-                var code = data.data.data.Company.Category.code
-                try {
-                  dataCategory = await getCategoryFromWalletWithCode(code, res)
-                } catch (error) {
-                  console.log("error", error) //// tkt
-                  if (!error.response) {
-                    log4j.loggererror.error(error.message)
-                    util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
-                    return util.send(res);
-                  }
-                  log4j.loggererror.error("Error in getting profile: " + error.response.data)
-                  util.setError(error.response.status, error.response.data.message, error.response.data.code);
-                  return util.send(res);
-                }
-              }
-            }
-          }
-        }
-        /************************************************************************************** */
-        console.log("dataCategory", dataCategory)
-        /************************************************************************************** */
-        console.log("Date.now()", Date.now())
-        let name = "complete_profile" + Date.now()
-        // userApp = await services.application.find(name)
-        myApp = await services.application.insert({
-          name: "user_app" + Date.now(),
-          ip: user.ip,
-          source: user.source,
-          os: user.os,
-          latitude: user.latitude,
-          longitude: user.longitude,
-          city: user.city,
-          country: user.country
-        }, myUser.id)
-
-        userApp = await services.application.find(name)
-        console.log("userapp", userApp)
-        console.log("myApp", myApp)
-
-        let userJson = {
-          id: user.id,
-          username: user.username,
-          lastname: user.lastname,
-          firstname: user.firstname,
-          email: user.email,
-          isActive: user.isActive,
-          phone: user.phone,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-          application: {
-            id: myApp.id,
-            ip: user.ip,
-            source: user.source,
-            os: user.os,
-            last_login: user.last_login,
-            latitude: user.latitude,
-            longitude: user.longitude,
-            city: user.city,
-            country: user.country
-          }
-        }
-        if (token) {
-          if (token.status == 200) {
-            if (data.status == 200) {
-              log4j.loggerinfo.info("Succes in getting token.");
-              if (dataCategory) {
-                if (dataCategory.data.data) {
-                  return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0] });
-                }
-              }
-              return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: null });
-            }
-          }
-        }
-        else {
-          log4j.loggererror.error("Error in getting profile")
-          util.setError(500, "error", status_code.CODE_ERROR.SERVER);
-          return util.send(res);
-        }
-        log4j.loggerinfo.info("Getting token");
-        console.log("token.status", token.status)
-        console.log("token.data", token.data)
-        console.log("scope", scope)
-        console.log("myUser", myUser)
-        return res.status(token.status).json({ token: token.data, role: roles, user: myUser });
-      }
-    }
-    else {
-      util.setError(200, "User has no role", status_code.CODE_ERROR.HAS_NO_ROLE);
-      return util.send(res);
-    }
-  });
-
   gatewayExpressApp.get('/api/logout', async (req, res, next) => { // still incomplete
     console.log('heere', req.headers.authorization)
     const test = await services.token.getTokenObject(req.headers.authorization)
@@ -1623,24 +1323,21 @@ module.exports = function (gatewayExpressApp) {
     return res.status(200).json(test);
   });
 
-  gatewayExpressApp.post('/forgot-password', async (req, res, next) => { //get email from user change to email
+  gatewayExpressApp.post('/forgot-password', async (req, res, next) => { 
+    ///////////////////Email////////////////////////
     const email = req.body.email
     if (!email) {
       return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
     }
     const getProfiled = await getProfileByEmail(email)
-    console.log("********************************************************************************")
     console.log("getProfile", getProfiled.data)
-    console.log("********************************************************************************")
     if (getProfiled.data.status == 'success') {
       if (!getProfiled.data.data.data[0]) {
         return res.status(200).json({ status: "Error", error: "User with this email does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
       }
-      /*********************************** */
-      const username = getProfiled.data.data.data[0].username
-      console.log("********************************************************************************")
+    ///////////////////Get username////////////////////////
+    const username = getProfiled.data.data.data[0].username
       console.log("username", username)
-      console.log("********************************************************************************")
       const user = await services.user.findByUsernameOrId(username)
       console.log("user", user)
       console.debug('confirmation', user, username)
@@ -1662,6 +1359,7 @@ module.exports = function (gatewayExpressApp) {
       console.log("req.header Referrer", req.get('Referrer'))
       console.log(" Referrer || Referer", req.headers.referrer || req.headers.referer
       )
+      ///////////////////Send mail////////////////////////
       var host = req.headers.host;
       console.log("host ", host)
       var origin = req.headers.origin;
@@ -1684,7 +1382,7 @@ module.exports = function (gatewayExpressApp) {
 
   gatewayExpressApp.post('/reset-password', async (req, res, done) => {
     try {
-      console.log("/reset")
+      console.log("/reset-password")
       const { username, token } = req.query
       const { password, password_confirmation } = req.body
       console.log("dddd", password)
@@ -1697,9 +1395,10 @@ module.exports = function (gatewayExpressApp) {
         return res.status(200).json({ error: "wrong confirmation token" });
       }
       let myCredBasicA = await services.credential.getCredential(user.id, 'basic-auth')
-      console.log("myCredBasicssssssss", myCredBasicA)
+      console.log("myCredBasicA", myCredBasicA)
       let decoded;
       try {
+        ///////////////////Verify token////////////////////////
         decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
         console.log("decoded", decoded)
         if (!decoded) {
@@ -1724,6 +1423,7 @@ module.exports = function (gatewayExpressApp) {
       }
       let myCredBasic = await services.credential.removeCredential(user.id, 'basic-auth')
       myCredBasic = await services.credential.getCredential(user.id, 'basic-auth')
+      ///////////////////Insert new password////////////////////////
       const crd_basic = await services.credential.insertCredential(user.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: password,
@@ -1765,8 +1465,6 @@ module.exports = function (gatewayExpressApp) {
         log4j.loggererror.error("Error wrong confirmation token")
         return res.status(200).json({ status: "Error", error: "wrong confirmation token", code: status_code.CODE_ERROR.NOT_EXIST });
       }
-      let myCredBasicA = await services.credential.getCredential(user.id, 'basic-auth')
-      console.log("myCredBasicA", myCredBasicA)
       let myCredBasic = await services.credential.getCredential(user.id, 'basic-auth')
       console.log("myCredBasic", myCredBasic)
       const passBooleanTrue = await utils.compareSaltAndHashed(old_password, myCredBasic.password)
@@ -1778,6 +1476,7 @@ module.exports = function (gatewayExpressApp) {
         let myCredBasic = await services.credential.removeCredential(user.id, 'basic-auth')
         myCredBasic = await services.credential.getCredential(user.id, 'basic-auth')
         console.log("myCredBasic", myCredBasic)
+        ///////////////////Update password////////////////////////
         const crd_basic = await services.credential.insertCredential(user.id, 'basic-auth', {
           autoGeneratePassword: false,
           password: new_password,
@@ -2267,7 +1966,7 @@ module.exports = function (gatewayExpressApp) {
 
   });
 
-  gatewayExpressApp.get('/run', async (req, res, next) => { // still incomplete
+  gatewayExpressApp.get('/run', async (req, res, next) => {
     myUserExist = await services.user.find(env.USERADMIN)
     console.log("env.USERADMIN", env.USERADMIN)
     console.log("env.PASSWORD", env.PASSWORD)

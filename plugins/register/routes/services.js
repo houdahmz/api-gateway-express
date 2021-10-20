@@ -242,6 +242,8 @@ exports.getCategoryFromWalletWithCode = async (code, res) => {
 exports.getToken = async (username, password, client_id, client_secret, res) => {
     try {
         log4j.loggerinfo.info("Call getToken");
+        console.log("bodyyy client_secret",client_secret)
+        console.log("bodyyy client_id",client_id)
 
         return await axios.post(`${env.baseURL}:${env.HTTP_PORT}/oauth2/token`, {
             grant_type: "password",
