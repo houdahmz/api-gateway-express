@@ -10,7 +10,6 @@ const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
 const authService = services.auth;
 const log4j = require("../../../config/configLog4js.js");
-const validation = require("../middleware/validation")
 const os = require('os');
 useragent = require('express-useragent');
 var device = require('express-device');
@@ -31,7 +30,6 @@ const {
 // const bodyParser = require("body-parser");
 const express = require('express');
 const status_code = require("../config")
-console.log("aaaaertyyuu")
 const bodyParser = require("body-parser");
 const app = express();
 var corsOptions = {

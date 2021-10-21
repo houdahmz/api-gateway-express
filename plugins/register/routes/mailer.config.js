@@ -1,10 +1,11 @@
 var nodemailer = require('nodemailer');
+const { emailConfig } = require('../../../config/vars');
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'payposkhallasli@gmail.com',
-      pass: 'khallasli123456789'
+      user: emailConfig.username,
+      pass: emailConfig.password
     }
   });
 01
@@ -18,7 +19,7 @@ transporter.verify((error) => {
 });
   exports.send_email = function send_email (subject , text,mail){
     var mailOptions = {
-        from: 'payposkhallasli@gmail.com',
+        from: emailConfig.username,
         to: mail,
         subject:subject,
         text: text
