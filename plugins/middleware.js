@@ -5,14 +5,17 @@ const { lookup } = require('geoip-lite');
 const iplocate = require("node-iplocate");
 var moment = require('moment');
 var ipF = require("ip");
+const {
+getProfile
+} = require("./Services/users");
 
+const {
+getCategoryFromWalletWithCode
+} = require("./Services/wallet");
 
 const axios = require('axios');
 const env = require("../config/env.config");
-
-
 const publicIp = require('public-ip');
-
 const middlewarePlugin = {
   schema: { $id: "./../config/models/schema.js" },
   version: '1.0.0',
@@ -72,41 +75,7 @@ const middlewarePlugin = {
         //  console.log("iplocate",iplocate(ip)); // location of the user
         endpointScopes = req.egContext.apiEndpoint;
         console.log("endpointScopes",endpointScopes)
-	console.log("*********************************")	
-      ///////////
-
-      const getProfile = async (id) => {
-        try {
-        // log4j.loggerinfo.info("Call getProfile: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id);
-
-          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
-        } catch (error) {
-          if(!error.response){
-            // log4j.loggererror.error(error.message)
-            return res.status(500).send({"error":error.message});
-          }
-          // log4j.loggererror.error("Error in getting profile: "+error.response.data)
-
-          return res.status(error.response.status).send(error.response.data);
-        }
-      }
-      ///////////
-      const getCategoryFromWalletWithCode = async (code) => {
-        try {
-        // log4j.loggerinfo.info("Call getcategory: "+`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category/`);
-
-          return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category?name=`+code)
-        } catch (error) {
-          if(!error.response){
-            // log4j.loggererror.error(error.message)
-            return res.status(500).send({"error":error.message});
-          }
-          // log4j.loggererror.error("Error in getting getcategory: "+error.response.data)
-
-          return res.status(error.response.status).send(error.response.data);
-        }
-      }
-      ///////////
+      	console.log("*********************************")	
             // if(endpointScopes.methods == ['GET']){
 
             // }
@@ -231,7 +200,7 @@ if (data.data.data.Company){
 
         }else {
           body.category_id = null
-  body.categoryId = null
+          body.categoryId = null
         
         }
         
@@ -252,7 +221,7 @@ if (data.data.data.Company){
           catch (error) {
             let errorObject = { message: error.message, reason: error.name }
             console.log(errorObject);
-            res.status(400).send(errorObject);
+            return res.status(400).send(errorObject);
           }
         }
     }
