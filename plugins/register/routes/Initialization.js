@@ -64,7 +64,7 @@ module.exports = async function (gatewayExpressApp) {
         console.log("insereScope",insereScope)
     }
 
-    if (myUserExist == false) { //if admin does not exist
+    if (myUserExist == false) { //if superAdmin does not exist
       myUser = await services.user.insert({
         isActive: true,
         confirmMail: true,
@@ -78,24 +78,18 @@ module.exports = async function (gatewayExpressApp) {
         team: true,
         redirectUri: 'https://www.khallasli.com',
       })
-      console.log("Admin already exist.");
 
-  // manque la creation de scope super_admin
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: env.PASSWORD,
         scopes: []
       })
-      console.log("Admin alfffready exist.");
 
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['super_admin'] })
       console.log("super Admin has been created")
-    //   return res.status(200).send("super Admin has been created");
-
     }
     else {
-      console.log("Admin already exist.");
-    //   return res.status(200).send("super Admin already exist");
+      console.log("SuperAdmin already exist.");
     }
 
 };

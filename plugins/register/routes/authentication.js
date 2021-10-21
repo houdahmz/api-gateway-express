@@ -41,8 +41,6 @@ const bodyParser = require("body-parser");
 var corsOptions = {
   origin: "*"
 };
-console.log("aaaaertyyuu1111")
-
 module.exports = function (gatewayExpressApp) {
   // gatewayExpressApp.use(bodyParser.json())
   gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
@@ -349,108 +347,6 @@ module.exports = function (gatewayExpressApp) {
     else {
       util.setError(200, "User has no role", status_code.CODE_ERROR.HAS_NO_ROLE);
       return util.send(res);
-    }
-  });
-
-  gatewayExpressApp.get('/api/logout', async (req, res, next) => { // still incomplete
-    console.log('heere', req.headers.authorization)
-    const test = await services.token.getTokenObject(req.headers.authorization)
-
-    return res.status(200).json(test);
-
-  });
-
-  gatewayExpressApp.post('/api/refreshToken', async (req, res, next) => { // still incomplete
-    const { client_id, client_secret, refresh_token } = req.body
-    console.log("************token *******************")
-
-    const getRefreshToken = async (client_id, client_secret, refresh_token) => {
-      try {
-        return await axios.post(`${env.baseURL}:${env.HTTP_PORT}/oauth2/token`, {
-          grant_type: "refresh_token",
-          refresh_token: refresh_token,
-          client_id: client_id,
-          client_secret: client_secret
-        })
-      } catch (error) {
-        console.error("error")
-        return res.status(400).json("error", error);
-
-      }
-    }
-    const token = getRefreshToken(client_id, client_secret, refresh_token)
-    console.log("token ", token.data)
-    console.log("token.data.access_token ", token.data.access_token)
-    console.log("token ", token)
-    return res.status(200).json({ token: token.data });
-    // myCredOauth = await services.credential.getCredential(client_id, 'oauth2')
-    // myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2')
-    // crd_oauth2 = await services.credential.insertCredential(client_id, 'oauth2')
-    // console.log("crd_oauth2 ", crd_oauth2)
-    // console.log("crd_oauth2 ", myCredOauth)
-    // const refresh_token = getRefreshToken(client_id,crd_oauth2.secret,refresh_token)
-    // const refresh_token = req.body.refresh_token
-    const test = await services.token.getTokenObject(refresh_token)
-    console.log("test", test)
-    return res.status(200).json(test);
-  });
-
-  gatewayExpressApp.post('/forgot-password', async (req, res, next) => { //get email from user change to email
-    const email = req.body.email
-    if (!email) {
-      return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
-    }
-    const getProfiled = await getProfileByEmail(email)
-    console.log("********************************************************************************")
-    console.log("getProfile", getProfiled.data)
-    console.log("********************************************************************************")
-    if (getProfiled.data.status == 'success') {
-      if (!getProfiled.data.data.data[0]) {
-        return res.status(200).json({ status: "Error", error: "User with this email does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
-      }
-      /*********************************** */
-      const username = getProfiled.data.data.data[0].username
-      console.log("********************************************************************************")
-      console.log("username", username)
-      console.log("********************************************************************************")
-      const user = await services.user.findByUsernameOrId(username)
-      console.log("user", user)
-      console.debug('confirmation', user, username)
-      if (user == false) { // username does not exist
-        console.debug('Username does not exist')
-        log4j.loggererror.error("Error Username does not exist: ")
-        return res.status(200).json({ status: "Error", error: "Username does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
-      }
-      const myUserJwt = await jwt.sign({ username: username }, `${env.JWT_SECRET}`, {
-        issuer: 'express-gateway',
-        audience: 'something',
-        expiresIn: `18000`,
-        subject: `${env.JWT_SUBJECT}`,
-        algorithm: `${env.ALGORITHM}`
-      });
-      console.log("aaa", myUserJwt)
-      console.log("req.header Referer", req.header('Referer'))
-      console.log("req.headers['referer']", req.headers['referer'])
-      console.log("req.header Referrer", req.get('Referrer'))
-      console.log(" Referrer || Referer", req.headers.referrer || req.headers.referer
-      )
-      var host = req.headers.host;
-      console.log("host ", host)
-      var origin = req.headers.origin;
-      console.log("req.headers.origin ", req.headers.origin)
-      if (origin) {
-        var url = origin
-      } else {
-        var url = `${env.baseURL}:${env.HTTP_PORT}`
-      }
-      const confirm_uri = `${url}/reset-password?username=` + username + "&" + "token=" + myUserJwt;
-      console.log("confirm_uri", confirm_uri)
-      mail.sendPasswordReset("Reset password", confirm_uri, user.email, user.firstname, user.lastname)
-      log4j.loggerinfo.info("Success check your email : " + user.email);
-      return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email + " for username " + username });
-      /*********************************** */
-    } else {
-      return res.status(200).json({ etat: "Error", message: getProfiled.data, code: status_code.CODE_ERROR.INCONNU });
     }
   });
 };

@@ -1856,47 +1856,4 @@ module.exports = function (gatewayExpressApp) {
 
   });
 
-  gatewayExpressApp.get('/run', async (req, res, next) => {
-    myUserExist = await services.user.find(env.USERADMIN)
-    console.log("env.USERADMIN", env.USERADMIN)
-    console.log("env.PASSWORD", env.PASSWORD)
-    console.log("env.EMAIL", env.EMAIL)
-    console.log("env.PHONE", env.PHONE)
-
-    if (myUserExist == false) { //if admin does not exist
-      myUser = await services.user.insert({
-        isActive: true,
-        confirmMail: true,
-        profilCompleted: true,
-        firstname: "paypos",
-        lastname: "paypos",
-        username: env.USERADMIN,
-        email: env.EMAIL,
-        phone: env.PHONE,
-        role: "ROLE_SUPER_ADMIN",
-        team: true,
-        redirectUri: 'https://www.khallasli.com',
-      })
-      console.log("Admin already exist.");
-
-  // manque la creation de scope super_admin
-      crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
-        autoGeneratePassword: false,
-        password: env.PASSWORD,
-        scopes: []
-      })
-      console.log("Admin alfffready exist.");
-
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['super_admin'] })
-      return res.status(200).send("super Admin has been created");
-
-    }
-    else {
-      console.log("Admin already exist.");
-      return res.status(200).send("super Admin already exist");
-    }
-
-  });
-
-
 };

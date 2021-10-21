@@ -3,7 +3,7 @@ module.exports = {
   init: function (pluginContext) {
     pluginContext.registerGatewayRoute(require('./routes/register-eg'));
     pluginContext.registerGatewayRoute(require('./routes/authentication'));
-    pluginContext.registerGatewayRoute(require('./routes/createSuperAdmin'));
+    pluginContext.registerGatewayRoute(require('./routes/Initialization'));
 
   },
   policies:['hello'], // this is for CLI to automatically add to "policies" whitelist in gateway.config

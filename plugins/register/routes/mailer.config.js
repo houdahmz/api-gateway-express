@@ -33,6 +33,3 @@ transporter.verify((error) => {
         }
       });
   }
-
-// EMAIL_USERNAME=khalaslipaypos@gmail.com 
-// EMAIL_PASSWORD=khalasli26260534
