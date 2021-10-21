@@ -6,6 +6,8 @@ const mailSimple = require("./mailer.config.js")
 const util = require("../helpers/utils");
 const jwt = require('jsonwebtoken');
 const env = require("../../../config/env.config");
+const {EMAIL} = require("../../../config/env.config");
+
 const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
 const authService = services.auth;

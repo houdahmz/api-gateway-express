@@ -352,6 +352,11 @@ apiEndpoints:
       scopes: ['admin','super_admin']
 
     - host: '*'
+      paths: '/topUpKh/operator/update_modem'
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
       paths: /topUpKh/operator/:id
       methods: ["GET","DELETE","PUT","PATCH"]
       scopes: ['admin','super_admin']
