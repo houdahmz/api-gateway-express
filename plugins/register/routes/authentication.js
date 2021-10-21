@@ -31,7 +31,7 @@ const PUB_KEY = fs.readFileSync("./config/public.pem", 'utf8');
 const cors = require("cors");
 const {
   createAdminProfile, getProfileByPhone, getProfileByEmail, addWallet, getType, getTypeById, getToken, getProfileByUsername, updateprofileConfirm, getCategoryFromWalletWithCode, getProfile, getCurrency, creteProfile, updateprofile, getWallet, updateprofileByAdmin
-} = require("./services");
+} = require("../../Services/users");
 
 // const bodyParser = require("body-parser");
 const express = require('express');

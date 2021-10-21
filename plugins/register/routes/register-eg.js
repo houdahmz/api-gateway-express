@@ -16,8 +16,13 @@ useragent = require('express-useragent');
 var device = require('express-device');
 const cors = require("cors");
 const {
-  createAdminProfile, getProfileByPhone, getProfileByEmail, addWallet, getType, getTypeById, getToken, getProfileByUsername, updateprofileConfirm, getCategoryFromWalletWithCode, getProfile, getCurrency, creteProfile, updateprofile, getWallet, updateprofileByAdmin
-} = require("./services");
+  createAdminProfile, getProfileByPhone, getProfileByEmail, getType, getTypeById, getToken, getProfileByUsername, updateprofileConfirm, getProfile, creteProfile, updateprofile, updateprofileByAdmin
+} = require("../../Services/users");
+
+const {
+   addWallet, getCategoryFromWalletWithCode, getCurrency, getWallet
+} = require("../../Services/wallet");
+
 
 const {
   verifyToken,verifyTokenAdmin,verifyTokenSuperAdmin,verifyTokenSuperAdminOrAdmin,verifyTokenUser
