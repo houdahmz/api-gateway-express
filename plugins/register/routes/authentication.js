@@ -29,9 +29,15 @@ const secretOrPrivateKey = config.systemConfig.accessTokens.secretOrPrivateKey
 const fs = require('fs');
 const PUB_KEY = fs.readFileSync("./config/public.pem", 'utf8');
 const cors = require("cors");
+
 const {
-  createAdminProfile, getProfileByPhone, getProfileByEmail, addWallet, getType, getTypeById, getToken, getProfileByUsername, updateprofileConfirm, getCategoryFromWalletWithCode, getProfile, getCurrency, creteProfile, updateprofile, getWallet, updateprofileByAdmin
+  getToken, getProfile
 } = require("../../Services/users");
+
+const {
+    getCategoryFromWalletWithCode, 
+} = require("../../Services/wallet");
+
 
 // const bodyParser = require("body-parser");
 const express = require('express');
