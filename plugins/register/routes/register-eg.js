@@ -24,6 +24,9 @@ const {
    addWallet, getCategoryFromWalletWithCode, getCurrency, getWallet
 } = require("../../Services/wallet");
 
+const {
+  addUser, createJwt, verifyJwt
+} = require("../../Services/function");
 
 const {
   verifyToken,verifyTokenAdmin,verifyTokenSuperAdmin,verifyTokenSuperAdminOrAdmin,verifyTokenUser
@@ -102,48 +105,37 @@ module.exports = function (gatewayExpressApp) {
       console.log("randomPassword", env.JWT_TIME)
       console.log("randomPassword", env.JWT_SUBJECT)
       console.log("randomPassword", env.ALGORITHM)
-      const myUserJwt = await jwt.sign({ username: username, password: randomPassword }, `${env.JWT_SECRET}`, {
-        issuer: 'express-gateway',
-        audience: 'something',
-        expiresIn: expiresIn,
-        subject: `${env.JWT_SUBJECT}`,
-        algorithm: `${env.ALGORITHM}`
-      });
-      console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
-      /////////////////////////////create user/////////////////////////////////////////////////////
-      myUser = await services.user.insert({
-        isActive: false,
-        confirmMail: false,
-        profilCompleted: true,
-        firstname: firstname,
-        lastname: lastname,
-        username: username,
-        email: email,
-        phone: phone,
-        role: "ROLE_USER",
-        team: false,
-        demand: "1",
 
-        redirectUri: 'https://www.khallasli.com',
-        confirm_token: myUserJwt
-      })
-      console.log("myUser", myUser)
+      const myUserJwt = await createJwt(username,randomPassword)
+      console.log("myUserJwt aaaaa",myUserJwt)
+      console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
+      // /////////////////////////////create user/////////////////////////////////////////////////////
+      const bodyUser = {
+          isActive: false,
+          confirmMail: false,
+          profilCompleted: true,
+          firstname: firstname,
+          lastname: lastname,
+          username: username,
+          email: email,
+          phone: phone,
+          role: "ROLE_USER",
+          team: false,
+          demand: "1",
+  
+          redirectUri: 'https://www.khallasli.com',
+          confirm_token: ""
+        }
+      const myUser = await addUser(bodyUser,randomPassword,['user'])
+        console.log("myUser",myUser)
+
       const dataType = await getType("10", res);
       if (!dataType.data.data) {
         log4j.loggererror.error("Error Problem in server ")
         util.setError(500, "Internal Server Error", status_code.CODE_ERROR.SERVER);
         return util.send(res);
       }
-      /////////////////////////////create basic-auth credential for authentication/////////////////////////////////////////////////////
-      crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
-        autoGeneratePassword: false,
-        password: randomPassword,
-        scopes: []
-      })
-      /////////////////////////////create basic-auth credential for authorization with scope/////////////////////////////////////////////////////
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['user'] })
-      /////////////////////////////create profile/////////////////////////////////////////////////////
-      console.log("photooooooooooooooos", photo)
+      // /////////////////////////////create profile/////////////////////////////////////////////////////
       const body = {
         image: image,
         patent: patent,
@@ -214,7 +206,7 @@ module.exports = function (gatewayExpressApp) {
       console.log("myCredBasic", myCredBasic)
       let decoded;
       try {
-        decoded = await jwt.verify(confirm_token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
+        decoded = await verifyJwt(confirm_token);
         console.log("***********************************")
         console.log("decoded", decoded)
         console.log("***********************************")
@@ -300,16 +292,7 @@ module.exports = function (gatewayExpressApp) {
       console.log("/api/agent-register")
 
       console.log("req.headers.authorization", req.headers.authorization)
-      agentUser = await services.user.insert({
-        isActive: true,
-        firstname: firstname,
-        lastname: lastname,
-        username: username,
-        email: email,
-        phone: phone,
-        team: false,
-        redirectUri: 'https://www.khallasli.com',
-      })
+      
       const createAgentProfile = async (agentUser) => {
         try {
           log4j.loggerinfo.info("Call postProfile agent: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`);
@@ -377,20 +360,21 @@ module.exports = function (gatewayExpressApp) {
       }
       var randomPassword = Math.random().toString(36).slice(-8);
       console.log("randomPassword", randomPassword)
-      console.log("agentUser", agentUser)
 
-      crd_basic = await services.credential.insertCredential(agentUser.id, 'basic-auth', {
-        autoGeneratePassword: false,
-        password: randomPassword,
-        scopes: []
-      })
+      const bodyUser = {
+        isActive: true,
+        firstname: firstname,
+        lastname: lastname,
+        username: username,
+        email: email,
+        phone: phone,
+        team: false,
+        redirectUri: 'https://www.khallasli.com',
+      }
+      const agentUser = await addUser(bodyUser,randomPassword,['agent'])
 
-      crd_oauth2 = await services.credential.insertCredential(agentUser.id, 'oauth2', { scopes: ['agent'] })
-      console.log("crd_oauth2", crd_oauth2)
       console.log("email", email)
       console.log("password", randomPassword)
-      console.log("crd_oauth2.id", crd_oauth2.id)
-      console.log("crd_oauth2.secret", crd_oauth2.secret)
 
       const userProfile = await createAgentProfile(agentUser);
       console.log("userProfile.data", userProfile.data)
@@ -450,13 +434,7 @@ module.exports = function (gatewayExpressApp) {
       /////////////////////////////generate random password/////////////////////////////////////////////////////
       var randomPassword = Math.random().toString(36).slice(-8);
       console.log("randomPassword", randomPassword)
-      const myUserJwt = await jwt.sign({ username: username, password: randomPassword }, `${env.JWT_SECRET}`, {
-        issuer: 'express-gateway',
-        audience: 'something',
-        expiresIn: expiresIn,
-        subject: `${env.JWT_SUBJECT}`,
-        algorithm: `${env.ALGORITHM}`
-      });
+      const myUserJwt = await createJwt(username,randomPassword)
       console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
       const dataType = await getTypeById(type_userId, res);
       console.log("dataType.data.data", dataType.data.data.data)
@@ -466,8 +444,7 @@ module.exports = function (gatewayExpressApp) {
       }
       const code = dataType.data.data.data.type
       const type = dataType.data.data.data.id
-      /////////////////////////////create user/////////////////////////////////////////////////////
-      myUser = await services.user.insert({
+      const bodyUser = {
         isActive: true,
         confirmMail: false,
         profilCompleted: true,
@@ -481,7 +458,10 @@ module.exports = function (gatewayExpressApp) {
 
         redirectUri: 'https://www.khallasli.com',
         confirm_token: myUserJwt
-      })
+
+      }
+      /////////////////////////////create user/////////////////////////////////////////////////////
+      const myUser = await addUser(bodyUser,randomPassword,[code])
       console.log("myUser", myUser)
       const creteProfile = async (myUser) => {
         try {
@@ -531,16 +511,7 @@ module.exports = function (gatewayExpressApp) {
           return res.status(error.response.status).send(error.response.data);
         }
       }
-      /////////////////////////////create basic-auth credential for authentication/////////////////////////////////////////////////////
-      crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
-        autoGeneratePassword: false,
-        password: randomPassword,
-        scopes: []
-      })
-      console.log("crd_basic", crd_basic)
-      /////////////////////////////create basic-auth credential for authorization with scope/////////////////////////////////////////////////////
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: [code] })
-      console.log("crd_oauth2", crd_oauth2)
+
       /////////////////////////////create profile/////////////////////////////////////////////////////
       const userProfile = await creteProfile(myUser);
       console.log("iciiiiiuserProfile", userProfile.data)
@@ -915,13 +886,7 @@ module.exports = function (gatewayExpressApp) {
         log4j.loggererror.error("Error Username does not exist: ")
         return res.status(200).json({ status: "Error", error: "Username does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
       }
-      const myUserJwt = await jwt.sign({ username: username }, `${env.JWT_SECRET}`, {
-        issuer: 'express-gateway',
-        audience: 'something',
-        expiresIn: expiresIn,
-        subject: `${env.JWT_SUBJECT}`,
-        algorithm: `${env.ALGORITHM}`
-      });
+      const myUserJwt = await createJwt(username,"")
       console.log("aaa", myUserJwt)
       console.log("req.header Referer", req.header('Referer'))
       console.log("req.headers['referer']", req.headers['referer'])
@@ -929,8 +894,6 @@ module.exports = function (gatewayExpressApp) {
       console.log(" Referrer || Referer", req.headers.referrer || req.headers.referer
       )
       ///////////////////Send mail////////////////////////
-      var host = req.headers.host;
-      console.log("host ", host)
       var origin = req.headers.origin;
       console.log("req.headers.origin ", req.headers.origin)
       if (origin) {
@@ -968,7 +931,8 @@ module.exports = function (gatewayExpressApp) {
       let decoded;
       try {
         ///////////////////Verify token////////////////////////
-        decoded = await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
+
+        decoded = await verifyJwt(token);
         console.log("decoded", decoded)
         if (!decoded) {
           console.debug('wrong confirmation token')
