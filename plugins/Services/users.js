@@ -12,7 +12,7 @@ exports.getProfileByEmail = async (email, res) => {
         return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?email=` + email)
     } catch (error) {
         // console.log("error",error)
-        console.log("error.response", error.response)
+        // console.log("error.response", error)
 
         if (!error.response) {
             if (error.message) {

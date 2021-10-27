@@ -1447,5 +1447,72 @@ module.exports = function (gatewayExpressApp) {
     }
 
   });
+  gatewayExpressApp.post('/add/user', async (req, res, done) => { //without profile
+    try {
+      console.log("/add-user")
+      console.log("req.body", req.body)
+      const { firstname, username, lastname, email, phone, } = req.body
 
+            /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
+            if (!email) {
+              util.setError(400, "email is required", status_code.CODE_ERROR.EMPTY);
+              return util.send(res);
+            }
+            if (!phone) {
+              util.setError(400, "phone is required", status_code.CODE_ERROR.EMPTY);
+              return util.send(res);
+            }
+            /////////////////////////////Check email unique or not/////////////////////////////////////////////////////
+            const getProfiled = await getProfileByEmail(email, res)
+            console.log("getProfile", getProfiled.data)
+            if (getProfiled.data.status == 'success') {
+              console.log("getProfiled.data.data", getProfiled.data.data)
+              if (getProfiled.data.data.data[0]) {
+                util.setError(200, "Email already exist", status_code.CODE_ERROR.ALREADY_EXIST);
+                return util.send(res);
+
+              }
+            } else {
+              util.setError(200, getProfiled.data, status_code.CODE_ERROR.EMPTY); //code
+              return util.send(res);
+            }
+            /////////////////////////////Check phone unique or not/////////////////////////////////////////////////////
+            const getProfiledByPhone = await getProfileByPhone(phone, res)
+            console.log("getProfiledByPhone", getProfiledByPhone.data)
+            if (getProfiledByPhone.data.status == 'success') {
+              console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+              if (getProfiledByPhone.data.data.data[0]) {
+                util.setError(200, "Phone already exist", status_code.CODE_ERROR.ALREADY_EXIST);
+                return util.send(res);
+              }
+            } else {
+              util.setError(200, getProfiledByPhone.data, status_code.CODE_ERROR.EMPTY); //code
+              return util.send(res);
+            }
+            var bodyUser = {
+              username: req.body.username,
+              firstname: req.body.firstname,
+              lastname: req.body.lastname,
+              email: req.body.email,
+              phone: req.body.phone,
+          
+              role: req.body.role,
+              confirmMail: req.body.confirmMail,
+              team: req.body.team,
+              profilCompleted: req.body.profilCompleted,
+            }
+            var randomPassword = Math.random().toString(36).slice(-8);
+            console.log("randomPassword", randomPassword)
+      
+            const myUser = await addUser(bodyUser,randomPassword,req.body.scopes)
+            console.log("myUser", myUser)
+            log4j.loggerinfo.info("Success");
+            return res.status(201).json({ etat: "Success", message: "Successfully added" ,data: myUser });
+      
+
+    } catch (err) {
+      log4j.loggererror.error("Error: " + err.message)
+      return res.status(422).json({ error: err.message })
+    }
+  });
 };
