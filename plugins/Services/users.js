@@ -340,7 +340,7 @@ exports.getServiceByUser = async (id, res) => {
     try {
         log4j.loggerinfo.info("Call getService: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service_user?userId` + id);
 
-        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service_user?userId=` + id)
+        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service_user?size=100&userId=` + id)
     } catch (error) {
         if (!error.response) {
             log4j.loggererror.error(error.message)

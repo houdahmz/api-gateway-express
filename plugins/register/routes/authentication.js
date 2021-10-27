@@ -245,12 +245,14 @@ module.exports = function (gatewayExpressApp) {
           util.setError(500, "Internal Server wallet Error", status_code.CODE_ERROR.SERVER);
           return util.send(res);
         }
-        console.log("serviceResult",serviceResult.data)
+        // console.log("serviceResult",serviceResult.data.data)
         var serviceData = []
         if(serviceResult.data){
-          if(serviceResult.data.items){
-            serviceData = serviceResult.data.items
+        if(serviceResult.data.data){
+          if(serviceResult.data.data.items){
+            serviceData = serviceResult.data.data.items
           }
+        }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
