@@ -31,7 +31,7 @@ const PUB_KEY = fs.readFileSync("./config/public.pem", 'utf8');
 const cors = require("cors");
 
 const {
-  getToken, getProfile
+  getToken, getProfile, getServiceByUser
 } = require("../../Services/users");
 
 const {
@@ -68,21 +68,21 @@ module.exports = function (gatewayExpressApp) {
       util.setError(200, "username does not exist", status_code.CODE_ERROR.NOT_EXIST);
       return util.send(res);
     }
-    // else if (myUser.demand == "1") {
-    //   log4j.loggerinfo.info("user is on pending. please wait for the administrator's agreement ");
-    //   util.setError(200, "user is on pending. please wait for the administrator's agreement", status_code.CODE_ERROR.USER_ON_PENDING);
-    //   return util.send(res);
-    // }
-    // else if (myUser.demand == "2") {
-    //   log4j.loggerinfo.info("user is refused by the administrator ");
-    //   util.setError(200, "user is refused by the administrator", status_code.CODE_ERROR.USER_REFUSED);
-    //   return util.send(res);
-    // }
-    // else if (myUser.isActive == false) {
-    //   log4j.loggerinfo.info("Error user is desactivated. please wait for the administrator's agreement ");
-    //   util.setError(200, "user is desactivated. please wait for the administrator's agreement", status_code.CODE_ERROR.USER_DESACTIVATE);
-    //   return util.send(res);
-    // }
+    else if (myUser.demand == "1") {
+      log4j.loggerinfo.info("user is on pending. please wait for the administrator's agreement ");
+      util.setError(200, "user is on pending. please wait for the administrator's agreement", status_code.CODE_ERROR.USER_ON_PENDING);
+      return util.send(res);
+    }
+    else if (myUser.demand == "2") {
+      log4j.loggerinfo.info("user is refused by the administrator ");
+      util.setError(200, "user is refused by the administrator", status_code.CODE_ERROR.USER_REFUSED);
+      return util.send(res);
+    }
+    else if (myUser.isActive == false) {
+      log4j.loggerinfo.info("Error user is desactivated. please wait for the administrator's agreement ");
+      util.setError(200, "user is desactivated. please wait for the administrator's agreement", status_code.CODE_ERROR.USER_DESACTIVATE);
+      return util.send(res);
+    }
     myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth')
     console.log("myCredBasic ", myCredBasic)
     const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password)
@@ -239,6 +239,20 @@ module.exports = function (gatewayExpressApp) {
         }
         console.log("addresses", addresses);
         ////////////////////////////
+        const serviceResult = await getServiceByUser(user.id, res);
+        if (!serviceResult.data) {
+          log4j.loggererror.error("Error Problem in server wallet ")
+          util.setError(500, "Internal Server wallet Error", status_code.CODE_ERROR.SERVER);
+          return util.send(res);
+        }
+        console.log("serviceResult",serviceResult.data)
+        var serviceData = []
+        if(serviceResult.data){
+          if(serviceResult.data.items){
+            serviceData = serviceResult.data.items
+          }
+        }
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         var data;
         try {
@@ -282,7 +296,7 @@ module.exports = function (gatewayExpressApp) {
           }
         }
         /************************************************************************************** */
-        console.log("dataCategory", dataCategory)
+        // console.log("dataCategory", dataCategory)
         /************************************************************************************** */
         console.log("Date.now()", Date.now())
         let name = "complete_profile" + Date.now()
@@ -330,10 +344,10 @@ module.exports = function (gatewayExpressApp) {
               log4j.loggerinfo.info("Succes in getting token.");
               if (dataCategory) {
                 if (dataCategory.data.data) {
-                  return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0] });
+                  return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0], services:serviceData });
                 }
               }
-              return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: null });
+              return res.status(token.status).json({ token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: null, services:serviceData });
             }
           }
         }
@@ -347,7 +361,7 @@ module.exports = function (gatewayExpressApp) {
         console.log("token.data", token.data)
         console.log("scope", scope)
         console.log("myUser", myUser)
-        return res.status(token.status).json({ token: token.data, role: roles, user: myUser });
+        return res.status(token.status).json({ token: token.data, role: roles, user: myUser, services:serviceData });
       }
     }
     else {

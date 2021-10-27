@@ -335,3 +335,21 @@ exports.updateprofileByAdmin = async (body,res) => { //with id user
       return res.status(error.response.status).send(error.response.data);
     }
   }
+////////////////////////////////////
+exports.getServiceByUser = async (id, res) => {
+    try {
+        log4j.loggerinfo.info("Call getService: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service_user?userId` + id);
+
+        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service_user?userId=` + id)
+    } catch (error) {
+        if (!error.response) {
+            log4j.loggererror.error(error.message)
+            util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
+            return util.send(res);
+        }
+        log4j.loggererror.error("Error in getting Service: " + error.response.data)
+        util.setError(error.response.status, error.response.data.message, error.response.data.code);
+        return util.send(res);
+
+    }
+}
