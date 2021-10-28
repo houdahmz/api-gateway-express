@@ -111,8 +111,9 @@ module.exports = function (gatewayExpressApp) {
           redirectUri: 'https://www.khallasli.com',
           confirm_token: ""
         }
+        var myUser;
         try {
-          const myUser = await addUser(bodyUser,randomPassword,['user'])
+          myUser = await addUser(bodyUser,randomPassword,['user'])
           console.log("myUser",myUser)
         } catch (error) {
           // console.log("error",error)
