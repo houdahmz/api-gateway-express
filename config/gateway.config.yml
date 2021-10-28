@@ -1310,15 +1310,15 @@ pipelines:
           - action:
               message: "api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}"
       - cors:              
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: ${JWT_SUBJECT}
-                secretOrPublicKey: ${JWT_SECRET}
-                checkCredentialExistence: false
-      - validate-user:
+      # - oauth2:
+      #     - action:
+      #         jwt:
+      #           issuer: express-gateway
+      #           audience: something
+      #           subject: ${JWT_SUBJECT}
+      #           secretOrPublicKey: ${JWT_SECRET}
+      #           checkCredentialExistence: false
+      # - validate-user:
       - request-transformer:
           action:
             body:

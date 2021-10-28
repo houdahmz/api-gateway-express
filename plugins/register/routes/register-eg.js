@@ -66,39 +66,39 @@ module.exports = function (gatewayExpressApp) {
       // }
       /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
       if (!email) {
-        util.setError(400, "email is required", status_code.CODE_ERROR.EMPTY);
+        util.setError(200, "email is required", status_code.CODE_ERROR.EMPTY);
         return util.send(res);
       }
       if (!phone) {
-        util.setError(400, "phone is required", status_code.CODE_ERROR.EMPTY);
+        util.setError(200, "phone is required", status_code.CODE_ERROR.EMPTY);
         return util.send(res);
       }
-      /////////////////////////////Check email unique or not/////////////////////////////////////////////////////
-      const getProfiled = await getProfileByEmail(email, res)
-      console.log("getProfile", getProfiled.data)
-      if (getProfiled.data.status == 'success') {
-        console.log("getProfiled.data.data", getProfiled.data.data)
-        if (getProfiled.data.data.data[0]) {
-          util.setError(200, "Email already exist", status_code.CODE_ERROR.ALREADY_EXIST);
-          return util.send(res);
-        }
-      } else {
-        util.setError(200, getProfiled.data, status_code.CODE_ERROR.EMPTY); //code
-        return util.send(res);
-      }
-      /////////////////////////////Check phone unique or not/////////////////////////////////////////////////////
-      const getProfiledByPhone = await getProfileByPhone(phone, res)
-      console.log("getProfiledByPhone", getProfiledByPhone.data)
-      if (getProfiledByPhone.data.status == 'success') {
-        console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
-        if (getProfiledByPhone.data.data.data[0]) {
-          util.setError(200, "Phone already exist", status_code.CODE_ERROR.ALREADY_EXIST);
-          return util.send(res);
-        }
-      } else {
-        util.setError(200, getProfiledByPhone.data, status_code.CODE_ERROR.EMPTY); //code
-        return util.send(res);
-      }
+      // /////////////////////////////Check email unique or not/////////////////////////////////////////////////////
+      // const getProfiled = await getProfileByEmail(email, res)
+      // console.log("getProfile", getProfiled.data)
+      // if (getProfiled.data.status == 'success') {
+      //   console.log("getProfiled.data.data", getProfiled.data.data)
+      //   if (getProfiled.data.data.data[0]) {
+      //     util.setError(200, "Email already exist", status_code.CODE_ERROR.ALREADY_EXIST);
+      //     return util.send(res);
+      //   }
+      // } else {
+      //   util.setError(200, getProfiled.data, status_code.CODE_ERROR.EMPTY); //code
+      //   return util.send(res);
+      // }
+      // /////////////////////////////Check phone unique or not/////////////////////////////////////////////////////
+      // const getProfiledByPhone = await getProfileByPhone(phone, res)
+      // console.log("getProfiledByPhone", getProfiledByPhone.data)
+      // if (getProfiledByPhone.data.status == 'success') {
+      //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
+      //   if (getProfiledByPhone.data.data.data[0]) {
+      //     util.setError(200, "Phone already exist", status_code.CODE_ERROR.ALREADY_EXIST);
+      //     return util.send(res);
+      //   }
+      // } else {
+      //   util.setError(200, getProfiledByPhone.data, status_code.CODE_ERROR.EMPTY); //code
+      //   return util.send(res);
+      // }
       /////////////////////////////generate random password/////////////////////////////////////////////////////
       var randomPassword = Math.random().toString(36).slice(-8);
       console.log("randomPassword", randomPassword)
@@ -126,8 +126,14 @@ module.exports = function (gatewayExpressApp) {
           redirectUri: 'https://www.khallasli.com',
           confirm_token: ""
         }
-      const myUser = await addUser(bodyUser,randomPassword,['user'])
-        console.log("myUser",myUser)
+        try {
+          const myUser = await addUser(bodyUser,randomPassword,['user'])
+          console.log("myUser",myUser)
+        } catch (error) {
+        util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
+        return util.send(res);
+  
+        }
 
       const dataType = await getType("10", res);
       if (!dataType.data.data) {
