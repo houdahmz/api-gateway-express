@@ -309,7 +309,7 @@ apiEndpoints:
     - host: '*'
       paths: '/topUpKh/transaction'
       methods: ["POST"]
-      scopes: ['admin','super_admin']
+      scopes: ['user','super_admin']
 
     - host: '*'
       paths: '/topUpKh/transaction'
