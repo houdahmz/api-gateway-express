@@ -73,32 +73,17 @@ module.exports = function (gatewayExpressApp) {
         util.setError(200, "phone is required", status_code.CODE_ERROR.EMPTY);
         return util.send(res);
       }
-      // /////////////////////////////Check email unique or not/////////////////////////////////////////////////////
-      // const getProfiled = await getProfileByEmail(email, res)
-      // console.log("getProfile", getProfiled.data)
-      // if (getProfiled.data.status == 'success') {
-      //   console.log("getProfiled.data.data", getProfiled.data.data)
-      //   if (getProfiled.data.data.data[0]) {
-      //     util.setError(200, "Email already exist", status_code.CODE_ERROR.ALREADY_EXIST);
-      //     return util.send(res);
-      //   }
-      // } else {
-      //   util.setError(200, getProfiled.data, status_code.CODE_ERROR.EMPTY); //code
-      //   return util.send(res);
-      // }
-      // /////////////////////////////Check phone unique or not/////////////////////////////////////////////////////
-      // const getProfiledByPhone = await getProfileByPhone(phone, res)
-      // console.log("getProfiledByPhone", getProfiledByPhone.data)
-      // if (getProfiledByPhone.data.status == 'success') {
-      //   console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
-      //   if (getProfiledByPhone.data.data.data[0]) {
-      //     util.setError(200, "Phone already exist", status_code.CODE_ERROR.ALREADY_EXIST);
-      //     return util.send(res);
-      //   }
-      // } else {
-      //   util.setError(200, getProfiledByPhone.data, status_code.CODE_ERROR.EMPTY); //code
-      //   return util.send(res);
-      // }
+      ///////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////////
+      const findByEmail = await services.user.findByEmail(email)
+      console.log("findByEmail---------------",findByEmail)
+      if(findByEmail){
+        return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+      }
+
+      const findByPhone = await services.user.findByPhone(phone)
+      if(findByPhone){
+        return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
+      }
       /////////////////////////////generate random password/////////////////////////////////////////////////////
       var randomPassword = Math.random().toString(36).slice(-8);
       console.log("randomPassword", randomPassword)
@@ -130,6 +115,7 @@ module.exports = function (gatewayExpressApp) {
           const myUser = await addUser(bodyUser,randomPassword,['user'])
           console.log("myUser",myUser)
         } catch (error) {
+          // console.log("error",error)
         util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
         return util.send(res);
   
@@ -401,7 +387,7 @@ module.exports = function (gatewayExpressApp) {
     }
   });
 
-  gatewayExpressApp.post('/team-register', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+  gatewayExpressApp.post('/team-register', async (req, res, next) => { // incomplete {add send mail with url /change_password} 
     try {
       const { firstname, username, lastname, email, phone, type_userId } = req.body
       /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
@@ -414,28 +400,16 @@ module.exports = function (gatewayExpressApp) {
       if (!type_userId) {
         return res.status(400).json({ status: "Error", error: "type_userId is required", code: status_code.CODE_ERROR.REQUIRED });
       }
-      /////////////////////////////Check email unique or not/////////////////////////////////////////////////////
-      const getProfiled = await getProfileByEmail(email, res)
-      console.log("getProfile", getProfiled.data)
-      if (getProfiled.data.status == 'success') {
-        console.log("getProfiled.data.data", getProfiled.data.data)
-        if (getProfiled.data.data.data[0]) {
-          return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-        }
-
-      } else {
-        return res.status(200).json({ message: getProfiled.data });
+      ///////////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////
+      const findByEmail = await services.user.findByEmail(email)
+      console.log("findByEmail---------------",findByEmail)
+      if(findByEmail){
+        return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
       }
-      /////////////////////////////Check phone unique or not/////////////////////////////////////////////////////
-      const getProfiledByPhone = await getProfileByPhone(phone, res)
-      console.log("getProfiledByPhone", getProfiledByPhone.data)
-      if (getProfiledByPhone.data.status == 'success') {
-        console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
-        if (getProfiledByPhone.data.data.data[0]) {
-          return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
-        }
-      } else {
-        return res.status(200).json({ message: getProfiledByPhone.data });
+
+      const findByPhone = await services.user.findByPhone(phone)
+      if(findByPhone){
+        return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
       }
       /////////////////////////////generate random password/////////////////////////////////////////////////////
       var randomPassword = Math.random().toString(36).slice(-8);
@@ -873,18 +847,16 @@ module.exports = function (gatewayExpressApp) {
     ///////////////////Email////////////////////////
     const email = req.body.email
     if (!email) {
-      return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
+      return res.status(400).json({ status: "Error", error: "Email is required", code: status_code.CODE_ERROR.EMPTY });
     }
-    const getProfiled = await getProfileByEmail(email)
-    console.log("getProfile", getProfiled.data)
-    if (getProfiled.data.status == 'success') {
-      if (!getProfiled.data.data.data[0]) {
-        return res.status(200).json({ status: "Error", error: "User with this email does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
-      }
+    const user = await services.user.findByEmail(email)
+    if (!user) {
+      return res.status(400).json({ status: "Error", error: "User with this email does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
+    }
+    console.log("user", user)
     ///////////////////Get username////////////////////////
-    const username = getProfiled.data.data.data[0].username
+    const username = user.username
       console.log("username", username)
-      const user = await services.user.findByUsernameOrId(username)
       console.log("user", user)
       console.debug('confirmation', user, username)
       if (user == false) { // username does not exist
@@ -913,9 +885,7 @@ module.exports = function (gatewayExpressApp) {
       log4j.loggerinfo.info("Success check your email : " + user.email);
       return res.status(201).json({ etat: "Success", message: "Check your email : " + user.email + " for username " + username });
       /*********************************** */
-    } else {
-      return res.status(200).json({ etat: "Error", message: getProfiled.data, code: status_code.CODE_ERROR.INCONNU });
-    }
+
   });
 
   gatewayExpressApp.post('/reset-password', async (req, res, done) => {
@@ -1468,32 +1438,16 @@ module.exports = function (gatewayExpressApp) {
               util.setError(400, "phone is required", status_code.CODE_ERROR.EMPTY);
               return util.send(res);
             }
-            /////////////////////////////Check email unique or not/////////////////////////////////////////////////////
-            const getProfiled = await getProfileByEmail(email, res)
-            console.log("getProfile", getProfiled.data)
-            if (getProfiled.data.status == 'success') {
-              console.log("getProfiled.data.data", getProfiled.data.data)
-              if (getProfiled.data.data.data[0]) {
-                util.setError(200, "Email already exist", status_code.CODE_ERROR.ALREADY_EXIST);
-                return util.send(res);
-
-              }
-            } else {
-              util.setError(200, getProfiled.data, status_code.CODE_ERROR.EMPTY); //code
-              return util.send(res);
+            ///////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////////
+            const findByEmail = await services.user.findByEmail(email)
+            console.log("findByEmail---------------",findByEmail)
+            if(findByEmail){
+              return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
             }
-            /////////////////////////////Check phone unique or not/////////////////////////////////////////////////////
-            const getProfiledByPhone = await getProfileByPhone(phone, res)
-            console.log("getProfiledByPhone", getProfiledByPhone.data)
-            if (getProfiledByPhone.data.status == 'success') {
-              console.log("getProfiledByPhone.data.data", getProfiledByPhone.data.data)
-              if (getProfiledByPhone.data.data.data[0]) {
-                util.setError(200, "Phone already exist", status_code.CODE_ERROR.ALREADY_EXIST);
-                return util.send(res);
-              }
-            } else {
-              util.setError(200, getProfiledByPhone.data, status_code.CODE_ERROR.EMPTY); //code
-              return util.send(res);
+      
+            const findByPhone = await services.user.findByPhone(phone)
+            if(findByPhone){
+              return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
             }
             var bodyUser = {
               username: req.body.username,
