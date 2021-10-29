@@ -6,6 +6,7 @@ const util = require("../register/helpers/utils");
 const jwt = require('jsonwebtoken');
 const env = require("../../config/env.config");
 const expiresIn = 3.6*1000*1000; //in ms //equals to 1 hour 
+const user_service = require('../../services/user/user.service')
 
 const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
@@ -16,7 +17,7 @@ useragent = require('express-useragent');
 var device = require('express-device');
 exports.addUser = async (body, password,scopes) => {
     /////////////////////////////create user//////////////////////////////////////////////////////
-    var user = await services.user.insert(body)
+    var user = await user_service.insert(body)
     console.log("user", user)
     /////////////////////////////create basic-auth credential for authentication//////////////////
     crd_basic = await services.credential.insertCredential(user.id, 'basic-auth', {

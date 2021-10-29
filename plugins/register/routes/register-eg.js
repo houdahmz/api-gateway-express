@@ -400,7 +400,7 @@ module.exports = function (gatewayExpressApp) {
     }
   });
 
-  gatewayExpressApp.post('/team-register', async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+  gatewayExpressApp.post('/team-register', verifyTokenSuperAdminOrAdmin,async (req, res, next) => { // incomplete {add send mail with url /change_password} 
     try {
       const { firstname, username, lastname, email, phone, type_userId } = req.body
       /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
@@ -758,7 +758,7 @@ module.exports = function (gatewayExpressApp) {
       }
     }
   });
-  gatewayExpressApp.post('/admin-register', async (req, res, next) => {
+  gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin,async (req, res, next) => {
     try {
       console.log("/api/admin-register")
       const { firstname, username, lastname, email, phone } = req.body
