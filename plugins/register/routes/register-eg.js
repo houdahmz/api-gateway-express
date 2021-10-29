@@ -7,6 +7,7 @@ const util = require("../helpers/utils");
 const jwt = require('jsonwebtoken');
 const env = require("../../../config/env.config");
 const {EMAIL} = require("../../../config/env.config");
+const user_service = require('../../../services/user/user.service')
 
 const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
@@ -74,13 +75,14 @@ module.exports = function (gatewayExpressApp) {
         return util.send(res);
       }
       ///////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////////
-      const findByEmail = await services.user.findByEmail(email)
+      const findByEmail = await user_service.findByEmail(email)
       console.log("findByEmail---------------",findByEmail)
       if(findByEmail){
         return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
       }
 
-      const findByPhone = await services.user.findByPhone(phone)
+      const findByPhone = await user_service.findByPhone(phone)
+      console.log("findByEmail---------------",findByEmail)
       if(findByPhone){
         return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
       }
@@ -365,6 +367,17 @@ module.exports = function (gatewayExpressApp) {
         redirectUri: 'https://www.khallasli.com',
       }
       const agentUser = await addUser(bodyUser,randomPassword,['agent'])
+      var myUser;
+      try {
+        myUser = await addUser(bodyUser,randomPassword,['user'])
+        console.log("myUser",myUser)
+      } catch (error) {
+        // console.log("error",error)
+      util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
+      return util.send(res);
+
+      }
+
 
       console.log("email", email)
       console.log("password", randomPassword)
@@ -402,13 +415,13 @@ module.exports = function (gatewayExpressApp) {
         return res.status(400).json({ status: "Error", error: "type_userId is required", code: status_code.CODE_ERROR.REQUIRED });
       }
       ///////////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////
-      const findByEmail = await services.user.findByEmail(email)
+      const findByEmail = await user_service.findByEmail(email)
       console.log("findByEmail---------------",findByEmail)
       if(findByEmail){
         return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
       }
 
-      const findByPhone = await services.user.findByPhone(phone)
+      const findByPhone = await user_service.findByPhone(phone)
       if(findByPhone){
         return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
       }
@@ -739,11 +752,11 @@ module.exports = function (gatewayExpressApp) {
       }
     }
   });
-  gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin, async (req, res, next) => {
+  gatewayExpressApp.post('/admin-register', async (req, res, next) => {
     try {
       console.log("/api/admin-register")
       const { firstname, username, lastname, email, phone } = req.body
-      myUser = await services.user.insert({
+      myUser = await user_service.insert({
         isActive: true,
         firstname: firstname,
         lastname: lastname,
@@ -850,7 +863,7 @@ module.exports = function (gatewayExpressApp) {
     if (!email) {
       return res.status(400).json({ status: "Error", error: "Email is required", code: status_code.CODE_ERROR.EMPTY });
     }
-    const user = await services.user.findByEmail(email)
+    const user = await user_service.findByEmail(email)
     if (!user) {
       return res.status(400).json({ status: "Error", error: "User with this email does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
     }
@@ -1440,13 +1453,13 @@ module.exports = function (gatewayExpressApp) {
               return util.send(res);
             }
             ///////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////////
-            const findByEmail = await services.user.findByEmail(email)
+            const findByEmail = await user_service.findByEmail(email)
             console.log("findByEmail---------------",findByEmail)
             if(findByEmail){
               return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
             }
       
-            const findByPhone = await services.user.findByPhone(phone)
+            const findByPhone = await user_service.findByPhone(phone)
             if(findByPhone){
               return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
             }
