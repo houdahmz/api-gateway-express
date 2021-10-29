@@ -1456,12 +1456,13 @@ module.exports = function (gatewayExpressApp) {
     }
 
   });
-  gatewayExpressApp.post('/add/user', async (req, res, done) => { //without profile
+  gatewayExpressApp.post('/user', async (req, res, done) => { //without profile
     try {
       console.log("/add-user")
       console.log("req.body", req.body)
-      const { firstname, username, lastname, email, phone, } = req.body
-
+      const { firstname, username, lastname, email, phone, } = req.body.user
+      const scopes = req.body.scopes
+      console.log("req.body",req.body)
             /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
             if (!email) {
               util.setError(400, "email is required", status_code.CODE_ERROR.EMPTY);
@@ -1482,31 +1483,36 @@ module.exports = function (gatewayExpressApp) {
             if(findByPhone){
               return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
             }
-            var bodyUser = {
-              username: req.body.username,
-              firstname: req.body.firstname,
-              lastname: req.body.lastname,
-              email: req.body.email,
-              phone: req.body.phone,
+            // var bodyUser = {
+            //   username: req.body.username,
+            //   firstname: req.body.firstname,
+            //   lastname: req.body.lastname,
+            //   email: req.body.email,
+            //   phone: req.body.phone,
           
-              role: req.body.role,
-              confirmMail: req.body.confirmMail,
-              team: req.body.team,
-              profilCompleted: req.body.profilCompleted,
-            }
+            //   role: req.body.role,
+            //   confirmMail: req.body.confirmMail,
+            //   team: req.body.team,
+            //   profilCompleted: req.body.profilCompleted,
+            // }
             var randomPassword = Math.random().toString(36).slice(-8);
             console.log("randomPassword", randomPassword)
       
             var myUser;
             try {
-              myUser = await addUser(bodyUser,randomPassword,req.body.scopes)
+              myUser = await addUser(req.body.user,randomPassword,scopes)
               console.log("myUser",myUser)
             } catch (error) {
             util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
             return util.send(res);
             }
             log4j.loggerinfo.info("Success");
-            return res.status(201).json({ etat: "Success", message: "Successfully added" ,data: myUser });
+                const resp = {
+                  data: myUser,
+                  randomPassword: randomPassword
+
+                }
+            return res.status(201).json({ etat: "Success", message: "Successfully added" ,data: resp });
       
 
     } catch (err) {

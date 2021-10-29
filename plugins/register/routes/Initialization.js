@@ -12,7 +12,7 @@ const env = require("../../../config/env.config");
 const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
 const authService = services.auth;
-const user_service = require('../../services/user/user.service')
+const user_service = require('../../../services/user/user.service')
 
 const log4j = require("../../../config/configLog4js.js");
 const validation = require("../middleware/validation")
