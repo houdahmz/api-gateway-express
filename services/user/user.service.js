@@ -1,12 +1,15 @@
 const uuidv4 = require('uuid/v4');
-const { validate } = require('../../../lib/schemas');
+const { validate } = require('express-gateway/lib/schemas');
 const userDao = require('./user.dao.js');
-const applicationService = require('./application.service.js');
-const credentialService = require('../credentials/credential.service.js');
-const config = require('../../config');
-const utils = require('../utils');
+const userDaoEG = require('express-gateway/lib/services/consumers/user.dao.js');
+const applicationService = require('express-gateway/lib/services/consumers/application.service');
+const credentialService = require('express-gateway/lib/services/credentials/credential.service');
+const config = require('express-gateway/lib/config');
+const utils = require('express-gateway/lib/services/utils');
 
 const SCHEMA = 'http://express-gateway.io/models/users.json';
+// const u = {};
+// u.user = require('express-gateway/lib/services/consumers/user.service.js');
 
 const s = {};
 
@@ -22,14 +25,13 @@ s.insert = function (user) {
         });
     });
 };
-
 s.get = function (userId, options) {
 
   if (!userId || !typeof userId === 'string') {
     return false;
   }
 
-  return userDao
+  return userDaoEG
     .getUserById(userId)
     .then(function (user) {
       if (!user) {
@@ -43,7 +45,6 @@ s.get = function (userId, options) {
       return user;
     });
 };
-
 s.getEmail = function (email, options) {
   if (!email || !typeof email === 'string') {
     return false;
@@ -82,33 +83,18 @@ s.getPhone = function (phone, options) {
       return user;
     });
 };
-s.findAll = function (query) {
-  return userDao.findAll(query).then(data => {
-    data.users = data.users || [];
-    data.users.forEach(u => { u.isActive = u.isActive === 'true'; });
-    return data;
-  });
-};
-
-s.find = function (username, options) {
-
-  if (!username || !typeof username === 'string') {
-    return Promise.reject(new Error('invalid username')); // TODO: replace with validation error
-  }
-
-  return userDao
-    .find(username)
-    .then(userId => {
-      return userId ? this.get(userId, options) : false;
-    });
-};
+// s.findAll = function (query) {
+//   return userDao.findAll(query).then(data => {
+//     data.users = data.users || [];
+//     data.users.forEach(u => { u.isActive = u.isActive === 'true'; });
+//     return data;
+//   });
+// };
 
 s.findEmail = function (email, options) {
-
   if (!email || !typeof email === 'string') {
     return Promise.reject(new Error('invalid email')); // TODO: replace with validation error
   }
-
   return userDao
     .findEmail(email)
     .then(userId => {
@@ -120,7 +106,6 @@ s.findByEmail = function (value) {
     return s
     .findEmail(value)
     .then(user => {
-
       if (user) {
         return user;
       }
@@ -130,11 +115,9 @@ s.findByEmail = function (value) {
 
 };
 s.findPhone = function (phone, options) {
-
   if (!phone || !typeof phone === 'string') {
     return Promise.reject(new Error('invalid phone')); // TODO: replace with validation error
   }
-
   return userDao
     .findPhone(phone)
     .then(userId => {
@@ -149,79 +132,21 @@ s.findByPhone = function (value) {
       if (user) {
         return user;
       }
-
       return s.get(value);
     });
 };
-s.findByUsernameOrId = function (value) {
-  return s
-    .find(value)
-    .then(user => {
-      if (user) {
-        return user;
-      }
-      return s.get(value);
-    });
-};
+s.find = function (username, options) {
 
-s.update = function (userId, _props) {
-  if (!_props || !userId) {
-    return Promise.reject(new Error('invalid user id')); // TODO: replace with validation error
+  if (!username || !typeof username === 'string') {
+    return Promise.reject(new Error('invalid username')); // TODO: replace with validation error
   }
-  return this.get(userId) // validate user exists
-    .then(user => {
-      if (!user) { return false; } // user does not exist
 
-      delete _props.username;
-      return validateUpdateToUserProperties(_props)
-        .then(function (updatedUserProperties) {
-          if (updatedUserProperties) {
-            utils.appendUpdatedAt(updatedUserProperties);
-            return userDao.update(userId, updatedUserProperties);
-          } else return true; // there are no properties to update
-        })
-        .then(updated => {
-          return updated ? true : Promise.reject(new Error('user update failed')); // TODO: replace with server error
-        });
+  return userDao
+    .find(username)
+    .then(userId => {
+      return userId ? this.get(userId, options) : false;
     });
 };
-
-s.deactivate = function (id) {
-  return this.get(id) // make sure user exists
-    .then(function () {
-      return userDao.deactivate(id)
-        .then(() => applicationService.deactivateAll(id)); // Cascade deactivate all applications associated with the user
-    })
-    .then(() => true)
-    .catch(() => Promise.reject(new Error('failed to deactivate user')));
-};
-
-s.activate = function (id) {
-  return this.get(id) // make sure user exists
-    .then(function () {
-      return userDao.activate(id);
-    })
-    .then(() => true)
-    .catch(() => Promise.reject(new Error('failed to activate user')));
-};
-
-s.remove = function (userId) {
-  return this.get(userId) // validate user exists
-    .then(user => Promise.all([user, !user ? false : userDao.remove(userId)]))
-    .then(([user, userDeleted]) => {
-      if (!user) {
-        return false;
-      } else if (user && !userDeleted) {
-        throw new Error('user delete failed');
-      } else {
-        return Promise.all([
-          applicationService.removeAll(userId), // Cascade delete all apps associated with user
-          credentialService.removeAllCredentials(user.id)
-        ]).then(() => true);
-      }
-    });
-};
-
 function validateAndCreateUser (_user) {
   let user;
 
@@ -261,23 +186,4 @@ function validateAndCreateUser (_user) {
       return user;
     });
 }
-
-function validateUpdateToUserProperties (userProperties) {
-  const updatedUserProperties = {};
-    // return  Promise.resolve(updatedUserProperties) 
-
-  if (!Object.keys(userProperties).every(key => typeof key === 'string' && config.models.users.properties[key])) {
-    
-    return Promise.reject(new Error('one or more properties is invalid')); // TODO: replace with validation error
-  }
-
-  for (const prop in userProperties) {
-    if (config.models.users.properties[prop].isMutable !== false) {
-      updatedUserProperties[prop] = userProperties[prop];
-    } else return Promise.reject(new Error('one or more properties is immutable')); // TODO: replace with validation error
-  }
-
-  return Object.keys(updatedUserProperties).length > 0 ? Promise.resolve(updatedUserProperties) : Promise.resolve(false);
-}
-
 module.exports = s;

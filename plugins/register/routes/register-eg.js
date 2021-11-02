@@ -7,6 +7,7 @@ const util = require("../helpers/utils");
 const jwt = require('jsonwebtoken');
 const env = require("../../../config/env.config");
 const {EMAIL} = require("../../../config/env.config");
+const user_service = require('../../../services/user/user.service')
 
 const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
@@ -74,13 +75,14 @@ module.exports = function (gatewayExpressApp) {
         return util.send(res);
       }
       ///////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////////
-      const findByEmail = await services.user.findByEmail(email)
+      const findByEmail = await user_service.findByEmail(email)
       console.log("findByEmail---------------",findByEmail)
       if(findByEmail){
         return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
       }
 
-      const findByPhone = await services.user.findByPhone(phone)
+      const findByPhone = await user_service.findByPhone(phone)
+      console.log("findByEmail---------------",findByEmail)
       if(findByPhone){
         return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
       }
@@ -364,7 +366,17 @@ module.exports = function (gatewayExpressApp) {
         team: false,
         redirectUri: 'https://www.khallasli.com',
       }
-      const agentUser = await addUser(bodyUser,randomPassword,['agent'])
+      var agentUser;
+      try {
+        agentUser = await addUser(bodyUser,randomPassword,['agent'])
+        console.log("agentUser",agentUser)
+      } catch (error) {
+        // console.log("error",error)
+      util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
+      return util.send(res);
+
+      }
+
 
       console.log("email", email)
       console.log("password", randomPassword)
@@ -388,7 +400,7 @@ module.exports = function (gatewayExpressApp) {
     }
   });
 
-  gatewayExpressApp.post('/team-register', async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+  gatewayExpressApp.post('/team-register', verifyTokenSuperAdminOrAdmin,async (req, res, next) => { // incomplete {add send mail with url /change_password} 
     try {
       const { firstname, username, lastname, email, phone, type_userId } = req.body
       /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
@@ -402,13 +414,13 @@ module.exports = function (gatewayExpressApp) {
         return res.status(400).json({ status: "Error", error: "type_userId is required", code: status_code.CODE_ERROR.REQUIRED });
       }
       ///////////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////
-      const findByEmail = await services.user.findByEmail(email)
+      const findByEmail = await user_service.findByEmail(email)
       console.log("findByEmail---------------",findByEmail)
       if(findByEmail){
         return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
       }
 
-      const findByPhone = await services.user.findByPhone(phone)
+      const findByPhone = await user_service.findByPhone(phone)
       if(findByPhone){
         return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
       }
@@ -442,8 +454,15 @@ module.exports = function (gatewayExpressApp) {
 
       }
       /////////////////////////////create user/////////////////////////////////////////////////////
-      const myUser = await addUser(bodyUser,randomPassword,[code])
-      console.log("myUser", myUser)
+      var myUser;
+      try {
+        const myUser = await addUser(bodyUser,randomPassword,[code])
+        console.log("myUser",myUser)
+      } catch (error) {
+      util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
+      return util.send(res);
+      }
+
       const creteProfile = async (myUser) => {
         try {
           console.log("aaacreteProfileaaa", {
@@ -739,11 +758,25 @@ module.exports = function (gatewayExpressApp) {
       }
     }
   });
-  gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin, async (req, res, next) => {
+  gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin,async (req, res, next) => {
     try {
       console.log("/api/admin-register")
       const { firstname, username, lastname, email, phone } = req.body
-      myUser = await services.user.insert({
+      // myUser = await user_service.insert({
+      //   isActive: true,
+      //   firstname: firstname,
+      //   lastname: lastname,
+      //   username: username,
+      //   email: email,
+      //   phone: phone,
+      //   team: true,
+      //   role: "ROLE_ADMIN",
+      //   confirmMail: false,
+      //   profilCompleted: true,
+
+      //   redirectUri: 'https://www.khallasli.com',
+      // })
+      const bodyUser = {
         isActive: true,
         firstname: firstname,
         lastname: lastname,
@@ -756,11 +789,20 @@ module.exports = function (gatewayExpressApp) {
         profilCompleted: true,
 
         redirectUri: 'https://www.khallasli.com',
-      })
+      }
       ////////////Generate a random password///////////////////////////////////////
       var randomPassword = Math.random().toString(36).slice(-8);
       console.log("randomPassword", randomPassword)
       //////////////
+      var myUser;
+      try {
+        myUser = await addUser(bodyUser,randomPassword,['admin'])
+        console.log("myUser",myUser)
+      } catch (error) {
+      util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
+      return util.send(res);
+      }
+      /////////////////////
       const dataType = await getType("20", res)
       if (!dataType.data.data) {
         log4j.loggererror.error("Error Problem in server ")
@@ -777,18 +819,8 @@ module.exports = function (gatewayExpressApp) {
         log4j.loggererror.error("Error in adding profile: " + userProfile.data)
         return res.status(200).json(userProfile.data);
       }
-      crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
-        autoGeneratePassword: false,
-        password: randomPassword,
-        scopes: []
-      })
-      console.log("crd_basic", crd_basic)
-      crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', { scopes: ['admin'] })
-      console.log("crd_oauth2", crd_oauth2)
       console.log("email", email)
       console.log("password", randomPassword)
-      console.log("crd_oauth2.id", crd_oauth2.id)
-      console.log("crd_oauth2.secret", crd_oauth2.secret)
       //////////////////////////////Send mail///////////////////////////////////
       var origin = req.headers.origin;
       if (origin) {
@@ -850,7 +882,7 @@ module.exports = function (gatewayExpressApp) {
     if (!email) {
       return res.status(400).json({ status: "Error", error: "Email is required", code: status_code.CODE_ERROR.EMPTY });
     }
-    const user = await services.user.findByEmail(email)
+    const user = await user_service.findByEmail(email)
     if (!user) {
       return res.status(400).json({ status: "Error", error: "User with this email does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
     }
@@ -1424,12 +1456,13 @@ module.exports = function (gatewayExpressApp) {
     }
 
   });
-  gatewayExpressApp.post('/add/user', async (req, res, done) => { //without profile
+  gatewayExpressApp.post('/user', async (req, res, done) => { //without profile
     try {
       console.log("/add-user")
       console.log("req.body", req.body)
-      const { firstname, username, lastname, email, phone, } = req.body
-
+      const { firstname, username, lastname, email, phone, } = req.body.user
+      const scopes = req.body.scopes
+      console.log("req.body",req.body)
             /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
             if (!email) {
               util.setError(400, "email is required", status_code.CODE_ERROR.EMPTY);
@@ -1440,35 +1473,46 @@ module.exports = function (gatewayExpressApp) {
               return util.send(res);
             }
             ///////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////////
-            const findByEmail = await services.user.findByEmail(email)
+            const findByEmail = await user_service.findByEmail(email)
             console.log("findByEmail---------------",findByEmail)
             if(findByEmail){
               return res.status(200).json({ status: "Error", error: "Email already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
             }
       
-            const findByPhone = await services.user.findByPhone(phone)
+            const findByPhone = await user_service.findByPhone(phone)
             if(findByPhone){
               return res.status(200).json({ status: "Error", error: "Phone already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
             }
-            var bodyUser = {
-              username: req.body.username,
-              firstname: req.body.firstname,
-              lastname: req.body.lastname,
-              email: req.body.email,
-              phone: req.body.phone,
+            // var bodyUser = {
+            //   username: req.body.username,
+            //   firstname: req.body.firstname,
+            //   lastname: req.body.lastname,
+            //   email: req.body.email,
+            //   phone: req.body.phone,
           
-              role: req.body.role,
-              confirmMail: req.body.confirmMail,
-              team: req.body.team,
-              profilCompleted: req.body.profilCompleted,
-            }
+            //   role: req.body.role,
+            //   confirmMail: req.body.confirmMail,
+            //   team: req.body.team,
+            //   profilCompleted: req.body.profilCompleted,
+            // }
             var randomPassword = Math.random().toString(36).slice(-8);
             console.log("randomPassword", randomPassword)
       
-            const myUser = await addUser(bodyUser,randomPassword,req.body.scopes)
-            console.log("myUser", myUser)
+            var myUser;
+            try {
+              myUser = await addUser(req.body.user,randomPassword,scopes)
+              console.log("myUser",myUser)
+            } catch (error) {
+            util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
+            return util.send(res);
+            }
             log4j.loggerinfo.info("Success");
-            return res.status(201).json({ etat: "Success", message: "Successfully added" ,data: myUser });
+                const resp = {
+                  data: myUser,
+                  randomPassword: randomPassword
+
+                }
+            return res.status(201).json({ etat: "Success", message: "Successfully added" ,data: resp });
       
 
     } catch (err) {
