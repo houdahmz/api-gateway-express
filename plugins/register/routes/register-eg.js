@@ -18,7 +18,7 @@ useragent = require('express-useragent');
 var device = require('express-device');
 const cors = require("cors");
 const {
-  createAdminProfile, getProfileByPhone, getProfileByEmail, getType, getTypeById, getToken, getProfileByUsername, updateprofileConfirm, getProfile, creteProfile, updateprofile, updateprofileByAdmin
+  createAdminProfile, getProfileByPhone, getProfileByEmail, getType, getTypeById, getToken, getProfileByUsername, updateprofileConfirm, getProfile, creteProfile, updateprofile, updateprofileByAdmin, updateDeleted
 } = require("../../Services/users");
 
 const {
@@ -98,8 +98,8 @@ module.exports = function (gatewayExpressApp) {
       console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
       // /////////////////////////////create user/////////////////////////////////////////////////////
       const bodyUser = {
-          isActive: false,
-          confirmMail: false,
+          isActive: true,
+          confirmMail: true,
           profilCompleted: true,
           firstname: firstname,
           lastname: lastname,
@@ -552,10 +552,10 @@ module.exports = function (gatewayExpressApp) {
   });
 
   gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //endpoint for activate (isActivate)
-    const { code } = req.body // code = 10 desactive , 11 active // id is a username
+    const { code } = req.body // code = 1 desactive , 0 active // id is a username
     if (!code) {
-      log4j.loggererror.error("Code can not be empty (set 10 to desactivate or 11 to activate) a user")
-      util.setError(200, "Code can not be empty (set 10 to desactivate or 11 to activate) a user", status_code.CODE_ERROR.EMPTY);
+      log4j.loggererror.error("Code can not be empty (set 1 to desactivate or 0 to activate) a user")
+      util.setError(200, "Code can not be empty (set 1 to desactivate or 0 to activate) a user", status_code.CODE_ERROR.EMPTY);
       return util.send(res);
     }
     myUser = await services.user.findByUsernameOrId(req.params.id)
@@ -564,13 +564,14 @@ module.exports = function (gatewayExpressApp) {
       log4j.loggererror.error("The user does not exist.")
       return res.status(200).json({ message: "The user does not exist" });
     }
+    
     //////////////////////////////Get profile///////////////////////////////////
     const getProfiled = await getProfileByUsername(req.params.id, res)
     console.log("getProfile", getProfiled.data)
     if (getProfiled.data.status == 'success') {
       console.log("myUser.id", myUser.id)
       //////////////////////////////Desactivate a user///////////////////////////////////
-      if (code == 10) {
+      if (code == 1) {
         myUser = await services.user.deactivate(myUser.id)
         if (myUser == true) {
           console.log("id", getProfiled.data.data.data[0].id)
@@ -586,12 +587,23 @@ module.exports = function (gatewayExpressApp) {
             log4j.loggererror.error("Error Problem in server ")
             return res.status(500).send({ status: "Error", error: "Internal Server Error", code: status_code.CODE_ERROR.SERVER });
           }
+              //////////////////////////////update///////////////////////////////////
+            const updateDeletedBody = {
+              deleted: code,
+              deleted_by: req.body.deletedBy
+            }
+            let userUpdated = await updateDeleted(updateDeletedBody, getProfiled.data.data.data[0].id, res);
+              if (!userUpdated.data) {
+                log4j.loggererror.error("Error Problem in server ")
+                return res.status(500).json({ "Error": "Problem in server" });
+              }
           ////////////////////////////////////
+
           return res.status(200).json({ message: "The user has been desactivated" });
         }
       } 
       //////////////////////////////Activate a user///////////////////////////////////
-      else if (code == 11) {
+      else if (code == 0) {
         myUser = await services.user.activate(myUser.id)
         if (myUser == true) {
           log4j.loggererror.error("Unkown error.")
@@ -609,7 +621,18 @@ module.exports = function (gatewayExpressApp) {
             log4j.loggererror.error("Error Problem in server ")
             return res.status(500).send({ status: "Error", error: "Internal Server Error", code: status_code.CODE_ERROR.SERVER });
           }
-          ////////////////////////////////////
+                        //////////////////////////////update///////////////////////////////////
+                        const updateDeletedBody = {
+                          deleted: code,
+                          deleted_by: req.body.deletedBy
+                        }
+                        let userUpdated = await updateDeleted(updateDeletedBody, getProfiled.data.data.data[0].id, res);
+                          if (!userUpdated.data) {
+                            log4j.loggererror.error("Error Problem in server ")
+                            return res.status(500).json({ "Error": "Problem in server" });
+                          }
+                      ////////////////////////////////////
+            
           console.log("userProfile.data", userProfile.data)
           return res.status(200).json({ message: "The user has been activated" });
         }
@@ -649,7 +672,7 @@ module.exports = function (gatewayExpressApp) {
 
   });
 
-  gatewayExpressApp.patch('/accept/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //accept or refuser a visitor (means give a visitor a role as a user)
+  gatewayExpressApp.patch('/accept/:id',  async (req, res, next) => { //accept or refuser a visitor (means give a visitor a role as a user)
     //accept or refuse a pdv 
     const { code } = req.body // code = 10 delete , 11 accept // id is a username
     console.log("Body in accepte endpint ", req.body)
@@ -1519,5 +1542,19 @@ module.exports = function (gatewayExpressApp) {
       log4j.loggererror.error("Error: " + err.message)
       return res.status(422).json({ error: err.message })
     }
+  });
+  gatewayExpressApp.get('/user', async (req, res, done) => { //without profile
+    // try {
+    //   console.log("/add-user")
+    //         return res.status(201).json({ etat: "Success", message: "Successfully added" ,data: resp });
+      
+
+    // } catch (err) {
+    //   log4j.loggererror.error("Error: " + err.message)
+    //   return res.status(422).json({ error: err.message })
+    // }
+    user_service.findAll(req.query).then(users => res.json(users)).catch(err => {
+      return res.status(422).json({ error: err.message })
+    })
   });
 };

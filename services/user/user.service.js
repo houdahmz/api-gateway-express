@@ -147,6 +147,15 @@ s.find = function (username, options) {
       return userId ? this.get(userId, options) : false;
     });
 };
+s.findAll = function (query) {
+  console.log("query",query)
+  return userDao.findAll(query).then(data => {
+    console.log("data",data)
+    data.users = data.users || [];
+    // data.users.forEach(u => { u.isActive = u.isActive === 'true'; });
+    return data;
+  });
+};
 function validateAndCreateUser (_user) {
   let user;
 
