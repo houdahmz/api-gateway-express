@@ -94,7 +94,7 @@ module.exports = function (gatewayExpressApp) {
     const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password)
     if (!passBooleanTrue) {
           //////////////////////////
-    const MAX_LOGIN_ATTEMPTS = 5;
+    const MAX_LOGIN_ATTEMPTS = 3;
     const LOCK_TIME = 2 * 60 * 60 * 1000;  //(2MIN) 7 200 000
     // const DIFF = 36 * 1000 * 1000;  //(10MIN) 36 000 000// 1h
     const DIFF = 6 * 1000 * 1000;  //(10MIN) 6 000 000// 
@@ -118,7 +118,6 @@ module.exports = function (gatewayExpressApp) {
     // console.log("userFinded.nextTry zzzz", userFinded.nextTry)
     // console.log("user.loginAttempts zzzzzzzz", userFinded.loginAttempts)
     if(userFinded.loginAttempts == 0 || !userFinded.loginAttempts){ //First loginAttempts
-    console.log("/***********111111111111***************///////")
     userFinded.loginAttempts = 1
     userFinded.nextTry = Date.now() + DIFF //DATE OF FIRST TENTATIVE + 10 MIN
 
@@ -129,11 +128,9 @@ module.exports = function (gatewayExpressApp) {
       loginAttempts:userFinded.loginAttempts.toString(),
       nextTry:userFinded.nextTry.toString()
     })
-    console.log("userUpdated 111111111111",userUpdated)
     }
 
     else if (userFinded.nextTry > Date.now() && parseInt(userFinded.loginAttempts) + 1 < MAX_LOGIN_ATTEMPTS  && parseInt(userFinded.loginAttempts) != -1){ //nextTry as number of tentative in DIFF
-    console.log("/***********2222222222222222***************///////")
     console.log("userparseInt(MAX_LOGIN_ATTEMPTS) - parseInt(userFinded.loginAttempts)Updated 2222222222222222",parseInt(MAX_LOGIN_ATTEMPTS) - parseInt(userFinded.loginAttempts))
 
       userFinded.loginAttempts = parseInt(userFinded.loginAttempts) + 1
@@ -142,12 +139,10 @@ module.exports = function (gatewayExpressApp) {
       let userUpdated = await services.user.update(userFinded.id,{
         loginAttempts:userFinded.loginAttempts.toString()
       })
-      console.log("userUpdated 2222222222222222",userUpdated)
   
     }
 
     else if (userFinded.nextTry > Date.now() && parseInt(userFinded.loginAttempts) + 1 >= MAX_LOGIN_ATTEMPTS && parseInt(userFinded.loginAttempts) != -1){ // Account is locked (-1) /nextTry as time a blocked account
-    console.log("/***********3333333333333333***************///////")
 
       userFinded.loginAttempts = -1
       userFinded.nextTry = Date.now() + LOCK_TIME
@@ -163,7 +158,6 @@ module.exports = function (gatewayExpressApp) {
       })
       myUserDesactivate = await services.user.deactivate(userFinded.id)
 
-      console.log("userUpdated 3333333333333333",userUpdated)
   
     }
 
