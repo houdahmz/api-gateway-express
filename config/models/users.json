@@ -16,8 +16,7 @@
       "format": "email"
     },
     "phone": {
-      "type": "string"
-    
+      "type": "string"  
     },
     "redirectUri": {
       "type": "string",
@@ -25,23 +24,26 @@
     },
     "confirmMail": {
       "type": "string"
-    
     },
     "team": {
       "type": "string"
-    
     },
     "demand": {
       "type": "string"
-    
+    },
+    "loginAttempts": {
+      "type": "number",
+      "default": 0
+    },
+    "nextTry": {
+      "type": "number",
+      "default": 0
     },
     "profilCompleted": {
       "type": "string"
-    
     },
     "role": {
       "type": "string"
-    
     },
     "ip": {
       "type": "string"

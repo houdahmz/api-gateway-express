@@ -98,8 +98,8 @@ module.exports = function (gatewayExpressApp) {
       console.log("myUserJwt", `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`)
       // /////////////////////////////create user/////////////////////////////////////////////////////
       const bodyUser = {
-          isActive: true,
-          confirmMail: true,
+          isActive: false,
+          confirmMail: false,
           profilCompleted: true,
           firstname: firstname,
           lastname: lastname,
@@ -604,7 +604,12 @@ module.exports = function (gatewayExpressApp) {
       } 
       //////////////////////////////Activate a user///////////////////////////////////
       else if (code == 0) {
+        let userUpdated = await services.user.update(myUser.id,{
+          loginAttempts: "0"
+        })
+
         myUser = await services.user.activate(myUser.id)
+  
         if (myUser == true) {
           log4j.loggererror.error("Unkown error.")
           /////////////////////

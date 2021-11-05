@@ -50,3 +50,27 @@ exports.createJwt = async (username, password=null) => {
 exports.verifyJwt = async (token) => {
     return await jwt.verify(token, `${env.JWT_SECRET}`, { algorithms: ['HS256'] });
 } 
+exports.incrementLoginAttempts = async (lockUntil,loginAttempts) => {
+        //     console.log("lock until",lockUntil)
+        //     // if we have a previous lock that has expired, restart at 1
+        //     var lockExpired = !!(lockUntil && lockUntil < Date.now());
+        // console.log("lockExpired",lockExpired)
+        //     if (lockExpired) {
+        //         return {
+        //             set: { loginAttempts: 1 },
+        //             unset: { lockUntil: 1 }
+        //         };
+        //     }
+        // // otherwise we're incrementing
+        //     var updates = loginAttempts+1;
+        //         // lock the account if we've reached max attempts and it's not locked already
+        //     var needToLock = !!(loginAttempts + 1 >= config.login.maxAttempts && !isLocked);
+        // console.log("needToLock",needToLock)
+        // console.log("loginAttempts",loginAttempts)
+        //     if (needToLock) {
+        //         updates.set = { lockUntil: Date.now() + config.login.lockoutHours };
+        //         console.log("config.login.lockoutHours",Date.now() + config.login.lockoutHours)
+            // }
+//console.log("lockUntil",this.lockUntil)
+    // return updates;
+} 
