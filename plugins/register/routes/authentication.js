@@ -96,9 +96,10 @@ module.exports = function (gatewayExpressApp) {
           //////////////////////////
     const MAX_LOGIN_ATTEMPTS = 5;
     const LOCK_TIME = 2 * 60 * 60 * 1000;  //(2MIN) 7 200 000
-    // const DIFF = 36 * 1000 * 1000;  //(10MIN) 36 000 000// 10h
-    const DIFF = 6 * 1000 * 1000;  //(10MIN) 36 000 000// 10h
-
+    // const DIFF = 36 * 1000 * 1000;  //(10MIN) 36 000 000// 1h
+    const DIFF = 6 * 1000 * 1000;  //(10MIN) 6 000 000// 
+    // var seconds = new Date().getTime() / 1000;
+    // console.log("seconds",seconds)
     const userFinded = await services.user.findByUsernameOrId(myUser.id)
     console.log("******************userici****************")
     console.log("user", userFinded.role)
@@ -106,11 +107,6 @@ module.exports = function (gatewayExpressApp) {
     console.log("user.loginAttempts", userFinded.loginAttempts)
     console.log("Date.now()", Date.now())
 
-    // let userUpdated = await services.user.update(userFinded.id,{
-    //   loginAttempts:"0",
-    //   nextTry:"1636118901357"
-
-    // })
 
     const userFinded1 = await services.user.findByUsernameOrId(myUser.id)
     console.log("******************userici****************")
@@ -157,8 +153,10 @@ module.exports = function (gatewayExpressApp) {
       userFinded.nextTry = Date.now() + LOCK_TIME
       //send mail
       mail.sendMailAccountBlocked("Your account has been blocked", userFinded.email, userFinded.username, userFinded.firstname, userFinded.lastname)
-      //desactivated account
+      mail.sendMailAccountBlocked("Your account has been blocked", "payposkhallasli@gmail.com", userFinded.username, userFinded.firstname, userFinded.lastname)
 
+      //desactivated account
+     
       let userUpdated = await services.user.update(userFinded.id,{
         loginAttempts: userFinded.loginAttempts.toString(),
         nextTry: userFinded.nextTry.toString()
