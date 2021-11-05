@@ -94,7 +94,7 @@ module.exports = function (gatewayExpressApp) {
     const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password)
     if (!passBooleanTrue) {
           //////////////////////////
-    const MAX_LOGIN_ATTEMPTS = 3;
+    const MAX_LOGIN_ATTEMPTS = 2;
     const LOCK_TIME = 2 * 60 * 60 * 1000;  //(2MIN) 7 200 000
     // const DIFF = 36 * 1000 * 1000;  //(10MIN) 36 000 000// 1h
     const DIFF = 6 * 1000 * 1000;  //(10MIN) 6 000 000// 
