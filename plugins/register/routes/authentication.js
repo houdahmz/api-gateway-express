@@ -83,10 +83,99 @@ module.exports = function (gatewayExpressApp) {
       util.setError(200, "user is desactivated. please wait for the administrator's agreement", status_code.CODE_ERROR.USER_DESACTIVATE);
       return util.send(res);
     }
+    // else if (myUser.loginAttempts == "-1") {
+    //   log4j.loggerinfo.info("Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator's ");
+    //   util.setError(200, "Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator's ", status_code.CODE_ERROR.USER_DESACTIVATE);
+    //   return util.send(res);
+    // }
+
     myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth')
     console.log("myCredBasic ", myCredBasic)
     const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password)
     if (!passBooleanTrue) {
+          //////////////////////////
+    const MAX_LOGIN_ATTEMPTS = 5;
+    const LOCK_TIME = 2 * 60 * 60 * 1000;  //(2MIN) 7 200 000
+    // const DIFF = 36 * 1000 * 1000;  //(10MIN) 36 000 000// 1h
+    const DIFF = 6 * 1000 * 1000;  //(10MIN) 6 000 000// 
+    // var seconds = new Date().getTime() / 1000;
+    // console.log("seconds",seconds)
+    const userFinded = await services.user.findByUsernameOrId(myUser.id)
+    console.log("******************userici****************")
+    console.log("user", userFinded.role)
+    console.log("userFinded.nextTry", userFinded.nextTry)
+    console.log("user.loginAttempts", userFinded.loginAttempts)
+    console.log("Date.now()", Date.now())
+
+
+    const userFinded1 = await services.user.findByUsernameOrId(myUser.id)
+    console.log("******************userici****************")
+    console.log("user", userFinded1.role)
+    console.log("userFinded.nextTry", userFinded1.nextTry)
+    console.log("user.loginAttempts", userFinded1.loginAttempts)
+    console.log("Date.now()", Date.now())
+
+    // console.log("userFinded.nextTry zzzz", userFinded.nextTry)
+    // console.log("user.loginAttempts zzzzzzzz", userFinded.loginAttempts)
+    if(userFinded.loginAttempts == 0 || !userFinded.loginAttempts){ //First loginAttempts
+    console.log("/***********111111111111***************///////")
+    userFinded.loginAttempts = 1
+    userFinded.nextTry = Date.now() + DIFF //DATE OF FIRST TENTATIVE + 10 MIN
+
+    console.log("userFinded.loginAttempts", userFinded.loginAttempts)
+    console.log("userFinded.nextTry", userFinded.nextTry)
+
+    let userUpdated = await services.user.update(userFinded.id,{
+      loginAttempts:userFinded.loginAttempts.toString(),
+      nextTry:userFinded.nextTry.toString()
+    })
+    console.log("userUpdated 111111111111",userUpdated)
+    }
+
+    else if (userFinded.nextTry > Date.now() && parseInt(userFinded.loginAttempts) + 1 < MAX_LOGIN_ATTEMPTS  && parseInt(userFinded.loginAttempts) != -1){ //nextTry as number of tentative in DIFF
+    console.log("/***********2222222222222222***************///////")
+    console.log("userparseInt(MAX_LOGIN_ATTEMPTS) - parseInt(userFinded.loginAttempts)Updated 2222222222222222",parseInt(MAX_LOGIN_ATTEMPTS) - parseInt(userFinded.loginAttempts))
+
+      userFinded.loginAttempts = parseInt(userFinded.loginAttempts) + 1
+      console.log(`\nIncorrect entries! ${parseInt(MAX_LOGIN_ATTEMPTS) +1 - parseInt(userFinded.loginAttempts)} Entries Remaining!`);
+
+      let userUpdated = await services.user.update(userFinded.id,{
+        loginAttempts:userFinded.loginAttempts.toString()
+      })
+      console.log("userUpdated 2222222222222222",userUpdated)
+  
+    }
+
+    else if (userFinded.nextTry > Date.now() && parseInt(userFinded.loginAttempts) + 1 >= MAX_LOGIN_ATTEMPTS && parseInt(userFinded.loginAttempts) != -1){ // Account is locked (-1) /nextTry as time a blocked account
+    console.log("/***********3333333333333333***************///////")
+
+      userFinded.loginAttempts = -1
+      userFinded.nextTry = Date.now() + LOCK_TIME
+      //send mail
+      mail.sendMailAccountBlocked("Your account has been blocked", userFinded.email, userFinded.username, userFinded.firstname, userFinded.lastname)
+      mail.sendMailAccountBlocked("Your account has been blocked", "payposkhallasli@gmail.com", userFinded.username, userFinded.firstname, userFinded.lastname)
+
+      //desactivated account
+     
+      let userUpdated = await services.user.update(userFinded.id,{
+        loginAttempts: userFinded.loginAttempts.toString(),
+        nextTry: userFinded.nextTry.toString()
+      })
+      myUserDesactivate = await services.user.deactivate(userFinded.id)
+
+      console.log("userUpdated 3333333333333333",userUpdated)
+  
+    }
+
+    // else if (parseInt(userFinded.loginAttempts) == -1){
+    //   util.setError(200, "Your account has been locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator's ", status_code.CODE_ERROR.USER_DESACTIVATE);
+    //   return util.send(res);
+    // }
+
+    // return res.status(200).json({ tt:"test" });
+
+////////////////////////////////////////////
+
       log4j.loggererror.error("Error Wrong password")
       util.setError(200, "Wrong password", status_code.CODE_ERROR.INCORRECT_PASSWORD);
       return util.send(res);
@@ -117,7 +206,10 @@ module.exports = function (gatewayExpressApp) {
       const user = await services.user.findByUsernameOrId(myUser.id)
       console.log("******************userici****************")
       console.log("user", user.role)
-      console.log("useruseruseruser", user)
+      console.log("user", user)
+      console.log("user.loginAttempts", user.loginAttempts)
+      
+/////////////////////////////////////
       console.log("*****************************************")
       /////////// Check if it is a visitor ////////////////////
       let userJsonVisistor = {
@@ -162,7 +254,7 @@ module.exports = function (gatewayExpressApp) {
         // console.log("m", m);
         const md1 = new MobileDetect(req.get('User-Agent'));
         res.locals.isMobile = md1.mobile();
-        console.log("md1", md1);
+        // console.log("md1", md1);
 
         console.log("md.os(), md.os()", md.os());
         if (md.os() === "iOS") {
@@ -179,21 +271,21 @@ module.exports = function (gatewayExpressApp) {
           req.connection.remoteAddress ||
           req.socket.remoteAddress ||
           req.connection.socket.remoteAddress
-        console.log("ip", ip)
-        console.log("req.connection.remoteAddress", req.connection.remoteAddress)
+        // console.log("ip", ip)
+        // console.log("req.connection.remoteAddress", req.connection.remoteAddress)
         // console.log("lookup",lookup(ip)); // location of the user
-        console.log("os.platform()", os.platform())
-        console.log("os.release()", os.release())
-        console.log("os.type()", os.type()); // "Windows_NT"
-        console.log("req.device.type.toUpperCase()", req.device.type.toUpperCase())
+        // console.log("os.platform()", os.platform())
+        // console.log("os.release()", os.release())
+        // console.log("os.type()", os.type()); // "Windows_NT"
+        // console.log("req.device.type.toUpperCase()", req.device.type.toUpperCase())
         // console.log("iplocate",iplocate(ip)); // location of the user
         // console.log("iplocate",iplocate(ip).country); // location of the user
         // console.log(iplocate(ip)); // location of the user
-        console.log("ipaddre", ipF.address());
+        // console.log("ipaddre", ipF.address());
         let addr = ipF.address()
-        console.log("aaaaaaaaaaaaaaaaaaaa", addr)
+        // console.log("aaaaaaaaaaaaaaaaaaaa", addr)
         const publicIpAdd = await publicIp.v4();
-        console.log("publicIpAdd", publicIpAdd)
+        // console.log("publicIpAdd", publicIpAdd)
         //////////////////////
         // let results;
         // try {
@@ -211,7 +303,7 @@ module.exports = function (gatewayExpressApp) {
         //  });
         var source = req.headers['user-agent']
         var ua = useragent.parse(source);
-        console.log("ua", ua)
+        // console.log("ua", ua)
         var isMobile = ua.isMobile
         console.log("isMobile", isMobile)
         let userUpdated = await services.user.update(myUser.id, {
@@ -300,7 +392,7 @@ module.exports = function (gatewayExpressApp) {
         /************************************************************************************** */
         // console.log("dataCategory", dataCategory)
         /************************************************************************************** */
-        console.log("Date.now()", Date.now())
+        // console.log("Date.now()", Date.now())
         let name = "complete_profile" + Date.now()
         // userApp = await services.application.find(name)
         myApp = await services.application.insert({

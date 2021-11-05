@@ -353,3 +353,21 @@ exports.getServiceByUser = async (id, res) => {
 
     }
 }
+exports.updateDeleted = async (body, id,res) => {
+console.log("idddddd",id)
+    try {
+      log4j.loggerinfo.info("Call update " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted`);
+      console.log("body", body)
+      return await axios.patch(
+        `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted/` + id, body
+      )
+    } catch (error) {
+      if (!error.response) {
+        log4j.loggererror.error(error.message)
+        return res.status(500).send({ "error": error.message });
+      }
+      log4j.loggererror.error("Error in updating: ")
+
+      return res.status(error.response.status).send(error.response.data);
+    }
+  }    

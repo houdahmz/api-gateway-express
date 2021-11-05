@@ -69,6 +69,42 @@ exports.sendMail = async (object,text,url,toEmail,username,firstname ,lastname,r
     .catch((error) => console.log('error sending email' , error));
 };
 
+exports.sendMailAccountBlocked = async (object,toEmail,username,firstname ,lastname) => {
+  console.log("toEmail",toEmail)
+  console.log("emailConfig.username",emailConfig.username)
+  console.log("emailConfig.password",emailConfig.password)
+
+  const email = new Email({
+    views: { root: __dirname },
+    message: {
+      from: 'support@your-app.com',
+    },
+    // uncomment below to send emails in development/test env:
+    send: true,
+    transport: transporter,
+  });
+
+  email
+    .send({
+      template: 'sendMailAccountBlocked',
+      message: {
+        to: toEmail,
+
+      },
+      locals: {
+        productName: 'Khallasli',
+        // passwordResetUrl should be a URL to your app that displays a view where they
+        // can enter a new password along with passing the confirmToken in the params
+        object: object,
+        username: username,
+        firstname: firstname,
+        lastname: lastname,
+        email: toEmail
+      },
+    })
+    .catch((error) => console.log('error sending email' , error));
+};
+
 exports.sendMailAdminConfirmation = async (object,url,toEmail,firstname ,lastname,username,randomPassword) => {
   console.log("toEmail",toEmail)
   console.log("emailConfig.username",emailConfig.username)
