@@ -3,7 +3,7 @@ module.exports = {
 
         VISITOR :  'visitor'  ,
         AGENT : 'agent' ,//CREATED BY PDV
-        USER : 'user' ,//PDV
+        USER : 'user' ,//type PDV/agent
         ADMIN : 'admin',
         SUPPORT :   'support' ,
         COMMERCIAL :   'commercial' ,
@@ -12,7 +12,7 @@ module.exports = {
 
 
     },
-            CODE_ERROR : {
+        CODE_ERROR : {
         EMPTY : 2000,
         NOT_EXIST : 2001,
         TYPE : 2002,

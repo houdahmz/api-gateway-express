@@ -361,6 +361,83 @@ apiEndpoints:
       methods: ["GET","DELETE","PUT","PATCH"]
       scopes: ['admin','super_admin']
 
+  stock:
+
+    - host: '*'
+      paths: '/stock/service'
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: '/stock/service'
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']
+
+    - host: '*'
+      paths: /stock/service/:id
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: '/stock/feed'
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: '/stock/feed'
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']
+
+    - host: '*'
+      paths: /stock/feed/:id
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: '/stock/document'
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: '/stock/document'
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']
+
+    - host: '*'
+      paths: /stock/document/:id
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: '/stock/provider'
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: '/stock/provider'
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']
+
+    - host: '*'
+      paths: /stock/provider/:id
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: '/stock/type_payment'
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: '/stock/type_payment'
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: /stock/type_payment/:id
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
+
   open:
 
     - host: '*'
