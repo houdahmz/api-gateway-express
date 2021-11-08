@@ -554,9 +554,9 @@ module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { //endpoint for activate (isActivate)
     const { code } = req.body // code = 1 desactive , 0 active // id is a username
     console.log("code",code)
-    if (!code) {
-      log4j.loggererror.error("Code can not be empty (set 1 to desactivate or 0 to activate) a user")
-      util.setError(200, "Code can not be empty (set 1 to desactivate or 0 to activate) a user", status_code.CODE_ERROR.EMPTY);
+    if (code!=0 && code !=1) {
+      log4j.loggererror.error("Set code 1 to desactivate or 0 to activate a user")
+      util.setError(200, "Set code 1 to desactivate or 0 to activate a user", status_code.CODE_ERROR.CODE_INCORRECT);
       return util.send(res);
     }
     myUser = await services.user.findByUsernameOrId(req.params.id)
