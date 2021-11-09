@@ -150,6 +150,7 @@ module.exports = function (gatewayExpressApp) {
         zip_code: zip_code,
         adresse: adresse,
         activity: activity,
+        canals: canals,
         id_commercial: id_commercial
       }
       const userProfile = await creteProfile(myUser, body, dataType, res);
