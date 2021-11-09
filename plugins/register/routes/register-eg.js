@@ -42,7 +42,15 @@ var corsOptions = {
   origin: "*"
 };
 const expiresIn = 3.6*1000*1000; //in ms //equals to 1 hour 
+const role_code = {
+  1 :  'VISITOR'  ,
+  2 : 'USER' ,//type PDV/agent
+  3 : 'ADMIN',
+  4 :   'SUPPORT' ,
+  5 :   'COMMERCIAL' ,
+  6 :   'COMPTABLE' ,
 
+}
 module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
   gatewayExpressApp.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
@@ -53,7 +61,7 @@ module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.post('/register', async (req, res, next) => { 
     try {
       const { firstname, username, lastname, email, phone, } = req.body
-      const { image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, updated_by, id_commercial } = req.body
+      const { image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, updated_by, id_commercial } = req.body
 
       // // Validate against a password string
       // if (validation.validatePassword(password) == false) {
@@ -400,9 +408,9 @@ module.exports = function (gatewayExpressApp) {
     }
   });
 
-  gatewayExpressApp.post('/team-register', verifyTokenSuperAdminOrAdmin,async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+  gatewayExpressApp.post('/team-register', async (req, res, next) => { // incomplete {add send mail with url /change_password} 
     try {
-      const { firstname, username, lastname, email, phone, type_userId } = req.body
+      const { firstname, username, lastname, email, phone, type_userId, role } = req.body
       /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
       if (!email) {
         return res.status(400).json({ status: "Error", error: "email is required", code: status_code.CODE_ERROR.REQUIRED });
@@ -414,6 +422,13 @@ module.exports = function (gatewayExpressApp) {
         return res.status(400).json({ status: "Error", error: "type_userId is required", code: status_code.CODE_ERROR.REQUIRED });
       }
       ///////////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////
+      // const scope_all = await services.credential.getAllScopes();
+      // console.log("scope_all",scope_all)
+      // const scope_exist = await services.credential.existsScope(role_code[role])
+      // console.log("scope_exist",scope_exist)
+      // if(!scope_exist){
+
+      // }
       const findByEmail = await user_service.findByEmail(email)
       console.log("findByEmail---------------",findByEmail)
       if(findByEmail){

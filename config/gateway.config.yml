@@ -1238,6 +1238,37 @@ pipelines:
               serviceEndpoint: api_management
               changeOrigin: true
 
+  stock:
+    apiEndpoints:
+      - stock
+    policies:
+      - log:
+          - action:
+              message: "stock header===> ${req.headers.authorization} ---${req}"
+      - cors:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
+                checkCredentialExistence: false
+      - validate-user:
+      - middleware:
+      - request-transformer:
+          action:
+            body:
+              add:
+                user: req.user
+      - log:
+          - action:
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
+      - proxy:
+          - action:
+              serviceEndpoint: api_management
+              changeOrigin: true
+
   profile:
     apiEndpoints:
       - profile
@@ -1387,15 +1418,15 @@ pipelines:
           - action:
               message: "api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}"
       - cors:              
-      # - oauth2:
-      #     - action:
-      #         jwt:
-      #           issuer: express-gateway
-      #           audience: something
-      #           subject: ${JWT_SUBJECT}
-      #           secretOrPublicKey: ${JWT_SECRET}
-      #           checkCredentialExistence: false
-      # - validate-user:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: ${JWT_SUBJECT}
+                secretOrPublicKey: ${JWT_SECRET}
+                checkCredentialExistence: false
+      - validate-user:
       - request-transformer:
           action:
             body:
