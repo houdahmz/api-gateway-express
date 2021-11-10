@@ -47,6 +47,10 @@ const bodyParser = require("body-parser");
 var corsOptions = {
   origin: "*"
 };
+
+const swaggerUi = require("swagger-ui-express"),
+     swaggerDocument = require("../../../doc/swagger.json");
+
 module.exports = function (gatewayExpressApp) {
   // gatewayExpressApp.use(bodyParser.json())
   gatewayExpressApp.use(bodyParser.json({ limit: '50mb', extended: true }));
@@ -457,4 +461,7 @@ module.exports = function (gatewayExpressApp) {
       return util.send(res);
     }
   });
+
+ gatewayExpressApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 };
