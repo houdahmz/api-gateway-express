@@ -127,6 +127,7 @@ const middlewarePlugin = {
                 body.updatedBy = data.consumerId
 
                 body.userId = data.consumerId
+                body.id_user = data.consumerId
 
 
                 console.log("body after ",body)

@@ -20,6 +20,7 @@ const configLog4js = require('../../../config/configLog4js.js');
           let body = req.body
 
           body.userId = decoded.consumerId
+          body.id_user = decoded.consumerId
 
 
           body.created_by = decoded.consumerId
@@ -65,6 +66,7 @@ const configLog4js = require('../../../config/configLog4js.js');
           console.log("decode", decoded.consumerId)
 
           body.userId = decoded.consumerId
+          body.id_user = decoded.consumerId
 
 
           body.created_by = decoded.consumerId
@@ -261,6 +263,7 @@ const configLog4js = require('../../../config/configLog4js.js');
           let body = req.body
 
           body.userId = decoded.consumerId
+          body.id_user = decoded.consumerId
 
 
           body.created_by = decoded.consumerId
@@ -331,6 +334,7 @@ const configLog4js = require('../../../config/configLog4js.js');
           let body = req.body
 
           body.userId = decoded.consumerId
+          body.id_user = decoded.consumerId
 
 
           body.created_by = decoded.consumerId
