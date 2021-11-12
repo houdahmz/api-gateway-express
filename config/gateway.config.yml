@@ -139,6 +139,21 @@ apiEndpoints:
       scopes: ['admin','super_admin']
 
     - host: '*'
+      paths: /user-management/type-canal
+      methods: ["GET"]
+      scopes: ['user',"admin","visitor"]
+
+    - host: '*'
+      paths: /user-management/type-canal/:id
+      methods: ["GET"]
+      scopes: ['user',"admin"]
+
+    - host: '*'
+      paths: /user-management/type-canal
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
       paths: /user-management/region
       methods: ["GET"]
       scopes: ['user',"admin"]
