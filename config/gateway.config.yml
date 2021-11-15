@@ -139,11 +139,6 @@ apiEndpoints:
       scopes: ['admin','super_admin']
 
     - host: '*'
-      paths: /user-management/type-canal
-      methods: ["GET"]
-      scopes: ['user',"admin","visitor"]
-
-    - host: '*'
       paths: /user-management/type-canal/:id
       methods: ["GET"]
       scopes: ['user',"admin"]
@@ -459,6 +454,10 @@ apiEndpoints:
       paths: /user-management/activity
       methods: ["GET"]
       
+    - host: '*'
+      paths: /user-management/type-canal
+      methods: ["GET"]
+
     - host: '*'
       paths: /user-management/documents
       methods: ["GET"]
