@@ -795,22 +795,22 @@ apiEndpoints:
       scopes: ['admin','super_admin']
 
     - host: '*'
-      paths: /wallet/service_user/update
+      paths: /wallet/service-user/update
       methods: ["POST"]
       scopes: ['admin','super_admin']
 
     - host: '*'
-      paths: /wallet/service_user*
+      paths: /wallet/service-user*
       methods: ["POST","DELETE","PUT","PATCH"]
       scopes: ['admin','super_admin']
 
     - host: '*'
-      paths: /wallet/service_user/:id
+      paths: /wallet/service-user/:id
       methods: ["GET"]
       scopes: ['user','admin','super_admin']   
 
     - host: '*'
-      paths: /wallet/service_user
+      paths: /wallet/service-user
       methods: ["GET"]
       scopes: ['admin','super_admin','user'] 
 
