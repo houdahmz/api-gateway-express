@@ -422,14 +422,19 @@ module.exports = function (gatewayExpressApp) {
       if (!type_userId) {
         return res.status(400).json({ status: "Error", error: "type_userId is required", code: status_code.CODE_ERROR.REQUIRED });
       }
-      ///////////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////
-      // const scope_all = await services.credential.getAllScopes();
-      // console.log("scope_all",scope_all)
-      // const scope_exist = await services.credential.existsScope(role_code[role])
-      // console.log("scope_exist",scope_exist)
-      // if(!scope_exist){
+      if (!role) {
+        return res.status(400).json({ status: "Error", error: "role is required", code: status_code.CODE_ERROR.REQUIRED });
+      }
 
-      // }
+      ///////////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////
+      const scope_all = await services.credential.getAllScopes();
+      console.log("scope_all",scope_all)
+      const scope_exist = await services.credential.existsScope(role)
+      console.log("scope_exist",scope_exist)
+      if(!scope_exist){
+        return res.status(400).json({ status: "Error", error: "role does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
+
+      }
       const findByEmail = await user_service.findByEmail(email)
       console.log("findByEmail---------------",findByEmail)
       if(findByEmail){
@@ -451,7 +456,9 @@ module.exports = function (gatewayExpressApp) {
         log4j.loggererror.error("Error Problem in server ")
         return res.status(500).send({ status: "Error", error: "Internal Server Error", code: status_code.CODE_ERROR.SERVER });
       }
-      const code = dataType.data.data.data.type
+      // const code = dataType.data.data.data.type
+      const code = role
+
       const type = dataType.data.data.data.id
       const bodyUser = {
         isActive: true,
@@ -472,7 +479,7 @@ module.exports = function (gatewayExpressApp) {
       /////////////////////////////create user/////////////////////////////////////////////////////
       var myUser;
       try {
-        const myUser = await addUser(bodyUser,randomPassword,[code])
+        myUser = await addUser(bodyUser,randomPassword,[code])
         console.log("myUser",myUser)
       } catch (error) {
       util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
@@ -481,6 +488,7 @@ module.exports = function (gatewayExpressApp) {
 
       const creteProfile = async (myUser) => {
         try {
+          console.log("aaaaaaamyUser",myUser)
           console.log("aaacreteProfileaaa", {
             id_user: myUser.id,
             first_name: myUser.firstname,
@@ -495,7 +503,7 @@ module.exports = function (gatewayExpressApp) {
             profilCompleted: true,
             username: username,
             email: email,
-            role: "ROLE_" + code.toUpperCase(),
+            role: code.toUpperCase(),
 
           })
           log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
@@ -513,7 +521,7 @@ module.exports = function (gatewayExpressApp) {
             profilCompleted: true,
             username: username,
             email: email,
-            role: "ROLE_" + code.toUpperCase(),
+            role: code.toUpperCase(),
           })
         } catch (error) {
           if (!error.response) {
