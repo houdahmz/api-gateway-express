@@ -87,7 +87,7 @@ module.exports = function (gatewayExpressApp) {
     console.log("findByPhone & findByEmail",findByPhone & findByEmail & myUser)
     console.log("!findByPhone & !findByEmail & !myUser",!findByPhone & !findByEmail & !myUser)
 
-    if(!findByPhone & !findByEmail & !myUser) //1
+    if(findByPhone & findByEmail & myUser) //1
     return res.status(200).json({ status: "success", exist: true , message:"Does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
     else return res.status(200).json({ status: "success", exist: false, message:"Already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
 
