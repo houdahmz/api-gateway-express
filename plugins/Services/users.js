@@ -157,7 +157,10 @@ exports.getProfile = async (id, res) => {
 
         return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/` + id)
     } catch (error) {
-        console.log("aaaaaaa111111111111111111")
+        console.log("aaaaaaa111111111111111111",error)
+        console.log("error.response",error.response)
+        console.log("error.message",error.message)
+
         if (!error.response) {
             log4j.loggererror.error(error.message)
             util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
