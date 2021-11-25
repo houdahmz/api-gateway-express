@@ -324,7 +324,7 @@ apiEndpoints:
     - host: '*'
       paths: '/topUpKh/transaction'
       methods: ["GET"]
-      scopes: ['admin','super_admin']
+      scopes: ['admin','super_admin','user']
 
     - host: '*'
       paths: '/topUpKh/transaction/by_user'
@@ -359,7 +359,7 @@ apiEndpoints:
     - host: '*'
       paths: '/topUpKh/operator'
       methods: ["GET"]
-      scopes: ['admin','super_admin']
+      scopes: ['admin','super_admin','user']
 
     - host: '*'
       paths: '/topUpKh/operator/update_modem'
