@@ -60,35 +60,36 @@ module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.get('/search', async (req, res, next) => { 
 
     const {username, phone, email} = req.query
-    var myUser = false; //false if exist & true if does not exist
+     //false if exist & true if does not exist
+    var myUser = false; //false  does not 
     if(username) {
       myUser = await services.user.findByUsernameOrId(username)
-      if(myUser) myUser = false;
-      else myUser = true;
+      if(myUser) myUser = true;
+      else myUser = false;
       console.log("myUser",myUser)
       
     }
     var findByEmail = false;
     if(email) {
       findByEmail = await user_service.findByEmail(email)
-      if(findByEmail) findByEmail = false;
-      else findByEmail = true;
+      if(findByEmail) findByEmail = true;
+      else findByEmail = false;
       console.log("findByEmail",findByEmail)
 
     }
     var findByPhone = false;
     if(phone) {
       findByPhone = await user_service.findByPhone(phone)
-      if(findByPhone) findByPhone = false;
-      else findByPhone = true;
+      if(findByPhone) findByPhone = true;
+      else findByPhone = false;
       console.log("findByPhone",findByPhone)
       
     }
     console.log("findByPhone & findByEmail",findByPhone & findByEmail & myUser)
     console.log("!findByPhone & !findByEmail & !myUser",!findByPhone & !findByEmail & !myUser)
-    return res.status(200).json({ status: "success", exist: true , message:"Does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
+    // return res.status(200).json({ status: "success", exist: true , message:"Does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
 
-    if(findByPhone & findByEmail & myUser) //1
+    if(!findByPhone & !findByEmail & !myUser) //1
     return res.status(200).json({ status: "success", exist: true , message:"Does not exist", code: status_code.CODE_ERROR.NOT_EXIST });
     else return res.status(200).json({ status: "success", exist: false, message:"Already exist", code: status_code.CODE_ERROR.ALREADY_EXIST });
 
