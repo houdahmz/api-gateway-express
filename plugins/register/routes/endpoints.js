@@ -71,7 +71,7 @@ module.exports = function (gatewayExpressApp) {
     }
     var findByEmail = false;
     if(email) {
-      findByEmail = await user_service.findByEmail(email)
+      findByEmail = await user_service.findByEmail(decodeURIComponent(email))
       if(findByEmail) findByEmail = true;
       else findByEmail = false;
       console.log("findByEmail",findByEmail)
