@@ -12,7 +12,7 @@ module.exports = {
 
 
     },
-        CODE_ERROR : {
+    CODE_ERROR : {
         EMPTY : 2000,
         NOT_EXIST : 2001,
         TYPE : 2002,
@@ -20,6 +20,12 @@ module.exports = {
         OUT_OF_STOCK : 2004 ,
         OTHER : 2005 
 
+
+    }
+    ,
+    CODE_SUCCESS : {
+        SUCCESS : 2202,
+        LIST_EMPTY : 2203,
 
     }
  
