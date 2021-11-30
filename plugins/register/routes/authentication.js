@@ -8,13 +8,11 @@ const util = require("../helpers/utils");
 
 const jwt = require('jsonwebtoken');
 const env = require("../../../config/env.config");
-// const validation = require("./validation");
 const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
 const authService = services.auth;
 
 const log4j = require("../../../config/configLog4js.js");
-const validation = require("../middleware/validation")
 const os = require('os');
 var ipF = require("ip");
 const publicIp = require('public-ip');

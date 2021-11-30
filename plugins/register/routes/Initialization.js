@@ -15,7 +15,6 @@ const authService = services.auth;
 const user_service = require('../../../services/user/user.service')
 
 const log4j = require("../../../config/configLog4js.js");
-const validation = require("../middleware/validation")
 const os = require('os');
 var ipF = require("ip");
 const publicIp = require('public-ip');

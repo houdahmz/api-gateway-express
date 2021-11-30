@@ -7,7 +7,12 @@ const util = require("../helpers/utils");
 const jwt = require('jsonwebtoken');
 const env = require("../../../config/env.config");
 const {EMAIL} = require("../../../config/env.config");
-const user_service = require('../../../services/user/user.service')
+const user_service = require('../../../services/user/user.service');
+
+const validate = require('../middleware/validation');
+const {schema, teamSchema, adminSchema, resetSchema} = require('../schemaValidation/register');
+const {profileSchema} = require('../schemaValidation/profile');
+const {schemaCompany} = require('../schemaValidation/company');
 
 const config = require('express-gateway/lib/config/');
 const tokenService = services.token;
@@ -58,21 +63,11 @@ module.exports = function (gatewayExpressApp) {
   gatewayExpressApp.use(device.capture());
 
   //////////////////////////////////////////////////////////////////////////////////
-  gatewayExpressApp.post('/register', async (req, res, next) => { 
+  gatewayExpressApp.post('/register', [validate(schema),validate(profileSchema),validate(schemaCompany)], async (req, res, next) => { 
     try {
       const { firstname, username, lastname, email, phone, } = req.body
       const { image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, updated_by, id_commercial } = req.body
 
-      // // Validate against a password string
-      // if (validation.validatePassword(password) == false) {
-      //   log4j.loggererror.error("Unkown error.")
-      //   return res.status(400).json({status:"Error",error: "password is not the correct format"});
-      // }
-      // if (password != password_confirmation) {
-      //   log4j.loggererror.error("Unkown error.")
-      //   return res.status(400).json({status:"Error",error: "password does not much"});
-
-      // }
       /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
       if (!email) {
         util.setError(200, "email is required", status_code.CODE_ERROR.EMPTY);
@@ -409,7 +404,7 @@ module.exports = function (gatewayExpressApp) {
     }
   });
 
-  gatewayExpressApp.post('/team-register', async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+  gatewayExpressApp.post('/team-register', validate(teamSchema), async (req, res, next) => { // incomplete {add send mail with url /change_password} 
     try {
       const { firstname, username, lastname, email, phone, type_userId, role } = req.body
       /////////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
@@ -811,7 +806,7 @@ module.exports = function (gatewayExpressApp) {
       }
     }
   });
-  gatewayExpressApp.post('/admin-register', verifyTokenSuperAdmin,async (req, res, next) => {
+  gatewayExpressApp.post('/admin-register', validate(adminSchema), verifyTokenSuperAdmin,async (req, res, next) => {
     try {
       console.log("/api/admin-register")
       const { firstname, username, lastname, email, phone } = req.body
@@ -974,7 +969,7 @@ module.exports = function (gatewayExpressApp) {
 
   });
 
-  gatewayExpressApp.post('/reset-password', async (req, res, done) => {
+  gatewayExpressApp.post('/reset-password', validate(resetSchema), async (req, res, done) => {
     try {
       console.log("/reset-password")
       const { username, token } = req.query

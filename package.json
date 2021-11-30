@@ -36,7 +36,8 @@
     "stream": "0.0.2",
     "swagger-express-jsdoc": "^1.0.4",
     "swagger-jsdoc": "^6.0.0-rc.3",
-    "yaml2json": "^1.0.2"
+    "yaml2json": "^1.0.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

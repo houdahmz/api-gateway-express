@@ -18,6 +18,7 @@ module.exports = {
         HAS_NO_ROLE : 2014,
         CODE_INCORRECT : 2015,
 
+        OTHER: 2020,
 
 
 
