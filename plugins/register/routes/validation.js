@@ -1,7 +1,7 @@
-var passwordValidator = require('password-validator');
-var schema = new passwordValidator();
+const passwordValidator = require('password-validator');
+const schema = new passwordValidator();
 
-exports.validatePassword = function validatePassword (text){
+exports.validatePassword = function validatePassword(text) {
     // let data = {
     //     boolean: "false",
     //     message:""
@@ -34,12 +34,13 @@ exports.validatePassword = function validatePassword (text){
     // return data
 
     schema
-    .is().min(8)                                    // Minimum length 8
-    .is().max(100)                                  // Maximum length 100
-    .has().digits(2)                                // Must have at least 2 digits
-    .has().not().spaces()                           // Should not have spaces
-    .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
+    .is().min(8) // Minimum length 8
+    .is().max(100) // Maximum length 100
+    .has().digits(2) // Must have at least 2 digits
+    .has().not().spaces() // Should not have spaces
+    .is().not().oneOf(['Passw0rd',
+'Password123']); // Blacklist these values
      
     // Validate against a password string
-            return schema.validate(text)
-}
+            return schema.validate(text);
+};
