@@ -130,7 +130,6 @@ console.log('req.egContext.apiEndpoint.methods check',req.egContext.apiEndpoint.
 
       /** ************************** */
 
-      let data;
       try {
         data = await getProfile(data.consumerId);
       } catch (error) {

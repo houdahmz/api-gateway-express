@@ -406,11 +406,16 @@ validate(schemaCompany)], async (req, res, next) => {
       const myUserJwt = await createJwt(username,randomPassword);
       console.log('myUserJwt', `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`);
       const dataType = await getTypeById(type_userId, res);
-      console.log('dataType.data.data', dataType.data.data.data);
+      console.log('dataType.data.data', dataType.data);
       if (!dataType.data.data) {
         log4j.loggererror.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
       }
+      if (dataType.data.data.code == status_code.CODE_SUCCESS) {
+        log4j.loggererror.error('Error Problem in server ');
+        return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
+      }
+
       // const code = dataType.data.data.data.type
       const code = role;
 
