@@ -484,6 +484,7 @@ validate(schemaCompany)], async (req, res, next) => {
             role: code.toUpperCase(),
           });
         } catch (error) {
+          console.log('error',error);
           if (!error.response) {
             log4j.loggererror.error(error.message);
             return res.status(500).send({'error': error.message});
