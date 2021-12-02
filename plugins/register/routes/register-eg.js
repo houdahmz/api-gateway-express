@@ -309,42 +309,6 @@ validate(schemaCompany)], async (req, res, next) => {
 
             },
           );
-          // return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`
-          // , {    
-          // ///profile-by-company
-          //       idOwner: idOwner,
-          //       id_user: agentUser.id,
-          //       first_name: agentUser.firstname,
-          //       last_name: agentUser.lastname,
-          //       phone: agentUser.phone,
-          //       created_by: agentUser.id
-
-          //     }
-          //     ,{
-          //       headers: {
-          //       'Authorization': req.headers.authorization}
-          //     }
-
-          // )
-
-          // return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`
-          // , {    
-          //   headers: {
-          //   'Authorization': req.headers.authorization
-          // },
-          // body: JSON.stringify(       
-          // { ///profile-by-company
-          //       idOwner: idOwner,
-          //       id_user: agentUser.id,
-          //       first_name: agentUser.firstname,
-          //       last_name: agentUser.lastname,
-          //       phone: agentUser.phone,
-          //       created_by: agentUser.id
-
-          //     }
-          //     )
-          // }
-          // )
         } catch (error) {
           if (!error.response) {
             log4j.loggererror.error(error.message);
@@ -479,8 +443,8 @@ validate(schemaCompany)], async (req, res, next) => {
 
       const creteProfile = async (myUser) => {
         try {
-          console.log('aaaaaaamyUser',myUser);
-          console.log('aaacreteProfileaaa', {
+          console.log('myUser',myUser);
+          console.log('profile', {
             id_user: myUser.id,
             first_name: myUser.firstname,
             last_name: myUser.lastname,
@@ -805,20 +769,6 @@ validate(schemaCompany)], async (req, res, next) => {
     try {
       console.log('/api/admin-register');
       const {firstname, username, lastname, email, phone} = req.body;
-      // myUser = await user_service.insert({
-      //   isActive: true,
-      //   firstname: firstname,
-      //   lastname: lastname,
-      //   username: username,
-      //   email: email,
-      //   phone: phone,
-      //   team: true,
-      //   role: "ROLE_ADMIN",
-      //   confirmMail: false,
-      //   profilCompleted: true,
-
-      //   redirectUri: 'https://www.khallasli.com',
-      // })
       const bodyUser = {
         isActive: true,
         firstname: firstname,
@@ -874,7 +824,6 @@ validate(schemaCompany)], async (req, res, next) => {
       }
       const change_password_uri = `${url}/change-password`;
       mail.sendChangePassword('Change password', `Veuillez cliquer sur lien pour changer le mot de passe (password: ${ randomPassword } ) \n `, change_password_uri, req.body.email, username, randomPassword);
-      // mailSimple.send_email("Reset password", "Veuillez cliquer sur lien pour changer le mot de passe (password: " + randomPassword + " )", req.body.email);
       log4j.loggerinfo.info(`Admin has been successfuly created, we have sent an email to ${ email } to set a new password`);
       return res.status(201).json({etat: 'Success', message: `Admin has been successfuly created, we have sent an email to ${ email } to set a new password`});
     } catch (err) {
