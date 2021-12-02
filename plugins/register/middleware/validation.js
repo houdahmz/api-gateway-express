@@ -11,10 +11,10 @@ const validate = (schema) => async (req, res, next) => {
     });
     return next();
   } catch (err) {
-    // console.log(
-    //   'err',
-    //   err,
-    // );
+    console.log(
+      'err',
+      err,
+    );
     // More logic goes here
     if (err.type == 'required') {
       util.setError(
