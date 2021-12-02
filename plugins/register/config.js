@@ -21,7 +21,12 @@ module.exports = {
         OTHER: 2020,
 
 
-    },    
+    }, 
+    CODE_SUCCESS: {
+        SUCCESS: 2202,
+        LIST_EMPTY: 2203,
+
+    },   
     USER: {
         DESACTIVATE: 2007,
         NOT_EXIST: 01,
