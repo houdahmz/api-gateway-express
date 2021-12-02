@@ -411,9 +411,9 @@ validate(schemaCompany)], async (req, res, next) => {
         log4j.loggererror.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
       }
-      if (dataType.data.data.code == status_code.CODE_SUCCESS) {
+      if (dataType.data.data.code == status_code.CODE_SUCCESS.LIST_EMPTY) {
         log4j.loggererror.error('Error Problem in server ');
-        return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
+        return res.status(200).send({status: 'Error', message: dataType.data.data.message, code: status_code.CODE_SUCCESS.LIST_EMPTY});
       }
 
       // const code = dataType.data.data.data.type
