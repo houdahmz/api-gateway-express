@@ -1,6 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-undef */
 exports.checkIfFileIsTooBig = (value) => {
+  if (!value) return true;
   const buffer = Buffer.from(value.substring(value.indexOf(',') + 1));
   console.log(`Byte length: ${buffer.length}`);
   console.log(`MB: ${buffer.length / 1e+6}`);
@@ -11,11 +12,13 @@ exports.checkIfFileIsTooBig = (value) => {
   return valueMB <= 2;
 };
 exports.checkIfFileIsCorrectType = (value) => {
+  if (!value) return true;
   const ext = value.split(';base64,')[0].split('/')[1];
   return (ext == 'png' || ext == 'jpg' || ext == 'jpeg');
 };
 exports.checkIfFilesAreTooBig = (files) => {
   let valid = true;
+  if (!files) return valid;
   if (files) {
     files.map((file) => {
       const buffer = Buffer.from(file.substring(file.indexOf(',') + 1));
@@ -30,6 +33,7 @@ exports.checkIfFilesAreTooBig = (files) => {
 };
 exports.checkIfFilesAreCorrectType = (files) => {
   let valid = true;
+  if (!files) return valid;
   if (files) {
     files.map((file) => {
       const ext = file.split(';base64,')[0].split('/')[1];
