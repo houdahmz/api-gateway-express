@@ -662,7 +662,7 @@ validate(schemaCompany)], async (req, res, next) => {
     }
   });
 
-  gatewayExpressApp.patch('/accept/:id', async (req, res, next) => { // accept or refuser a visitor (means give a visitor a role as a user)
+  gatewayExpressApp.patch('/accept/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // accept or refuser a visitor (means give a visitor a role as a user)
     // accept or refuse a pdv 
     const {code} = req.body; // code = 10 delete , 11 accept // id is a username
     console.log('Body in accepte endpint ', req.body);
@@ -750,6 +750,8 @@ validate(schemaCompany)], async (req, res, next) => {
             currencyId: currencyId,
             createdBy: req.body.createdBy,
           });
+          console.log('req.body.createdBy', req.body.createdBy);
+
           if (dataWallet.data.status == 'error') {
             return res.status(dataWallet.status).json({status: dataWallet.data.status, message: dataWallet.data.message});
           }
