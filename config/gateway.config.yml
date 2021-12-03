@@ -1140,7 +1140,7 @@ pipelines:
       - rate-limit:
         -
           action:                         # allow
-            max: 5                       # max 5 request
+            max: 20                       # max 20 request
             windowMs: 120000              # per 120 seconds
             rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
             statusCode: 400
@@ -1252,7 +1252,7 @@ pipelines:
       - rate-limit:
         -
           action:                         # allow
-            max: 5                       # max 5 request
+            max: 20                       # max 20 request
             windowMs: 120000              # per 120 seconds
             rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
             statusCode: 400
@@ -1294,7 +1294,7 @@ pipelines:
       - rate-limit:
         -
           action:                         # allow
-            max: 5                       # max 5 request
+            max: 20                       # max 20 request
             windowMs: 120000              # per 120 seconds
             rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
             statusCode: 400
@@ -1336,7 +1336,7 @@ pipelines:
       - rate-limit:
         -
           action:                         # allow
-            max: 5                       # max 5 request
+            max: 20                       # max 20 request
             windowMs: 120000              # per 120 seconds
             rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
             statusCode: 400
@@ -1378,7 +1378,7 @@ pipelines:
       - rate-limit:
         -
           action:                         # allow
-            max: 5                       # max 5 request
+            max: 20                       # max 20 request
             windowMs: 120000              # per 120 seconds
             rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
             statusCode: 400
@@ -1420,7 +1420,7 @@ pipelines:
       - rate-limit:
         -
           action:                         # allow
-            max: 5                       # max 5 request
+            max: 20                       # max 20 request
             windowMs: 120000              # per 120 seconds
             rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
             statusCode: 400
@@ -1540,7 +1540,7 @@ pipelines:
       - rate-limit:
         -
           action:                         # allow
-            max: 5                       # max 5 request
+            max: 20                       # max 20 request
             windowMs: 120000              # per 120 seconds
             rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
             statusCode: 400
@@ -1582,7 +1582,7 @@ pipelines:
       - rate-limit:
         -
           action:                         # allow
-            max: 5                       # max 5 request
+            max: 20                       # max 20 request
             windowMs: 120000              # per 120 seconds
             rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
             statusCode: 400
@@ -1623,7 +1623,7 @@ pipelines:
       - rate-limit:
         -
           action:                         # allow
-            max: 5                       # max 5 request
+            max: 20                       # max 20 request
             windowMs: 120000              # per 120 seconds
             rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
             statusCode: 400
