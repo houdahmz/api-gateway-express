@@ -1624,7 +1624,7 @@ pipelines:
         -
           action:                         # allow
             max: 20                       # max 20 request
-            windowMs: 120000              # per 120 seconds
+            windowMs: 120000              # per 120 seconds //6h reset
             rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
             statusCode: 400
             message: Too many requests, please try again later!
