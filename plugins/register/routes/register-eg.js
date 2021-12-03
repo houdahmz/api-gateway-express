@@ -678,18 +678,18 @@ validate(schemaCompany)], async (req, res, next) => {
       log4j.loggererror.error('User does not exist');
       return res.status(200).json({status: 'error', message: 'The user does not exist'});
     } else {
-      if (myUser.demand == '2') { // refuse demand
+      if (code == 1 && myUser.demand == '2') { // refuse demand
         log4j.loggererror.error('user already refused');
         return res.status(200).json({status: 'error', message: 'user already refused', code: status_code.CODE_ERROR.ALREADY_REFUSED});
       }
-      if (myUser.demand == '3') {
+      if (code == 0 && myUser.demand == '3') {
         log4j.loggererror.error('user already accepted'); // demand is already accepted
         return res.status(200).json({status: 'error', message: 'user already accepted', code: status_code.CODE_ERROR.ALREADY_ACCEPTED});
       }
       // ////////////////////////////Get profile///////////////////////////////////
       const getProfiled = await getProfile(myUser.id, res);
       console.log('getProfile', getProfiled.data);
-      if (code == 10) { // refuse user
+      if (code == 1) { // refuse user
         if (getProfiled.data.status == 'success') {
           console.log('CompanyId', getProfiled.data.data.CompanyId);
           console.log('myUser.id', myUser.id);
@@ -708,7 +708,7 @@ validate(schemaCompany)], async (req, res, next) => {
         } else {
           return res.status(200).json({message: getProfiled.data});
         }
-      } else if (code == 11) { // accept user
+      } else if (code == 0) { // accept user
         const myUserUpdated = await services.user.activate(myUser.id);
         if (myUserUpdated == true) {
           const user_res = await services.user.update(myUser.id, {demand: '3'}); // test this
