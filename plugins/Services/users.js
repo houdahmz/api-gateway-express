@@ -347,7 +347,7 @@ console.log('idddddd',id);
       log4j.loggerinfo.info('Call update ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted`);
       console.log('body', body);
       return await axios.patch(
-        `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted/${ id}`, body,
+        `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted/${id}`, body,
       );
     } catch (error) {
       if (!error.response) {

@@ -598,7 +598,6 @@ validate(schemaCompany)], async (req, res, next) => {
         myUser = await services.user.activate(myUser.id);
   
         if (myUser == true) {
-          log4j.loggererror.error('Unkown error.');
           // ///////////////////
           console.log('id', getProfiled.data.data.data[0].id);
           const updateBody = {
