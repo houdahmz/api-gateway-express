@@ -48,7 +48,6 @@ const corsOptions = {
 };
 
 module.exports = function(gatewayExpressApp) {
-  // gatewayExpressApp.use(bodyParser.json())
   gatewayExpressApp.use(bodyParser.json({limit: '50mb', extended: true}));
   gatewayExpressApp.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 

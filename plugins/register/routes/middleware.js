@@ -205,8 +205,6 @@ const {
             console.log('req.body', req.body);
             console.log('**************************************************');
 
-            // console.log("res.headers.authorization",res.headers.authorization)
-            // res.headers.authorization = req.headers.authorization
             next();
           } else {
             const errorObject = {message: 'Unauthorized Token. cannot'};

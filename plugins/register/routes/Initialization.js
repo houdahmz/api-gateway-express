@@ -29,10 +29,7 @@ module.exports = async function(gatewayExpressApp) {
 
 
     myUserExist = await services.user.find(env.USERADMIN);
-    // console.log("env.USERADMIN", env.USERADMIN)
-    // console.log("env.PASSWORD", env.PASSWORD)
-    // console.log("env.EMAIL", env.EMAIL)
-    // console.log("env.PHONE", env.PHONE)
+
 
     const scopeExiste = await services.credential.existsScope('super_admin');
     if (!scopeExiste) { // create scope if not existe

@@ -1081,46 +1081,6 @@ policies:
   - rate-limit
 
 pipelines:
-  # default:
-  #   apiEndpoints:
-  #     - profile
-  #   policies:
-  #     - log:
-  #         - action:
-  #             message: "profile eee header===> ${req.headers.authorization} ---${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
-  #   # rewrite:
-  #   #   -
-  #   #     condition:
-  #   #       name: pathmatch
-  #   #       match: /:route*
-  #   #     action:
-  #   #       rewrite: /api_management/:route
-  #     - log:
-  #         - action:
-  #             message: "eeerrr header===> ${req.headers.authorization} ---${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
-  #     - oauth2:
-  #         - action:
-  #             jwt:
-  #               issuer: express-gateway
-  #               audience: something
-  #               subject: ${JWT_SUBJECT}
-  #               secretOrPublicKey: ${JWT_SECRET}
-  #               checkCredentialExistence: false
-  #     - validate-user:
-  #     - request-transformer:
-  #         action:
-  #           body:
-  #             add:
-  #               user: req.user
-  #     - log:
-  #         - action:
-  #             message: "aaaa ${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
-
-  #     - proxy:
-  #         - action:
-  #             serviceEndpoint: api_management
-  #             changeOrigin: true
-
   voucher:
     apiEndpoints:
       - voucher
@@ -1149,38 +1109,8 @@ pipelines:
           - action:
               message: "rate-limit===> ${req.headers.test} -hostname--${req.hostname} -user.id${req.user.consumerId}"
       - validate-user:
-      # - request-transformer:
-      #     action:
-      #       body:
-      #         add:
-      #           user: req.user
       - middleware:
       - request-transformer:
-        # - condition:
-        #     name: method
-        #     methods:
-        #     - POST
-      #   -   # array of Actions optionally gated by a condition
-      #      condition: # this action is executed only if path is exactly /v1
-      #        name: pathExact
-      #        path: /v1
-        # - condition:
-        #   name: method
-        #   methods:
-        #     - GET
-        # - condition:
-        #     name: oneOf
-        #     conditions:
-        #         -
-        #             name: pathExact
-        #             path: /api/facial
-        #         -
-        #             name: not
-        #             condition:
-        #                 name: method
-        #                 methods:
-        #                     - GET
-        #                     - HEAD 
         - action:
             body:
               add:
@@ -1194,45 +1124,6 @@ pipelines:
               serviceEndpoint: api_management
               changeOrigin: true
 
-  # voucher:
-  #   apiEndpoints:
-  #   - voucher
-  #   policies:
-  #   - log:
-  #     - action:
-  #         message: voucher header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}
-  #   - cors:
-  #   - oauth2:
-  #     - action:
-  #         jwt:
-  #           issuer: express-gateway
-  #           audience: something
-  #           subject: ${JWT_SUBJECT}
-  #           secretOrPublicKey: ${JWT_SECRET}
-  #           checkCredentialExistence: false
-  #   - validate-user:
-  #   - request-transformer:
-  #       action:
-  #         body:
-  #           add:
-  #             user: req.user
-  #   - middleware:
-  #   - request-transformer:
-  #     # - condition:
-  #     #     name: method
-  #     #     methods:
-  #     #     - POST
-  #     - action:
-  #         body:
-  #           add:
-  #             user: req.user
-  #   - log:
-  #     - action:
-  #         message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
-  #   - proxy:
-  #     - action:
-  #         serviceEndpoint: api_management
-  #         changeOrigin: true
   topupKh:
     apiEndpoints:
       - topupKh

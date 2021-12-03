@@ -116,8 +116,6 @@ module.exports = function(gatewayExpressApp) {
     console.log('user.loginAttempts', userFinded1.loginAttempts);
     console.log('Date.now()', Date.now());
 
-    // console.log("userFinded.nextTry zzzz", userFinded.nextTry)
-    // console.log("user.loginAttempts zzzzzzzz", userFinded.loginAttempts)
     if (userFinded.loginAttempts == 0 || !userFinded.loginAttempts) { // First loginAttempts
     userFinded.loginAttempts = 1;
     userFinded.nextTry = Date.now() + DIFF; // DATE OF FIRST TENTATIVE + 10 MIN
@@ -236,12 +234,10 @@ module.exports = function(gatewayExpressApp) {
         // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /** ************************ */
         const md = new MobileDetect(req.headers['user-agent']);
-        // var m = new MobileDetect(window.navigator.userAgent);
         console.log('md', md);
         // console.log("m", m);
         const md1 = new MobileDetect(req.get('User-Agent'));
         res.locals.isMobile = md1.mobile();
-        // console.log("md1", md1);
 
         console.log('md.os(), md.os()', md.os());
         if (md.os() === 'iOS') {
@@ -257,50 +253,17 @@ module.exports = function(gatewayExpressApp) {
           req.connection.remoteAddress ||
           req.socket.remoteAddress ||
           req.connection.socket.remoteAddress;
-        // console.log("ip", ip)
-        // console.log("req.connection.remoteAddress", req.connection.remoteAddress)
-        // console.log("lookup",lookup(ip)); // location of the user
-        // console.log("os.platform()", os.platform())
-        // console.log("os.release()", os.release())
-        // console.log("os.type()", os.type()); // "Windows_NT"
-        // console.log("req.device.type.toUpperCase()", req.device.type.toUpperCase())
-        // console.log("iplocate",iplocate(ip)); // location of the user
-        // console.log("iplocate",iplocate(ip).country); // location of the user
-        // console.log(iplocate(ip)); // location of the user
-        // console.log("ipaddre", ipF.address());
         const addr = ipF.address();
-        // console.log("aaaaaaaaaaaaaaaaaaaa", addr)
         const publicIpAdd = await publicIp.v4();
-        // console.log("publicIpAdd", publicIpAdd)
-        // ////////////////////
-        // let results;
-        // try {
-        //    results = await iplocate(publicIpAdd) 
-        //   console.log("results",results)
-        // } catch (error) {
-        //   console.log("error",error)
-        // }
-        // iplocate(ip).then(function(results) {
-        //    console.log("IP Address: " + results.ip);
-        //    console.log("Country: " + results.country + " (" + results.country_code + ")");
-        //    console.log("Continent: " + results.continent);
-        //    console.log("Organisation: " + results.org + " (" + results.asn + ")");
-        //    console.log(JSON.stringify(results, null, 2));
-        //  });
+ 
         const source = req.headers['user-agent'];
         const ua = useragent.parse(source);
-        // console.log("ua", ua)
         const {isMobile} = ua;
         console.log('isMobile', isMobile);
         const userUpdated = await services.user.update(myUser.id, {
           ip: publicIpAdd,
           os: os.platform(),
           source: ua.source,
-          // // geoip: lookup(ip),
-          // country:results.country,
-          // city:results.city,
-          // latitude:results.latitude,
-          // longitude:results.longitude,
           last_login: new Date().toString(),
         });
         console.log('userUpdated', userUpdated);
@@ -351,7 +314,6 @@ module.exports = function(gatewayExpressApp) {
         /** ******************************************************************************************** */
         // console.log("data",data)
         console.log('*********************************');
-        console.log('**************/////////////////////*******************');
         let dataCategory;
         if (data.data) {
           if (data.data.data) {
@@ -376,9 +338,6 @@ module.exports = function(gatewayExpressApp) {
           }
         }
         /** ************************************************************************************ */
-        // console.log("dataCategory", dataCategory)
-        /** ************************************************************************************ */
-        // console.log("Date.now()", Date.now())
         const name = `complete_profile${ Date.now()}`;
         // userApp = await services.application.find(name)
         myApp = await services.application.insert({
