@@ -1,278 +1,241 @@
 http:
   port: ${HTTP_PORT:-8080}
   # host: https://refonte-api.khallasli.com
-admin:
+admin: 
   port: 9876
   # port: ${HTTP_PORT_ADMIN:9876}
-  host: localhost
+  host: localhost 
 
 apiEndpoints:
   topup:
     - host: '*'
       paths: /topup/operator*
-      methods: ['POST', 'PATCH', 'GET', 'PUT', 'DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","PATCH","GET","PUT","DELETE"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /topup/simcard*
-      methods: ['POST', 'PATCH', 'GET', 'PUT', 'DELETE']
-      scopes: ['admin', 'super_admin']
-    - host: '*'
-      paths: /topup/card*
-      methods: ['POST', 'PATCH', 'GET', 'PUT', 'DELETE']
-      scopes: ['admin', 'super_admin']
-    - host: '*'
-      paths: /topup/organisme*
-      methods: ['POST', 'PATCH', 'GET', 'PUT', 'DELETE']
-      scopes: ['admin', 'super_admin']
-    - host: '*'
-      paths: /topup/bill-payment
-      methods: ['POST']
-      scopes: ['user']
-    - host: '*'
-      paths: /topup/consultation-invoice
-      methods: ['POST']
-      scopes: ['user']
-    - host: '*'
-      paths: /topup/bill-payment/:id
-      methods: ['GET']
-      scopes: ['user']
-    - host: '*'
-      paths: /topup/bill-payment
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
-    - host: '*'
-      paths: /topup
-      methods: ['POST']
-      scopes: ['user']
-    - host: '*'
-      paths: /topup/:id
-      methods: ['GET']
-      scopes: ['user']
-    - host: '*'
-      paths: /topup
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
-    - host: '*'
-      paths: /topup/stock
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","PATCH","GET","PUT","DELETE"]
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /topup/serialeport*
-      methods: ['POST', 'PATCH', 'GET', 'PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","PATCH","GET","PUT"]
+      scopes: ['admin','super_admin']
+      
 
   profile:
     - host: '*'
       paths: /admin/company*
-      methods: ['POST', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /admin/statsmobile
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
 
     - host: '*'
       paths: /user-management/wallet/extrait
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
 
     - host: '*'
       paths: /user-management/wallet/extrait/pdf
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
 
     - host: '*'
       paths: /wallet/history/pdf
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
 
     - host: '*'
       paths: /user-management/user/profile
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
 
     - host: '*'
       paths: /user-management/user/:id
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/profile/export
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/profile
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/profile/by_userId/:id
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
 
     - host: '*'
       paths: /user-management/profile/:id
-      methods: ['DELETE', 'GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["DELETE","GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/profile*
-      methods: ['PUT', 'PATCH']
-      scopes: ['user', 'admin', 'super_admin', 'visitor']
+      methods: ["PUT","PATCH"]
+      scopes: ['user','admin','super_admin',"visitor"]
 
     - host: '*'
       paths: /user-management/company/:id
-      methods: ['PUT', 'PATCH']
-      scopes: ['user', 'admin', 'super_admin', 'visitor']
+      methods: ["PUT","PATCH"]
+      scopes: ['user','admin','super_admin',"visitor"]
 
     - host: '*'
       paths: /user-management/company/profile-by-company
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['user']
 
     - host: '*'
       paths: /user-management/company/import
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/history/*
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/image*
-      methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/activity/:id
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /user-management/activity
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/type-user/by_code/:id
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/type-user
-      methods: ['GET']
-      scopes: ['user', 'admin', 'visitor']
+      methods: ["GET"]
+      scopes: ['user',"admin","visitor"]
 
     - host: '*'
       paths: /user-management/type-user/:id
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /user-management/type-user
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/type-canal/:id
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /user-management/type-canal
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/region
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /user-management/region/:id
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /user-management/region
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/getUserByRegion
-      methods: ['GET']
-      scopes: ['admin']
+      methods: ["GET"]
+      scopes: ["admin"]
 
     - host: '*'
       paths: /user-management/category*
-      methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/document*
-      methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/company*
-      methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /user-management/activity-company*
-      methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
   voucher:
-    # valider les vouchers importer et modifier leurs status
+
+
+# valider les vouchers importer et modifier leurs status
     - host: '*'
       paths: /voucher/document
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/document/:id
-      methods: ['DELETE', 'GET', 'PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["DELETE","GET","PUT"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/voucher/transaction'
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['user']
 
     - host: '*'
       paths: '/voucher/transaction'
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/voucher/transaction/by_user/:id'
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
-    # valider et refuser les commandes
+# valider et refuser les commandes
     - host: '*'
       paths: '/voucher/transaction/status/:id'
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/facial
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/facial/:id
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/facial*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     # - host: '*'
     #   paths: /voucher/voucher*
@@ -281,38 +244,38 @@ apiEndpoints:
 
     - host: '*'
       paths: /voucher/operator
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/operator/:id
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/operator*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/settings
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/settings/:id
-      methods: ['GET']
-      scopes: ['user', 'admin']
+      methods: ["GET"]
+      scopes: ['user',"admin"]
 
     - host: '*'
       paths: /voucher/settings*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/transactionByAdmin/:id
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin']
 
     # - host: '*'
     #   paths: /voucher/document*
@@ -324,37 +287,39 @@ apiEndpoints:
     #   methods: ["GET"]
     #   scopes: ['admin','super_admin']
 
-    # add voucher
+# add voucher 
     - host: '*'
       paths: /voucher
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher/ooredoo
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
+
 
     - host: '*'
       paths: /voucher/:id
-      methods: ['GET', 'DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /voucher
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
 
   topupKh:
+
     - host: '*'
       paths: '/topUpKh/stats'
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/topUpKh/transaction'
-      methods: ['POST']
-      scopes: ['user', 'super_admin']
+      methods: ["POST"]
+      scopes: ['user','super_admin']
 
     - host: '*'
       paths: '/topUpKh/transaction'
@@ -363,33 +328,33 @@ apiEndpoints:
 
     - host: '*'
       paths: '/topUpKh/transaction/by_user'
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
 
     - host: '*'
       paths: /topUpKh/transaction/:id
-      methods: ['GET', 'DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE"]
+      scopes: ['admin','super_admin']
+ 
+    - host: '*'
+      paths: '/topUpKh/type'
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/topUpKh/type'
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
-
-    - host: '*'
-      paths: '/topUpKh/type'
-      methods: ['GET']
-      scopes: ['admin', 'super_admin', 'user']
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']
 
     - host: '*'
       paths: /topUpKh/type/:id
-      methods: ['GET', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/topUpKh/operator'
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/topUpKh/operator'
@@ -398,689 +363,695 @@ apiEndpoints:
 
     - host: '*'
       paths: '/topUpKh/operator/update_modem'
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /topUpKh/operator/:id
-      methods: ['GET', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
   stock:
-    - host: '*'
-      paths: '/stock/service'
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
 
     - host: '*'
       paths: '/stock/service'
-      methods: ['GET']
-      scopes: ['admin', 'super_admin', 'user']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: '/stock/service'
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']
 
     - host: '*'
       paths: /stock/service/:id
-      methods: ['GET', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/stock/feed'
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/stock/feed'
-      methods: ['GET']
-      scopes: ['admin', 'super_admin', 'user']
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']
 
     - host: '*'
       paths: /stock/feed/:id
-      methods: ['GET', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/stock/document'
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/stock/document'
-      methods: ['GET']
-      scopes: ['admin', 'super_admin', 'user']
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']
 
     - host: '*'
       paths: /stock/document/:id
-      methods: ['GET', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/stock/provider'
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/stock/provider'
-      methods: ['GET']
-      scopes: ['admin', 'super_admin', 'user']
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']
 
     - host: '*'
       paths: /stock/provider/:id
-      methods: ['GET', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/stock/type_payment'
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: '/stock/type_payment'
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /stock/type_payment/:id
-      methods: ['GET', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
   open:
-    - host: '*'
-      paths: /user-management/activity
-      methods: ['GET']
 
     - host: '*'
+      paths: /user-management/activity
+      methods: ["GET"]
+      
+    - host: '*'
       paths: /user-management/type-canal
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /user-management/documents
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/contact
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/contact/:id
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/block
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/block/:id
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/header
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/header/:id
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/logo
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/logo/:id
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/regards
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/regards/:id
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/service
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/service/:id
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/contact
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/contact/:id
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/image
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/image/:id
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/partner
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/partner/:id
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/feature
-      methods: ['GET']
+      methods: ["GET"]
 
     - host: '*'
       paths: /home/feature/:id
-      methods: ['GET']
+      methods: ["GET"]
 
   home:
+
     - host: '*'
       paths: /home/contact_user
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['user']
 
     - host: '*'
       paths: /home/contact_user*
-      methods: ['GET', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/contact*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
-
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
+      
     - host: '*'
       paths: /home/block*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/header*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/logo*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/regard*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/partner*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/feature*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/image*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /home/serivce*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
   paymee:
     - host: '*'
       paths: /paymee/cashin
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['user']
 
     - host: '*'
-      paths: ['/paymee/accountname/:id']
-      methods: ['GET']
+      paths:  ['/paymee/accountname/:id']
+      methods: ["GET"]
       scopes: ['user']
 
     - host: '*'
       paths: /paymee/transactions
       scopes: ['user']
-
+  
   poste:
+
     - host: '*'
       paths: /poste/affiliation/:id
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
 
     - host: '*'
       paths: /poste/affiliation
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['user']
     - host: '*'
       paths: /poste/affiliation-commercant
-      methods: ['POST', 'GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/bill-payment
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['user']
 
     - host: '*'
       paths: /poste/recharge-card
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['user']
 
     - host: '*'
       paths: /poste/balance
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /poste/unsubscribe*
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['user']
     - host: '*'
       paths: /poste/card*
-      methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/alimentation-user*
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/collect-fond*
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/affiliation
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/affiliation/user*
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
     - host: '*'
       paths: /poste/recharge
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /poste/recharge/user*
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
     - host: '*'
       paths: /poste/bill-payment
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']  
     - host: '*'
       paths: /poste/bill-payment/user*
-      methods: ['GET']
-      scopes: ['user']
+      methods: ["GET"]
+      scopes: ['user']  
     - host: '*'
       paths: /poste/transaction-transfer
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin'] 
   topnet:
     - host: '*'
       paths: /topnet/payment*
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['user']
 
     - host: '*'
-      paths: /topnet/transaction/user*
-      methods: ['GET']
+      paths:  /topnet/transaction/user*
+      methods: ["GET"]
       scopes: ['user']
     - host: '*'
-      paths: /topnet/transaction*
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      paths:  /topnet/transaction*
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /topnet/bill*
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
-
+  
   agent-register:
     - host: '*'
       paths: /api/agent-register/profile/agent
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['agent']
   wallet:
+      
     - host: '*'
       paths: /wallet/supplier-service*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/supplier-service/:id
-      methods: ['GET']
-      scopes: ['user', 'admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['user','admin','super_admin']   
 
     - host: '*'
       paths: /wallet/supplier-service
-      methods: ['GET']
-      scopes: ['admin', 'super_admin', 'user']
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user'] 
 
     - host: '*'
       paths: /wallet/supplier
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/supplier
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/supplier*
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/supplier*
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/supplier/*
-      methods: ['PATCH']
-      scopes: ['user']
+      methods: ["PATCH"]
+      scopes: ['user'] 
     - host: '*'
       paths: /wallet/supplier/*
-      methods: ['DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["DELETE"]
+      scopes: ['admin','super_admin']                       
     - host: '*'
       paths: /wallet/supplier
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/reimbursed
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/reimbursed
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/reimbursed*
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/reimbursed*
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/reimbursed/*
-      methods: ['PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["PATCH"]
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/reimbursed/*
-      methods: ['DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["DELETE"]
+      scopes: ['admin','super_admin']                       
     - host: '*'
       paths: /wallet/reimbursed
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']  
     - host: '*'
       paths: /wallet/service
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/service
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/service-user/update
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/service-user*
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/service-user/:id
-      methods: ['GET']
-      scopes: ['user', 'admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['user','admin','super_admin']   
 
     - host: '*'
       paths: /wallet/service-user
-      methods: ['GET']
-      scopes: ['admin', 'super_admin', 'user']
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user'] 
 
     - host: '*'
       paths: /wallet/service*
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/service*
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/service/*
-      methods: ['PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["PATCH"]
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/service/*
-      methods: ['DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["DELETE"]
+      scopes: ['admin','super_admin']                       
     - host: '*'
       paths: /wallet/service
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']    
     - host: '*'
       paths: /wallet/category
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/category
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/category*
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/category*
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/category/*
-      methods: ['PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["PATCH"]
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/category/*
-      methods: ['DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["DELETE"]
+      scopes: ['admin','super_admin']                       
     - host: '*'
-      paths: /wallet/category
-    - host: '*'
-      paths: /wallet/document
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      paths: /wallet/category  
     - host: '*'
       paths: /wallet/document
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
+    - host: '*'
+      paths: /wallet/document
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/document*
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/document*
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/document/*
-      methods: ['PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["PATCH"]
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/document/*
-      methods: ['DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["DELETE"]
+      scopes: ['admin','super_admin']                       
     - host: '*'
-      paths: /wallet/document
-    - host: '*'
-      paths: /wallet/currency
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      paths: /wallet/document     
     - host: '*'
       paths: /wallet/currency
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
+    - host: '*'
+      paths: /wallet/currency
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/currency*
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/currency*
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/currency/*
-      methods: ['PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["PATCH"]
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/currency/*
-      methods: ['DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["DELETE"]
+      scopes: ['admin','super_admin']                       
     - host: '*'
-      paths: /wallet/currency
+      paths: /wallet/currency   
     - host: '*'
       paths: /wallet/feed
-      methods: ['POST']
+      methods: ["POST"]
       scopes: ['user']
     - host: '*'
       paths: /wallet/feed/type
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/feed/by_user
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['user']
     - host: '*'
       paths: /wallet/feed
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/feed/type
-      methods: ['GET']
-      scopes: ['user', 'admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['user','admin','super_admin']   
     - host: '*'
       paths: /wallet/feed/type/*
-      methods: ['GET']
-      scopes: ['user', 'admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['user','admin','super_admin']  
     - host: '*'
       paths: /wallet/feed/type/*
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin', 'user']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin','user']
     - host: '*'
       paths: /wallet/feed/type/*
-      methods: ['PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["PATCH"]
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/feed/type/*
-      methods: ['DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["DELETE"]
+      scopes: ['admin','super_admin']  
     - host: '*'
       paths: /wallet/feed*
-      methods: ['GET']
-      scopes: ['user', 'admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['user','admin','super_admin']
     - host: '*'
       paths: /wallet/feed*
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/feed/*
-      methods: ['PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["PATCH"]
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/feed/*
-      methods: ['DELETE']
-      scopes: ['admin', 'super_admin']
-
+      methods: ["DELETE"]
+      scopes: ['admin','super_admin']                       
+   
     - host: '*'
       paths: /wallet/intervenant/:id
-      methods: ['GET', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/intervenant
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']   
 
     - host: '*'
       paths: /wallet/intervenant
-      methods: ['POST', 'DELETE', 'PUT', 'PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST","DELETE","PUT","PATCH"]
+      scopes: ['admin','super_admin']
 
     - host: '*'
       paths: /wallet/commission
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
+      methods: ["POST"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/commission
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/commission*
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']   
     - host: '*'
       paths: /wallet/commission*
-      methods: ['PUT']
-      scopes: ['admin', 'super_admin']
+      methods: ["PUT"]
+      scopes: ['admin','super_admin']
     - host: '*'
       paths: /wallet/commission/*
-      methods: ['PATCH']
-      scopes: ['admin', 'super_admin']
+      methods: ["PATCH"]
+      scopes: ['admin','super_admin'] 
     - host: '*'
       paths: /wallet/commission/:id
-      methods: ['DELETE']
-      scopes: ['admin', 'super_admin']
+      methods: ["DELETE"]
+      scopes: ['admin','super_admin']                       
     - host: '*'
-      paths: /wallet/commission
+      paths: /wallet/commission  
+    - host: '*'
+      paths: /wallet
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user'] 
+    - host: '*'
+      paths: /wallet
+      methods: ["POST"]
+      scopes: ['admin','super_admin']   
+    - host: '*'
+      paths: /wallet/:id
+      methods: ["PUT","PATCH","DELETE"]
+      scopes: ['admin','super_admin']  
+    - host: '*'
+      paths: /wallet/:id
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']    
     - host: '*'
       paths: /wallet/history
-      methods: ['GET']
-      scopes: ['admin', 'super_admin', 'user']
-    - host: '*'
-      paths: /wallet
-      methods: ['GET']
-      scopes: ['admin', 'super_admin', 'user']
-    - host: '*'
-      paths: /wallet
-      methods: ['POST']
-      scopes: ['admin', 'super_admin']
-    - host: '*'
-      paths: /wallet/:id
-      methods: ['PUT', 'PATCH', 'DELETE']
-      scopes: ['admin', 'super_admin']
-    - host: '*'
-      paths: /wallet/:id
-      methods: ['GET']
-      scopes: ['admin', 'super_admin', 'user']
-
+      methods: ["GET"]
+      scopes: ['admin','super_admin','user']       
+                                  
   api:
-    - host: '*'
-      paths: ['/scopes*']
-      methods: ['GET']
-      scopes: ['admin', 'super_admin']
 
     - host: '*'
-      paths: ['/credentials*', '/apps*', '/api-endpoints*']
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', PUT]
+      paths: ['/scopes*']
+      methods: ["GET"]
+      scopes: ['admin','super_admin']
+
+    - host: '*'
+      paths: ['/credentials*','/apps*','/api-endpoints*']
+      methods: ["GET","POST","PUT","DELETE","PATCH",PUT]
       scopes: ['super_admin']
 
     - host: '*'
       paths: ['/scopes*']
-      methods: ['POST', 'PUT', 'DELETE', 'PATCH', PUT]
+      methods: ["POST","PUT","DELETE","PATCH",PUT]
       scopes: ['super_admin']
 
     - host: '*'
       paths: ['/users*']
-      methods: ['POST', 'PUT', 'DELETE', 'PATCH', PUT]
+      methods: ["POST","PUT","DELETE","PATCH",PUT]
       scopes: ['super_admin']
 
     - host: '*'
       paths: ['/users*']
-      methods: ['GET']
+      methods: ["GET"]
       scopes: ['super_admin']
 
 serviceEndpoints:
@@ -1107,6 +1078,7 @@ policies:
   - login
   - response-transformer
   - cors
+  - rate-limit
 
 pipelines:
   # default:
@@ -1155,8 +1127,8 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'voucher header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}'
-      - cors:
+              message: "voucher header===> ${req.headers.authorization} ---${req.originalUrl}  url: ${req.url} user: ${req.user}"
+      - cors:    
       - oauth2:
           - action:
               jwt:
@@ -1165,6 +1137,17 @@ pipelines:
                 subject: ${JWT_SUBJECT}
                 secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
+      - rate-limit:
+        -
+          action:                         # allow
+            max: 5                       # max 5 request
+            windowMs: 120000              # per 120 seconds
+            rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
+            statusCode: 400
+            message: Too many requests, please try again later!
+      - log:
+          - action:
+              message: "rate-limit===> ${req.headers.test} -hostname--${req.hostname} -user.id${req.user.consumerId}"
       - validate-user:
       # - request-transformer:
       #     action:
@@ -1173,39 +1156,39 @@ pipelines:
       #           user: req.user
       - middleware:
       - request-transformer:
-          # - condition:
-          #     name: method
-          #     methods:
-          #     - POST
-          #   -   # array of Actions optionally gated by a condition
-          #      condition: # this action is executed only if path is exactly /v1
-          #        name: pathExact
-          #        path: /v1
-          # - condition:
-          #   name: method
-          #   methods:
-          #     - GET
-          # - condition:
-          #     name: oneOf
-          #     conditions:
-          #         -
-          #             name: pathExact
-          #             path: /api/facial
-          #         -
-          #             name: not
-          #             condition:
-          #                 name: method
-          #                 methods:
-          #                     - GET
-          #                     - HEAD
-          - action:
-              body:
-                add:
-                  user: req.user
+        # - condition:
+        #     name: method
+        #     methods:
+        #     - POST
+      #   -   # array of Actions optionally gated by a condition
+      #      condition: # this action is executed only if path is exactly /v1
+      #        name: pathExact
+      #        path: /v1
+        # - condition:
+        #   name: method
+        #   methods:
+        #     - GET
+        # - condition:
+        #     name: oneOf
+        #     conditions:
+        #         -
+        #             name: pathExact
+        #             path: /api/facial
+        #         -
+        #             name: not
+        #             condition:
+        #                 name: method
+        #                 methods:
+        #                     - GET
+        #                     - HEAD 
+        - action:
+            body:
+              add:
+                user: req.user
 
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - proxy:
           - action:
               serviceEndpoint: api_management
@@ -1256,7 +1239,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'topupKh header===> ${req.headers.authorization} ---${req}'
+              message: "topupKh header===> ${req.headers.authorization} ---${req}"
       - cors:
       - oauth2:
           - action:
@@ -1266,6 +1249,17 @@ pipelines:
                 subject: ${JWT_SUBJECT}
                 secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
+      - rate-limit:
+        -
+          action:                         # allow
+            max: 5                       # max 5 request
+            windowMs: 120000              # per 120 seconds
+            rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
+            statusCode: 400
+            message: Too many requests, please try again later!
+      - log:
+          - action:
+              message: "rate-limit===> ${req.headers.test} -hostname--${req.hostname} -user.id${req.user.consumerId}"
       - validate-user:
       - middleware:
       - request-transformer:
@@ -1275,7 +1269,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - proxy:
           - action:
               serviceEndpoint: api_management
@@ -1287,7 +1281,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'stock header===> ${req.headers.authorization} ---${req}'
+              message: "stock header===> ${req.headers.authorization} ---${req}"
       - cors:
       - oauth2:
           - action:
@@ -1297,6 +1291,17 @@ pipelines:
                 subject: ${JWT_SUBJECT}
                 secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
+      - rate-limit:
+        -
+          action:                         # allow
+            max: 5                       # max 5 request
+            windowMs: 120000              # per 120 seconds
+            rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
+            statusCode: 400
+            message: Too many requests, please try again later!
+      - log:
+          - action:
+              message: "rate-limit===> ${req.headers.test} -hostname--${req.hostname} -user.id${req.user.consumerId}"
       - validate-user:
       - middleware:
       - request-transformer:
@@ -1306,7 +1311,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - proxy:
           - action:
               serviceEndpoint: api_management
@@ -1318,7 +1323,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'profile header===> ${req.headers.authorization} ---${req}'
+              message: "profile header===> ${req.headers.authorization} ---${req}"
       - cors:
       - oauth2:
           - action:
@@ -1328,6 +1333,17 @@ pipelines:
                 subject: ${JWT_SUBJECT}
                 secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
+      - rate-limit:
+        -
+          action:                         # allow
+            max: 5                       # max 5 request
+            windowMs: 120000              # per 120 seconds
+            rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
+            statusCode: 400
+            message: Too many requests, please try again later!
+      - log:
+          - action:
+              message: "rate-limit===> ${req.headers.test} -hostname--${req.hostname} -user.id${req.user.consumerId}"
       - validate-user:
       - middleware:
       - request-transformer:
@@ -1337,7 +1353,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - proxy:
           - action:
               serviceEndpoint: api_management
@@ -1349,7 +1365,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'topup header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}'
+              message: "topup header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
       - cors:
       - oauth2:
           - action:
@@ -1359,6 +1375,17 @@ pipelines:
                 subject: ${JWT_SUBJECT}
                 secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
+      - rate-limit:
+        -
+          action:                         # allow
+            max: 5                       # max 5 request
+            windowMs: 120000              # per 120 seconds
+            rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
+            statusCode: 400
+            message: Too many requests, please try again later!
+      - log:
+          - action:
+              message: "rate-limit===> ${req.headers.test} -hostname--${req.hostname} -user.id${req.user.consumerId}"
       - validate-user:
       - request-transformer:
           action:
@@ -1367,7 +1394,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
 
       - proxy:
           - action:
@@ -1380,7 +1407,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'paymee header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}'
+              message: "paymee header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
       - cors:
       - oauth2:
           - action:
@@ -1390,6 +1417,17 @@ pipelines:
                 subject: ${JWT_SUBJECT}
                 secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
+      - rate-limit:
+        -
+          action:                         # allow
+            max: 5                       # max 5 request
+            windowMs: 120000              # per 120 seconds
+            rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
+            statusCode: 400
+            message: Too many requests, please try again later!
+      - log:
+          - action:
+              message: "rate-limit===> ${req.headers.test} -hostname--${req.hostname} -user.id${req.user.consumerId}"
       - validate-user:
       - request-transformer:
           action:
@@ -1398,7 +1436,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
 
       - proxy:
           - action:
@@ -1411,7 +1449,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'home header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}'
+              message: "home header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
       - cors:
       - oauth2:
           - action:
@@ -1430,7 +1468,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
 
       - proxy:
           - action:
@@ -1443,11 +1481,11 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'open header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}'
+              message: "open header===> ${req.headers.authorization} ---${req.originalUrl}  ${req.url}"
       - cors:
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
 
       - proxy:
           - action:
@@ -1459,8 +1497,8 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}'
-      - cors:
+              message: "api admin header===> ${req.headers.authorization} ${req.originalUrl}  ${req.url}"
+      - cors:              
       - oauth2:
           - action:
               jwt:
@@ -1477,7 +1515,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - proxy:
           - action:
               serviceEndpoint: backend
@@ -1489,7 +1527,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'header===> ${req.headers.authorization} ---${req}'
+              message: "header===> ${req.headers.authorization} ---${req}"
       - cors:
       - oauth2:
           - action:
@@ -1499,6 +1537,17 @@ pipelines:
                 subject: ${JWT_SUBJECT}
                 secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
+      - rate-limit:
+        -
+          action:                         # allow
+            max: 5                       # max 5 request
+            windowMs: 120000              # per 120 seconds
+            rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
+            statusCode: 400
+            message: Too many requests, please try again later!
+      - log:
+          - action:
+              message: "rate-limit===> ${req.headers.test} -hostname--${req.hostname} -user.id${req.user.consumerId}"
       - validate-user:
       - middleware:
       - request-transformer:
@@ -1508,7 +1557,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - proxy:
           - action:
               serviceEndpoint: api_management
@@ -1520,7 +1569,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'topnet header===> ${req.headers.authorization} ---${req}'
+              message: "topnet header===> ${req.headers.authorization} ---${req}"
       - cors:
       - oauth2:
           - action:
@@ -1530,6 +1579,17 @@ pipelines:
                 subject: ${JWT_SUBJECT}
                 secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
+      - rate-limit:
+        -
+          action:                         # allow
+            max: 5                       # max 5 request
+            windowMs: 120000              # per 120 seconds
+            rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
+            statusCode: 400
+            message: Too many requests, please try again later!
+      - log:
+          - action:
+              message: "rate-limit===> ${req.headers.test} -hostname--${req.hostname} -user.id${req.user.consumerId}"
       - validate-user:
       - middleware:
       - request-transformer:
@@ -1539,7 +1599,7 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - proxy:
           - action:
               serviceEndpoint: api_management
@@ -1550,7 +1610,7 @@ pipelines:
     policies:
       - log:
           - action:
-              message: 'wallet header===> ${req.headers.authorization} ---${req}'
+              message: "wallet header===> ${req.headers.authorization} ---${req}"
       - cors:
       - oauth2:
           - action:
@@ -1560,6 +1620,17 @@ pipelines:
                 subject: ${JWT_SUBJECT}
                 secretOrPublicKey: ${JWT_SECRET}
                 checkCredentialExistence: false
+      - rate-limit:
+        -
+          action:                         # allow
+            max: 5                       # max 5 request
+            windowMs: 120000              # per 120 seconds
+            rateLimitBy: "${req.user.consumerId} ${req.headers.test} ${req.hostname}" # EgContext.req.user.id
+            statusCode: 400
+            message: Too many requests, please try again later!
+      - log:
+          - action:
+              message: "rate-limit===> ${req.headers.test} -hostname--${req.hostname} -user.id${req.user.consumerId}"
       - validate-user:
       - middleware:
       - request-transformer:
@@ -1569,8 +1640,11 @@ pipelines:
                 user: req.user
       - log:
           - action:
-              message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
+              message: "${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}"
       - proxy:
           - action:
               serviceEndpoint: api_management
               changeOrigin: true
+
+
+
