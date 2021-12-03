@@ -9,7 +9,7 @@ require('dotenv-safe').config({
       port: process.env.EMAIL_PORT,
       username: process.env.EMAIL_USERNAME,
       password: process.env.EMAIL_PASSWORD,
-      baseURL: process.env.BASE_URL
+      baseURL: process.env.BASE_URL,
     },
   };
   

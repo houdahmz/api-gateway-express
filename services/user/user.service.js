@@ -1,5 +1,6 @@
+/* eslint-disable require-jsdoc */
 const uuidv4 = require('uuid/v4');
-const { validate } = require('express-gateway/lib/schemas');
+const {validate} = require('express-gateway/lib/schemas');
 const userDao = require('./user.dao.js');
 const userDaoEG = require('express-gateway/lib/services/consumers/user.dao.js');
 const applicationService = require('express-gateway/lib/services/consumers/application.service');
@@ -13,11 +14,11 @@ const SCHEMA = 'http://express-gateway.io/models/users.json';
 
 const s = {};
 
-s.insert = function (user) {
+s.insert = function(user) {
   return validateAndCreateUser(user)
-    .then(function (newUser) {
+    .then(function(newUser) {
       return userDao.insert(newUser)
-        .then(function (success) {
+        .then(function(success) {
           if (success) {
             newUser.isActive = newUser.isActive === 'true';
             return newUser;
@@ -25,15 +26,14 @@ s.insert = function (user) {
         });
     });
 };
-s.get = function (userId, options) {
-
+s.get = function(userId, options) {
   if (!userId || !typeof userId === 'string') {
     return false;
   }
 
   return userDaoEG
     .getUserById(userId)
-    .then(function (user) {
+    .then(function(user) {
       if (!user) {
         return false;
       }
@@ -45,14 +45,14 @@ s.get = function (userId, options) {
       return user;
     });
 };
-s.getEmail = function (email, options) {
+s.getEmail = function(email, options) {
   if (!email || !typeof email === 'string') {
     return false;
   }
 
   return userDao
     .getUserByEmail(email)
-    .then(function (user) {
+    .then(function(user) {
       if (!user) {
         return false;
       }
@@ -64,14 +64,14 @@ s.getEmail = function (email, options) {
       return user;
     });
 };
-s.getPhone = function (phone, options) {
+s.getPhone = function(phone, options) {
   if (!phone || !typeof phone === 'string') {
     return false;
   }
 
   return userDao
     .getUserByEmail(phone)
-    .then(function (user) {
+    .then(function(user) {
       if (!user) {
         return false;
       }
@@ -91,72 +91,69 @@ s.getPhone = function (phone, options) {
 //   });
 // };
 
-s.findEmail = function (email, options) {
+s.findEmail = function(email, options) {
   if (!email || !typeof email === 'string') {
     return Promise.reject(new Error('invalid email')); // TODO: replace with validation error
   }
   return userDao
     .findEmail(email)
-    .then(userId => {
+    .then((userId) => {
       return userId ? this.get(userId, options) : false;
     });
 };
 
-s.findByEmail = function (value) {
+s.findByEmail = function(value) {
     return s
     .findEmail(value)
-    .then(user => {
+    .then((user) => {
       if (user) {
         return user;
       }
       return s.get(value);
     });
-
-
 };
-s.findPhone = function (phone, options) {
+s.findPhone = function(phone, options) {
   if (!phone || !typeof phone === 'string') {
     return Promise.reject(new Error('invalid phone')); // TODO: replace with validation error
   }
   return userDao
     .findPhone(phone)
-    .then(userId => {
+    .then((userId) => {
       return userId ? this.get(userId, options) : false;
     });
 };
 
-s.findByPhone = function (value) {
+s.findByPhone = function(value) {
     return s
     .findPhone(value)
-    .then(user => {
+    .then((user) => {
       if (user) {
         return user;
       }
       return s.get(value);
     });
 };
-s.find = function (username, options) {
-
+s.find = function(username, options) {
   if (!username || !typeof username === 'string') {
     return Promise.reject(new Error('invalid username')); // TODO: replace with validation error
   }
 
   return userDao
     .find(username)
-    .then(userId => {
+    .then((userId) => {
       return userId ? this.get(userId, options) : false;
     });
 };
-s.findAll = function (query) {
-  console.log("query",query)
-  return userDao.findAll(query).then(data => {
-    console.log("data",data)
+s.findAll = function(query) {
+  console.log('query',query);
+  return userDao.findAll(query).then((data) => {
+    console.log('data',data);
     data.users = data.users || [];
     // data.users.forEach(u => { u.isActive = u.isActive === 'true'; });
     return data;
   });
 };
-function validateAndCreateUser (_user) {
+function validateAndCreateUser(_user) {
   let user;
 
   const result = validate(SCHEMA, _user);
@@ -165,26 +162,26 @@ function validateAndCreateUser (_user) {
   }
 
   return s.find(_user.username) // Ensure username is unique
-    .then(function (exists) {
+    .then(function(exists) {
       if (exists) {
         throw new Error('username already exists');
       }
       return s.findEmail(_user.email) // Ensure email is unique
-      .then(function (exists) {
+      .then(function(exists) {
         if (exists) {
           throw new Error('email already exists');
         }
         return s.findPhone(_user.phone) // Ensure phone is unique
-        .then(function (exists) {
+        .then(function(exists) {
           if (exists) {
             throw new Error('phone already exists');
           }
           return _user;
-        })
-      })  
+        });
+      });  
     })
-    .then(function (newUser) {
-      const baseUserProps = { isActive: 'true', username: _user.username, id: uuidv4() };
+    .then(function(newUser) {
+      const baseUserProps = {isActive: 'true', username: _user.username, id: uuidv4()};
       if (newUser) {
         user = Object.assign(baseUserProps, newUser);
       } else user = baseUserProps;

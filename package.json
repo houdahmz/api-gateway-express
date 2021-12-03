@@ -21,6 +21,7 @@
     "express-useragent": "^1.0.15",
     "geoip-lite": "^1.4.2",
     "ip": "^1.1.5",
+    "joi": "^17.5.0",
     "jsonwebtoken": "^8.5.1",
     "log4js": "^6.3.0",
     "mobile-detect": "^1.4.5",
