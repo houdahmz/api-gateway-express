@@ -666,9 +666,10 @@ validate(schemaCompany)], async (req, res, next) => {
     // accept or refuse a pdv 
     const {code} = req.body; // code = 10 delete , 11 accept // id is a username
     console.log('Body in accepte endpint ', req.body);
-    if (!code) {
-      log4j.loggererror.error('Role can not be empty');
-      return res.status(200).json({error: 'Role can not be empty '});
+    if (code != 0 && code != 1) {
+      log4j.loggererror.error('Set code 1 to desactivate or 0 to activate a user');
+      util.setError(200, 'Set code 1 to desactivate or 0 to activate a user', status_code.CODE_ERROR.CODE_INCORRECT);
+      return util.send(res);
     }
     // ////////////////////////////Get user///////////////////////////////////
     const myUser = await services.user.find(req.params.id);
