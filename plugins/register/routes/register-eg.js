@@ -5,9 +5,7 @@ const axios = require('axios');
 const mail = require('../../../services/emails/emailProvider');
 const mailSimple = require('./mailer.config.js');
 const util = require('../helpers/utils');
-const jwt = require('jsonwebtoken');
 const env = require('../../../config/env.config');
-const {EMAIL} = require('../../../config/env.config');
 const user_service = require('../../../services/user/user.service');
 
 const validate = require('../middleware/validation');
@@ -15,12 +13,7 @@ const {schema, teamSchema, adminSchema, resetSchema} = require('../schemaValidat
 const {profileSchema} = require('../schemaValidation/profile');
 const {schemaCompany} = require('../schemaValidation/company');
 
-const config = require('express-gateway/lib/config/');
-const tokenService = services.token;
-const authService = services.auth;
 const log4j = require('../../../config/configLog4js.js');
-const os = require('os');
-useragent = require('express-useragent');
 const device = require('express-device');
 const cors = require('cors');
 const {
@@ -45,16 +38,7 @@ const bodyParser = require('body-parser');
 const corsOptions = {
   origin: '*',
 };
-const expiresIn = 3.6 * 1000 * 1000; // in ms //equals to 1 hour 
-const role_code = {
-  1: 'VISITOR' ,
-  2: 'USER' ,// type PDV/agent
-  3: 'ADMIN',
-  4: 'SUPPORT' ,
-  5: 'COMMERCIAL' ,
-  6: 'COMPTABLE' ,
 
-};
 module.exports = function(gatewayExpressApp) {
   gatewayExpressApp.use(bodyParser.json({limit: '50mb', extended: true}));
   gatewayExpressApp.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -114,7 +98,7 @@ validate(schemaCompany)], async (req, res, next) => {
           team: false,
           demand: '1',
   
-          redirectUri: 'https://www.khallasli.com',
+          redirectUri: `${env.baseURL}`,
           confirm_token: '',
         };
         let myUser;
@@ -331,7 +315,7 @@ validate(schemaCompany)], async (req, res, next) => {
         email: email,
         phone: phone,
         team: false,
-        redirectUri: 'https://www.khallasli.com',
+        redirectUri: `${env.baseURL}`,
       };
       let agentUser;
       try {
@@ -432,7 +416,7 @@ validate(schemaCompany)], async (req, res, next) => {
         role: `ROLE_${ code.toUpperCase()}`,
         team: true,
 
-        redirectUri: 'https://www.khallasli.com',
+        redirectUri: `${env.baseURL}`,
         confirm_token: myUserJwt,
 
       };
@@ -499,7 +483,7 @@ validate(schemaCompany)], async (req, res, next) => {
 
       // ///////////////////////////create profile/////////////////////////////////////////////////////
       const userProfile = await creteProfile(myUser);
-      console.log('iciiiiiuserProfile', userProfile.data);
+      console.log('userProfile.data', userProfile.data);
       if (!userProfile.data) {
         log4j.loggererror.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
@@ -789,7 +773,7 @@ validate(schemaCompany)], async (req, res, next) => {
         confirmMail: false,
         profilCompleted: true,
 
-        redirectUri: 'https://www.khallasli.com',
+        redirectUri: `${env.baseURL}`,
       };
       // //////////Generate a random password///////////////////////////////////////
       const randomPassword = Math.random().toString(36).slice(-8);
@@ -930,7 +914,7 @@ validate(schemaCompany)], async (req, res, next) => {
       console.log('/reset-password');
       const {username, token} = req.query;
       const {password, password_confirmation} = req.body;
-      console.log('dddd', password);
+      console.log('password', password);
       const user = await services.user.findByUsernameOrId(username);
       console.log('user', user);
       console.debug('confirmation', user, req.query, token, username);
@@ -1479,18 +1463,6 @@ validate(schemaCompany)], async (req, res, next) => {
             if (findByPhone) {
               return res.status(200).json({status: 'Error', error: 'Phone already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
             }
-            // var bodyUser = {
-            //   username: req.body.username,
-            //   firstname: req.body.firstname,
-            //   lastname: req.body.lastname,
-            //   email: req.body.email,
-            //   phone: req.body.phone,
-          
-            //   role: req.body.role,
-            //   confirmMail: req.body.confirmMail,
-            //   team: req.body.team,
-            //   profilCompleted: req.body.profilCompleted,
-            // }
             const randomPassword = Math.random().toString(36).slice(-8);
             console.log('randomPassword', randomPassword);
       

@@ -1,33 +1,19 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable brace-style */
 /* eslint-disable guard-for-in */
 const services = require('express-gateway/lib/services/');
 const utils = require('express-gateway/lib/services/utils');
-const axios = require('axios');
 const mail = require('../../../services/emails/emailProvider');
-const mailSimple = require('./mailer.config.js');
-
 const util = require('../helpers/utils');
-
-const jwt = require('jsonwebtoken');
-const env = require('../../../config/env.config');
 const config = require('express-gateway/lib/config/');
-const tokenService = services.token;
-const authService = services.auth;
-
 const log4j = require('../../../config/configLog4js.js');
 const os = require('os');
 const ipF = require('ip');
 const publicIp = require('public-ip');
-useragent = require('express-useragent');
+const useragent = require('express-useragent');
 const device = require('express-device');
 const MobileDetect = require('mobile-detect');
-const {lookup} = require('geoip-lite');
-const iplocate = require('node-iplocate');
 
-const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
-const {secretOrPrivateKey} = config.systemConfig.accessTokens;
-const fs = require('fs');
-const PUB_KEY = fs.readFileSync('./config/public.pem', 'utf8');
 const cors = require('cors');
 
 const {
@@ -37,10 +23,6 @@ const {
 const {
     getCategoryFromWalletWithCode, 
 } = require('../../Services/wallet');
-
-
-// const bodyParser = require("body-parser");
-const express = require('express');
 const status_code = require('../config');
 
 const bodyParser = require('body-parser');
@@ -65,7 +47,7 @@ module.exports = function(gatewayExpressApp) {
     const {username, password} = req.body;
     console.log('password', password);
     console.log('username', username);
-    myUser = await services.user.find(username);
+    const myUser = await services.user.find(username);
     console.log('myUser', myUser);
     if (myUser == false) {
       log4j.loggerinfo.info('Error username does not exist.');
@@ -90,7 +72,7 @@ module.exports = function(gatewayExpressApp) {
     //   return util.send(res);
     // }
 
-    myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth');
+    const myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth');
     console.log('myCredBasic ', myCredBasic);
     const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password);
     if (!passBooleanTrue) {
@@ -149,7 +131,7 @@ module.exports = function(gatewayExpressApp) {
         loginAttempts: userFinded.loginAttempts.toString(),
         nextTry: userFinded.nextTry.toString(),
       });
-      myUserDesactivate = await services.user.deactivate(userFinded.id);
+      const myUserDesactivate = await services.user.deactivate(userFinded.id);
     }
 
     // else if (parseInt(userFinded.loginAttempts) == -1){
@@ -165,7 +147,7 @@ module.exports = function(gatewayExpressApp) {
       util.setError(200, 'Wrong password', status_code.CODE_ERROR.INCORRECT_PASSWORD);
       return util.send(res);
     }
-    crd_oauth2 = await services.credential.getCredential(myUser.id, 'oauth2');
+    let crd_oauth2 = await services.credential.getCredential(myUser.id, 'oauth2');
     if (crd_oauth2) {
       const scope = crd_oauth2.scopes;
       console.log('******************Scopeeeeeee******************');
@@ -173,10 +155,10 @@ module.exports = function(gatewayExpressApp) {
       console.log('************************************');
       crd_oauth2 = await services.credential.removeCredential(crd_oauth2.id, 'oauth2');
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', {scopes: scope});
-      tt = await services.credential.getCredential(myUser.id, 'oauth2');
+      const get_crd_oauth2 = await services.credential.getCredential(myUser.id, 'oauth2');
 
       console.log('crd_oauth2 ', crd_oauth2);
-      console.log('tt ', tt);
+      console.log('get_crd_oauth2 ', get_crd_oauth2);
 
       // here should get the token and applique invoke before generating a new one
       let token;
@@ -217,7 +199,7 @@ module.exports = function(gatewayExpressApp) {
         element = `ROLE_${ element.toUpperCase()}`;
         roles.push(element);
       });
-      console.log('rolessss', roles);
+      console.log('roles', roles);
       if (roles[0] == 'ROLE_VISITOR') {
         // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
         return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
@@ -340,7 +322,7 @@ module.exports = function(gatewayExpressApp) {
         /** ************************************************************************************ */
         const name = `complete_profile${ Date.now()}`;
         // userApp = await services.application.find(name)
-        myApp = await services.application.insert({
+        const myApp = await services.application.insert({
           name: `user_app${ Date.now()}`,
           ip: user.ip,
           source: user.source,
@@ -351,7 +333,7 @@ module.exports = function(gatewayExpressApp) {
           country: user.country,
         }, myUser.id);
 
-        userApp = await services.application.find(name);
+        const userApp = await services.application.find(name);
         console.log('userapp', userApp);
         console.log('myApp', myApp);
 
