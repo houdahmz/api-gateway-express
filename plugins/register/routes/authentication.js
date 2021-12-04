@@ -144,7 +144,7 @@ module.exports = function(gatewayExpressApp) {
 
 // //////////////////////////////////////////
 
-      log4j.loggererror.error('Error Wrong password');
+      logger.error('Error Wrong password');
       util.setError(200, 'Wrong password', status_code.CODE_ERROR.INCORRECT_PASSWORD);
       return util.send(res);
     }
@@ -166,7 +166,7 @@ module.exports = function(gatewayExpressApp) {
       try {
         token = await getToken(username, password, crd_oauth2.id, crd_oauth2.secret, res);
       } catch (error) {
-        log4j.loggererror.error(`Error :${ error.message}`);
+        logger.error(`Error :${ error.message}`);
         util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
         return util.send(res);
       }
@@ -265,7 +265,7 @@ module.exports = function(gatewayExpressApp) {
         // //////////////////////////
         const serviceResult = await getServiceByUser(user.id, res);
         if (!serviceResult.data) {
-          log4j.loggererror.error('Error Problem in server wallet ');
+          logger.error('Error Problem in server wallet ');
           util.setError(500, 'Internal Server wallet Error', status_code.CODE_ERROR.SERVER);
           return util.send(res);
         }
@@ -286,11 +286,11 @@ module.exports = function(gatewayExpressApp) {
         } catch (error) {
           console.log('error', error); // // tkt
           if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
             return util.send(res);
           }
-          log4j.loggererror.error(`Error in getting profile: ${ error.response.data}`);
+          logger.error(`Error in getting profile: ${ error.response.data}`);
           util.setError(error.response.status, error.response.data.message, error.response.data.code);
           return util.send(res);
         }
@@ -308,11 +308,11 @@ module.exports = function(gatewayExpressApp) {
                 } catch (error) {
                   console.log('error', error); // // tkt
                   if (!error.response) {
-                    log4j.loggererror.error(error.message);
+                    logger.error(error.message);
                     util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
                     return util.send(res);
                   }
-                  log4j.loggererror.error(`Error in getting profile: ${ error.response.data}`);
+                  logger.error(`Error in getting profile: ${ error.response.data}`);
                   util.setError(error.response.status, error.response.data.message, error.response.data.code);
                   return util.send(res);
                 }
@@ -373,7 +373,7 @@ module.exports = function(gatewayExpressApp) {
             }
           }
         } else {
-          log4j.loggererror.error('Error in getting profile');
+          logger.error('Error in getting profile');
           util.setError(500, 'error', status_code.CODE_ERROR.SERVER);
           return util.send(res);
         }
