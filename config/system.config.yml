@@ -88,31 +88,13 @@ authorizationCodes:
 #   timeToExpiry: 300000
 
 plugins:
-  wallet:
-    package: "../../../plugins/wallet/manifest.js"
   register:
     package: "../../../plugins/register/manifest.js"
-  voucher:
-    package: "../../../plugins/voucher/manifest.js"
-  bodyParser:
-    package: "../../../plugins/bodyParser/manifest.js"
   validate-user:
     package: "../../../plugins/validate-user.js"
   middleware:
     package: "../../../plugins/middleware.js"
   jwt-permissions:
     package: express-gateway-plugin-jwt-permissions
-  jwtScopes:
-    package: "../../../plugins/jwtScopes.js"
-  agent-register:
-    package: "../../../plugins/agent-register.js"
   rewrite:
     package: express-gateway-plugin-rewrite
-  tokenReg:
-    package: "../../../plugins/tokenReg.js"
-  login:
-    package: "../../../plugins/login.js"
-  # example:
-  #   package: example
-  hello:
-    package: "../../../plugins/hello/manifest.js"

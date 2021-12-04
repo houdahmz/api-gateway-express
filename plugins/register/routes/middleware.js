@@ -2,6 +2,8 @@ const services = require('express-gateway/lib/services/');
 const jwt = require('jsonwebtoken');
 const env = require('../../../config/env.config');
 const log4j = require('../../../config/configLog4js.js');
+const logger = require('../../../config/Logger');
+
 const {
   getProfile,
   } = require('../../Services/users');
@@ -98,10 +100,10 @@ const {
             } catch (error) {
               console.log('error', error); // // tkt
               if (!error.response) {
-                log4j.loggererror.error(error.message);
+                logger.error(error.message);
                 return res.status(500).send({'error': error.message});
               }
-              log4j.loggererror.error(`Error in getting profile: ${ error.response.data}`);
+              logger.error(`Error in getting profile: ${ error.response.data}`);
 
               return res.status(error.response.status).send(error.response.data);
             }
@@ -117,10 +119,10 @@ const {
                 } catch (error) {
                   console.log('error', error); // // tkt
                   if (!error.response) {
-                    log4j.loggererror.error(error.message);
+                    logger.error(error.message);
                     return res.status(500).send({'error': error.message});
                   }
-                  log4j.loggererror.error(`Error in getting profile: ${ error.response.data}`);
+                  logger.error(`Error in getting profile: ${ error.response.data}`);
 
                   return res.status(error.response.status).send(error.response.data);
                 }
