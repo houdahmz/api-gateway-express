@@ -1,9 +1,8 @@
 const os = require('os');
-useragent = require('express-useragent');
+const useragent = require('express-useragent');
 const services = require('express-gateway/lib/services/');
 const {lookup} = require('geoip-lite');
 const iplocate = require('node-iplocate');
-const moment = require('moment');
 const ipF = require('ip');
 const {
 getProfile,
@@ -13,8 +12,6 @@ const {
 getCategoryFromWalletWithCode,
 } = require('./Services/wallet');
 
-const axios = require('axios');
-const env = require('../config/env.config');
 const publicIp = require('public-ip');
 const middlewarePlugin = {
   schema: {$id: './../config/models/schema.js'},
@@ -72,7 +69,7 @@ const middlewarePlugin = {
          console.log('lookup(ip)',lookup(ip));
          console.log('lookup(ip)',lookup(ip));
         //  console.log("iplocate",iplocate(ip)); // location of the user
-        endpointScopes = req.egContext.apiEndpoint;
+        const endpointScopes = req.egContext.apiEndpoint;
         console.log('endpointScopes',endpointScopes);
       console.log('*********************************');
             // if(endpointScopes.methods == ['GET']){

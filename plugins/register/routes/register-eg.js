@@ -14,6 +14,8 @@ const {profileSchema} = require('../schemaValidation/profile');
 const {schemaCompany} = require('../schemaValidation/company');
 
 const log4j = require('../../../config/configLog4js.js');
+const logger = require('../../../config/Logger');
+
 const device = require('express-device');
 const cors = require('cors');
 const {
@@ -162,7 +164,7 @@ validate(schemaCompany)], async (req, res, next) => {
       mail.sendMail('Confirmation of your registration', 'Veuillez cliquer sur lien pour confirmer votre mail \n ', confirm_uri, req.body.email, username, firstname, lastname, randomPassword);
       console.log('confirm_uri', confirm_uri);
       
-      log4j.loggerinfo.info(`Success, mail has been sent to : ${ email}`);
+      logger.info(`Success, mail has been sent to : ${ email}`);
       return res.status(201).json({etat: 'Success', message: `Check your email : ${ email}`});
     } catch (err) {
       log4j.loggererror.error(`Error :${ err.message}`);
@@ -260,7 +262,7 @@ validate(schemaCompany)], async (req, res, next) => {
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
       };
       const user_res = await services.user.update(req.params.id, {profilCompleted: 'true'}); // test this
-      log4j.loggerinfo.info('Success');
+      logger.info('Success');
       return res.status(200).json({etat: 'success', message: 'Wait for the admin to accept your profile ', data: userProfile.data});
     } catch (err) {
       log4j.loggererror.error('Error in adding profile');
@@ -277,7 +279,7 @@ validate(schemaCompany)], async (req, res, next) => {
       
       const createAgentProfile = async (agentUser) => {
         try {
-          log4j.loggerinfo.info('Call postProfile agent: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`);
+          logger.info('Call postProfile agent: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`);
           return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/company/profile-by-company`
             , {
               // /profile-by-company
@@ -450,7 +452,7 @@ validate(schemaCompany)], async (req, res, next) => {
             role: code.toUpperCase(),
 
           });
-          log4j.loggerinfo.info('Call postProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+          logger.info('Call postProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
           return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
             id_user: myUser.id,
             first_name: myUser.firstname,
@@ -513,7 +515,7 @@ validate(schemaCompany)], async (req, res, next) => {
       console.log('confirm_uri', confirm_uri);
       console.log('change_password_uri', change_password_uri);
 
-      log4j.loggerinfo.info(`Success, mail has been sent to : ${ email}`);
+      logger.info(`Success, mail has been sent to : ${ email}`);
       return res.status(201).json({etat: 'Success', message: `Check your email : ${ email}`});
     } catch (err) {
       log4j.loggererror.error(`Error :${ err.message}`);
@@ -816,7 +818,7 @@ validate(schemaCompany)], async (req, res, next) => {
       }
       const change_password_uri = `${url}/change-password`;
       mail.sendChangePassword('Change password', `Veuillez cliquer sur lien pour changer le mot de passe (password: ${ randomPassword } ) \n `, change_password_uri, req.body.email, username, randomPassword);
-      log4j.loggerinfo.info(`Admin has been successfuly created, we have sent an email to ${ email } to set a new password`);
+      logger.info(`Admin has been successfuly created, we have sent an email to ${ email } to set a new password`);
       return res.status(201).json({etat: 'Success', message: `Admin has been successfuly created, we have sent an email to ${ email } to set a new password`});
     } catch (err) {
       log4j.loggererror.error(`Error in adding profile: ${ err}`);
@@ -904,7 +906,7 @@ validate(schemaCompany)], async (req, res, next) => {
       const confirm_uri = `${url}/reset-password?username=${ username }&` + `token=${ myUserJwt}`;
       console.log('confirm_uri', confirm_uri);
       mail.sendPasswordReset('Reset password', confirm_uri, user.email, user.firstname, user.lastname);
-      log4j.loggerinfo.info(`Success check your email : ${ user.email}`);
+      logger.info(`Success check your email : ${ user.email}`);
       return res.status(201).json({etat: 'Success', message: `Check your email : ${ user.email } for username ${ username}`});
       /** ********************************* */
   });
@@ -966,7 +968,7 @@ validate(schemaCompany)], async (req, res, next) => {
         log4j.loggererror.error('Error wrong confirmation token ');
         return res.status(200).json({error: 'wrong confirmation token'});
       }
-      log4j.loggerinfo.info('Success.Votre mot de passe a été réinitialisé');
+      logger.info('Success.Votre mot de passe a été réinitialisé');
       return res.status(200).json({etat: 'Success', message: 'Votre mot de passe a été réinitialisé'});
     } catch (err) {
       log4j.loggererror.error(`Error: ${ err.message}`);
@@ -1011,7 +1013,7 @@ validate(schemaCompany)], async (req, res, next) => {
           password: new_password,
           scopes: [],
         });
-        log4j.loggerinfo.info('Success.');
+        logger.info('Success.');
         console.log('crd_basic', crd_basic);
         return res.status(200).json({status: 'Success', message: 'Password has been successfully changed'});
       }
@@ -1024,7 +1026,7 @@ validate(schemaCompany)], async (req, res, next) => {
   gatewayExpressApp.get('/stats', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // still incomplete
     try {
       // ////////////////////////topup///////////////////////
-      log4j.loggerinfo.info('Call wallet get stock topup: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`);
+      logger.info('Call wallet get stock topup: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`);
       const statTopup = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`, {
         params: {
           yearB: req.query.yearB,
@@ -1042,7 +1044,7 @@ validate(schemaCompany)], async (req, res, next) => {
       }
       console.log('statTopup', statTopup.data);
       // //////////////////////////////////region////////////////////////////////////////
-      log4j.loggerinfo.info('Call get users by region: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/getUserByRegion`);
+      logger.info('Call get users by region: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/getUserByRegion`);
       const statsRegion = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/getUserByRegion`, {
         params: {
           yearB: req.query.yearB,
@@ -1059,7 +1061,7 @@ validate(schemaCompany)], async (req, res, next) => {
         arrayStatsRegion = statsRegion.data.data;
       }
       console.log('amountTotalWallet', arrayStatsRegion);
-      log4j.loggerinfo.info('Call paymee: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
+      logger.info('Call paymee: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
       const amountPaymee = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`, {
         params: {
           yearB: req.query.yearB,
@@ -1072,7 +1074,7 @@ validate(schemaCompany)], async (req, res, next) => {
         res.status('500').json('Error: error server paymee');
       }
 
-      log4j.loggerinfo.info('Call topnet: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`);
+      logger.info('Call topnet: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`);
       const amountTopnet = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`, {
         params: {
           yearB: req.query.yearB,
@@ -1085,7 +1087,7 @@ validate(schemaCompany)], async (req, res, next) => {
         res.status('500').json('Error: error server topnet');
       }
 
-      log4j.loggerinfo.info('Call voucher: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`);
+      logger.info('Call voucher: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`);
       const amountVoucher = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`,
         {
           params: {
@@ -1101,7 +1103,7 @@ validate(schemaCompany)], async (req, res, next) => {
       }
 
 
-      log4j.loggerinfo.info('Call poste: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`);
+      logger.info('Call poste: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`);
       const amountPosteRecharge = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`, {
         yearB: req.query.yearB,
         dayB: req.query.dayB,
@@ -1111,7 +1113,7 @@ validate(schemaCompany)], async (req, res, next) => {
       if (!amountPosteRecharge.data) {
         res.status('500').json('Error: error server poste recharge');
       }
-      log4j.loggerinfo.info('Call poste: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`);
+      logger.info('Call poste: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`);
       const amountPostePayemnt = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`, {
         params: {
           yearB: req.query.yearB,
@@ -1134,7 +1136,7 @@ validate(schemaCompany)], async (req, res, next) => {
       console.log('ca', ca);
       const nbT = amountPaymee.data.data.transaction.All + amountPosteRecharge.data.data.transaction.All + amountPostePayemnt.data.data.transaction.All + amountTopnet.data.data.transaction.All;
 
-      log4j.loggerinfo.info('Call stats by month endpoint api-management/admin/statsAllMonth: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`);
+      logger.info('Call stats by month endpoint api-management/admin/statsAllMonth: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`);
       const statsDataAllMonth = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`);
       // console.log("statsDataAllMonth",statsDataAllMonth)
       console.log('statsDataAllMonth.data', statsDataAllMonth.data);
@@ -1142,7 +1144,7 @@ validate(schemaCompany)], async (req, res, next) => {
         res.status('500').json('Error: error server stats all month');
       }
 
-      log4j.loggerinfo.info('Call statsCommission endpoint api-management/wallet/stats-commission: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
+      logger.info('Call statsCommission endpoint api-management/wallet/stats-commission: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
       const statsDataCommission = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
       // console.log("statsDataCommission",statsDataCommission)
       console.log('statsDataCommission.data', statsDataCommission.data);
@@ -1192,7 +1194,7 @@ validate(schemaCompany)], async (req, res, next) => {
       console.log('------------------------');
       // ////////////////////////topup///////////////////////
 
-      log4j.loggerinfo.info('Call wallet get stock topup: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`);
+      logger.info('Call wallet get stock topup: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`);
       const statTopup = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/stats/`, {
         params: {
           id_pdv: req.query.userId,
@@ -1217,7 +1219,7 @@ validate(schemaCompany)], async (req, res, next) => {
         dayB: req.query.dayB,
       };
       console.log('paramPaymee', paramPaymee);
-      log4j.loggerinfo.info('Call paymee: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
+      logger.info('Call paymee: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`);
       const amountPaymee = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`, {
         params: paramPaymee,
       });
@@ -1231,7 +1233,7 @@ validate(schemaCompany)], async (req, res, next) => {
         res.status('500').json('Error: error server');
       }
 
-      log4j.loggerinfo.info('Call topnet: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`);
+      logger.info('Call topnet: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`);
       const amountTopnet = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topnet/stats`, {
 
         params: {
@@ -1246,7 +1248,7 @@ validate(schemaCompany)], async (req, res, next) => {
         res.status('500').json('Error: error server');
       }
 
-      log4j.loggerinfo.info('Call voucher: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`);
+      logger.info('Call voucher: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`);
       const amountVoucher = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/stats`,
         {
           params: {
@@ -1262,7 +1264,7 @@ validate(schemaCompany)], async (req, res, next) => {
       }
 
 
-      log4j.loggerinfo.info('Call poste: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`);
+      logger.info('Call poste: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`);
       const amountPosteRecharge = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-recharge`, {
         params: {
           company_id: req.query.userId,
@@ -1275,7 +1277,7 @@ validate(schemaCompany)], async (req, res, next) => {
       if (!amountPosteRecharge.data) {
         res.status('500').json('Error: error server');
       }
-      log4j.loggerinfo.info('Call poste: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`);
+      logger.info('Call poste: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`);
       const amountPostePayemnt = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/poste/stats-payement`, {
         params: {
           company_id: req.query.userId,
@@ -1308,7 +1310,7 @@ validate(schemaCompany)], async (req, res, next) => {
           body: req.body.userId,
         },
       );
-      log4j.loggerinfo.info('Call stats by month endpoint api-management/admin/statsAllMonth: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`);
+      logger.info('Call stats by month endpoint api-management/admin/statsAllMonth: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`);
       const statsDataAllMonth = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`,
         {
           params: {
@@ -1322,7 +1324,7 @@ validate(schemaCompany)], async (req, res, next) => {
         res.status('500').json('Error: error server');
       }
 
-      log4j.loggerinfo.info('Call statsCommission endpoint api-management/wallet/stats-commission: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
+      logger.info('Call statsCommission endpoint api-management/wallet/stats-commission: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`);
       const statsDataCommission = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/stats-commission`,
         {
           params: {
@@ -1370,7 +1372,7 @@ validate(schemaCompany)], async (req, res, next) => {
     try {
       // ////////////////////////Wallet///////////////////////
 
-      log4j.loggerinfo.info('Call wallet get solde all: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`);
+      logger.info('Call wallet get solde all: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`);
       const amountWallet = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/solde`, {
         params: {
           yearB: req.query.yearB,
@@ -1390,7 +1392,7 @@ validate(schemaCompany)], async (req, res, next) => {
 
       // ////////////////////////voucher///////////////////////
 
-      log4j.loggerinfo.info('Call voucher get stock voucher: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`);
+      logger.info('Call voucher get stock voucher: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`);
       const stockVoucher = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/voucher/getStock`, {
         params: {
           // status: "1100",
@@ -1474,7 +1476,7 @@ validate(schemaCompany)], async (req, res, next) => {
             util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
             return util.send(res);
             }
-            log4j.loggerinfo.info('Success');
+            logger.info('Success');
                 const resp = {
                   data: myUser,
                   randomPassword: randomPassword,

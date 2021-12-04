@@ -13,6 +13,7 @@ const publicIp = require('public-ip');
 const useragent = require('express-useragent');
 const device = require('express-device');
 const MobileDetect = require('mobile-detect');
+const logger = require('../../../config/Logger');
 
 const cors = require('cors');
 
@@ -50,24 +51,24 @@ module.exports = function(gatewayExpressApp) {
     const myUser = await services.user.find(username);
     console.log('myUser', myUser);
     if (myUser == false) {
-      log4j.loggerinfo.info('Error username does not exist.');
+      logger.info('Error username does not exist.');
       util.setError(200, 'username does not exist', status_code.CODE_ERROR.NOT_EXIST);
       return util.send(res);
     } else if (myUser.demand == '1') {
-      log4j.loggerinfo.info('user is on pending. please wait for the administrator\'s agreement ');
+      logger.info('user is on pending. please wait for the administrator\'s agreement ');
       util.setError(200, 'user is on pending. please wait for the administrator\'s agreement', status_code.CODE_ERROR.USER_ON_PENDING);
       return util.send(res);
     } else if (myUser.demand == '2') {
-      log4j.loggerinfo.info('user is refused by the administrator ');
+      logger.info('user is refused by the administrator ');
       util.setError(200, 'user is refused by the administrator', status_code.CODE_ERROR.USER_REFUSED);
       return util.send(res);
     } else if (myUser.isActive == false) {
-      log4j.loggerinfo.info('Error user is desactivated. please wait for the administrator\'s agreement ');
+      logger.info('Error user is desactivated. please wait for the administrator\'s agreement ');
       util.setError(200, 'user is desactivated. please wait for the administrator\'s agreement', status_code.CODE_ERROR.USER_DESACTIVATE);
       return util.send(res);
     }
     // else if (myUser.loginAttempts == "-1") {
-    //   log4j.loggerinfo.info("Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator's ");
+    //   logger.info("Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator's ");
     //   util.setError(200, "Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator's ", status_code.CODE_ERROR.USER_DESACTIVATE);
     //   return util.send(res);
     // }
@@ -362,7 +363,7 @@ module.exports = function(gatewayExpressApp) {
         if (token) {
           if (token.status == 200) {
             if (data.status == 200) {
-              log4j.loggerinfo.info('Succes in getting token.');
+              logger.info('Succes in getting token.');
               if (dataCategory) {
                 if (dataCategory.data.data) {
                   return res.status(token.status).json({token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0], services: serviceData});
@@ -376,7 +377,7 @@ module.exports = function(gatewayExpressApp) {
           util.setError(500, 'error', status_code.CODE_ERROR.SERVER);
           return util.send(res);
         }
-        log4j.loggerinfo.info('Getting token');
+        logger.info('Getting token');
         console.log('token.status', token.status);
         console.log('token.data', token.data);
         console.log('scope', scope);
