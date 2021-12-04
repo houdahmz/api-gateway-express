@@ -1,10 +1,7 @@
 const services = require('express-gateway/lib/services/');
-const utils = require('express-gateway/lib/services/utils');
-const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const env = require('../../../config/env.config');
 const log4j = require('../../../config/configLog4js.js');
-const configLog4js = require('../../../config/configLog4js.js');
 const {
   getProfile,
   } = require('../../Services/users');
@@ -109,13 +106,6 @@ const {
               return res.status(error.response.status).send(error.response.data);
             }
             /** ******************************************************************************************** */
-            console.log('data.data', data.data);
-            console.log('*********************************');
-            console.log('iciiiiiiiiiiiiiiiiiiii', data.data);
-            console.log('*********************************');
-            console.log('**************/////////////////////*******************');
-            console.log('iciiiiiiiiiiiiiiiiiiii', data.data.data);
-            console.log('****************//////////////////*****************');
             let dataWallet;
 
             if (data.data) {
@@ -205,8 +195,6 @@ const {
             console.log('req.body', req.body);
             console.log('**************************************************');
 
-            // console.log("res.headers.authorization",res.headers.authorization)
-            // res.headers.authorization = req.headers.authorization
             next();
           } else {
             const errorObject = {message: 'Unauthorized Token. cannot'};

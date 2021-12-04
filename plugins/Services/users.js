@@ -127,30 +127,14 @@ exports.creteProfile = async (myUser, body, type, res) => {
         return util.send(res);
     }
 };
-// /////////////////////////////////////////////////////////////////////////
-// exports.getProfile = async (myUser) => { // de registration_confirm
-//   try {
-//     log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
-
-//     return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?id_user=` + myUser.id)
-//   } catch (error) {
-//     if (!error.response) {
-//       log4j.loggererror.error(error.message)
-//       return res.status(500).send({ "error": error.message });
-//     }
-//     log4j.loggererror.error("Error in getProfile :" + error.response.data)
-//     return res.status(error.response.status).send(error.response.data);
-//   }
-// }
 // ////////////////////////////////////////////////////////////////////////////////
-
 exports.getProfile = async (id, res) => {
     try {
         log4j.loggerinfo.info(`${'Call getProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/`}${ id}`);
 
         return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/${ id}`);
     } catch (error) {
-        console.log('aaaaaaa111111111111111111',error);
+        console.log('error',error);
         console.log('error.response',error.response);
         console.log('error.message',error.message);
 
@@ -190,26 +174,6 @@ exports.getToken = async (username, password, client_id, client_secret, res) => 
     }
 };
 // /////////////////////////////////////////////////////////////////////////
-// exports.getProfileByEmail = async (myUser) => {
-//   try {
-//     log4j.loggerinfo.info("Call postProfile: " + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
-
-//     return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?email=` + myUser)
-//   } catch (error) {
-//     if (!error.response) {
-//       log4j.loggererror.error(error.message)
-//       return res.status(500).send({ status: "Error", error: error.message, code: status_code.CODE_ERROR.SERVER });
-
-//     }
-//     log4j.loggererror.error("Error in getProfile :" + error.response.data)
-//     return res.status(error.response.status).send(error.response.data);
-//   }
-// }
-
-// /////////////////////////////////////////////////////////////////////////
-
-
-/** ********************************** */
 
 exports.getProfileByUsername = async (myUser,res) => {
     try {
@@ -342,12 +306,12 @@ exports.getServiceByUser = async (id, res) => {
     }
 };
 exports.updateDeleted = async (body, id,res) => {
-console.log('idddddd',id);
+console.log('id',id);
     try {
       log4j.loggerinfo.info('Call update ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted`);
       console.log('body', body);
       return await axios.patch(
-        `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted/${ id}`, body,
+        `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted/${id}`, body,
       );
     } catch (error) {
       if (!error.response) {

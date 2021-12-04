@@ -1,33 +1,19 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable brace-style */
 /* eslint-disable guard-for-in */
 const services = require('express-gateway/lib/services/');
 const utils = require('express-gateway/lib/services/utils');
-const axios = require('axios');
 const mail = require('../../../services/emails/emailProvider');
-const mailSimple = require('./mailer.config.js');
-
 const util = require('../helpers/utils');
-
-const jwt = require('jsonwebtoken');
-const env = require('../../../config/env.config');
 const config = require('express-gateway/lib/config/');
-const tokenService = services.token;
-const authService = services.auth;
-
 const log4j = require('../../../config/configLog4js.js');
 const os = require('os');
 const ipF = require('ip');
 const publicIp = require('public-ip');
-useragent = require('express-useragent');
+const useragent = require('express-useragent');
 const device = require('express-device');
 const MobileDetect = require('mobile-detect');
-const {lookup} = require('geoip-lite');
-const iplocate = require('node-iplocate');
 
-const expiresIn = config.systemConfig.accessTokens.timeToExpiry / 1000;
-const {secretOrPrivateKey} = config.systemConfig.accessTokens;
-const fs = require('fs');
-const PUB_KEY = fs.readFileSync('./config/public.pem', 'utf8');
 const cors = require('cors');
 
 const {
@@ -37,10 +23,6 @@ const {
 const {
     getCategoryFromWalletWithCode, 
 } = require('../../Services/wallet');
-
-
-// const bodyParser = require("body-parser");
-const express = require('express');
 const status_code = require('../config');
 
 const bodyParser = require('body-parser');
@@ -65,7 +47,7 @@ module.exports = function(gatewayExpressApp) {
     const {username, password} = req.body;
     console.log('password', password);
     console.log('username', username);
-    myUser = await services.user.find(username);
+    const myUser = await services.user.find(username);
     console.log('myUser', myUser);
     if (myUser == false) {
       log4j.loggerinfo.info('Error username does not exist.');
@@ -90,7 +72,7 @@ module.exports = function(gatewayExpressApp) {
     //   return util.send(res);
     // }
 
-    myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth');
+    const myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth');
     console.log('myCredBasic ', myCredBasic);
     const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password);
     if (!passBooleanTrue) {
@@ -116,8 +98,6 @@ module.exports = function(gatewayExpressApp) {
     console.log('user.loginAttempts', userFinded1.loginAttempts);
     console.log('Date.now()', Date.now());
 
-    // console.log("userFinded.nextTry zzzz", userFinded.nextTry)
-    // console.log("user.loginAttempts zzzzzzzz", userFinded.loginAttempts)
     if (userFinded.loginAttempts == 0 || !userFinded.loginAttempts) { // First loginAttempts
     userFinded.loginAttempts = 1;
     userFinded.nextTry = Date.now() + DIFF; // DATE OF FIRST TENTATIVE + 10 MIN
@@ -151,7 +131,7 @@ module.exports = function(gatewayExpressApp) {
         loginAttempts: userFinded.loginAttempts.toString(),
         nextTry: userFinded.nextTry.toString(),
       });
-      myUserDesactivate = await services.user.deactivate(userFinded.id);
+      const myUserDesactivate = await services.user.deactivate(userFinded.id);
     }
 
     // else if (parseInt(userFinded.loginAttempts) == -1){
@@ -167,7 +147,7 @@ module.exports = function(gatewayExpressApp) {
       util.setError(200, 'Wrong password', status_code.CODE_ERROR.INCORRECT_PASSWORD);
       return util.send(res);
     }
-    crd_oauth2 = await services.credential.getCredential(myUser.id, 'oauth2');
+    let crd_oauth2 = await services.credential.getCredential(myUser.id, 'oauth2');
     if (crd_oauth2) {
       const scope = crd_oauth2.scopes;
       console.log('******************Scopeeeeeee******************');
@@ -175,10 +155,10 @@ module.exports = function(gatewayExpressApp) {
       console.log('************************************');
       crd_oauth2 = await services.credential.removeCredential(crd_oauth2.id, 'oauth2');
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', {scopes: scope});
-      tt = await services.credential.getCredential(myUser.id, 'oauth2');
+      const get_crd_oauth2 = await services.credential.getCredential(myUser.id, 'oauth2');
 
       console.log('crd_oauth2 ', crd_oauth2);
-      console.log('tt ', tt);
+      console.log('get_crd_oauth2 ', get_crd_oauth2);
 
       // here should get the token and applique invoke before generating a new one
       let token;
@@ -219,7 +199,7 @@ module.exports = function(gatewayExpressApp) {
         element = `ROLE_${ element.toUpperCase()}`;
         roles.push(element);
       });
-      console.log('rolessss', roles);
+      console.log('roles', roles);
       if (roles[0] == 'ROLE_VISITOR') {
         // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
         return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
@@ -236,12 +216,10 @@ module.exports = function(gatewayExpressApp) {
         // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /** ************************ */
         const md = new MobileDetect(req.headers['user-agent']);
-        // var m = new MobileDetect(window.navigator.userAgent);
         console.log('md', md);
         // console.log("m", m);
         const md1 = new MobileDetect(req.get('User-Agent'));
         res.locals.isMobile = md1.mobile();
-        // console.log("md1", md1);
 
         console.log('md.os(), md.os()', md.os());
         if (md.os() === 'iOS') {
@@ -257,50 +235,17 @@ module.exports = function(gatewayExpressApp) {
           req.connection.remoteAddress ||
           req.socket.remoteAddress ||
           req.connection.socket.remoteAddress;
-        // console.log("ip", ip)
-        // console.log("req.connection.remoteAddress", req.connection.remoteAddress)
-        // console.log("lookup",lookup(ip)); // location of the user
-        // console.log("os.platform()", os.platform())
-        // console.log("os.release()", os.release())
-        // console.log("os.type()", os.type()); // "Windows_NT"
-        // console.log("req.device.type.toUpperCase()", req.device.type.toUpperCase())
-        // console.log("iplocate",iplocate(ip)); // location of the user
-        // console.log("iplocate",iplocate(ip).country); // location of the user
-        // console.log(iplocate(ip)); // location of the user
-        // console.log("ipaddre", ipF.address());
         const addr = ipF.address();
-        // console.log("aaaaaaaaaaaaaaaaaaaa", addr)
         const publicIpAdd = await publicIp.v4();
-        // console.log("publicIpAdd", publicIpAdd)
-        // ////////////////////
-        // let results;
-        // try {
-        //    results = await iplocate(publicIpAdd) 
-        //   console.log("results",results)
-        // } catch (error) {
-        //   console.log("error",error)
-        // }
-        // iplocate(ip).then(function(results) {
-        //    console.log("IP Address: " + results.ip);
-        //    console.log("Country: " + results.country + " (" + results.country_code + ")");
-        //    console.log("Continent: " + results.continent);
-        //    console.log("Organisation: " + results.org + " (" + results.asn + ")");
-        //    console.log(JSON.stringify(results, null, 2));
-        //  });
+ 
         const source = req.headers['user-agent'];
         const ua = useragent.parse(source);
-        // console.log("ua", ua)
         const {isMobile} = ua;
         console.log('isMobile', isMobile);
         const userUpdated = await services.user.update(myUser.id, {
           ip: publicIpAdd,
           os: os.platform(),
           source: ua.source,
-          // // geoip: lookup(ip),
-          // country:results.country,
-          // city:results.city,
-          // latitude:results.latitude,
-          // longitude:results.longitude,
           last_login: new Date().toString(),
         });
         console.log('userUpdated', userUpdated);
@@ -351,7 +296,6 @@ module.exports = function(gatewayExpressApp) {
         /** ******************************************************************************************** */
         // console.log("data",data)
         console.log('*********************************');
-        console.log('**************/////////////////////*******************');
         let dataCategory;
         if (data.data) {
           if (data.data.data) {
@@ -376,12 +320,9 @@ module.exports = function(gatewayExpressApp) {
           }
         }
         /** ************************************************************************************ */
-        // console.log("dataCategory", dataCategory)
-        /** ************************************************************************************ */
-        // console.log("Date.now()", Date.now())
         const name = `complete_profile${ Date.now()}`;
         // userApp = await services.application.find(name)
-        myApp = await services.application.insert({
+        const myApp = await services.application.insert({
           name: `user_app${ Date.now()}`,
           ip: user.ip,
           source: user.source,
@@ -392,7 +333,7 @@ module.exports = function(gatewayExpressApp) {
           country: user.country,
         }, myUser.id);
 
-        userApp = await services.application.find(name);
+        const userApp = await services.application.find(name);
         console.log('userapp', userApp);
         console.log('myApp', myApp);
 

@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { emailConfig } = require('../../config/vars');
+const {emailConfig} = require('../../config/vars');
 const Email = require('email-templates');
 
 // SMTP is the main transport in Nodemailer for delivering messages.
@@ -24,15 +24,14 @@ transporter.verify((error) => {
 });
 
 exports.sendMail = async (object,text,url,toEmail,username,firstname ,lastname,randomPassword) => {
-  console.log("toEmail",toEmail)
-  console.log("emailConfig.username",emailConfig.username)
-  console.log("emailConfig.password",emailConfig.password)
-  console.log("url",url)
-
+  console.log('toEmail',toEmail);
+  console.log('emailConfig.username',emailConfig.username);
+  console.log('emailConfig.password',emailConfig.password);
+  console.log('url',url);
 
 
   const email = new Email({
-    views: { root: __dirname },
+    views: {root: __dirname},
     message: {
       from: 'support@your-app.com',
     },
@@ -59,7 +58,6 @@ exports.sendMail = async (object,text,url,toEmail,username,firstname ,lastname,r
         email: toEmail,
 
 
-
         text: text,
         password: randomPassword,
 
@@ -70,12 +68,12 @@ exports.sendMail = async (object,text,url,toEmail,username,firstname ,lastname,r
 };
 
 exports.sendMailAccountBlocked = async (object,toEmail,username,firstname ,lastname) => {
-  console.log("toEmail",toEmail)
-  console.log("emailConfig.username",emailConfig.username)
-  console.log("emailConfig.password",emailConfig.password)
+  console.log('toEmail',toEmail);
+  console.log('emailConfig.username',emailConfig.username);
+  console.log('emailConfig.password',emailConfig.password);
 
   const email = new Email({
-    views: { root: __dirname },
+    views: {root: __dirname},
     message: {
       from: 'support@your-app.com',
     },
@@ -99,26 +97,24 @@ exports.sendMailAccountBlocked = async (object,toEmail,username,firstname ,lastn
         username: username,
         firstname: firstname,
         lastname: lastname,
-        email: toEmail
+        email: toEmail,
       },
     })
     .catch((error) => console.log('error sending email' , error));
 };
 
 exports.sendMailAdminConfirmation = async (object,url,toEmail,firstname ,lastname,username,randomPassword) => {
-  console.log("toEmail",toEmail)
-  console.log("emailConfig.username",emailConfig.username)
-  console.log("emailConfig.password",emailConfig.password)
-  console.log("firstname",firstname)
-  console.log("lastname",lastname)
-  console.log("username",username)
-  console.log("randomPassword",randomPassword)
-
-
+  console.log('toEmail',toEmail);
+  console.log('emailConfig.username',emailConfig.username);
+  console.log('emailConfig.password',emailConfig.password);
+  console.log('firstname',firstname);
+  console.log('lastname',lastname);
+  console.log('username',username);
+  console.log('randomPassword',randomPassword);
 
 
   const email = new Email({
-    views: { root: __dirname },
+    views: {root: __dirname},
     message: {
       from: 'support@your-app.com',
     },
@@ -149,13 +145,13 @@ exports.sendMailAdminConfirmation = async (object,url,toEmail,firstname ,lastnam
 };
 
 exports.sendPasswordReset = async (object,url,toEmail,firstname ,lastname) => {
-  console.log("toEmail",toEmail)
-  console.log("url",url)
+  console.log('toEmail',toEmail);
+  console.log('url',url);
 
   // console.log("confirmToken",confirmToken)
 
   const email = new Email({
-    views: { root: __dirname },
+    views: {root: __dirname},
     message: {
       from: 'support@your-app.com',
     },
@@ -181,12 +177,12 @@ exports.sendPasswordReset = async (object,url,toEmail,firstname ,lastname) => {
 
       },
     })
-    .catch((err) => console.log('error sending password reset email '+err));
+    .catch((err) => console.log(`error sending password reset email ${err}`));
 };
 
 exports.sendPasswordChange = async (object,text,url,toEmail) => {
   const email = new Email({
-    views: { root: __dirname },
+    views: {root: __dirname},
     message: {
       from: 'support@your-app.com',
     },
@@ -205,14 +201,14 @@ exports.sendPasswordChange = async (object,text,url,toEmail) => {
         // productName: 'khallasli',
         object: object,
         text: text,
-        url: url,      },
+        url: url},
     })
     .catch(() => console.log('error sending change password email'));
 };
 
 exports.sendChangePassword = async (object,text,url,toEmail,username,randomPassword) => {
   const email = new Email({
-    views: { root: __dirname },
+    views: {root: __dirname},
     message: {
       from: 'support@your-app.com',
     },
@@ -240,13 +236,13 @@ exports.sendChangePassword = async (object,text,url,toEmail,username,randomPassw
 };
 
 exports.sendMailFromAdmin = async (toEmail,username,firstname ,lastname,randomPassword,url) => {
-  console.log("toEmail",toEmail)
-  console.log("emailConfig.username",emailConfig.username)
-  console.log("emailConfig.password",emailConfig.password)
-  console.log("url",url)
+  console.log('toEmail',toEmail);
+  console.log('emailConfig.username',emailConfig.username);
+  console.log('emailConfig.password',emailConfig.password);
+  console.log('url',url);
 
   const email = new Email({
-    views: { root: __dirname },
+    views: {root: __dirname},
     message: {
       from: 'support@your-app.com',
     },

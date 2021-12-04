@@ -2,17 +2,12 @@
 const services = require('express-gateway/lib/services/');
 
 const env = require('../../../config/env.config');
-// const validation = require("./validation");
 const user_service = require('../../../services/user/user.service');
 
 useragent = require('express-useragent');
 const device = require('express-device');
 
-const fs = require('fs');
-const PUB_KEY = fs.readFileSync('./config/public.pem', 'utf8');
 const cors = require('cors');
-
-// const bodyParser = require("body-parser");
 
 const bodyParser = require('body-parser');
 const corsOptions = {
@@ -29,10 +24,7 @@ module.exports = async function(gatewayExpressApp) {
 
 
     myUserExist = await services.user.find(env.USERADMIN);
-    // console.log("env.USERADMIN", env.USERADMIN)
-    // console.log("env.PASSWORD", env.PASSWORD)
-    // console.log("env.EMAIL", env.EMAIL)
-    // console.log("env.PHONE", env.PHONE)
+
 
     const scopeExiste = await services.credential.existsScope('super_admin');
     if (!scopeExiste) { // create scope if not existe
