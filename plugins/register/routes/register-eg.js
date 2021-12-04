@@ -115,7 +115,7 @@ validate(schemaCompany)], async (req, res, next) => {
 
       const dataType = await getType('10', res);
       if (!dataType.data.data) {
-        log4j.loggererror.error('Error Problem in server ');
+        logger.error('Error Problem in server ');
         util.setError(500, 'Internal Server Error', status_code.CODE_ERROR.SERVER);
         return util.send(res);
       }
@@ -136,13 +136,13 @@ validate(schemaCompany)], async (req, res, next) => {
       };
       const userProfile = await creteProfile(myUser, body, dataType, res);
       if (!userProfile.data) {
-        log4j.loggererror.error('Error Problem in server ');
+        logger.error('Error Problem in server ');
         util.setError(500, 'Internal Server Error', status_code.CODE_ERROR.SERVER);
         return util.send(res);
       }
       // console.log("aaaa", userProfile)
       if (userProfile.data.status == 'error') {
-        log4j.loggererror.error(`Error in adding profile: ${ userProfile.data}`);
+        logger.error(`Error in adding profile: ${ userProfile.data}`);
         util.setError(400, userProfile.data);
         return util.send(res);
       }
@@ -167,7 +167,7 @@ validate(schemaCompany)], async (req, res, next) => {
       logger.info(`Success, mail has been sent to : ${ email}`);
       return res.status(201).json({etat: 'Success', message: `Check your email : ${ email}`});
     } catch (err) {
-      log4j.loggererror.error(`Error :${ err.message}`);
+      logger.error(`Error :${ err.message}`);
       util.setError(422, err.message); // code
       return util.send(res);
     }
@@ -185,7 +185,7 @@ validate(schemaCompany)], async (req, res, next) => {
       console.debug('confirmation', user, req.query, confirm_token, username);
       if (user == false) { // username does not exist
         console.debug('wrong confirmation token');
-        log4j.loggererror.error('wrong confirmation token');
+        logger.error('wrong confirmation token');
         return res.status(200).json({error: 'wrong confirmation token'});
       };
       const myCredBasic = await services.credential.getCredential(user.id, 'basic-auth');
@@ -198,17 +198,17 @@ validate(schemaCompany)], async (req, res, next) => {
         console.log('***********************************');
         if (!decoded) {
           console.debug('wrong confirmation token');
-          log4j.loggererror.error('wrong confirmation token');
+          logger.error('wrong confirmation token');
           return res.status(200).json({error: 'wrong confirmation token'});
         } else {
           if (user.username != decoded.username) {
             console.debug('???wrong confirmation token');
-            log4j.loggererror.error('???wrong confirmation token');
+            logger.error('???wrong confirmation token');
             return res.status(200).json({error: 'wrong confirmation token'});
           }
           const passBooleanTrue = await utils.compareSaltAndHashed(decoded.password, myCredBasic.password);
           if (!passBooleanTrue) {
-            log4j.loggererror.error('???wrong confirmation token');
+            logger.error('???wrong confirmation token');
             return res.status(200).json({error: 'wrong confirmation token'});
           }
         }
@@ -216,7 +216,7 @@ validate(schemaCompany)], async (req, res, next) => {
         console.log('***********************************');
         console.log('error', error);
         console.log('***********************************');
-        log4j.loggererror.error(`Error in adding profile: ${ error.message}`);
+        logger.error(`Error in adding profile: ${ error.message}`);
         return res.status(400).json({error: error.message});
       }
       console.log('user_res');
@@ -236,13 +236,13 @@ validate(schemaCompany)], async (req, res, next) => {
       // updateBody.company.profilCompleted = true
       const userProfile = await updateprofileConfirm(updateBody, getProfiled.data.data.id, res);
       if (!userProfile.data) {
-        log4j.loggererror.error('Error Problem in server ');
+        logger.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
       }
       // /////////////////////////////////
       return res.status(200).json({etat: 'Success'});
     } catch (err) {
-      log4j.loggererror.error(`Error : ${ err.message}`); // ici
+      logger.error(`Error : ${ err.message}`); // ici
       return res.status(422).json({error: err.message});
     }
   });
@@ -258,14 +258,14 @@ validate(schemaCompany)], async (req, res, next) => {
       req.body.company.profilCompleted = true;
       const userProfile = await updateprofileByAdmin(req.body, res);
       if (!userProfile.data) {
-        log4j.loggererror.error('Error Problem in server ');
+        logger.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
       };
       const user_res = await services.user.update(req.params.id, {profilCompleted: 'true'}); // test this
       logger.info('Success');
       return res.status(200).json({etat: 'success', message: 'Wait for the admin to accept your profile ', data: userProfile.data});
     } catch (err) {
-      log4j.loggererror.error('Error in adding profile');
+      logger.error('Error in adding profile');
       return res.status(422).json({error: err.message});
     }
   });
@@ -297,10 +297,10 @@ validate(schemaCompany)], async (req, res, next) => {
           );
         } catch (error) {
           if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             return res.status(500).send({'error': error.message});
           }
-          log4j.loggererror.error('Error in adding profile: ');
+          logger.error('Error in adding profile: ');
           const deleted = services.user.remove(agentUser.id);
 
           return res.status(error.response.status).send(error.response.data);
@@ -336,17 +336,17 @@ validate(schemaCompany)], async (req, res, next) => {
       const userProfile = await createAgentProfile(agentUser);
       console.log('userProfile.data', userProfile.data);
       if (!userProfile.data) {
-        log4j.loggererror.error('Error Problem in server ');
+        logger.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
       }
       if (userProfile.data.status == 'error') {
-        log4j.loggererror.error(`Error in adding profile: ${ userProfile.data}`);
+        logger.error(`Error in adding profile: ${ userProfile.data}`);
         return res.status(200).json(userProfile.data);
       }
       mailSimple.send_email('Reset password', `Veuillez cliquer sur lien pour changer le mot de passe (password: ${ randomPassword } )`, req.body.email);
       return res.status(201).json({etat: 'Success', message: `We have sent an email to ${ agentUser.email } to set a new password`});
     } catch (err) {
-      log4j.loggererror.error('Error in adding profile: ');
+      logger.error('Error in adding profile: ');
       return res.status(422).json({error: err.message});
     }
   });
@@ -394,11 +394,11 @@ validate(schemaCompany)], async (req, res, next) => {
       const dataType = await getTypeById(type_userId, res);
       console.log('dataType.data.data', dataType.data);
       if (!dataType.data.data) {
-        log4j.loggererror.error('Error Problem in server ');
+        logger.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
       }
       if (dataType.data.data.code == status_code.CODE_SUCCESS.LIST_EMPTY) {
-        log4j.loggererror.error('Error Problem in server ');
+        logger.error('Error Problem in server ');
         return res.status(200).send({status: 'Error', message: dataType.data.data.message, code: status_code.CODE_SUCCESS.LIST_EMPTY});
       }
 
@@ -472,10 +472,10 @@ validate(schemaCompany)], async (req, res, next) => {
         } catch (error) {
           console.log('error',error);
           if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             return res.status(500).send({'error': error.message});
           }
-          log4j.loggererror.error(`Error in createProfile :${ error.response.data}`);
+          logger.error(`Error in createProfile :${ error.response.data}`);
 
           const deleted = services.user.remove(myUser.id);
 
@@ -487,11 +487,11 @@ validate(schemaCompany)], async (req, res, next) => {
       const userProfile = await creteProfile(myUser);
       console.log('userProfile.data', userProfile.data);
       if (!userProfile.data) {
-        log4j.loggererror.error('Error Problem in server ');
+        logger.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
       }
       if (userProfile.data.status == 'error') {
-        log4j.loggererror.error(`Error  : ${ userProfile.data}`);
+        logger.error(`Error  : ${ userProfile.data}`);
         return res.status(400).json(userProfile.data);
       }
       // ///////////////////////////create application contains his login info(last_login/from which device/////////////////////////////////////////////////////
@@ -518,7 +518,7 @@ validate(schemaCompany)], async (req, res, next) => {
       logger.info(`Success, mail has been sent to : ${ email}`);
       return res.status(201).json({etat: 'Success', message: `Check your email : ${ email}`});
     } catch (err) {
-      log4j.loggererror.error(`Error :${ err.message}`);
+      logger.error(`Error :${ err.message}`);
       return res.status(422).json({error: err.message});
     }
   });
@@ -527,14 +527,14 @@ validate(schemaCompany)], async (req, res, next) => {
     const {code} = req.body; // code = 1 desactive , 0 active // id is a username
     console.log('code',code);
     if (code != 0 && code != 1) {
-      log4j.loggererror.error('Set code 1 to desactivate or 0 to activate a user');
+      logger.error('Set code 1 to desactivate or 0 to activate a user');
       util.setError(200, 'Set code 1 to desactivate or 0 to activate a user', status_code.CODE_ERROR.CODE_INCORRECT);
       return util.send(res);
     }
     let myUser = await services.user.findByUsernameOrId(req.params.id);
     console.log('myUser', myUser);
     if (myUser == false) {
-      log4j.loggererror.error('The user does not exist.');
+      logger.error('The user does not exist.');
       return res.status(200).json({message: 'The user does not exist'});
     }
     
@@ -557,7 +557,7 @@ validate(schemaCompany)], async (req, res, next) => {
           // ////////////////////////////Update the status of user///////////////////////////////////
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id, res);
           if (!userProfile.data) {
-            log4j.loggererror.error('Error Problem in server ');
+            logger.error('Error Problem in server ');
             return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
           }
               // ////////////////////////////update///////////////////////////////////
@@ -567,7 +567,7 @@ validate(schemaCompany)], async (req, res, next) => {
             };
             const userUpdated = await updateDeleted(updateDeletedBody, getProfiled.data.data.data[0].id, res);
               if (!userUpdated.data) {
-                log4j.loggererror.error('Error Problem in server ');
+                logger.error('Error Problem in server ');
                 return res.status(500).json({'Error': 'Problem in server'});
               }
           // //////////////////////////////////
@@ -595,7 +595,7 @@ validate(schemaCompany)], async (req, res, next) => {
           // ////////////////////////////Update the status of user///////////////////////////////////
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id, res);
           if (!userProfile.data) {
-            log4j.loggererror.error('Error Problem in server ');
+            logger.error('Error Problem in server ');
             return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
           }
                         // ////////////////////////////update///////////////////////////////////
@@ -605,7 +605,7 @@ validate(schemaCompany)], async (req, res, next) => {
                         };
                         const userUpdated = await updateDeleted(updateDeletedBody, getProfiled.data.data.data[0].id, res);
                           if (!userUpdated.data) {
-                            log4j.loggererror.error('Error Problem in server ');
+                            logger.error('Error Problem in server ');
                             return res.status(500).json({'Error': 'Problem in server'});
                           }
                       // //////////////////////////////////
@@ -623,14 +623,14 @@ validate(schemaCompany)], async (req, res, next) => {
   gatewayExpressApp.patch('/update_role/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => {
     const {role} = req.body; // code = 10 desactive , 11 active // id is a username
     if (!role) {
-      log4j.loggererror.error('role can not be empty.');
+      logger.error('role can not be empty.');
       return res.status(200).json({error: 'role can not be empty '});
     }
     // ////////////////////////////Get user///////////////////////////////////
     const myUser = await services.user.find(req.params.id);
     console.log('myUser', myUser);
     if (myUser == false) {
-      log4j.loggererror.error('User does not exist');
+      logger.error('User does not exist');
       return res.status(200).json({status: 'error', message: 'The user does not exist'});
     } else {
       let myCredOauth = await services.credential.getCredential(myUser.id, 'oauth2');
@@ -652,7 +652,7 @@ validate(schemaCompany)], async (req, res, next) => {
     const {code} = req.body; // code = 10 delete , 11 accept // id is a username
     console.log('Body in accepte endpint ', req.body);
     if (code != 0 && code != 1) {
-      log4j.loggererror.error('Set code 1 to desactivate or 0 to activate a user');
+      logger.error('Set code 1 to desactivate or 0 to activate a user');
       util.setError(200, 'Set code 1 to desactivate or 0 to activate a user', status_code.CODE_ERROR.CODE_INCORRECT);
       return util.send(res);
     }
@@ -660,15 +660,15 @@ validate(schemaCompany)], async (req, res, next) => {
     const myUser = await services.user.find(req.params.id);
     console.log('myUser', myUser);
     if (myUser == false) {
-      log4j.loggererror.error('User does not exist');
+      logger.error('User does not exist');
       return res.status(200).json({status: 'error', message: 'The user does not exist'});
     } else {
       if (code == 1 && myUser.demand == '2') { // refuse demand
-        log4j.loggererror.error('user already refused');
+        logger.error('user already refused');
         return res.status(200).json({status: 'error', message: 'user already refused', code: status_code.CODE_ERROR.ALREADY_REFUSED});
       }
       if (code == 0 && myUser.demand == '3') {
-        log4j.loggererror.error('user already accepted'); // demand is already accepted
+        logger.error('user already accepted'); // demand is already accepted
         return res.status(200).json({status: 'error', message: 'user already accepted', code: status_code.CODE_ERROR.ALREADY_ACCEPTED});
       }
       // ////////////////////////////Get profile///////////////////////////////////
@@ -685,10 +685,10 @@ validate(schemaCompany)], async (req, res, next) => {
           console.log('aaaa update', getProfiled.data.data.id);
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.id, res);
           if (!userProfile.data) {
-            log4j.loggererror.error('Error Problem in server ');
+            logger.error('Error Problem in server ');
             return res.status(500).json({'Error': 'Problem in server'});
           }
-          log4j.loggererror.error('The user has been refused');
+          logger.error('The user has been refused');
           return res.status(200).json({status: 'success', message: 'The user has been refused'});
         } else {
           return res.status(200).json({message: getProfiled.data});
@@ -704,7 +704,7 @@ validate(schemaCompany)], async (req, res, next) => {
           console.log('aaaa update', getProfiled.data.data.id);
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.id, res);
           if (!userProfile.data) {
-            log4j.loggererror.error('Error Problem in server ');
+            logger.error('Error Problem in server ');
             return res.status(500).json({'Error': 'Problem in server'});
           }
           // //generate pswd/////////
@@ -722,7 +722,7 @@ validate(schemaCompany)], async (req, res, next) => {
           const dataCurrency = await getCurrency(res);
           console.log('dataCurrency', dataCurrency.data);
           if (!dataCurrency.data.data) {
-            log4j.loggererror.error('Error Problem in server ');
+            logger.error('Error Problem in server ');
             return res.status(500).json({'Error': 'Problem in server'});
           }
           const currencyId = dataCurrency.data.data.items[0].id;
@@ -792,18 +792,18 @@ validate(schemaCompany)], async (req, res, next) => {
       // ///////////////////
       const dataType = await getType('20', res);
       if (!dataType.data.data) {
-        log4j.loggererror.error('Error Problem in server ');
+        logger.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
       }
       // let userProfile;
       const userProfile = await createAdminProfile(myUser, dataType.data.data.id, res);
       if (!userProfile.data.data) {
-        log4j.loggererror.error('Error Problem in server ');
+        logger.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
       }
       console.log('userProfile', userProfile.response);
       if (userProfile.data.status == 'error') {
-        log4j.loggererror.error(`Error in adding profile: ${ userProfile.data}`);
+        logger.error(`Error in adding profile: ${ userProfile.data}`);
         return res.status(200).json(userProfile.data);
       }
       console.log('email', email);
@@ -821,7 +821,7 @@ validate(schemaCompany)], async (req, res, next) => {
       logger.info(`Admin has been successfuly created, we have sent an email to ${ email } to set a new password`);
       return res.status(201).json({etat: 'Success', message: `Admin has been successfuly created, we have sent an email to ${ email } to set a new password`});
     } catch (err) {
-      log4j.loggererror.error(`Error in adding profile: ${ err}`);
+      logger.error(`Error in adding profile: ${ err}`);
       return res.status(422).json({error: err.message});
     }
   });
@@ -832,7 +832,7 @@ validate(schemaCompany)], async (req, res, next) => {
       const myUser = await services.user.findByUsernameOrId(req.params.id);
       console.log('myUser', myUser);
       if (myUser == false) {
-        log4j.loggererror.error('User does not exist');
+        logger.error('User does not exist');
         return res.status(200).json({status: 'error', message: 'The user does not exist'});
       } else {
         const {origin} = req.headers;
@@ -859,7 +859,7 @@ validate(schemaCompany)], async (req, res, next) => {
         return res.status(200).json({etat: 'Success', message: `Admin has been successfuly created, we have sent an email to ${ myUser.email } to set a new password`});
       }
     } catch (err) {
-      log4j.loggererror.error(`Error resending mail: ${ err.message}`);
+      logger.error(`Error resending mail: ${ err.message}`);
       return res.status(400).json({etat: 'error', error: err.message});
     }
   });
@@ -883,7 +883,7 @@ validate(schemaCompany)], async (req, res, next) => {
       console.debug('confirmation', user, username);
       if (user == false) { // username does not exist
         console.debug('Username does not exist');
-        log4j.loggererror.error('Error Username does not exist: ');
+        logger.error('Error Username does not exist: ');
         return res.status(200).json({status: 'Error', error: 'Username does not exist', code: status_code.CODE_ERROR.NOT_EXIST});
       }
       const myUserJwt = await createJwt(username,'');
@@ -922,7 +922,7 @@ validate(schemaCompany)], async (req, res, next) => {
       console.debug('confirmation', user, req.query, token, username);
       if (user == false) { // username does not exist
         console.debug('wrong confirmation token');
-        log4j.loggererror.error('Error wrong confirmation token');
+        logger.error('Error wrong confirmation token');
         return res.status(200).json({error: 'wrong confirmation token'});
       }
       const myCredBasicA = await services.credential.getCredential(user.id, 'basic-auth');
@@ -935,22 +935,22 @@ validate(schemaCompany)], async (req, res, next) => {
         console.log('decoded', decoded);
         if (!decoded) {
           console.debug('wrong confirmation token');
-          log4j.loggererror.error('Error wrong confirmation token');
+          logger.error('Error wrong confirmation token');
           return res.status(403).json({status: 'Error', error: 'wrong confirmation token'});
         } else {
           if (user.username != decoded.username) {
             console.debug('wrong confirmation token');
-            log4j.loggererror.error('Error wrong confirmation token');
+            logger.error('Error wrong confirmation token');
             return res.status(403).json({status: 'Error', error: 'wrong confirmation token'});
           }
           if (password != password_confirmation) {
-            log4j.loggererror.error('Error password does not much ');
+            logger.error('Error password does not much ');
             return res.status(200).json({status: 'Error', error: 'password does not much'});
           }
         }
       } catch (error) {
         console.log('error', error.message);
-        log4j.loggererror.error(`Error ${ error.message}`);
+        logger.error(`Error ${ error.message}`);
         return res.status(400).json({status: 'Error', error: error.message});
       }
       let myCredBasic = await services.credential.removeCredential(user.id, 'basic-auth');
@@ -965,13 +965,13 @@ validate(schemaCompany)], async (req, res, next) => {
       console.log('myCredBasic', myCredBasic);
       const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password);
       if (!passBooleanTrue) {
-        log4j.loggererror.error('Error wrong confirmation token ');
+        logger.error('Error wrong confirmation token ');
         return res.status(200).json({error: 'wrong confirmation token'});
       }
       logger.info('Success.Votre mot de passe a été réinitialisé');
       return res.status(200).json({etat: 'Success', message: 'Votre mot de passe a été réinitialisé'});
     } catch (err) {
-      log4j.loggererror.error(`Error: ${ err.message}`);
+      logger.error(`Error: ${ err.message}`);
       return res.status(422).json({error: err.message});
     }
   });
@@ -994,14 +994,14 @@ validate(schemaCompany)], async (req, res, next) => {
       // console.debug('confirmation', user, req.query, token, username)
       if (user == false) { // username does not exist
         console.debug('wrong confirmation token');
-        log4j.loggererror.error('Error wrong confirmation token');
+        logger.error('Error wrong confirmation token');
         return res.status(200).json({status: 'Error', error: 'wrong confirmation token', code: status_code.CODE_ERROR.NOT_EXIST});
       }
       const myCredBasic = await services.credential.getCredential(user.id, 'basic-auth');
       console.log('myCredBasic', myCredBasic);
       const passBooleanTrue = await utils.compareSaltAndHashed(old_password, myCredBasic.password);
       if (!passBooleanTrue) {
-        log4j.loggererror.error('Error wrong password ');
+        logger.error('Error wrong password ');
         return res.status(200).json({status: 'Error', error: 'wrong password', code: status_code.CODE_ERROR.INCORRECT_PASSWORD});
       } else {
         let myCredBasic = await services.credential.removeCredential(user.id, 'basic-auth');
@@ -1018,7 +1018,7 @@ validate(schemaCompany)], async (req, res, next) => {
         return res.status(200).json({status: 'Success', message: 'Password has been successfully changed'});
       }
     } catch (err) {
-      log4j.loggererror.error(`Error: ${ err.message}`);
+      logger.error(`Error: ${ err.message}`);
       return res.status(422).json({error: err.message});
     }
   });
@@ -1176,10 +1176,10 @@ validate(schemaCompany)], async (req, res, next) => {
       });
     } catch (error) {
       if (!error.response) {
-        log4j.loggererror.error(error.message);
+        logger.error(error.message);
         return res.status(500).send({'error': error.message});
       }
-      log4j.loggererror.error('Error: ');
+      logger.error('Error: ');
       return res.status(error.response.status).send(error.response.data);
     }
   });
@@ -1360,10 +1360,10 @@ validate(schemaCompany)], async (req, res, next) => {
       });
     } catch (error) {
       if (!error.response) {
-        log4j.loggererror.error(error.message);
+        logger.error(error.message);
         return res.status(500).send({'error': error.message});
       }
-      log4j.loggererror.error('Error: ');
+      logger.error('Error: ');
       return res.status(error.response.status).send(error.response.data);
     }
   });
@@ -1427,10 +1427,10 @@ validate(schemaCompany)], async (req, res, next) => {
       return res.status(200).send(responseST_W);
     } catch (error) {
       if (!error.response) {
-        log4j.loggererror.error(error.message);
+        logger.error(error.message);
         return res.status(500).send({'error': error.message});
       }
-      log4j.loggererror.error('Error: ');
+      logger.error('Error: ');
       return res.status(error.response.status).send(error.response.data);
     }
   });
@@ -1484,7 +1484,7 @@ validate(schemaCompany)], async (req, res, next) => {
                 };
             return res.status(201).json({etat: 'Success', message: 'Successfully added' ,data: resp});
     } catch (err) {
-      log4j.loggererror.error(`Error: ${ err.message}`);
+      logger.error(`Error: ${ err.message}`);
       return res.status(422).json({error: err.message});
     }
   });

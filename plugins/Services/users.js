@@ -4,10 +4,11 @@ const services = require('express-gateway/lib/services/');
 const env = require('../../config/env.config');
 const util = require('../register/helpers/utils');
 const status_code = require('../register/config');
+const logger = require('../../config/Logger');
 
 exports.getProfileByEmail = async (email, res) => {
     try {
-        log4j.loggerinfo.info('Call getProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+        logger.info('Call getProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
 
         return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?email=${ email}`);
     } catch (error) {
@@ -16,12 +17,12 @@ exports.getProfileByEmail = async (email, res) => {
 
         if (!error.response) {
             if (error.message) {
-                log4j.loggererror.error(error.message);
+                logger.error(error.message);
                 util.setError(500, error.message, status_code.CODE_ERROR.EMPTY);
                 return util.send(res);
             }
         }
-        log4j.loggererror.error(`Error in getProfile :${ error.response.data}`);
+        logger.error(`Error in getProfile :${ error.response.data}`);
         util.setError(error.response.status, error.response.statusText.CODE_ERROR.EMPTY);
         return util.send(res);
     }
@@ -29,16 +30,16 @@ exports.getProfileByEmail = async (email, res) => {
 
 exports.getProfileByPhone = async (phone, res) => {
     try {
-        log4j.loggerinfo.info('Call getProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+        logger.info('Call getProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
 
         return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?phone=${ phone}`);
     } catch (error) {
         if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             util.setError(500, error.message, status_code.CODE_ERROR.EMPTY);
             return util.send(res);
         }
-        log4j.loggererror.error(`Error in getProfile :${ error.response.data}`);
+        logger.error(`Error in getProfile :${ error.response.data}`);
         util.setError(error.response.status, error.response.statusText, status_code.CODE_ERROR.EMPTY);
         return util.send(res);
     }
@@ -46,15 +47,15 @@ exports.getProfileByPhone = async (phone, res) => {
 
 exports.getTypeById = async (code, res) => {
     try {
-        log4j.loggerinfo.info(`${'Call getType: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/`}${ code}`);
+        logger.info(`${'Call getType: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/`}${ code}`);
 
         return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/${ code}`);
     } catch (error) {
         if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             return res.status(500).send({'error': error.message});
         }
-        log4j.loggererror.error(`Error in getType: ${ error.response.data}`);
+        logger.error(`Error in getType: ${ error.response.data}`);
 
         return res.status(error.response.status).send(error.response.data);
     }
@@ -62,16 +63,16 @@ exports.getTypeById = async (code, res) => {
 // ////////////////////////////////////////////////////////////////////////////////
 exports.getType = async (code, res) => {
     try {
-        log4j.loggerinfo.info(`${'Call getType: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`}${ code}`);
+        logger.info(`${'Call getType: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`}${ code}`);
 
         return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/${ code}`);
     } catch (error) {
         if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             util.setError(500, error.message, status_code.CODE_ERROR.EMPTY);
             return util.send(res);
         }
-        log4j.loggererror.error(`Error in getType: ${ error.response.data}`);
+        logger.error(`Error in getType: ${ error.response.data}`);
         util.setError(error.response.status, error.response.statusText, status_code.CODE_ERROR.EMPTY);
         return util.send(res);
 
@@ -81,7 +82,7 @@ exports.getType = async (code, res) => {
 // ////////////////////////////////////////////////////////////////////////////////
 exports.creteProfile = async (myUser, body, type, res) => {
     try {
-        log4j.loggerinfo.info('Call postProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+        logger.info('Call postProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
 
         return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
             id_user: myUser.id,
@@ -116,11 +117,11 @@ exports.creteProfile = async (myUser, body, type, res) => {
         });
     } catch (error) {
         if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             util.setError(500, error.message, status_code.CODE_ERROR.EMPTY);
             return util.send(res);
         }
-        log4j.loggererror.error(`Error in createProfile :${ error.response.data}`);
+        logger.error(`Error in createProfile :${ error.response.data}`);
 
         const deleted = services.user.remove(myUser.id);
         util.setError(error.response.status, error.response.data, status_code.CODE_ERROR.EMPTY);
@@ -130,7 +131,7 @@ exports.creteProfile = async (myUser, body, type, res) => {
 // ////////////////////////////////////////////////////////////////////////////////
 exports.getProfile = async (id, res) => {
     try {
-        log4j.loggerinfo.info(`${'Call getProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/`}${ id}`);
+        logger.info(`${'Call getProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/`}${ id}`);
 
         return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/by_userId/${ id}`);
     } catch (error) {
@@ -139,11 +140,11 @@ exports.getProfile = async (id, res) => {
         console.log('error.message',error.message);
 
         if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
             return util.send(res);
         }
-        log4j.loggererror.error(`Error in getting profile: ${ error.response.data}`);
+        logger.error(`Error in getting profile: ${ error.response.data}`);
         util.setError(error.response.status, error.response.data.message, error.response.data.code);
         return util.send(res);
     }
@@ -151,7 +152,7 @@ exports.getProfile = async (id, res) => {
 // /////////////////////////////////////////////////////////////////////////
 exports.getToken = async (username, password, client_id, client_secret, res) => {
     try {
-        log4j.loggerinfo.info('Call getToken');
+        logger.info('Call getToken');
         console.log('bodyyy client_secret',client_secret);
         console.log('bodyyy client_id',client_id);
 
@@ -164,11 +165,11 @@ exports.getToken = async (username, password, client_id, client_secret, res) => 
         });
     } catch (error) {
         if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
             return util.send(res);
         }
-        log4j.loggererror.error(`Error in getToken: ${ error.response.data}`);
+        logger.error(`Error in getToken: ${ error.response.data}`);
         util.setError(error.response.status, error.response.data, status_code.CODE_ERROR.SERVER);
         return util.send(res);
     }
@@ -177,15 +178,15 @@ exports.getToken = async (username, password, client_id, client_secret, res) => 
 
 exports.getProfileByUsername = async (myUser,res) => {
     try {
-        log4j.loggerinfo.info(`${'Call getProfileByUsername: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?username=`}${ myUser}`);
+        logger.info(`${'Call getProfileByUsername: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?username=`}${ myUser}`);
 
         return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?username=${ myUser}`);
     } catch (error) {
         if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             return res.status(500).send({'error': error.message});
         }
-        log4j.loggererror.error(`Error in getProfileByUsername :${ error.response.data}`);
+        logger.error(`Error in getProfileByUsername :${ error.response.data}`);
         return res.status(error.response.status).send(error.response.data);
     }
 };
@@ -194,7 +195,7 @@ exports.getProfileByUsername = async (myUser,res) => {
 
 exports.updateprofileConfirm = async (body, id,res) => {
     try {
-        log4j.loggerinfo.info('Call updateprofileConfirm in complete-profile ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+        logger.info('Call updateprofileConfirm in complete-profile ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
         console.log('bodyyyyyyyyy', body);
         body.updated_by = id;
         body.updatedBy = id;
@@ -203,10 +204,10 @@ exports.updateprofileConfirm = async (body, id,res) => {
         );
     } catch (error) {
         if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             return res.status(500).send({'error': error.message});
         }
-        log4j.loggererror.error('Error in updatinh profile: ');
+        logger.error('Error in updatinh profile: ');
 
         return res.status(error.response.status).send(error.response.data);
     }
@@ -216,7 +217,7 @@ exports.updateprofileConfirm = async (body, id,res) => {
 
 exports.createAdminProfile = async (agentUser, typeId, res) => {
     try {
-        log4j.loggerinfo.info('Call post Profile agent: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/agent`);
+        logger.info('Call post Profile agent: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/agent`);
 
         return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/agent`, {
             id_user: agentUser.id,
@@ -238,10 +239,10 @@ exports.createAdminProfile = async (agentUser, typeId, res) => {
         });
     } catch (error) {
         if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             return res.status(500).send({'error': error.message});
         }
-        log4j.loggererror.error('Error in adding profile: ');
+        logger.error('Error in adding profile: ');
         const deleted = services.user.remove(myUser.id);
 
         return res.status(error.response.status).send(error.response.data);
@@ -251,7 +252,7 @@ exports.createAdminProfile = async (agentUser, typeId, res) => {
 // /////////////////////////////////////
 exports.updateprofile = async (body, id,res) => {
     try {
-      log4j.loggerinfo.info('Call updateProfile in complete-profile ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
+      logger.info('Call updateProfile in complete-profile ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
       console.log('bodyyyyyyyyy', body);
       body.updated_by = id;
       body.updatedBy = id;
@@ -260,10 +261,10 @@ exports.updateprofile = async (body, id,res) => {
       );
     } catch (error) {
       if (!error.response) {
-        log4j.loggererror.error(error.message);
+        logger.error(error.message);
         return res.status(500).send({'error': error.message});
       }
-      log4j.loggererror.error('Error in adding profile: ');
+      logger.error('Error in adding profile: ');
 
       return res.status(error.response.status).send(error.response.data);
     }
@@ -271,7 +272,7 @@ exports.updateprofile = async (body, id,res) => {
 // //////////////////////////////////
 exports.updateprofileByAdmin = async (body,res) => { // with id user
     try {
-      log4j.loggerinfo.info('Call updateprofileByAdmin in complete-profile ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/company/`);
+      logger.info('Call updateprofileByAdmin in complete-profile ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/company/`);
       console.log('bodyyyyyyyyy', body);
       body.updated_by = req.params.id;
       body.updatedBy = req.params.id;
@@ -280,10 +281,10 @@ exports.updateprofileByAdmin = async (body,res) => { // with id user
       );
     } catch (error) {
       if (!error.response) {
-        log4j.loggererror.error(error.message);
+        logger.error(error.message);
         return res.status(500).send({'error': error.message});
       }
-      log4j.loggererror.error('Error in adding profile: ');
+      logger.error('Error in adding profile: ');
 
       return res.status(error.response.status).send(error.response.data);
     }
@@ -291,16 +292,16 @@ exports.updateprofileByAdmin = async (body,res) => { // with id user
 // //////////////////////////////////
 exports.getServiceByUser = async (id, res) => {
     try {
-        log4j.loggerinfo.info(`${'Call getService: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?userId`}${ id}`);
+        logger.info(`${'Call getService: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?userId`}${ id}`);
 
         return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?size=100&userId=${ id}`);
     } catch (error) {
         if (!error.response) {
-            log4j.loggererror.error(error.message);
+            logger.error(error.message);
             util.setError(500, error.message, status_code.CODE_ERROR.SERVER);
             return util.send(res);
         }
-        log4j.loggererror.error(`Error in getting Service: ${ error.response.data}`);
+        logger.error(`Error in getting Service: ${ error.response.data}`);
         util.setError(error.response.status, error.response.data.message, error.response.data.code);
         return util.send(res);
     }
@@ -308,17 +309,17 @@ exports.getServiceByUser = async (id, res) => {
 exports.updateDeleted = async (body, id,res) => {
 console.log('id',id);
     try {
-      log4j.loggerinfo.info('Call update ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted`);
+      logger.info('Call update ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted`);
       console.log('body', body);
       return await axios.patch(
         `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/updated_deleted/${id}`, body,
       );
     } catch (error) {
       if (!error.response) {
-        log4j.loggererror.error(error.message);
+        logger.error(error.message);
         return res.status(500).send({'error': error.message});
       }
-      log4j.loggererror.error('Error in updating: ');
+      logger.error('Error in updating: ');
 
       return res.status(error.response.status).send(error.response.data);
     }

@@ -13,21 +13,21 @@ const tokenService = services.token;
 const authService = services.auth;
 const log4j = require('../../config/configLog4js.js');
 const os = require('os');
-useragent = require('express-useragent');
+const useragent = require('express-useragent');
 const device = require('express-device');
 exports.addUser = async (body, password,scopes) => {
     // ///////////////////////////create user//////////////////////////////////////////////////////
     const user = await user_service.insert(body);
     console.log('user', user);
     // ///////////////////////////create basic-auth credential for authentication//////////////////
-    crd_basic = await services.credential.insertCredential(user.id, 'basic-auth', {
+    const crd_basic = await services.credential.insertCredential(user.id, 'basic-auth', {
       autoGeneratePassword: false,
       password: password,
       scopes: [],
     });
     console.log('crd_basic',crd_basic);
     // ///////////////////////////create basic-auth credential for authorization with scope////////
-    crd_oauth2 = await services.credential.insertCredential(user.id, 'oauth2', {scopes: scopes});
+    const crd_oauth2 = await services.credential.insertCredential(user.id, 'oauth2', {scopes: scopes});
     console.log('crd_oauth2',crd_oauth2);
     return user;
 };    
