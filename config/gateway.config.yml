@@ -1679,7 +1679,7 @@ pipelines:
                 checkCredentialExistence: false
       - rate-limit:
           - action:
-              max: 20
+              max: 1000
               windowMs: 120000
               rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
               statusCode: 400
@@ -1721,7 +1721,7 @@ pipelines:
                 checkCredentialExistence: false
       - rate-limit:
           - action:
-              max: 20
+              max: 1000
               windowMs: 120000
               rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
               statusCode: 400
@@ -1763,7 +1763,7 @@ pipelines:
                 checkCredentialExistence: false
       - rate-limit:
           - action:
-              max: 20
+              max: 1000
               windowMs: 120000
               rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
               statusCode: 400
@@ -1805,7 +1805,7 @@ pipelines:
                 checkCredentialExistence: false
       - rate-limit:
           - action:
-              max: 20
+              max: 1000
               windowMs: 120000
               rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
               statusCode: 400
@@ -1849,7 +1849,7 @@ pipelines:
                 checkCredentialExistence: false
       - rate-limit:
           - action:
-              max: 20
+              max: 1000
               windowMs: 120000
               rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
               statusCode: 400
@@ -1892,7 +1892,7 @@ pipelines:
                 checkCredentialExistence: false
       - rate-limit:
           - action:
-              max: 20
+              max: 1000
               windowMs: 120000
               rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
               statusCode: 400
@@ -2013,7 +2013,7 @@ pipelines:
                 checkCredentialExistence: false
       - rate-limit:
           - action:
-              max: 20
+              max: 1000
               windowMs: 120000
               rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
               statusCode: 400
@@ -2055,7 +2055,7 @@ pipelines:
                 checkCredentialExistence: false
       - rate-limit:
           - action:
-              max: 20
+              max: 1000
               windowMs: 120000
               rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
               statusCode: 400
@@ -2097,7 +2097,7 @@ pipelines:
                 checkCredentialExistence: false
       - rate-limit:
           - action:
-              max: 20
+              max: 1000
               windowMs: 120000
               rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
               statusCode: 400
