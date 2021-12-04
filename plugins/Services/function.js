@@ -1,20 +1,9 @@
 const services = require('express-gateway/lib/services/');
-const utils = require('express-gateway/lib/services/utils');
-const axios = require('axios');
-const mail = require('../../services/emails/emailProvider');
-const util = require('../register/helpers/utils');
 const jwt = require('jsonwebtoken');
 const env = require('../../config/env.config');
 const expiresIn = 3.6 * 1000 * 1000; // in ms //equals to 1 hour 
 const user_service = require('../../services/user/user.service');
 
-const config = require('express-gateway/lib/config/');
-const tokenService = services.token;
-const authService = services.auth;
-const log4j = require('../../config/configLog4js.js');
-const os = require('os');
-const useragent = require('express-useragent');
-const device = require('express-device');
 exports.addUser = async (body, password,scopes) => {
     // ///////////////////////////create user//////////////////////////////////////////////////////
     const user = await user_service.insert(body);

@@ -1,4 +1,3 @@
-const log4j = require('../../config/configLog4js.js');
 const axios = require('axios');
 const services = require('express-gateway/lib/services/');
 const env = require('../../config/env.config');

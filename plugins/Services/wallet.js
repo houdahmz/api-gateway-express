@@ -1,6 +1,4 @@
-const log4j = require('../../config/configLog4js.js');
 const axios = require('axios');
-const services = require('express-gateway/lib/services/');
 const env = require('../../config/env.config');
 const util = require('../register/helpers/utils');
 const status_code = require('../register/config');
@@ -9,7 +7,7 @@ const logger = require('../../config/Logger');
 exports.addWallet = async (body) => {
     try {
         logger.info('Call addWallet in wallet ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet`);
-        console.log('bodyyyyyyyyy', body);
+        console.log('body', body);
         // body.updated_by = id
         // body.updatedBy = id
         return await axios.post(
