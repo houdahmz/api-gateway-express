@@ -1,9 +1,7 @@
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const path = require('path');
 const services = require('express-gateway/lib/services/');
 const env = require('../config/env.config');
-const PUB_KEY = fs.readFileSync('./config/public.pem', 'utf8');
+const logger = require('../config/Logger');
 
 const validateUserPlugin = {
   schema: {$id: './../config/models/schema.js'},
@@ -29,8 +27,7 @@ const validateUserPlugin = {
             }
 
             const myCredOauth = await services.credential.getCredential(decoded.consumerId, 'oauth2');
-//            console.log("myCredOauth ", myCredOauth)
-console.log('*********************************');
+            console.log('*********************************');
             console.log('myCredOauth ', myCredOauth.scopes);
 
             let endpointScopes;
@@ -38,11 +35,10 @@ console.log('*********************************');
               endpointScopes = req.egContext.apiEndpoint.scopes;
             }
             console.log('endpointScopes', endpointScopes);
-console.log('************************************');
-console.log('req.egContext',req.egContext.apiEndpoint);
-// console.log("req.egContext",req.egContext.apiEndpoint.methods[0] == 'GET')
-// console.log("req.egContext check",req.egContext.apiEndpoint.methods.includes("GET"))
-
+            console.log('************************************');
+            console.log('req.egContext',req.egContext.apiEndpoint);
+            // console.log("req.egContext",req.egContext.apiEndpoint.methods[0] == 'GET')
+            // console.log("req.egContext check",req.egContext.apiEndpoint.methods.includes("GET"))
 
             try {
               if (myCredOauth.scopes) {
@@ -60,7 +56,7 @@ console.log('req.egContext',req.egContext.apiEndpoint);
                 }
                 if (boolean == 0) {
                   const errorObject = {message: 'Unauthorized Token'};
-                  console.log(errorObject);
+                  console.warn(errorObject);
                   res.status(403).send(errorObject);
                 }
               }
@@ -69,7 +65,7 @@ console.log('req.egContext',req.egContext.apiEndpoint);
             }
           } catch (error) {
             const errorObject = {message: 'Unauthorized Token', reason: error.name};
-            console.log(errorObject);
+            console.warn(errorObject);
             res.status(403).send(errorObject);
           }
         },

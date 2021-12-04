@@ -1677,18 +1677,6 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - rate-limit:
-          - action:
-              max: 1000
-              windowMs: 120000
-              rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
-              statusCode: 400
-              message: 'Too many requests, please try again later!'
-      - log:
-          - action:
-              message: >-
-                rate-limit===> ${req.headers.test} -hostname--${req.hostname}
-                -user.id${req.user.consumerId}
       - validate-user: null
       - middleware: null
       - request-transformer:
@@ -1719,18 +1707,6 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - rate-limit:
-          - action:
-              max: 1000
-              windowMs: 120000
-              rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
-              statusCode: 400
-              message: 'Too many requests, please try again later!'
-      - log:
-          - action:
-              message: >-
-                rate-limit===> ${req.headers.test} -hostname--${req.hostname}
-                -user.id${req.user.consumerId}
       - validate-user: null
       - middleware: null
       - request-transformer:
@@ -1761,18 +1737,6 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - rate-limit:
-          - action:
-              max: 1000
-              windowMs: 120000
-              rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
-              statusCode: 400
-              message: 'Too many requests, please try again later!'
-      - log:
-          - action:
-              message: >-
-                rate-limit===> ${req.headers.test} -hostname--${req.hostname}
-                -user.id${req.user.consumerId}
       - validate-user: null
       - middleware: null
       - request-transformer:
@@ -1803,18 +1767,6 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - rate-limit:
-          - action:
-              max: 1000
-              windowMs: 120000
-              rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
-              statusCode: 400
-              message: 'Too many requests, please try again later!'
-      - log:
-          - action:
-              message: >-
-                rate-limit===> ${req.headers.test} -hostname--${req.hostname}
-                -user.id${req.user.consumerId}
       - validate-user: null
       - middleware: null
       - request-transformer:
@@ -1847,18 +1799,6 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - rate-limit:
-          - action:
-              max: 1000
-              windowMs: 120000
-              rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
-              statusCode: 400
-              message: 'Too many requests, please try again later!'
-      - log:
-          - action:
-              message: >-
-                rate-limit===> ${req.headers.test} -hostname--${req.hostname}
-                -user.id${req.user.consumerId}
       - validate-user: null
       - request-transformer:
           action:
@@ -1890,18 +1830,6 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - rate-limit:
-          - action:
-              max: 1000
-              windowMs: 120000
-              rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
-              statusCode: 400
-              message: 'Too many requests, please try again later!'
-      - log:
-          - action:
-              message: >-
-                rate-limit===> ${req.headers.test} -hostname--${req.hostname}
-                -user.id${req.user.consumerId}
       - validate-user: null
       - request-transformer:
           action:
@@ -2011,18 +1939,6 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - rate-limit:
-          - action:
-              max: 1000
-              windowMs: 120000
-              rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
-              statusCode: 400
-              message: 'Too many requests, please try again later!'
-      - log:
-          - action:
-              message: >-
-                rate-limit===> ${req.headers.test} -hostname--${req.hostname}
-                -user.id${req.user.consumerId}
       - validate-user: null
       - middleware: null
       - request-transformer:
@@ -2053,18 +1969,6 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - rate-limit:
-          - action:
-              max: 1000
-              windowMs: 120000
-              rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
-              statusCode: 400
-              message: 'Too many requests, please try again later!'
-      - log:
-          - action:
-              message: >-
-                rate-limit===> ${req.headers.test} -hostname--${req.hostname}
-                -user.id${req.user.consumerId}
       - validate-user: null
       - middleware: null
       - request-transformer:
@@ -2095,18 +1999,6 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - rate-limit:
-          - action:
-              max: 1000
-              windowMs: 120000
-              rateLimitBy: '${req.user.consumerId} ${req.headers.test} ${req.hostname}'
-              statusCode: 400
-              message: 'Too many requests, please try again later!'
-      - log:
-          - action:
-              message: >-
-                rate-limit===> ${req.headers.test} -hostname--${req.hostname}
-                -user.id${req.user.consumerId}
       - validate-user: null
       - middleware: null
       - request-transformer:

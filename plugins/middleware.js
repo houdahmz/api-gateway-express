@@ -1,9 +1,8 @@
 const os = require('os');
-useragent = require('express-useragent');
+const useragent = require('express-useragent');
 const services = require('express-gateway/lib/services/');
 const {lookup} = require('geoip-lite');
 const iplocate = require('node-iplocate');
-const moment = require('moment');
 const ipF = require('ip');
 const {
 getProfile,
@@ -13,8 +12,6 @@ const {
 getCategoryFromWalletWithCode,
 } = require('./Services/wallet');
 
-const axios = require('axios');
-const env = require('../config/env.config');
 const publicIp = require('public-ip');
 const middlewarePlugin = {
   schema: {$id: './../config/models/schema.js'},
@@ -27,43 +24,23 @@ const middlewarePlugin = {
         async function(req, res, next) {
           console.log('in middleware gateway');
           try {
-            console.log('icii in middleware gateway',req.body);
+            console.log('in middleware gateway',req.body);
             const ip = (typeof req.headers['x-forwarded-for'] === 'string' &&
             req.headers['x-forwarded-for'].split(',').shift()) || 
          req.connection.remoteAddress || 
          req.socket.remoteAddress || 
          req.connection.socket.remoteAddress;
          console.log('ip',ip);
-        //  console.log("Date.now()",Date.now().toString())
          console.log('new Date()',new Date().toString());
 
 
          console.log('os.platform()',os.platform());
          console.log('os.release()',os.release());
          console.log('os.type()',os.type()); // "Windows_NT"
-        //  console.log("lookup",lookup("192.168.0.115")); // location of the user
-        //  console.log("iplocate",iplocate(ip)); // location of the user
-        //  console.log("iplocate",iplocate(ip).country); // location of the user
-        //  console.log(iplocate(ip)); // location of the user
-        // 192.168.0.115
-        //  iplocate("192.168.0.115").then(function(results) {
-        //     console.log("IP Address: " + results.ip);
-        //     console.log("Country: " + results.country + " (" + results.country_code + ")");
-        //     console.log("Continent: " + results.continent);
-        //     console.log("Organisation: " + results.org + " (" + results.asn + ")");
-           
-        //     console.log(JSON.stringify(results, null, 2));
-        //   });
-        // let addr = ipF.address()
         const publicIpAdd = await publicIp.v4();
-
-          // const results = await iplocate(publicIpAdd) 
-          // console.log("results",results)
-
 
          const source = req.headers['user-agent'];
          const ua = useragent.parse(source);
-        //  console.log("ua",ua)
          console.log('ua.source',ua.source);
 
          const {isMobile} = ua;
@@ -71,17 +48,13 @@ const middlewarePlugin = {
 
          console.log('lookup(ip)',lookup(ip));
          console.log('lookup(ip)',lookup(ip));
-        //  console.log("iplocate",iplocate(ip)); // location of the user
-        endpointScopes = req.egContext.apiEndpoint;
+        const endpointScopes = req.egContext.apiEndpoint;
         console.log('endpointScopes',endpointScopes);
-      console.log('*********************************');
-            // if(endpointScopes.methods == ['GET']){
-
-            // }
-console.log('req.egContext.apiEndpoint.methods check',req.egContext.apiEndpoint.methods.includes('GET'));
-    if (req.egContext.apiEndpoint.methods.includes('GET')) {
-      console.log('Methode GET');
-    }
+        console.log('*********************************');
+        console.log('req.egContext.apiEndpoint.methods check',req.egContext.apiEndpoint.methods.includes('GET'));
+            if (req.egContext.apiEndpoint.methods.includes('GET')) {
+              console.log('Methode GET');
+            }
             let data;
             const {body} = req;
 
@@ -97,11 +70,6 @@ console.log('req.egContext.apiEndpoint.methods check',req.egContext.apiEndpoint.
                         ip: publicIpAdd ,
                         os: os.platform(),
                         source: ua.source,
-                        // country:results.country,
-                        // city:results.city,
-                        // latitude:results.latitude,
-                        // longitude:results.longitude,
-                        // geoip: lookup(ip),
                         last_login: new Date().toString(),
                     
                     });
@@ -112,7 +80,6 @@ console.log('req.egContext.apiEndpoint.methods check',req.egContext.apiEndpoint.
                     const user = await services.user.findByUsernameOrId(data.consumerId);
                     console.log('user', user);
 
-                // console.log("body before",body)
                 body.created_by = data.consumerId;
                 body.deleted_by = data.consumerId;
                 body.updated_by = data.consumerId;
@@ -126,9 +93,7 @@ console.log('req.egContext.apiEndpoint.methods check',req.egContext.apiEndpoint.
 
 
                 console.log('body after ',body);
-/** *******************************************Call profile */
-
-      /** ************************** */
+      /** *******************************************Call profile */
 
       try {
         data = await getProfile(data.consumerId);
@@ -142,40 +107,40 @@ console.log('req.egContext.apiEndpoint.methods check',req.egContext.apiEndpoint.
 
         return res.status(error.response.status).send(error.response.data);
       }
-/** *********************************************************************************************/
-let dataCategory;
+      /** *********************************************************************************************/
+      let dataCategory;
 
-if (data.data) {
-  if (data.data.data) {
-console.log('data.data.data',data.data.data);
-body.CompanyId = data.data.data.CompanyId;
-body.company_id = data.data.data.CompanyId;
+      if (data.data) {
+        if (data.data.data) {
+      console.log('data.data.data',data.data.data);
+      body.CompanyId = data.data.data.CompanyId;
+      body.company_id = data.data.data.CompanyId;
 
-if (data.data.data.Company) {
-  if (data.data.data.Company.Category) {
-    console.log('data.data.data.Company',data.data.data.Company);
-    
-      console.log('data.data.data.Category',data.data.data.Company.Category);
-      if (data.data.data.Company.Category) {
-        const {code} = data.data.data.Company.Category;
-        console.log('cooooode ',code);
-        try {
-          dataCategory = await getCategoryFromWalletWithCode(code);
-        } catch (error) {
-          console.log('error', error); // // tkt
-          if (!error.response) {
-            // log4j.loggererror.error(error.message)
-            return res.status(500).send({'Error getCategory in Gateway': error.message});
-          }
-          // log4j.loggererror.error("Error in getting profile: "+error.response.data)
-      
-          return res.status(error.response.status).send(error.response.data);
-        }
+      if (data.data.data.Company) {
+        if (data.data.data.Company.Category) {
+          console.log('data.data.data.Company',data.data.data.Company);
+          
+            console.log('data.data.data.Category',data.data.data.Company.Category);
+            if (data.data.data.Company.Category) {
+              const {code} = data.data.data.Company.Category;
+              console.log('cooooode ',code);
+              try {
+                dataCategory = await getCategoryFromWalletWithCode(code);
+              } catch (error) {
+                console.log('error', error); // // tkt
+                if (!error.response) {
+                  // log4j.loggererror.error(error.message)
+                  return res.status(500).send({'Error getCategory in Gateway': error.message});
+                }
+                // log4j.loggererror.error("Error in getting profile: "+error.response.data)
+            
+                return res.status(error.response.status).send(error.response.data);
+              }
+            }
+              }
       }
         }
-}
-  }
-}
+      }
       /** ************************************************************************************ */
       if (dataCategory) {
       console.log('dataCategory.data',dataCategory.data);
@@ -189,10 +154,10 @@ if (data.data.data.Company) {
           body.category_id = null;
           body.categoryId = null;
         }
-} else {
-  body.categoryId = null;
-  body.category_id = null;
-}
+        } else {
+          body.categoryId = null;
+          body.category_id = null;
+        }
 
       /** ************************************************************************************ */
                 }
