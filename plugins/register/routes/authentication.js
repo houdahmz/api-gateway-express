@@ -33,7 +33,15 @@ const corsOptions = {
 
 const swaggerUi = require('swagger-ui-express');
      const swaggerDocument = require('../../../doc/swagger.json');
-
+     const rateLimit = require('express-rate-limit');
+     const apiLimiter = rateLimit({
+      windowMs: 2 * 60 * 1000, // 2 minutes
+      max: 2, // limite chaque adresse IP à 100 requêtes par windowMs
+      message: {
+        status: 'Error',
+        error: 'Tentatives de connexion trop nombreuse, veuillez réessayer dans 2 min'},
+      headers: true,
+      });
 module.exports = function(gatewayExpressApp) {
   // gatewayExpressApp.use(bodyParser.json())
   gatewayExpressApp.use(bodyParser.json({limit: '50mb', extended: true}));
@@ -42,7 +50,7 @@ module.exports = function(gatewayExpressApp) {
   gatewayExpressApp.use(cors(corsOptions));
   gatewayExpressApp.use(device.capture());
 
-  gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
+  gatewayExpressApp.post('/api/login',apiLimiter, async (req, res, next) => { // code=20 for agent created by admin
     console.log('*********************************', req.body);
     console.log('/api/login');
     const {username, password} = req.body;
