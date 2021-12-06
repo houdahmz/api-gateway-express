@@ -27,7 +27,7 @@ apiEndpoints:
       scopes:
         - admin
         - super_admin
-     - host: '*'
+    - host: '*'
       paths: /topup/organisme*
       methods:
         - POST
