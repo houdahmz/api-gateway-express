@@ -120,6 +120,7 @@ validate(schemaCompany)], async (req, res, next) => {
         return util.send(res);
       }
       // /////////////////////////////create profile/////////////////////////////////////////////////////
+      if (!fromWeb) fromWeb = false;
       const body = {
         fromWeb: fromWeb,
 
