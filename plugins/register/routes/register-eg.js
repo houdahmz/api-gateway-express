@@ -53,7 +53,7 @@ validate(profileSchema),
 validate(schemaCompany)], async (req, res, next) => { 
     try {
       const {firstname, username, lastname, email, phone} = req.body;
-      const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, updated_by, id_commercial} = req.body;
+      const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, fromWeb, id_commercial} = req.body;
 
       // ///////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
       if (!email) {
@@ -120,7 +120,10 @@ validate(schemaCompany)], async (req, res, next) => {
         return util.send(res);
       }
       // /////////////////////////////create profile/////////////////////////////////////////////////////
+      if (!fromWeb) fromWeb = false;
       const body = {
+        fromWeb: fromWeb,
+
         image: image,
         patent: patent,
         photo: photo,
@@ -415,7 +418,7 @@ validate(schemaCompany)], async (req, res, next) => {
         username: username,
         email: email,
         phone: phone,
-        role: `ROLE_${ code.toUpperCase()}`,
+        role: `${code.toUpperCase()}`,
         team: true,
 
         redirectUri: `${env.baseURL}`,
