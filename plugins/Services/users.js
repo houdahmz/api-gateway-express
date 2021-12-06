@@ -107,7 +107,7 @@ exports.creteProfile = async (myUser, body, type, res) => {
             confirmMail: false,
             team: false,
             demand: '1',
-
+            fromWeb: body.fromWeb,
             profilCompleted: true,
             username: myUser.username,
             email: myUser.email,
