@@ -28,6 +28,28 @@ apiEndpoints:
         - admin
         - super_admin
     - host: '*'
+      paths: /topup/organisme*
+      methods:
+        - POST
+        - PATCH
+        - GET
+        - PUT
+        - DELETE
+      scopes:
+        - admin
+        - super_admin
+    - host: '*'
+      paths: /topup/card*
+      methods:
+        - POST
+        - PATCH
+        - GET
+        - PUT
+        - DELETE
+      scopes:
+        - admin
+        - super_admin
+    - host: '*'
       paths: /topup/serialeport*
       methods:
         - POST
@@ -37,6 +59,26 @@ apiEndpoints:
       scopes:
         - admin
         - super_admin
+    - host: '*'
+      paths: /topup/bill-payment
+      methods:
+        - GET
+        - POST
+      scopes:
+        - user
+    - host: '*'
+      paths: /topup/consultation-invoice
+      methods:
+        - POST
+      scopes:
+        - user
+    - host: '*'
+      paths: /topup
+      methods:
+        - GET
+        - POST
+      scopes:
+        - user
   profile:
     - host: '*'
       paths: /admin/company*
