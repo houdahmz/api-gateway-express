@@ -3,8 +3,8 @@ const yup = require('yup');
 
 const schema = yup.object({
   body: yup.object({
-    firstname: yup.string().required('firstname is a required field').matches(/^[a-z]*$/,'firstname should be only letters'),
-    lastname: yup.string().required('lastname is a required field').matches(/^[a-z]*$/,'lastname should be only letters'),
+    firstname: yup.string().required('firstname is a required field').matches(/^[a-zA-Z]*$/,'firstname should be only letters'),
+    lastname: yup.string().required('lastname is a required field').matches(/^[a-zA-Z]*$/,'lastname should be only letters'),
     username: yup.string().required('username should not be empty').required('username is a required field'),
     email: yup.string().required('Email should not be empty').email('Email should be valid').min(9,'Email must have atleast 9 char').max(40,'Less than 40 char'),
     phone: yup.string().required('Phone number should not empty').min(8,'phone number should be 8 digit').max(8,'phone number should be 8 digit').matches(/^[0-9]*$/,'phone should be digit'),
@@ -13,8 +13,8 @@ const schema = yup.object({
 });
 const teamSchema = yup.object({
   body: yup.object({
-    firstname: yup.string().required('firstname is a required field').matches(/^[a-z]*$/,'firstname should be only letters'),
-    lastname: yup.string().required('lastname is a required field').matches(/^[a-z]*$/,'lastname should be only letters'),
+    firstname: yup.string().required('firstname is a required field').matches(/^[a-zA-Z]*$/,'firstname should be only letters'),
+    lastname: yup.string().required('lastname is a required field').matches(/^[a-zA-Z]*$/,'lastname should be only letters'),
     username: yup.string().required('username should not be empty').required('username is a required field'),
     email: yup.string().required('Email should not be empty').email('Email should be valid').min(9,'Email must have atleast 9 char').max(40,'Less than 40 char'),
     phone: yup.string().required('Phone number should not empty').min(8,'phone number should be 8 digit').max(8,'phone number should be 8 digit').matches(/^[0-9]*$/,'phone should be digit'),
@@ -24,8 +24,8 @@ const teamSchema = yup.object({
 });
 const adminSchema = yup.object({
   body: yup.object({
-    firstname: yup.string().required('firstname is a required field').matches(/^[a-z]*$/,'firstname should be only letters'),
-    lastname: yup.string().required('lastname is a required field').matches(/^[a-z]*$/,'lastname should be only letters'),
+    firstname: yup.string().required('firstname is a required field').matches(/^[a-zA-Z]*$/,'firstname should be only letters'),
+    lastname: yup.string().required('lastname is a required field').matches(/^[a-zA-Z]*$/,'lastname should be only letters'),
     username: yup.string().required('username should not be empty').required('username is a required field'),
     email: yup.string().required('Email should not be empty').email('Email should be valid').min(9,'Email must have atleast 9 char').max(40,'Less than 40 char'),
     phone: yup.string().required('Phone number should not empty').min(8,'phone number should be 8 digit').max(8,'phone number should be 8 digit').matches(/^[0-9]*$/,'phone should be digit'),
