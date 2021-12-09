@@ -44,7 +44,7 @@ const options = {
   console: {
     level: 'info',
     handleExceptions: true,
-    json: false,
+    json: true,
     colorize: true,
   },
   console_error: {
