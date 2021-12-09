@@ -122,9 +122,11 @@ validate(schemaCompany)], async (req, res, next) => {
       }
       // /////////////////////////////create profile/////////////////////////////////////////////////////
       if (!fromWeb) fromWeb = false;
-      console.log('fromWeb ici ',fromWeb);
+      const {origin} = req.headers;
       console.log('req.headers.origin ', req.headers.origin);
-      
+      if (origin == env.URL) fromWeb = true;
+      console.log('fromWeb ici ',fromWeb);
+
       const body = {
         fromWeb: fromWeb,
 
@@ -159,8 +161,6 @@ validate(schemaCompany)], async (req, res, next) => {
         redirectUri: `${env.baseURL}:5000/api/profile`,
       }, myUser.id);
       // ///////////////////////////Send mails/////////////////////////////////////////////////////
-      const {origin} = req.headers;
-      console.log('req.headers.origin ', req.headers.origin);
       let url;
       if (origin) {
         url = origin;
