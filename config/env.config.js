@@ -9,6 +9,8 @@ const {ALGORITHM} = process.env;
 const {JWT_SUBJECT} = process.env;
 const {JWT_TIME} = process.env;
 const {baseURL} = process.env;
+const {URL} = process.env;
+
 
 const {USERADMIN} = process.env;
 const {PASSWORD} = process.env;
@@ -23,7 +25,7 @@ module.exports = {
     JWT_SUBJECT: JWT_SUBJECT,
     JWT_TIME: JWT_TIME,
     ALGORITHM: ALGORITHM,
-
+    URL: URL,
     USERADMIN: USERADMIN,
     PASSWORD: PASSWORD,
     EMAIL: EMAIL,
