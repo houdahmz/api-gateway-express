@@ -55,6 +55,7 @@ validate(schemaCompany)], async (req, res, next) => {
       const {firstname, username, lastname, email, phone} = req.body;
       const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, id_commercial} = req.body;
       let {fromWeb} = req.body;
+      console.log('fromWeb')
       // ///////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
       if (!email) {
         util.setError(200, 'email is required', status_code.CODE_ERROR.EMPTY);
