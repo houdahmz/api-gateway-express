@@ -38,7 +38,7 @@ s.get = function(userId, options) {
         return false;
       }
 
-      user.isActive = user.isActive === 'true';
+      // user.isActive = user.isActive === 'true';
       if (!options || !options.includePassword) {
         delete user.password;
       }
@@ -122,7 +122,26 @@ s.findPhone = function(phone, options) {
       return userId ? this.get(userId, options) : false;
     });
 };
-
+// s.findUsrname = function(phone, options) {
+//   if (!phone || !typeof phone === 'string') {
+//     return Promise.reject(new Error('invalid phone')); // TODO: replace with validation error
+//   }
+//   return userDao
+//     .findUsrname(phone)
+//     .then((userId) => {
+//       return userId ? this.get(userId, options) : false;
+//     });
+// };
+// s.findByUsrname = function(value) {
+//   return s
+//   .findPhone(value)
+//   .then((user) => {
+//     if (user) {
+//       return user;
+//     }
+//     return s.get(value);
+//   });
+// };
 s.findByPhone = function(value) {
     return s
     .findPhone(value)
