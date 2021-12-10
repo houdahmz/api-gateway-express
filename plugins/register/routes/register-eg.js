@@ -103,7 +103,7 @@ validate(schemaCompany)], async (req, res, next) => {
           username: username,
           email: email,
           phone: phone,
-          role: 'ROLE_USER',
+          role: 'user',
           team: false,
           demand: '1',
   
@@ -241,7 +241,7 @@ validate(schemaCompany)], async (req, res, next) => {
               username: username,
               email: email,
               phone: phone,
-              role: 'ROLE_USER',
+              role: 'user',
               team: false,
               demand: '1',
       
@@ -514,6 +514,9 @@ validate(schemaCompany)], async (req, res, next) => {
     try {
       const {firstname, username, lastname, email, phone, type_userId, role} = req.body;
       // ///////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
+      if (!username) {
+        return res.status(400).json({status: 'Error', error: 'username is required', code: status_code.CODE_ERROR.REQUIRED});
+      }
       if (!email) {
         return res.status(400).json({status: 'Error', error: 'email is required', code: status_code.CODE_ERROR.REQUIRED});
       }
@@ -534,6 +537,11 @@ validate(schemaCompany)], async (req, res, next) => {
       console.log('scope_exist',scope_exist);
       if (!scope_exist) {
         return res.status(400).json({status: 'Error', error: 'role does not exist', code: status_code.CODE_ERROR.NOT_EXIST});
+      }
+      const findByUsername = await services.user.findByUsernameOrId(username);
+      console.log('findByUsername---------------',findByUsername);
+      if (findByUsername) {
+        return res.status(200).json({status: 'Error', error: 'username already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
       }
       const findByEmail = await user_service.findByEmail(email);
       console.log('findByEmail---------------',findByEmail);
@@ -574,7 +582,7 @@ validate(schemaCompany)], async (req, res, next) => {
         username: username,
         email: email,
         phone: phone,
-        role: `${code.toUpperCase()}`,
+        role: code,
         team: true,
 
         redirectUri: `${env.baseURL}`,
@@ -608,7 +616,7 @@ validate(schemaCompany)], async (req, res, next) => {
             profilCompleted: true,
             username: username,
             email: email,
-            role: code.toUpperCase(),
+            role: code,
 
           });
           logger.info('Call postProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
@@ -626,7 +634,7 @@ validate(schemaCompany)], async (req, res, next) => {
             profilCompleted: true,
             username: username,
             email: email,
-            role: code.toUpperCase(),
+            role: code,
           });
         } catch (error) {
           console.log('error',error);
@@ -930,7 +938,7 @@ validate(schemaCompany)], async (req, res, next) => {
         email: email,
         phone: phone,
         team: true,
-        role: 'ROLE_ADMIN',
+        role: 'admin',
         confirmMail: false,
         profilCompleted: true,
 
