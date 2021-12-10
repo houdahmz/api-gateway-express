@@ -50,7 +50,7 @@ module.exports = function(gatewayExpressApp) {
   gatewayExpressApp.use(cors(corsOptions));
   gatewayExpressApp.use(device.capture());
 
-  gatewayExpressApp.post('/api/login',apiLimiter, async (req, res, next) => { // code=20 for agent created by admin
+  gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
     console.log('*********************************', req.body);
     console.log('/api/login');
     const {username, password} = req.body;

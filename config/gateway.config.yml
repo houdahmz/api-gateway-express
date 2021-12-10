@@ -481,6 +481,13 @@ apiEndpoints:
         - admin
         - super_admin
     - host: '*'
+      paths: '/voucher/stock/document'
+      methods:
+        - GET
+      scopes:
+        - admin
+        - super_admin
+    - host: '*'
       paths: /voucher
       methods:
         - GET

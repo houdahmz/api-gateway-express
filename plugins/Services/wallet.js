@@ -53,7 +53,7 @@ exports.getCategoryFromWalletWithCode = async (code, res) => {
     try {
         logger.info('Call getcategory: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category/`);
 
-        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category?name=${ code}`);
+        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/category?code=${ code}`);
     } catch (error) {
         if (!error.response) {
             logger.error(error.message);

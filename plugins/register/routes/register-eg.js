@@ -53,8 +53,9 @@ validate(profileSchema),
 validate(schemaCompany)], async (req, res, next) => { 
     try {
       const {firstname, username, lastname, email, phone} = req.body;
-      const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, updated_by, id_commercial} = req.body;
-
+      const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, id_commercial} = req.body;
+      let {fromWeb} = req.body;
+      console.log('fromWeb',fromWeb);
       // ///////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
       if (!email) {
         util.setError(200, 'email is required', status_code.CODE_ERROR.EMPTY);
@@ -120,7 +121,15 @@ validate(schemaCompany)], async (req, res, next) => {
         return util.send(res);
       }
       // /////////////////////////////create profile/////////////////////////////////////////////////////
+      if (!fromWeb) fromWeb = false;
+      const {origin} = req.headers;
+      console.log('req.headers.origin ', req.headers.origin);
+      if (origin == env.URL) fromWeb = true;
+      console.log('fromWeb ici ',fromWeb);
+
       const body = {
+        fromWeb: fromWeb,
+
         image: image,
         patent: patent,
         photo: photo,
@@ -152,8 +161,6 @@ validate(schemaCompany)], async (req, res, next) => {
         redirectUri: `${env.baseURL}:5000/api/profile`,
       }, myUser.id);
       // ///////////////////////////Send mails/////////////////////////////////////////////////////
-      const {origin} = req.headers;
-      console.log('req.headers.origin ', req.headers.origin);
       let url;
       if (origin) {
         url = origin;
@@ -415,7 +422,7 @@ validate(schemaCompany)], async (req, res, next) => {
         username: username,
         email: email,
         phone: phone,
-        role: `ROLE_${ code.toUpperCase()}`,
+        role: `${code.toUpperCase()}`,
         team: true,
 
         redirectUri: `${env.baseURL}`,
@@ -663,14 +670,14 @@ validate(schemaCompany)], async (req, res, next) => {
       logger.error('User does not exist');
       return res.status(200).json({status: 'error', message: 'The user does not exist'});
     } else {
-      if (code == 1 && myUser.demand == '2') { // refuse demand
-        logger.error('user already refused');
-        return res.status(200).json({status: 'error', message: 'user already refused', code: status_code.CODE_ERROR.ALREADY_REFUSED});
-      }
-      if (code == 0 && myUser.demand == '3') {
-        logger.error('user already accepted'); // demand is already accepted
-        return res.status(200).json({status: 'error', message: 'user already accepted', code: status_code.CODE_ERROR.ALREADY_ACCEPTED});
-      }
+      // if (code == 1 && myUser.demand == '2') { // refuse demand
+      //   logger.error('user already refused');
+      //   return res.status(200).json({status: 'error', message: 'user already refused', code: status_code.CODE_ERROR.ALREADY_REFUSED});
+      // }
+      // if (code == 0 && myUser.demand == '3') {
+      //   logger.error('user already accepted'); // demand is already accepted
+      //   return res.status(200).json({status: 'error', message: 'user already accepted', code: status_code.CODE_ERROR.ALREADY_ACCEPTED});
+      // }
       // ////////////////////////////Get profile///////////////////////////////////
       const getProfiled = await getProfile(myUser.id, res);
       console.log('getProfile', getProfiled.data);

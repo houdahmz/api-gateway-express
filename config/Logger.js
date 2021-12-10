@@ -44,7 +44,7 @@ const options = {
   console: {
     level: 'info',
     handleExceptions: true,
-    json: false,
+    json: true,
     colorize: true,
   },
   console_error: {
@@ -66,8 +66,9 @@ if (process.env.loglevel && process.env.NODE_ENV === 'development') {
     levels: winston.config.npm.levels,
     format: winston.format.combine(
       format.timestamp({format: 'MMM-DD-YYYY HH:mm:ss'}),
-      format.align(),
-      format.printf((info) => `${info.level}: ${[info.timestamp]}: ${info.message}\n Stack: ${info.stack}`),
+      format.colorize(),
+      format.json(),
+      format.printf((info) => `${info.timestamp} [${info.level}] : ${JSON.stringify(info.message)}`),
     ),
     transports: [
       new winston.transports.File(options.file),
@@ -85,14 +86,16 @@ if (process.env.loglevel && process.env.NODE_ENV === 'development') {
     levels: winston.config.npm.levels,
     format: winston.format.combine(
       format.timestamp({format: 'MMM-DD-YYYY HH:mm:ss'}),
-      format.align(),
-      format.printf((info) => `${info.level}: ${[info.timestamp]}: ${info.message}\n Stack: ${info.stack}`),
+      format.colorize(),
+      format.json(),
+      format.printf((info) => `${info.timestamp} [${info.level}] : ${JSON.stringify(info.message)}`),
     ),
     transports: [
       new winston.transports.File(options.file),
       new winston.transports.File(options.file_error),
       new winston.transports.Console(options.console_error),
       new winston.transports.Console(options.only_console),
+      new winston.transports.Console(options.console),
 
     ],
     exitOnError: false,

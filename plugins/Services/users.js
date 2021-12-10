@@ -82,7 +82,8 @@ exports.getType = async (code, res) => {
 exports.creteProfile = async (myUser, body, type, res) => {
     try {
         logger.info('Call postProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
-
+        logger.info(body.canals);
+        console.log('body.canals',body.canals);
         return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
             id_user: myUser.id,
             first_name: myUser.firstname,
@@ -107,7 +108,7 @@ exports.creteProfile = async (myUser, body, type, res) => {
             confirmMail: false,
             team: false,
             demand: '1',
-
+            fromWeb: body.fromWeb,
             profilCompleted: true,
             username: myUser.username,
             email: myUser.email,
