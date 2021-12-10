@@ -79,7 +79,7 @@ validate(schemaCompany)], async (req, res, next) => {
       }
 
       const findByPhone = await user_service.findByPhone(phone);
-      console.log('findByEmail---------------',findByEmail);
+      console.log('findByEmail---------------',findByPhone);
       if (findByPhone) {
         return res.status(200).json({status: 'Error', error: 'Phone already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
       }
