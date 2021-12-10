@@ -62,10 +62,17 @@ apiEndpoints:
     - host: '*'
       paths: /topup/bill-payment
       methods:
-        - GET
         - POST
       scopes:
         - user
+    - host: '*'
+      paths: /topup/bill-payment
+      methods:
+        - GET
+      scopes:
+        - user
+        - admin
+        - super_admin
     - host: '*'
       paths: /topup/consultation-invoice
       methods:
@@ -75,10 +82,17 @@ apiEndpoints:
     - host: '*'
       paths: /topup
       methods:
-        - GET
         - POST
       scopes:
         - user
+    - host: '*'
+      paths: /topup
+      methods:
+        - GET
+      scopes:
+        - user
+        - admin
+        - super_admin
   profile:
     - host: '*'
       paths: /admin/company*
