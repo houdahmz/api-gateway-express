@@ -271,7 +271,10 @@ validate(schemaCompany)], async (req, res, next) => {
           if (origin == env.URL) fromWeb = true;
           fromWeb = false;
           console.log('fromWeb ici ',fromWeb);
-          const id_commercial = req.body.created_by;
+          const getProfileCommercial = await getProfile(req.body.created_by, res);
+
+
+          const id_commercial = getProfileCommercial.data.data.id;
           console.log('id_commercial ici ',id_commercial);
           console.log('req.body ici ',req.body);
 
