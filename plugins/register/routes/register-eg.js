@@ -58,8 +58,8 @@ validate(schemaCompany)], async (req, res, next) => {
       console.log('fromWeb',fromWeb);
       const findByUsername = await services.user.findByUsernameOrId(username);
       console.log('findByUsername---------------',findByUsername);
-      if (findByPhone) {
-        return res.status(200).json({status: 'Error', error: 'Phone already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
+      if (findByUsername) {
+        return res.status(200).json({status: 'Error', error: 'username already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
       }
 
       // ///////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
