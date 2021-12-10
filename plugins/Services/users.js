@@ -106,6 +106,8 @@ exports.creteProfile = async (myUser, body, type, res) => {
 
             location_x: body.location_x,
             location_y: body.location_y,
+            imei: body.imei,
+
 
             isActive: false,
             confirmMail: false,
