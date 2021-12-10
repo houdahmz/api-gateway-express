@@ -269,8 +269,13 @@ validate(schemaCompany)], async (req, res, next) => {
           const {origin} = req.headers;
           console.log('req.headers.origin ', req.headers.origin);
           if (origin == env.URL) fromWeb = true;
+          fromWeb = false;
           console.log('fromWeb ici ',fromWeb);
           const id_commercial = req.body.created_by;
+          console.log('id_commercial ici ',id_commercial);
+          console.log('req.body ici ',req.body);
+
+
           const body = {
             fromWeb: fromWeb,
     
