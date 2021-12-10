@@ -31,7 +31,7 @@ const {
 } = require('../../Services/function');
 
 const {
-  verifyToken,verifyTokenSuperAdmin,verifyTokenSuperAdminOrAdmin,verifyTokenUser,
+  verifyToken,verifyTokenSuperAdmin,verifyTokenSuperAdminOrAdmin,verifyTokenUser,verifyTokenCommercial
 } = require('./middleware');
 
 // const bodyParser = require("body-parser");
@@ -185,6 +185,144 @@ validate(schemaCompany)], async (req, res, next) => {
       return util.send(res);
     }
   });
+
+  gatewayExpressApp.post('/pdv-by-commercial',verifyTokenCommercial, [validate(schema),
+    validate(profileSchema),
+    validate(schemaCompany)], async (req, res, next) => { 
+        try {
+          const {firstname, username, lastname, email, phone} = req.body;
+          const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals} = req.body;
+          let {fromWeb} = req.body;
+          console.log('fromWeb',fromWeb);
+          const findByUsername = await services.user.findByUsernameOrId(username);
+          console.log('findByUsername---------------',findByUsername);
+          if (findByUsername) {
+            return res.status(200).json({status: 'Error', error: 'username already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
+          }
+    
+          // ///////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
+          if (!email) {
+            util.setError(200, 'email is required', status_code.CODE_ERROR.EMPTY);
+            return util.send(res);
+          }
+          if (!phone) {
+            util.setError(200, 'phone is required', status_code.CODE_ERROR.EMPTY);
+            return util.send(res);
+          }
+          // /////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////////
+          const findByEmail = await user_service.findByEmail(email);
+          console.log('findByEmail---------------',findByEmail);
+          if (findByEmail) {
+            return res.status(200).json({status: 'Error', error: 'Email already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
+          }
+    
+          const findByPhone = await user_service.findByPhone(phone);
+          console.log('findByEmail---------------',findByPhone);
+          if (findByPhone) {
+            return res.status(200).json({status: 'Error', error: 'Phone already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
+          }
+          // ///////////////////////////generate random password/////////////////////////////////////////////////////
+          const randomPassword = Math.random().toString(36).slice(-8);
+          console.log('randomPassword', randomPassword);
+          console.log('randomPassword', env.JWT_TIME);
+          console.log('randomPassword', env.JWT_SUBJECT);
+          console.log('randomPassword', env.ALGORITHM);
+    
+          const myUserJwt = await createJwt(username,randomPassword);
+          console.log('myUserJwt aaaaa',myUserJwt);
+          console.log('myUserJwt', `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`);
+          // /////////////////////////////create user/////////////////////////////////////////////////////
+          const bodyUser = {
+              isActive: false,
+              confirmMail: false,
+              profilCompleted: true,
+              firstname: firstname,
+              lastname: lastname,
+              username: username,
+              email: email,
+              phone: phone,
+              role: 'ROLE_USER',
+              team: false,
+              demand: '1',
+      
+              redirectUri: `${env.baseURL}`,
+              confirm_token: '',
+            };
+            let myUser;
+            try {
+              myUser = await addUser(bodyUser,randomPassword,['user']);
+              console.log('myUser',myUser);
+            } catch (error) {
+              // console.log("error",error)
+            util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
+            return util.send(res);
+            }
+    
+          const dataType = await getType('10', res);
+          if (!dataType.data.data) {
+            logger.error('Error Problem in server ');
+            util.setError(500, 'Internal Server Error', status_code.CODE_ERROR.SERVER);
+            return util.send(res);
+          }
+          // /////////////////////////////create profile/////////////////////////////////////////////////////
+          if (!fromWeb) fromWeb = false;
+          const {origin} = req.headers;
+          console.log('req.headers.origin ', req.headers.origin);
+          if (origin == env.URL) fromWeb = true;
+          console.log('fromWeb ici ',fromWeb);
+          const id_commercial = req.body.created_by;
+          const body = {
+            fromWeb: fromWeb,
+    
+            image: image,
+            patent: patent,
+            photo: photo,
+            cin: cin,
+            pos: pos,
+            commercial_register: commercial_register,
+            city: city,
+            zip_code: zip_code,
+            adresse: adresse,
+            activity: activity,
+            canals: canals,
+            id_commercial: id_commercial,
+          };
+          const userProfile = await creteProfile(myUser, body, dataType, res);
+          if (!userProfile.data) {
+            logger.error('Error Problem in server ');
+            util.setError(500, 'Internal Server Error', status_code.CODE_ERROR.SERVER);
+            return util.send(res);
+          }
+          // console.log("aaaa", userProfile)
+          if (userProfile.data.status == 'error') {
+            logger.error(`Error in adding profile: ${ userProfile.data}`);
+            util.setError(400, userProfile.data);
+            return util.send(res);
+          }
+          // ///////////////////////////create application contains his login info(last_login/from which device/////////////////////////////////////////////////////
+          const myProfile = await services.application.insert({
+            name: `complete_profile${ myUser.id}`,
+            redirectUri: `${env.baseURL}:5000/api/profile`,
+          }, myUser.id);
+          // ///////////////////////////Send mails/////////////////////////////////////////////////////
+          let url;
+          if (origin) {
+            url = origin;
+          } else {
+            url = `${env.baseURL}:${env.HTTP_PORT}`;
+          }
+          const confirm_uri = `${url}/registration-confirm?username=${ username }&` + `confirm_token=${ myUserJwt}`;
+          mail.sendMail('Confirmation of your registration', 'Veuillez cliquer sur lien pour confirmer votre mail \n ', confirm_uri, req.body.email, username, firstname, lastname, randomPassword);
+          console.log('confirm_uri', confirm_uri);
+          
+          logger.info(`Success, mail has been sent to : ${ email}`);
+          return res.status(201).json({etat: 'Success', message: `Check your email : ${ email}`});
+        } catch (err) {
+          logger.error(`Error :${ err.message}`);
+          util.setError(422, err.message); // code
+          return util.send(res);
+        }
+      });
 
   gatewayExpressApp.post('/registration-confirm', async (req, res, next) => {
     try {
