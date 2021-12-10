@@ -670,14 +670,14 @@ validate(schemaCompany)], async (req, res, next) => {
       logger.error('User does not exist');
       return res.status(200).json({status: 'error', message: 'The user does not exist'});
     } else {
-      if (code == 1 && myUser.demand == '2') { // refuse demand
-        logger.error('user already refused');
-        return res.status(200).json({status: 'error', message: 'user already refused', code: status_code.CODE_ERROR.ALREADY_REFUSED});
-      }
-      if (code == 0 && myUser.demand == '3') {
-        logger.error('user already accepted'); // demand is already accepted
-        return res.status(200).json({status: 'error', message: 'user already accepted', code: status_code.CODE_ERROR.ALREADY_ACCEPTED});
-      }
+      // if (code == 1 && myUser.demand == '2') { // refuse demand
+      //   logger.error('user already refused');
+      //   return res.status(200).json({status: 'error', message: 'user already refused', code: status_code.CODE_ERROR.ALREADY_REFUSED});
+      // }
+      // if (code == 0 && myUser.demand == '3') {
+      //   logger.error('user already accepted'); // demand is already accepted
+      //   return res.status(200).json({status: 'error', message: 'user already accepted', code: status_code.CODE_ERROR.ALREADY_ACCEPTED});
+      // }
       // ////////////////////////////Get profile///////////////////////////////////
       const getProfiled = await getProfile(myUser.id, res);
       console.log('getProfile', getProfiled.data);
