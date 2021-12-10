@@ -53,7 +53,7 @@ validate(profileSchema),
 validate(schemaCompany)], async (req, res, next) => { 
     try {
       const {firstname, username, lastname, email, phone} = req.body;
-      const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, location_x, location_y, id_commercial} = req.body;
+      const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, location_x, location_y, imei, id_commercial} = req.body;
       let {fromWeb} = req.body;
       console.log('fromWeb',fromWeb);
       const findByUsername = await services.user.findByUsernameOrId(username);
@@ -151,6 +151,8 @@ validate(schemaCompany)], async (req, res, next) => {
 
         location_x: location_x,
         location_y: location_y,
+        imei: imei,
+
 
       };
       console.log('fromWebbody  ici ',body);
@@ -197,7 +199,7 @@ validate(schemaCompany)], async (req, res, next) => {
     validate(schemaCompany)], async (req, res, next) => { 
         try {
           const {firstname, username, lastname, email, phone} = req.body;
-          const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity,location_x,location_y, canals} = req.body;
+          const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity,location_x,location_y, imei, canals} = req.body;
           let {fromWeb} = req.body;
           console.log('fromWeb',fromWeb);
           const findByUsername = await services.user.findByUsernameOrId(username);
@@ -302,6 +304,7 @@ validate(schemaCompany)], async (req, res, next) => {
             id_commercial: id_commercial,
             location_x: location_x,
             location_y: location_y,
+            imei: imei,
     
           };
           const userProfile = await creteProfile(myUser, body, dataType, res);
