@@ -56,6 +56,12 @@ validate(schemaCompany)], async (req, res, next) => {
       const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, id_commercial} = req.body;
       let {fromWeb} = req.body;
       console.log('fromWeb',fromWeb);
+      const findByUsername = await services.user.findByUsernameOrId(username);
+      console.log('findByUsername---------------',findByUsername);
+      if (findByUsername) {
+        return res.status(200).json({status: 'Error', error: 'username already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
+      }
+
       // ///////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
       if (!email) {
         util.setError(200, 'email is required', status_code.CODE_ERROR.EMPTY);
