@@ -383,6 +383,20 @@ apiEndpoints:
         - admin
         - super_admin
     - host: '*'
+      paths: /voucher/transaction/export
+      methods:
+        - GET
+      scopes:
+        - admin
+        - super_admin
+    - host: '*'
+      paths: /voucher/stock/export
+      methods:
+        - GET
+      scopes:
+        - admin
+        - super_admin
+    - host: '*'
       paths: /voucher/transaction
       methods:
         - POST
@@ -539,6 +553,14 @@ apiEndpoints:
         - user
         - super_admin
     - host: '*'
+      paths: /topUpKh/transaction/export
+      methods:
+        - GET
+      scopes:
+        - admin
+        - super_admin
+        - user
+    - host: '*'
       paths: /topUpKh/transaction
       methods:
         - GET
@@ -592,6 +614,14 @@ apiEndpoints:
       scopes:
         - admin
         - super_admin
+    - host: '*'
+      paths: /topUpKh/operator/export
+      methods:
+        - GET
+      scopes:
+        - admin
+        - super_admin
+        - user
     - host: '*'
       paths: /topUpKh/operator
       methods:
@@ -1462,11 +1492,24 @@ apiEndpoints:
         - admin
         - super_admin
     - host: '*'
+      paths: /wallet/feed/by_user/export
+      methods:
+        - GET
+      scopes:
+        - user
+    - host: '*'
       paths: /wallet/feed/by_user
       methods:
         - GET
       scopes:
         - user
+    - host: '*'
+      paths: /wallet/feed/export
+      methods:
+        - GET
+      scopes:
+        - admin
+        - super_admin
     - host: '*'
       paths: /wallet/feed
       methods:
