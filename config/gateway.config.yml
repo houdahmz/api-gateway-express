@@ -60,6 +60,13 @@ apiEndpoints:
         - admin
         - super_admin
     - host: '*'
+      paths: /topup/stock*
+      methods:
+        - GET
+      scopes:
+        - admin
+        - super_admin
+    - host: '*'
       paths: /topup/bill-payment
       methods:
         - POST
