@@ -54,53 +54,6 @@ const {
   
           if (myCredOauth.scopes) {
             if (myCredOauth.scopes[0] == endpointScopes) {
-              /** ************************** */
-  
-              let data;
-              try {
-                data = await getProfile(req.body.userId, res);
-              } catch (error) {
-                console.log('error', error); // // tkt
-                if (!error.response) {
-                  logger.error(error.message);
-                  return res.status(500).send({'error': error.message});
-                }
-                logger.error(`Error in getting profile: ${ error.response.data}`);
-  
-                return res.status(error.response.status).send(error.response.data);
-              }
-              /** ******************************************************************************************** */
-              let dataWallet;
-  
-              if (data.data) {
-                if (data.data.data) {
-                  console.log('data.data.data', data.data.data); // CompanyId
-  
-                  try {
-                    dataWallet = await getWallet(data.data.data.CompanyId, res);
-                  } catch (error) {
-                    console.log('error', error); // // tkt
-                    if (!error.response) {
-                      logger.error(error.message);
-                      return res.status(500).send({'error': error.message});
-                    }
-                    logger.error(`Error in getting profile: ${ error.response.data}`);
-  
-                    return res.status(error.response.status).send(error.response.data);
-                  }
-                  console.log('dataWallet.data', dataWallet.data.data);
-  
-                  if (dataWallet.data.data.data) {
-                    body.walletId = dataWallet.data.data.data.items[0].id;
-                  } else {
-                    console.log('**************************************************');
-                    console.log('req.body', body);
-                    console.log('**************************************************');
-  
-                    body.walletId = null;
-                  }
-                }
-              }
               console.log('**************************************************');
               console.log('req.body', req.body);
               console.log('**************************************************');
