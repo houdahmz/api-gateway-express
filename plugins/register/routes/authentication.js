@@ -213,7 +213,7 @@ module.exports = function(gatewayExpressApp) {
         // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
         return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
       }
-      if (roles[0] == 'ROLE_SUPER_ADMIN' || roles[0] == 'ROLE_COMMERCIAL' || roles[0] == 'ROLE_SUPPORT' || roles[0] == 'ROLE_COMPTABLE' || roles[0] == 'ROLE_ADMIN') {
+      if (roles[0] == 'ROLE_SUPER_ADMIN') {
         // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
         return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
       }
