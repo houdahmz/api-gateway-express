@@ -50,7 +50,7 @@ const {
   
           console.log('myCredOauth', myCredOauth.scopes);
   
-          const endpointScopes = 'COMMERCIAL';
+          const endpointScopes = 'commercial';
   
           if (myCredOauth.scopes) {
             if (myCredOauth.scopes[0] == endpointScopes) {
