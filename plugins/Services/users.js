@@ -297,9 +297,9 @@ exports.updateprofileByAdmin = async (body,res) => { // with id user
 // //////////////////////////////////
 exports.getServiceByUser = async (id, res) => {
     try {
-        logger.info(`${'Call getService: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?userId`}${ id}`);
+        logger.info(`${'Call getService: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?userId=`}${id}`);
 
-        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?size=100&userId=${ id}`);
+        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?size=100&userId=${id}`);
     } catch (error) {
         if (!error.response) {
             logger.error(error.message);
