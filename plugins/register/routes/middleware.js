@@ -10,7 +10,72 @@ const {
   const {
     getWallet,
     } = require('../../Services/wallet');
-    
+  
+    exports.verifyTokenCommercial = async (req, res, next) => {
+      const {body} = req;
+  
+      // /////////
+      const bearerHeader = req.headers['authorization'];
+  
+      if (bearerHeader) {
+        try {
+          const token = (req.headers.authorization).replace('Bearer ', '');
+          let decoded;
+          try {
+            decoded = await jwt.verify(token, `${env.JWT_SECRET}`, {algorithms: ['HS256']});
+            console.log('decode', decoded.consumerId);
+  
+            body.userId = decoded.consumerId;
+            body.id_user = decoded.consumerId;
+  
+  
+            body.created_by = decoded.consumerId;
+            body.deleted_by = decoded.consumerId;
+            body.updated_by = decoded.consumerId;
+  
+            body.createdBy = decoded.consumerId;
+            body.deletedBy = decoded.consumerId;
+            body.updatedBy = decoded.consumerId;
+          } catch (error) {
+            console.log('error', error);
+            return res.status(403).send(error);
+          }
+          let myCredOauth;
+          try {
+            myCredOauth = await services.credential.getCredential(decoded.consumerId, 'oauth2');
+            console.log('myCredOauth', myCredOauth);
+          } catch (error) {
+            console.log('error', error);
+          }
+  
+          console.log('myCredOauth', myCredOauth.scopes);
+  
+          const endpointScopes = 'commercial';
+  
+          if (myCredOauth.scopes) {
+            if (myCredOauth.scopes[0] == endpointScopes) {
+              console.log('**************************************************');
+              console.log('req.body', req.body);
+              console.log('**************************************************');
+  
+              next();
+            } else {
+              const errorObject = {message: 'Unauthorized Token. cannot'};
+              console.log(errorObject);
+              return res.status(403).send(errorObject);
+            }
+          }
+        } catch (error) {
+          const errorObject = {message: 'Unauthorized Token.', reason: error.name};
+          console.log(errorObject);
+          return res.status(403).send(errorObject);
+        }
+      } else {
+        // Forbidden
+        return res.sendStatus(403);
+      }
+    };
+  
   exports.verifyToken = async (req, res, next) => {
     const bearerHeader = req.headers['authorization'];
 

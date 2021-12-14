@@ -82,8 +82,8 @@ exports.getType = async (code, res) => {
 exports.creteProfile = async (myUser, body, type, res) => {
     try {
         logger.info('Call postProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
-        logger.info(body.canals);
-        console.log('body.canals',body.canals);
+        logger.info(body);
+        console.log('body.bodyyy',body);
         return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
             id_user: myUser.id,
             first_name: myUser.firstname,
@@ -104,6 +104,11 @@ exports.creteProfile = async (myUser, body, type, res) => {
             canals: body.canals,
             id_commercial: body.id_commercial,
 
+            location_x: body.location_x,
+            location_y: body.location_y,
+            imei: body.imei,
+
+
             isActive: false,
             confirmMail: false,
             team: false,
@@ -112,7 +117,7 @@ exports.creteProfile = async (myUser, body, type, res) => {
             profilCompleted: true,
             username: myUser.username,
             email: myUser.email,
-            role: 'ROLE_USER',
+            role: 'user',
 
         });
     } catch (error) {
@@ -292,9 +297,9 @@ exports.updateprofileByAdmin = async (body,res) => { // with id user
 // //////////////////////////////////
 exports.getServiceByUser = async (id, res) => {
     try {
-        logger.info(`${'Call getService: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?userId`}${ id}`);
+        logger.info(`${'Call getService: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?userId=`}${id}`);
 
-        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?size=100&userId=${ id}`);
+        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/wallet/service-user?size=100&userId=${id}`);
     } catch (error) {
         if (!error.response) {
             logger.error(error.message);
