@@ -9,7 +9,7 @@ const env = require('../../../config/env.config');
 const user_service = require('../../../services/user/user.service');
 
 const validate = require('../middleware/validation');
-const {schema, teamSchema, adminSchema, resetSchema} = require('../schemaValidation/register');
+const {schema, teamSchema, adminSchema, resetSchema, patchTeamSchema} = require('../schemaValidation/register');
 const {profileSchema} = require('../schemaValidation/profile');
 const {schemaCompany} = require('../schemaValidation/company');
 
@@ -27,11 +27,11 @@ const {
 } = require('../../Services/wallet');
 
 const {
-  addUser, createJwt, verifyJwt,
+  addUser, createJwt, verifyJwt, updateUser,
 } = require('../../Services/function');
 
 const {
-  verifyToken,verifyTokenSuperAdmin,verifyTokenSuperAdminOrAdmin,verifyTokenUser,verifyTokenCommercial
+  verifyToken,verifyTokenSuperAdmin,verifyTokenSuperAdminOrAdmin,verifyTokenUser,verifyTokenCommercial,verifyBody
 } = require('./middleware');
 
 // const bodyParser = require("body-parser");
@@ -696,6 +696,80 @@ validate(schemaCompany)], async (req, res, next) => {
 
       logger.info(`Success, mail has been sent to : ${ email}`);
       return res.status(201).json({etat: 'Success', message: `Check your email : ${ email}`});
+    } catch (err) {
+      logger.error(`Error :${ err.message}`);
+      return res.status(422).json({error: err.message});
+    }
+  });
+
+  gatewayExpressApp.patch('/update-team/:id', verifyBody,validate(patchTeamSchema),async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+    try {
+      const {firstname, lastname, email, phone, role} = req.body.user;
+      const {type_userId} = req.body.profile;
+      console.log('req.body',req.body);
+
+      const myUser = await services.user.findByUsernameOrId(req.params.id);
+      console.log('myUser before update', myUser);
+      if (myUser == false) {
+        logger.error('User does not exist');
+        return res.status(200).json({status: 'error', message: 'The user does not exist'});
+      }
+
+      // ///////////////////////////getTypeById/////////////////////////////////////////////////////
+      let dataType;
+      if (type_userId) {
+        dataType = await getTypeById(type_userId, res);
+        console.log('dataType.data.data', dataType.data);
+        if (!dataType.data.data) {
+          logger.error('Error Problem in server ');
+          return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
+        }
+        if (dataType.data.data.code == status_code.CODE_SUCCESS.LIST_EMPTY) {
+          logger.error('Error Problem in server ');
+          return res.status(200).send({status: 'Error', message: dataType.data.data.message, code: status_code.CODE_SUCCESS.LIST_EMPTY});
+        }
+      }
+
+      // const code = dataType.data.data.data.type
+      const code = role;
+      
+      // ///////////////////////////update user/////////////////////////////////////////////////////
+      try {
+        const myUserUpdated = await updateUser(myUser.id,req.body.user,[code]);
+        console.log('myUser after update',myUserUpdated);
+      } catch (error) {
+      util.setError(200, error.message,status_code.CODE_ERROR.ALREADY_EXIST);
+      return util.send(res);
+      }
+      // ////////////////////////////Get profile///////////////////////////////////
+      if (type_userId) {
+        req.body.user.type_userId = req.body.profile.type_userId;
+      }
+
+      const getProfiled = await getProfile(myUser.id, res);
+      console.log('getProfiled.data', getProfiled.data);
+        if (getProfiled.data.status == 'success') {
+          console.log('id profile', getProfiled.data.data.id);
+          console.log('myUser.id', myUser.id);
+          const bodyProfile = {
+            email: email,
+            phone: phone,
+            first_name: firstname,
+            last_name: lastname,
+            role: role,
+            TypeUserId: type_userId,
+          }
+      // ///////////////////////////update profile/////////////////////////////////////////////////////
+          const userProfile = await updateprofile(bodyProfile, getProfiled.data.data.id, res);
+          if (!userProfile.data) {
+            logger.error('Error Problem in server ');
+            return res.status(500).json({'Error': 'Problem in server'});
+          }
+          logger.info('The user has been updated');
+          return res.status(200).json({status: 'success', message: 'The user has been updated'});
+        } else {
+          return res.status(200).json({message: getProfiled.data});
+        }
     } catch (err) {
       logger.error(`Error :${ err.message}`);
       return res.status(422).json({error: err.message});
