@@ -12,9 +12,9 @@ exports.checkIfFileIsTooBig = (value) => {
   return valueMB <= 2;
 };
 exports.checkIfFileIsCorrectType = (value) => {
-  console.log('ext filess',file.split(';base64,')[0]);
-  console.log('ext filess',file.split(';base64,'));
-  console.log('ext filess',file.split(';base64,')[0].split('/'));
+  console.log('ext filess',value.split(';base64,')[0]);
+  console.log('ext filess',value.split(';base64,'));
+  console.log('ext filess',value.split(';base64,')[0].split('/'));
 
   if (!value) return true;
   const ext = value.split(';base64,')[0].split('/')[1];
