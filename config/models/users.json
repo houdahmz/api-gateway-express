@@ -29,7 +29,7 @@
       "type": "string"
     },
     "isBlocked": {
-      "type": "boolean"
+      "type": "string"
     },
     "demand": {
       "type": "string"
