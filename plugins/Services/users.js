@@ -258,11 +258,11 @@ exports.createAdminProfile = async (agentUser, typeId, res) => {
 exports.updateprofile = async (body, id,res) => {
     try {
       logger.info('Call updateProfile in complete-profile ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
-      console.log('bodyyyyyyyyy', body);
+      console.log('body', body);
       body.updated_by = id;
       body.updatedBy = id;
       return await axios.patch(
-        `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/${ id}`, body,
+        `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile/${id}`, body,
       );
     } catch (error) {
       if (!error.response) {
@@ -274,6 +274,21 @@ exports.updateprofile = async (body, id,res) => {
       return res.status(error.response.status).send(error.response.data);
     }
   };    
+// //////////////////////////////////
+exports.getProfileById = async (myUser,res) => {
+    try {
+        logger.info(`${'Call getProfileByUsername: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?id_user=`}${myUser}`);
+
+        return await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile?id_user=${myUser}`);
+    } catch (error) {
+        if (!error.response) {
+            logger.error(error.message);
+            return res.status(500).send({'error': error.message});
+        }
+        logger.error(`Error in getProfileByUsername :${ error.response.data}`);
+        return res.status(error.response.status).send(error.response.data);
+    }
+};  
 // //////////////////////////////////
 exports.updateprofileByAdmin = async (body,res) => { // with id user
     try {

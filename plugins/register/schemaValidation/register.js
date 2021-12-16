@@ -22,6 +22,16 @@ const teamSchema = yup.object({
     role: yup.string().required('role is a required field'),
     }),
 });
+const patchTeamSchema = yup.object({
+  body: yup.object({
+    firstname: yup.string().matches(/^[a-zA-Z]*$/,'firstname should be only letters'),
+    lastname: yup.string().matches(/^[a-zA-Z]*$/,'lastname should be only letters'),
+    email: yup.string().email('Email should be valid').min(9,'Email must have atleast 9 char').max(40,'Less than 40 char'),
+    phone: yup.string().min(8,'phone number should be 8 digit').max(8,'phone number should be 8 digit').matches(/^[0-9]*$/,'phone should be digit'),
+    type_userId: yup.string().matches(/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i, 'type_userId should only be UUID v4 '),
+    role: yup.string(),
+    }),
+});
 const adminSchema = yup.object({
   body: yup.object({
     firstname: yup.string().required('firstname is a required field').matches(/^[a-zA-Z]*$/,'firstname should be only letters'),
@@ -61,6 +71,7 @@ const putSchema = yup.object({
 const validation = {
     schema: schema,
     patchSchema: patchSchema,
+    patchTeamSchema: patchTeamSchema,
     putSchema: putSchema,
     teamSchema: teamSchema,
     adminSchema: adminSchema,

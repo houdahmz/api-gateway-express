@@ -4,7 +4,7 @@ const env = require('../../config/env.config');
 const expiresIn = 3.6 * 1000 * 1000; // in ms //equals to 1 hour 
 const user_service = require('../../services/user/user.service');
 
-exports.addUser = async (body, password,scopes) => {
+exports.addUser = async (body, password, scopes) => {
     // ///////////////////////////create user//////////////////////////////////////////////////////
     const user = await user_service.insert(body);
     console.log('user', user);
@@ -18,6 +18,25 @@ exports.addUser = async (body, password,scopes) => {
     // ///////////////////////////create basic-auth credential for authorization with scope////////
     const crd_oauth2 = await services.credential.insertCredential(user.id, 'oauth2', {scopes: scopes});
     console.log('crd_oauth2',crd_oauth2);
+    return user;
+};   
+exports.updateUser = async (idUser, myUser, scopes) => {
+    console.log('myUser in updateUser', myUser);
+    console.log('idUser', idUser);
+
+    // ///////////////////////////create user//////////////////////////////////////////////////////
+    const user = await services.user.update(idUser, myUser);
+    // ///////////////////////////create basic-auth credential for authorization with scope////////
+    let myCredOauth = await services.credential.getCredential(idUser, 'oauth2');
+    console.log('old myCredOauth', myCredOauth);
+    const scope = myCredOauth.scopes;
+    console.log('old scope', scope);
+    myCredOauth = await services.credential.removeCredential(myCredOauth.id, 'oauth2');
+
+    const crd_oauth2 = await services.credential.insertCredential(idUser, 'oauth2', {scopes: scopes});
+    console.log('crd_oauth2 ', crd_oauth2);
+    myCredOauth = await services.credential.getCredential(idUser, 'oauth2');
+    
     return user;
 };    
 exports.createJwt = async (username, password = null) => {

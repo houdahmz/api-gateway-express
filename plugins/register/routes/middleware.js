@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const env = require('../../../config/env.config');
 const log4j = require('../../../config/configLog4js.js');
 const logger = require('../../../config/Logger');
+const user_service = require('../../../services/user/user.service');
+const status_code = require('../config');
 
 const {
   getProfile,
@@ -403,3 +405,45 @@ const {
       return res.sendStatus(403);
     }
   };
+
+  exports.verifyBody = async (req, res, next) => {
+    const role = req.body.user ? req.body.user.role : req.body.role;
+    const email = req.body.user ? req.body.user.email : req.body.email;
+    const phone = req.body.user ? req.body.user.phone : req.body.phone;
+    const username = req.body.user ? req.body.user.username : req.body.username;
+
+
+      // /////////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////
+      if (role) {
+        const scope_exist = await services.credential.existsScope(role);
+        console.log('scope_exist',scope_exist);
+        if (!scope_exist) {
+          return res.status(400).json({status: 'Error', error: 'role does not exist', code: status_code.CODE_ERROR.NOT_EXIST});
+        }
+      }
+
+      if (email) {
+        const findByEmail = await user_service.findByEmail(email);
+        console.log('findByEmail---------------',findByEmail);
+        if (findByEmail) {
+          return res.status(200).json({status: 'Error', error: 'Email already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
+        }
+      }
+      if (phone) {
+        const findByPhone = await user_service.findByPhone(phone);
+        if (findByPhone) {
+          return res.status(200).json({status: 'Error', error: 'Phone already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
+        }
+      }
+
+      if (username) {
+        const findByUsername = await services.user.findByUsernameOrId(username);
+        console.log('findByUsername---------------',findByUsername);
+        if (findByUsername) {
+          return res.status(200).json({status: 'Error', error: 'username already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
+        }
+      }
+
+      next();
+  };
+
