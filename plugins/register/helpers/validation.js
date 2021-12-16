@@ -12,6 +12,10 @@ exports.checkIfFileIsTooBig = (value) => {
   return valueMB <= 2;
 };
 exports.checkIfFileIsCorrectType = (value) => {
+  console.log('ext filess',file.split(';base64,')[0]);
+  console.log('ext filess',file.split(';base64,'));
+  console.log('ext filess',file.split(';base64,')[0].split('/'));
+
   if (!value) return true;
   const ext = value.split(';base64,')[0].split('/')[1];
   console.log('ext file',ext);
@@ -37,6 +41,11 @@ exports.checkIfFilesAreCorrectType = (files) => {
   if (!files) return valid;
   if (files) {
     files.map((file) => {
+      console.log('ext filess',file.split(';base64,')[0]);
+      console.log('ext filess',file.split(';base64,'));
+      console.log('ext filess',file.split(';base64,')[0].split('/'));
+
+      
       const ext = file.split(';base64,')[0].split('/')[1];
       console.log('ext filess',ext);
       if (ext != 'png' && ext != 'jpg' && ext != 'jpeg') {

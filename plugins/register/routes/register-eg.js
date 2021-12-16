@@ -830,9 +830,9 @@ validate(schemaCompany)], async (req, res, next) => {
       } else if (code == 0) {
       // ////////////////////////////Activate a user///////////////////////////////////
 
-        const userUpdated = await services.user.update(myUser.id,{
-          loginAttempts: '0',
-        });
+        // const userUpdated = await services.user.update(myUser.id,{
+        //   loginAttempts: '0',
+        // });
 
         myUser = await services.user.activate(myUser.id);
   
@@ -872,6 +872,7 @@ validate(schemaCompany)], async (req, res, next) => {
       return res.status(200).json({message: getProfiled.data});
     }
   });
+
 
   gatewayExpressApp.patch('/update_role/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => {
     const {role} = req.body; // code = 10 desactive , 11 active // id is a username
