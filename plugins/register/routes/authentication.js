@@ -18,7 +18,7 @@ const logger = require('../../../config/Logger');
 const cors = require('cors');
 
 const {
-  getToken, getProfile, getServiceByUser,
+  getToken, getProfile, getServiceByUser, updateprofile
 } = require('../../Services/users');
 
 const {
@@ -75,7 +75,7 @@ module.exports = function(gatewayExpressApp) {
       util.setError(200, 'user is desactivated. please wait for the administrator\'s agreement', status_code.CODE_ERROR.USER_DESACTIVATE);
       return util.send(res);
     }
-    else if (myUser.isBlocker == true) {
+    else if (myUser.isBlocked == true) {
       logger.info('Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator\'s ');
       util.setError(200, 'Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator\'s ', status_code.CODE_ERROR.USER_DESACTIVATE);
       return util.send(res);
@@ -144,10 +144,28 @@ module.exports = function(gatewayExpressApp) {
       const userUpdated = await services.user.update(userFinded.id,{
         loginAttempts: userFinded.loginAttempts.toString(),
         nextTry: userFinded.nextTry.toString(),
-        // isBlocked: true,
+        isBlocked: 'true',
       });
 
-      
+      const getProfiled = await getProfile(userFinded.id, res);
+      console.log('getProfiled.data', getProfiled.data);
+        if (getProfiled.data.status == 'success') {
+          console.log('id profile', getProfiled.data.data.id);
+          console.log('myUser.id', userFinded.id);
+          const bodyProfile = {
+            isBlocked: true,
+          };
+      // ///////////////////////////update profile/////////////////////////////////////////////////////
+          const userProfile = await updateprofile(bodyProfile, getProfiled.data.data.id, res);
+          if (!userProfile.data) {
+            logger.error('Error Problem in server ');
+            return res.status(500).json({'Error': 'Problem in server'});
+          }
+          logger.info('The user has been blocked');
+        } else {
+          return res.status(200).json({message: 'Error in updating profile'});
+        }
+
       // const myUserDesactivate = await services.user.deactivate(userFinded.id);
     }
 

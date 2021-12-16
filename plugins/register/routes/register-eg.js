@@ -758,7 +758,7 @@ validate(schemaCompany)], async (req, res, next) => {
             last_name: lastname,
             role: role,
             TypeUserId: type_userId,
-          }
+          };
       // ///////////////////////////update profile/////////////////////////////////////////////////////
           const userProfile = await updateprofile(bodyProfile, getProfiled.data.data.id, res);
           if (!userProfile.data) {
@@ -873,101 +873,52 @@ validate(schemaCompany)], async (req, res, next) => {
     }
   });
 
-  gatewayExpressApp.patch('/block/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // endpoint for activate (isActivate)
-    const {code} = req.body; // code = 1 desactive , 0 active // id is a username
-    console.log('code',code);
-    if (code != 0 && code != 1) {
-      logger.error('Set code 1 to deblock or 0 to block a user');
-      util.setError(200, 'Set code 1 to desactivate or 0 to block a user', status_code.CODE_ERROR.CODE_INCORRECT);
+  gatewayExpressApp.patch('/block/:id', async (req, res, next) => { // endpoint for activate (isActivate)
+    const {isBlocked} = req.body; 
+    console.log('isBlocked',isBlocked);
+    if (!isBlocked) {
+      logger.error('isBlocked can not be empty');
+      util.setError(200, 'isBlocked can not be empty', status_code.CODE_ERROR.EMPTY);
       return util.send(res);
     }
-    let myUser = await services.user.findByUsernameOrId(req.params.id);
+    const data_json = {
+      'true': '-1',
+      'false': '0',
+    };
+    const myUser = await services.user.findByUsernameOrId(req.params.id);
     console.log('myUser', myUser);
     if (myUser == false) {
       logger.error('The user does not exist.');
       return res.status(200).json({message: 'The user does not exist'});
     }
-    
     // ////////////////////////////Get profile///////////////////////////////////
-    const getProfiled = await getProfileByUsername(req.params.id, res);
-    console.log('getProfile', getProfiled.data);
-    if (getProfiled.data.status == 'success') {
-      console.log('myUser.id', myUser.id);
-      // ////////////////////////////Desactivate a user///////////////////////////////////
-      if (code == 1) {
-        myUser = await services.user.deactivate(myUser.id);
-        if (myUser == true) {
-          console.log('id', getProfiled.data.data.data[0].id);
-          const updateBody = {
-            isActive: false,
-          };
-          console.log('*************************************************************************************');
-          console.log('getProfiled.data.data.data[0].id_user', getProfiled.data.data.data[0].id);
-          console.log('*************************************************************************************');
-          // ////////////////////////////Update the status of user///////////////////////////////////
-          const userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id, res);
-          if (!userProfile.data) {
-            logger.error('Error Problem in server ');
-            return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
-          }
-              // ////////////////////////////update///////////////////////////////////
-            const updateDeletedBody = {
-              deleted: code,
-              deleted_by: req.body.deletedBy,
-            };
-            const userUpdated = await updateDeleted(updateDeletedBody, getProfiled.data.data.data[0].id, res);
-              if (!userUpdated.data) {
-                logger.error('Error Problem in server ');
-                return res.status(500).json({'Error': 'Problem in server'});
-              }
-          // //////////////////////////////////
+    const getProfiled = await getProfile(myUser.id, res);
+    console.log('getProfiled.data', getProfiled.data);
+      if (getProfiled.data.status == 'success') {
+        console.log('id profile', getProfiled.data.data.id);
+        console.log('myUser.id', myUser.id);
+        const bodyProfile = {
+          isBlocked: isBlocked,
+        };
+        console.log('data_json[isBlocked]',data_json[isBlocked]);
+        console.log('isBlocked', isBlocked);
 
-          return res.status(200).json({message: 'The user has been desactivated'});
-        }
-      } else if (code == 0) {
-      // ////////////////////////////Activate a user///////////////////////////////////
-
-        const userUpdated = await services.user.update(myUser.id,{
-          loginAttempts: '0',
+    const userUpdated = await services.user.update(myUser.id,{
+          loginAttempts: data_json[isBlocked],
         });
 
-        myUser = await services.user.activate(myUser.id);
-  
-        if (myUser == true) {
-          // ///////////////////
-          console.log('id', getProfiled.data.data.data[0].id);
-          const updateBody = {
-            isActive: true,
-          };
-          console.log('*************************************************************************************');
-          console.log('getProfiled.data.data.data[0].id_user', getProfiled.data.data.data[0].id);
-          console.log('*************************************************************************************');
-          // ////////////////////////////Update the status of user///////////////////////////////////
-          const userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id, res);
-          if (!userProfile.data) {
-            logger.error('Error Problem in server ');
-            return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
-          }
-                        // ////////////////////////////update///////////////////////////////////
-                        const updateDeletedBody = {
-                          deleted: code,
-                          deleted_by: req.body.deletedBy,
-                        };
-                        const userUpdated = await updateDeleted(updateDeletedBody, getProfiled.data.data.data[0].id, res);
-                          if (!userUpdated.data) {
-                            logger.error('Error Problem in server ');
-                            return res.status(500).json({'Error': 'Problem in server'});
-                          }
-                      // //////////////////////////////////
-            
-          console.log('userProfile.data', userProfile.data);
-          return res.status(200).json({message: 'The user has been activated'});
+    // ///////////////////////////update profile/////////////////////////////////////////////////////
+        const userProfile = await updateprofile(bodyProfile, getProfiled.data.data.id, res);
+        if (!userProfile.data) {
+          logger.error('Error Problem in server ');
+          return res.status(500).json({'Error': 'Problem in server'});
         }
+        logger.info('The user has been updated');
+        util.setSuccess(200, 'The user has been updated', status_code.CODE_SUCCESS.SUCCESS);
+        return util.send(res);
+      } else {
+        return res.status(200).json({message: 'Error in updating profile'});
       }
-      return res.status(200).json({message: 'The visitor has been refused'});
-    } else {
-      return res.status(200).json({message: getProfiled.data});
-    }
   });
 
   gatewayExpressApp.patch('/update_role/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => {
