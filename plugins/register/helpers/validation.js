@@ -39,6 +39,8 @@ exports.checkIfFilesAreTooBig = (files) => {
   return valid;
 };
 exports.checkIfFilesAreCorrectType = (files) => {
+  console.log('ext file value ----------',files);
+
   let valid = true;
   if (!files) return valid;
   if (files) {
