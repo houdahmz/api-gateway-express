@@ -28,6 +28,9 @@
     "team": {
       "type": "string"
     },
+    "isBlocked": {
+      "type": "boolean"
+    },
     "demand": {
       "type": "string"
     },

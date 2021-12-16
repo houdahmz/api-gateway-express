@@ -75,11 +75,16 @@ module.exports = function(gatewayExpressApp) {
       util.setError(200, 'user is desactivated. please wait for the administrator\'s agreement', status_code.CODE_ERROR.USER_DESACTIVATE);
       return util.send(res);
     }
-    // else if (myUser.loginAttempts == "-1") {
-    //   logger.info("Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator's ");
-    //   util.setError(200, "Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator's ", status_code.CODE_ERROR.USER_DESACTIVATE);
-    //   return util.send(res);
-    // }
+    else if (myUser.isBlocker == true) {
+      logger.info('Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator\'s ');
+      util.setError(200, 'Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator\'s ', status_code.CODE_ERROR.USER_DESACTIVATE);
+      return util.send(res);
+    }
+    else if (myUser.loginAttempts == '-1') {
+      logger.info('Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator\'s ');
+      util.setError(200, 'Your account is locked. You have exceeded the maximum number of login attempts. You may attempt to log in again after the verification of the administrator\'s ', status_code.CODE_ERROR.USER_DESACTIVATE);
+      return util.send(res);
+    }
 
     const myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth');
     console.log('myCredBasic ', myCredBasic);
@@ -139,8 +144,9 @@ module.exports = function(gatewayExpressApp) {
       const userUpdated = await services.user.update(userFinded.id,{
         loginAttempts: userFinded.loginAttempts.toString(),
         nextTry: userFinded.nextTry.toString(),
+        // isBlocked: true,
       });
-      const myUserDesactivate = await services.user.deactivate(userFinded.id);
+      // const myUserDesactivate = await services.user.deactivate(userFinded.id);
     }
 
     // else if (parseInt(userFinded.loginAttempts) == -1){
