@@ -1,4 +1,42 @@
-# Express Gateway 
+## Express Gateway
+​
+
+This gateway is for any language, any framework and for all microservice use cases.
+It allows you to manage your api and your user authentification.
+​
+
+## Requirements
+
+​
+
+- [Node v12.16.1+](http://nodejs.org/)
+
+- [Express](https://npmjs.com/package/express)
+
+- [Sequelize](https://www.npmjs.com/package/sequelize)
+
+- [HTTP Status](https://www.npmjs.com/package/http-status)
+
+- [Winston](https://www.npmjs.com/package/winston)
+
+- [Nodemon](https://www.npmjs.com/package/nodemon)
+
+- [PM2](https://www.npmjs.com/package/pm2)
+
+- [Redis v5.0.7](https://www.npmjs.com/package/redis)
+
+​
+
+## Features
+
+
+- Manage all users
+
+- Manage all credentials
+
+- Manage all scopes
+
+- Manage all applications
 
 ## Setup Redis Database
 
@@ -16,10 +54,10 @@ Open this file with your preferred text editor:
 sudo nano /etc/redis/redis.conf
 ```
 Inside the file, find the supervised directive. This directive allows you to declare an init system to manage Redis as a service, providing you with more control over its operation. The supervised directive is set to no by default. Since you are running Ubuntu, which uses the systemd init system, change this to systemd:
-    ```
-supervised systemd
 
-    ```
+```
+supervised systemd
+```
 
 That’s the only change you need to make to the Redis configuration file at this point, so save and close it when you are finished. If you used nano to edit the file, do so by pressing CTRL + X, Y, then ENTER.
 Then, restart the Redis service to reflect the changes you made to the configuration file:
