@@ -17,12 +17,8 @@ sudo nano /etc/redis/redis.conf
 ```
 Inside the file, find the supervised directive. This directive allows you to declare an init system to manage Redis as a service, providing you with more control over its operation. The supervised directive is set to no by default. Since you are running Ubuntu, which uses the systemd init system, change this to systemd:
     ```
-
-    . . .
-
 supervised systemd
 
-. . .
     ```
 
 That’s the only change you need to make to the Redis configuration file at this point, so save and close it when you are finished. If you used nano to edit the file, do so by pressing CTRL + X, Y, then ENTER.
