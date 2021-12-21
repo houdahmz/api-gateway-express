@@ -5,8 +5,6 @@ const services = require('express-gateway/lib/services/');
 const utils = require('express-gateway/lib/services/utils');
 const mail = require('../../../services/emails/emailProvider');
 const util = require('../helpers/utils');
-const config = require('express-gateway/lib/config/');
-const log4j = require('../../../config/configLog4js.js');
 const os = require('os');
 const ipF = require('ip');
 const publicIp = require('public-ip');
@@ -18,7 +16,7 @@ const logger = require('../../../config/Logger');
 const cors = require('cors');
 
 const {
-  getToken, getProfile, getServiceByUser, updateprofile
+  getToken, getProfile, getServiceByUser, updateprofile,
 } = require('../../Services/users');
 
 const {
@@ -32,9 +30,10 @@ const corsOptions = {
 };
 
 const swaggerUi = require('swagger-ui-express');
-     const swaggerDocument = require('../../../doc/swagger.json');
-     const rateLimit = require('express-rate-limit');
-     const apiLimiter = rateLimit({
+const swaggerDocument = require('../../../doc/swagger.json');
+
+const rateLimit = require('express-rate-limit');
+const apiLimiter = rateLimit({
       windowMs: 2 * 60 * 1000, // 2 minutes
       max: 2, // limite chaque adresse IP à 100 requêtes par windowMs
       message: {
