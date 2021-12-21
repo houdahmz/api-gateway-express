@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const services = require('express-gateway/lib/services/');
 const env = require('../config/env.config');
-const logger = require('../config/Logger');
 
 const validateUserPlugin = {
   schema: {$id: './../config/models/schema.js'},

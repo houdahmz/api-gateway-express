@@ -1,7 +1,6 @@
 const services = require('express-gateway/lib/services/');
 const jwt = require('jsonwebtoken');
 const env = require('../../../config/env.config');
-const log4j = require('../../../config/configLog4js.js');
 const logger = require('../../../config/Logger');
 const user_service = require('../../../services/user/user.service');
 const status_code = require('../config');

@@ -47,7 +47,7 @@ module.exports = function(gatewayExpressApp) {
       const {image, patent, photo, cin, commercial_register, city, zip_code, adresse, activity, updated_by, id_commercial} = req.body;
       console.log('req.ody', req.body);
       req.body.company.profilCompleted = true;
-      const userProfile = await updateprofileByAdmin(req.body, res);
+      const userProfile = await updateprofileByAdmin(req.body, res, req);
       if (!userProfile.data) {
         logger.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});
