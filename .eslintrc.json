@@ -13,7 +13,7 @@
         "ecmaVersion": 13
     },
     "rules": {
-        "no-console": "off",    //* Avoid Bugs //./node_modules/.bin/eslint --fix
+        "no-console": "warn",    //* Avoid Bugs //./node_modules/.bin/eslint --fix
         "no-undef": "warn",
         // "semi": "error",
         "semi-spacing": "error",    //* Best Practices

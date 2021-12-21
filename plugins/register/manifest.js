@@ -9,10 +9,6 @@ module.exports = {
     pluginContext.registerGatewayRoute(require('./routes/handleUserStatus'));
     pluginContext.registerGatewayRoute(require('./routes/statistique'));
     pluginContext.registerGatewayRoute(require('./routes/user'));
-
-
-
-
   },
   policies: ['hello'], // this is for CLI to automatically add to "policies" whitelist in gateway.config
   schema: { // This is for CLI to ask about params 'eg plugin configure customer-auth'
