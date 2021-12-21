@@ -11,6 +11,9 @@ const validate = require('../middleware/validation');
 const {schema, teamSchema, adminSchema} = require('../schemaValidation/register');
 const {profileSchema} = require('../schemaValidation/profile');
 const {schemaCompany} = require('../schemaValidation/company');
+const {
+  verifyBody,
+} = require('./middleware');
 
 const logger = require('../../../config/Logger');
 
