@@ -248,7 +248,7 @@ exports.createAdminProfile = async (agentUser, typeId, res) => {
             return res.status(500).send({'error': error.message});
         }
         logger.error('Error in adding profile: ');
-        const deleted = services.user.remove(myUser.id);
+        const deleted = services.user.remove(agentUser.id);
 
         return res.status(error.response.status).send(error.response.data);
     }
@@ -290,10 +290,10 @@ exports.getProfileById = async (myUser,res) => {
     }
 };  
 // //////////////////////////////////
-exports.updateprofileByAdmin = async (body,res) => { // with id user
+exports.updateprofileByAdmin = async (body,res,req) => { // with id user
     try {
       logger.info('Call updateprofileByAdmin in complete-profile ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/company/`);
-      console.log('bodyyyyyyyyy', body);
+      console.log('body', body);
       body.updated_by = req.params.id;
       body.updatedBy = req.params.id;
       return await axios.patch(
