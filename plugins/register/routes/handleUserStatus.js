@@ -231,9 +231,10 @@ module.exports = function(gatewayExpressApp) {
         if (getProfiled.data.status == 'success') {
           logger.info(`CompanyId${getProfiled.data.data.CompanyId}`);
           logger.info(`myUser.id${myUser.id}`);
-          const user_res = await services.user.update(myUser.id, {demand: '2'});
+          const deleted = services.user.remove(myUser.id);
           const updateBody = {
             demand: '2',
+            deleted: 1,
           };
           logger.info(`update${ getProfiled.data.data.id}`);
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.id, res);
