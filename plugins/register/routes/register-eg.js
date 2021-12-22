@@ -5,7 +5,6 @@ const mail = require('../../../services/emails/emailProvider');
 const mailSimple = require('./mailer.config.js');
 const util = require('../helpers/utils');
 const env = require('../../../config/env.config');
-const user_service = require('../../../services/user/user.service');
 
 const validate = require('../middleware/validation');
 const {schema, teamSchema, adminSchema} = require('../schemaValidation/register');
@@ -35,8 +34,8 @@ const corsOptions = {
 };
 
 module.exports = function(gatewayExpressApp) {
-  gatewayExpressApp.use(bodyParser.json({limit: '50mb', extended: true}));
-  gatewayExpressApp.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+  gatewayExpressApp.use(bodyParser.json({limit: env.LIMIT, extended: true}));
+  gatewayExpressApp.use(bodyParser.urlencoded({limit: env.LIMIT, extended: true}));
   gatewayExpressApp.use(cors(corsOptions));
   gatewayExpressApp.use(device.capture());
 

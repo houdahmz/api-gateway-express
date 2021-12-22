@@ -16,6 +16,7 @@ const {USERADMIN} = process.env;
 const {PASSWORD} = process.env;
 const {EMAIL} = process.env;
 const {PHONE} = process.env;
+const {LIMIT} = process.env;
 
 
 module.exports = {
@@ -30,6 +31,8 @@ module.exports = {
     PASSWORD: PASSWORD,
     EMAIL: EMAIL,
     PHONE: PHONE,
+
+    LIMIT: LIMIT,
 
     HTTP_PORT_API_MANAGEMENT: HTTP_PORT_API_MANAGEMENT,
     HTTP_PORT_ADMIN: HTTP_PORT_ADMIN,
