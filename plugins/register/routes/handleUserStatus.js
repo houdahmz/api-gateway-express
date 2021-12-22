@@ -40,14 +40,15 @@ module.exports = function(gatewayExpressApp) {
 
   gatewayExpressApp.patch('/activate/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // endpoint for activate (isActivate)
     const {code} = req.body; // code = 1 desactive , 0 active // id is a username
-    console.log('code',code);
+    console.log(`code${code}`);
     if (code != 0 && code != 1) {
       logger.error('Set code 1 to desactivate or 0 to activate a user');
       util.setError(200, 'Set code 1 to desactivate or 0 to activate a user', status_code.CODE_ERROR.CODE_INCORRECT);
       return util.send(res);
     }
     let myUser = await services.user.findByUsernameOrId(req.params.id);
-    console.log('myUser', myUser);
+    console.log('myUser',myUser);
+
     if (myUser == false) {
       logger.error('The user does not exist.');
       return res.status(200).json({message: 'The user does not exist'});
@@ -55,20 +56,17 @@ module.exports = function(gatewayExpressApp) {
     
     // ////////////////////////////Get profile///////////////////////////////////
     const getProfiled = await getProfileByUsername(req.params.id, res);
-    console.log('getProfile', getProfiled.data);
     if (getProfiled.data.status == 'success') {
-      console.log('myUser.id', myUser.id);
+        console.log(`myUser.id${ myUser.id}`);
       // ////////////////////////////Desactivate a user///////////////////////////////////
       if (code == 1) {
         myUser = await services.user.deactivate(myUser.id);
         if (myUser == true) {
-          console.log('id', getProfiled.data.data.data[0].id);
+          logger.info('id', getProfiled.data.data.data[0].id);
           const updateBody = {
             isActive: false,
           };
-          console.log('*************************************************************************************');
-          console.log('getProfiled.data.data.data[0].id_user', getProfiled.data.data.data[0].id);
-          console.log('*************************************************************************************');
+          console.log(`getProfiled.data.data.data[0].id_user${getProfiled.data.data.data[0].id}`);
           // ////////////////////////////Update the status of user///////////////////////////////////
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id, res);
           if (!userProfile.data) {
@@ -100,13 +98,11 @@ module.exports = function(gatewayExpressApp) {
   
         if (myUser == true) {
           // ///////////////////
-          console.log('id', getProfiled.data.data.data[0].id);
+          logger.info(`id${ getProfiled.data.data.data[0].id}`);
           const updateBody = {
             isActive: true,
           };
-          console.log('*************************************************************************************');
-          console.log('getProfiled.data.data.data[0].id_user', getProfiled.data.data.data[0].id);
-          console.log('*************************************************************************************');
+          console.log(`getProfiled.data.data.data[0].id_user${ getProfiled.data.data.data[0].id}`);
           // ////////////////////////////Update the status of user///////////////////////////////////
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.data[0].id, res);
           if (!userProfile.data) {
@@ -125,7 +121,6 @@ module.exports = function(gatewayExpressApp) {
                           }
                       // //////////////////////////////////
             
-          console.log('userProfile.data', userProfile.data);
           return res.status(200).json({message: 'The user has been activated'});
         }
       }
@@ -137,7 +132,7 @@ module.exports = function(gatewayExpressApp) {
 
   gatewayExpressApp.patch('/block/:id', async (req, res, next) => { // endpoint for activate (isActivate)
     const {isBlocked} = req.body; 
-    console.log('isBlocked',isBlocked);
+    console.log(`isBlocked${isBlocked}`);
     if (!isBlocked) {
       logger.error('isBlocked can not be empty');
       util.setError(200, 'isBlocked can not be empty', status_code.CODE_ERROR.EMPTY);
@@ -148,22 +143,20 @@ module.exports = function(gatewayExpressApp) {
       'false': '0',
     };
     const myUser = await services.user.findByUsernameOrId(req.params.id);
-    console.log('myUser', myUser);
     if (myUser == false) {
       logger.error('The user does not exist.');
       return res.status(200).json({message: 'The user does not exist'});
     }
     // ////////////////////////////Get profile///////////////////////////////////
     const getProfiled = await getProfile(myUser.id, res);
-    console.log('getProfiled.data', getProfiled.data);
       if (getProfiled.data.status == 'success') {
-        console.log('id profile', getProfiled.data.data.id);
-        console.log('myUser.id', myUser.id);
+        console.log(`id profile${ getProfiled.data.data.id}`);
+        console.log(`myUser.id${ myUser.id}`);
         const bodyProfile = {
           isBlocked: isBlocked,
         };
-        console.log('data_json[isBlocked]',data_json[isBlocked]);
-        console.log('isBlocked', isBlocked);
+        console.log(`data_json[isBlocked]${data_json[isBlocked]}`);
+        console.log(`isBlocked${ isBlocked}`);
 
     const userUpdated = await services.user.update(myUser.id,{
           loginAttempts: data_json[isBlocked],
@@ -186,12 +179,12 @@ module.exports = function(gatewayExpressApp) {
   gatewayExpressApp.patch('/update_role/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => {
     const {role} = req.body; // code = 10 desactive , 11 active // id is a username
     if (!role) {
-      logger.error('role can not be empty.');
+      logger.error(`${req.params.id}role can not be empty.`);
       return res.status(200).json({error: 'role can not be empty '});
     }
     // ////////////////////////////Get user///////////////////////////////////
     const myUser = await services.user.find(req.params.id);
-    console.log('myUser', myUser);
+    logger.info('myUser', myUser);
     if (myUser == false) {
       logger.error('User does not exist');
       return res.status(200).json({status: 'error', message: 'The user does not exist'});
@@ -213,7 +206,6 @@ module.exports = function(gatewayExpressApp) {
   gatewayExpressApp.patch('/accept/:id', verifyTokenSuperAdminOrAdmin, async (req, res, next) => { // accept or refuser a visitor (means give a visitor a role as a user)
     // accept or refuse a pdv 
     const {code} = req.body; // code = 10 delete , 11 accept // id is a username
-    console.log('Body in accepte endpint ', req.body);
     if (code != 0 && code != 1) {
       logger.error('Set code 1 to desactivate or 0 to activate a user');
       util.setError(200, 'Set code 1 to desactivate or 0 to activate a user', status_code.CODE_ERROR.CODE_INCORRECT);
@@ -221,7 +213,6 @@ module.exports = function(gatewayExpressApp) {
     }
     // ////////////////////////////Get user///////////////////////////////////
     const myUser = await services.user.find(req.params.id);
-    console.log('myUser', myUser);
     if (myUser == false) {
       logger.error('User does not exist');
       return res.status(200).json({status: 'error', message: 'The user does not exist'});
@@ -236,16 +227,15 @@ module.exports = function(gatewayExpressApp) {
       // }
       // ////////////////////////////Get profile///////////////////////////////////
       const getProfiled = await getProfile(myUser.id, res);
-      console.log('getProfile', getProfiled.data);
       if (code == 1) { // refuse user
         if (getProfiled.data.status == 'success') {
-          console.log('CompanyId', getProfiled.data.data.CompanyId);
-          console.log('myUser.id', myUser.id);
+          logger.info(`CompanyId${getProfiled.data.data.CompanyId}`);
+          logger.info(`myUser.id${myUser.id}`);
           const user_res = await services.user.update(myUser.id, {demand: '2'});
           const updateBody = {
             demand: '2',
           };
-          console.log('aaaa update', getProfiled.data.data.id);
+          logger.info(`update${ getProfiled.data.data.id}`);
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.id, res);
           if (!userProfile.data) {
             logger.error('Error Problem in server ');
@@ -264,7 +254,7 @@ module.exports = function(gatewayExpressApp) {
             isActive: true,
             demand: '3',
           };
-          console.log('aaaa update', getProfiled.data.data.id);
+          logger.info(`update${ getProfiled.data.data.id}`);
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.id, res);
           if (!userProfile.data) {
             logger.error('Error Problem in server ');
@@ -272,10 +262,10 @@ module.exports = function(gatewayExpressApp) {
           }
           // //generate pswd/////////
           const randomPassword = Math.random().toString(36).slice(-8);
-          console.log('randomPassword', randomPassword);
+          logger.info(`randomPassword${ randomPassword}`);
           let myCredBasic = await services.credential.removeCredential(myUser.id, 'basic-auth');
           myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth');
-          console.log('myCredBasic', myCredBasic);
+          logger.info(`myCredBasic${ myCredBasic}`);
           const crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
             autoGeneratePassword: false,
             password: randomPassword,
@@ -283,7 +273,6 @@ module.exports = function(gatewayExpressApp) {
           });
           // ///get currency///////////
           const dataCurrency = await getCurrency(res);
-          console.log('dataCurrency', dataCurrency.data);
           if (!dataCurrency.data.data) {
             logger.error('Error Problem in server ');
             return res.status(500).json({'Error': 'Problem in server'});
@@ -291,21 +280,20 @@ module.exports = function(gatewayExpressApp) {
           const currencyId = dataCurrency.data.data.items[0].id;
           // ///add wallet///////////
           const companyId = getProfiled.data.data.CompanyId;
-          console.log('companyId', companyId);
+          logger.info(`companyId${ companyId}`);
           const dataWallet = await addWallet({
             balance: '0',
             companyId: companyId,
             currencyId: currencyId,
             createdBy: req.body.createdBy,
           });
-          console.log('req.body.createdBy', req.body.createdBy);
+          logger.info('req.body.createdBy', req.body.createdBy);
 
           if (dataWallet.data.status == 'error') {
             return res.status(dataWallet.status).json({status: dataWallet.data.status, message: dataWallet.data.message});
           }
           // ////////////////////////////Send mail///////////////////////////////////
           const {origin} = req.headers;
-          console.log('req.headers.origin ', req.headers.origin);
           let url;
           if (origin) {
             url = origin;
@@ -313,7 +301,6 @@ module.exports = function(gatewayExpressApp) {
             url = `${env.baseURL}:${env.HTTP_PORT}`;
           }
           const change_password_uri = `${url}/change-password`;
-          console.log('change_password_uri', change_password_uri);
           mail.sendMailAdminConfirmation('confirmationByAdmin', change_password_uri, myUser.email, myUser.firstname, myUser.lastname, myUser.username, randomPassword);
           return res.status(200).json({status: 'success', message: 'The user has been accepted'});
         } else {
@@ -325,13 +312,9 @@ module.exports = function(gatewayExpressApp) {
 
   gatewayExpressApp.post('/registration-confirm', async (req, res, next) => {
     try {
-      console.log('/registration-confirm');
+      logger.info('/registration-confirm');
       const {username, confirm_token} = req.query;
       const user = await services.user.findByUsernameOrId(username);
-      console.log('***********************************');
-      console.log('user', user);
-      console.log('confirm_token', confirm_token);
-      console.log('***********************************');
       console.debug('confirmation', user, req.query, confirm_token, username);
       if (user == false) { // username does not exist
         console.debug('wrong confirmation token');
@@ -339,13 +322,10 @@ module.exports = function(gatewayExpressApp) {
         return res.status(200).json({error: 'wrong confirmation token'});
       };
       const myCredBasic = await services.credential.getCredential(user.id, 'basic-auth');
-      console.log('myCredBasic', myCredBasic);
+      logger.info('myCredBasic', myCredBasic);
       let decoded;
       try {
         decoded = await verifyJwt(confirm_token);
-        console.log('***********************************');
-        console.log('decoded', decoded);
-        console.log('***********************************');
         if (!decoded) {
           console.debug('wrong confirmation token');
           logger.error('wrong confirmation token');
@@ -363,18 +343,12 @@ module.exports = function(gatewayExpressApp) {
           }
         }
       } catch (error) {
-        console.log('***********************************');
-        console.log('error', error);
-        console.log('***********************************');
         logger.error(`Error in adding profile: ${ error.message}`);
         return res.status(400).json({error: error.message});
       }
-      console.log('user_res');
       const user_res = await services.user.update(user.id, {confirmMail: 'true'}); // test this
-      console.log('user_res', user_res);
       // ///////////////////////////
       const getProfiled = await getProfile(user.id, res);
-      console.log('getProfile', getProfiled.data);
       if (getProfiled.data.data.length == 0) {
         return res.status(200).json({status: 'Error', message: 'profile does not existe with id_user', code: status_code.CODE_ERROR.NOT_EXIST});
       }

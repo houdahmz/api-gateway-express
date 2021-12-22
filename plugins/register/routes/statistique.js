@@ -165,12 +165,6 @@ module.exports = function(gatewayExpressApp) {
         res.status('500').json('Error: error server statsDataCommission ');
       }
 
-      console.log('statTopup', statTopup.data);
-      console.log('eeeeeefffff');
-      console.log('statTopup', statTopup);
-      console.log('statTopup.data', statTopup.data);
-      console.log('statTopup.data.data', statTopup.data.data);
-
       return res.status(200).json({
         'Services': {
           'paymee': amountPaymee.data.data,
@@ -200,11 +194,8 @@ module.exports = function(gatewayExpressApp) {
 
   gatewayExpressApp.get('/stats/byUser', verifyTokenUser, async (req, res, next) => { // still incomplete
     try {
-      console.log('------------------------');
-      console.log('----------req.body.userId-------------- ', req.body.userId);
       req.query.userId = req.body.userId;
       console.log('----------req.query.userId-------------- ', req.query.userId);
-      console.log('------------------------');
       // ////////////////////////topup///////////////////////
 
       logger.info('Call wallet get stock topup: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/topUpKh/transaction/stats/`);
@@ -215,8 +206,7 @@ module.exports = function(gatewayExpressApp) {
           dayB: req.query.dayB,
         },
       });
-      // console.log("amountPaymee",amountPaymee)
-      console.log('amountWallet.data', statTopup);
+      console.log('statTopup', statTopup.data);
       if (!statTopup.data) {
         return res.status('500').json('Error: Call wallet get solde all');
       }
@@ -224,7 +214,6 @@ module.exports = function(gatewayExpressApp) {
       if (statTopup.data.status == 'success') {
         stockTopup = statTopup.data.data;
       }
-      console.log('statTopup', statTopup);
       // //////////////////////
       const paramPaymee = {
         id_pdv: req.query.userId,
@@ -236,11 +225,7 @@ module.exports = function(gatewayExpressApp) {
       const amountPaymee = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/paymee/stats`, {
         params: paramPaymee,
       });
-      // console.log("amountPaymee",amountPaymee)
-      console.log('*************************************');
       console.log('amountPaymee.data', amountPaymee.data);
-      console.log('*************************************');
-
 
       if (!amountPaymee.data) {
         res.status('500').json('Error: error server');
@@ -303,26 +288,11 @@ module.exports = function(gatewayExpressApp) {
       if (!amountPostePayemnt.data) {
         res.status('500').json('Error: error server');
       }
-      console.log('amountPaymee', amountPaymee.data);
-      console.log('amountPosteRecharge', amountPosteRecharge.data);
-      console.log('amountPostePayemnt', amountPostePayemnt.data);
-      console.log('amountTopnet', amountTopnet.data);
-      console.log('amountVoucher', amountVoucher.data);
       let ca = 0;
-      // if (condition) {
-
-      // }
       console.log('amountPaymee.data', amountPaymee.data);
       ca = amountPaymee.data.data.amount.Success + amountPosteRecharge.data.data.amount.Success + amountPostePayemnt.data.data.amount.Success + amountTopnet.data.data.amount.Success;
       console.log('ca', ca);
       const nbT = amountPaymee.data.data.transaction.All + amountPosteRecharge.data.data.transaction.All + amountPostePayemnt.data.data.transaction.All + amountTopnet.data.data.transaction.All;
-      console.log('azerty',
-        {
-          userId: req.userId,
-          query: req.query.userId,
-          body: req.body.userId,
-        },
-      );
       logger.info('Call stats by month endpoint api-management/admin/statsAllMonth: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`);
       const statsDataAllMonth = await axios.get(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/admin/statsAllMonth`,
         {
@@ -331,7 +301,6 @@ module.exports = function(gatewayExpressApp) {
           },
         },
       );
-      // console.log("statsDataAllMonth",statsDataAllMonth)
       console.log('statsDataAllMonth.data', statsDataAllMonth.data);
       if (!statsDataAllMonth.data) {
         res.status('500').json('Error: error server');
@@ -349,11 +318,6 @@ module.exports = function(gatewayExpressApp) {
       if (!statsDataCommission.data) {
         res.status('500').json('Error: error server');
       }
-      console.log('eeeeeefffff');
-
-      console.log('statTopup', statTopup);
-      console.log('statTopup.data', statTopup.data);
-      console.log('statTopup.data.data', statTopup.data.data);
 
       return res.status(200).json({
         'Services': {
@@ -392,7 +356,6 @@ module.exports = function(gatewayExpressApp) {
           dayB: req.query.dayB,
         },
       });
-      // console.log("amountPaymee",amountPaymee)
       console.log('amountWallet.data', amountWallet.data);
       if (!amountWallet.data) {
         return res.status('500').json('Error: Call wallet get solde all');
@@ -412,7 +375,6 @@ module.exports = function(gatewayExpressApp) {
           // dayB: req.query.dayB
         },
       });
-      // console.log("amountPaymee",amountPaymee)
 
       console.log('amountWallet.data', stockVoucher.data);
       if (!stockVoucher) {

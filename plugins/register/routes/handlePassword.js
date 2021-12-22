@@ -24,7 +24,7 @@ const corsOptions = {
   origin: '*',
 };
 const {
-    verifyToken,verifyTokenSuperAdmin,verifyTokenSuperAdminOrAdmin,verifyTokenUser,verifyTokenCommercial,verifyBody,
+    verifyToken,
   } = require('./middleware');
   
 module.exports = function(gatewayExpressApp) {
@@ -38,18 +38,11 @@ module.exports = function(gatewayExpressApp) {
   gatewayExpressApp.post('/forgot-password', async (req, res, next) => { 
     // /////////////////Email////////////////////////
     const {email} = req.body;
-    if (!email) {
-      return res.status(400).json({status: 'Error', error: 'Email is required', code: status_code.CODE_ERROR.EMPTY});
-    }
+    if (!email) return res.status(400).json({status: 'Error', error: 'Email is required', code: status_code.CODE_ERROR.EMPTY});
     const user = await user_service.findByEmail(email);
-    if (!user) {
-      return res.status(400).json({status: 'Error', error: 'User with this email does not exist', code: status_code.CODE_ERROR.NOT_EXIST});
-    }
-    console.log('user', user);
+    if (!user) return res.status(400).json({status: 'Error', error: 'User with this email does not exist', code: status_code.CODE_ERROR.NOT_EXIST});
     // /////////////////Get username////////////////////////
     const {username} = user;
-      console.log('username', username);
-      console.log('user', user);
       console.debug('confirmation', user, username);
       if (user == false) { // username does not exist
         console.debug('Username does not exist');
@@ -57,15 +50,8 @@ module.exports = function(gatewayExpressApp) {
         return res.status(200).json({status: 'Error', error: 'Username does not exist', code: status_code.CODE_ERROR.NOT_EXIST});
       }
       const myUserJwt = await createJwt(username,'');
-      console.log('aaa', myUserJwt);
-      console.log('req.header Referer', req.header('Referer'));
-      console.log('req.headers[\'referer\']', req.headers['referer']);
-      console.log('req.header Referrer', req.get('Referrer'));
-      console.log(' Referrer || Referer', req.headers.referrer || req.headers.referer,
-      );
       // /////////////////Send mail////////////////////////
       const {origin} = req.headers;
-      console.log('req.headers.origin ', req.headers.origin);
       let url;
 
       if (origin) {
@@ -74,7 +60,6 @@ module.exports = function(gatewayExpressApp) {
         url = `${env.baseURL}:${env.HTTP_PORT}`;
       }
       const confirm_uri = `${url}/reset-password?username=${ username }&` + `token=${ myUserJwt}`;
-      console.log('confirm_uri', confirm_uri);
       mail.sendPasswordReset('Reset password', confirm_uri, user.email, user.firstname, user.lastname);
       logger.info(`Success check your email : ${ user.email}`);
       return res.status(201).json({etat: 'Success', message: `Check your email : ${ user.email } for username ${ username}`});
@@ -86,7 +71,6 @@ module.exports = function(gatewayExpressApp) {
       console.log('/reset-password');
       const {username, token} = req.query;
       const {password, password_confirmation} = req.body;
-      console.log('password', password);
       const user = await services.user.findByUsernameOrId(username);
       console.log('user', user);
       console.debug('confirmation', user, req.query, token, username);
@@ -102,7 +86,6 @@ module.exports = function(gatewayExpressApp) {
         // /////////////////Verify token////////////////////////
 
         decoded = await verifyJwt(token);
-        console.log('decoded', decoded);
         if (!decoded) {
           console.debug('wrong confirmation token');
           logger.error('Error wrong confirmation token');
@@ -121,6 +104,8 @@ module.exports = function(gatewayExpressApp) {
       } catch (error) {
         console.log('error', error.message);
         logger.error(`Error ${ error.message}`);
+        logger.error(error);
+
         return res.status(400).json({status: 'Error', error: error.message});
       }
       let myCredBasic = await services.credential.removeCredential(user.id, 'basic-auth');
@@ -151,14 +136,8 @@ module.exports = function(gatewayExpressApp) {
       console.log('/change-password');
       console.log('req.body', req.body);
       const {old_password, new_password, userId} = req.body;
-      console.log('old_password', old_password);
-      console.log('new_password', new_password);
-      if (!old_password) {
-        return res.status(400).json({status: 'Error', error: 'old_password is required', code: status_code.CODE_ERROR.REQUIRED});
-      }
-      if (!new_password) {
-        return res.status(400).json({status: 'Error', error: 'new_password is required', code: status_code.CODE_ERROR.REQUIRED});
-      }
+      if (!old_password) return res.status(400).json({status: 'Error', error: 'old_password is required', code: status_code.CODE_ERROR.REQUIRED});
+      if (!new_password) return res.status(400).json({status: 'Error', error: 'new_password is required', code: status_code.CODE_ERROR.REQUIRED});
       const user = await services.user.findByUsernameOrId(userId);
       console.log('user', user);
       // console.debug('confirmation', user, req.query, token, username)
@@ -189,6 +168,7 @@ module.exports = function(gatewayExpressApp) {
       }
     } catch (err) {
       logger.error(`Error: ${ err.message}`);
+      logger.error(err);
       return res.status(422).json({error: err.message});
     }
   });

@@ -50,11 +50,9 @@ module.exports = function(gatewayExpressApp) {
   gatewayExpressApp.use(device.capture());
 
   gatewayExpressApp.post('/api/login', async (req, res, next) => { // code=20 for agent created by admin
-    console.log('*********************************', req.body);
+    console.log('req.body', req.body);
     console.log('/api/login');
     const {username, password} = req.body;
-    console.log('password', password);
-    console.log('username', username);
     const myUser = await services.user.find(username);
     console.log('myUser', myUser);
     if (myUser == false) {
@@ -97,18 +95,7 @@ module.exports = function(gatewayExpressApp) {
     // var seconds = new Date().getTime() / 1000;
     // console.log("seconds",seconds)
     const userFinded = await services.user.findByUsernameOrId(myUser.id);
-    console.log('******************userici****************');
-    console.log('user', userFinded.role);
-    console.log('userFinded.nextTry', userFinded.nextTry);
-    console.log('user.loginAttempts', userFinded.loginAttempts);
-    console.log('Date.now()', Date.now());
-
-
-    const userFinded1 = await services.user.findByUsernameOrId(myUser.id);
-    console.log('******************userici****************');
-    console.log('user', userFinded1.role);
-    console.log('userFinded.nextTry', userFinded1.nextTry);
-    console.log('user.loginAttempts', userFinded1.loginAttempts);
+    console.log('user', userFinded);
     console.log('Date.now()', Date.now());
 
     if (userFinded.loginAttempts == 0 || !userFinded.loginAttempts) { // First loginAttempts
@@ -184,9 +171,7 @@ module.exports = function(gatewayExpressApp) {
     let crd_oauth2 = await services.credential.getCredential(myUser.id, 'oauth2');
     if (crd_oauth2) {
       const scope = crd_oauth2.scopes;
-      console.log('******************Scopeeeeeee******************');
       console.log('scope', scope);
-      console.log('************************************');
       crd_oauth2 = await services.credential.removeCredential(crd_oauth2.id, 'oauth2');
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', {scopes: scope});
       const get_crd_oauth2 = await services.credential.getCredential(myUser.id, 'oauth2');
@@ -205,10 +190,7 @@ module.exports = function(gatewayExpressApp) {
       }
       // ///////////////////////////Get user info by username //////////////////////////////////
       const user = await services.user.findByUsernameOrId(myUser.id);
-      console.log('******************userici****************');
-      console.log('user', user.role);
       console.log('user', user);
-      console.log('user.loginAttempts', user.loginAttempts);
       
 // ///////////////////////////////////
       console.log('*****************************************');
@@ -234,18 +216,8 @@ module.exports = function(gatewayExpressApp) {
         roles.push(element);
       });
       console.log('roles', roles);
-      if (roles[0] == 'ROLE_VISITOR') {
-        // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
-        return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
-      }
-      if (roles[0] == 'ROLE_SUPER_ADMIN') {
-        // return res.status(token.status).json({ token: token.data, role: "ROLE_"+scope.toUpperCase(), user: userJsonVisistor, categoryWalletId: null });
-        return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
-      }
-      // else
-      // if(scope[0] == 'admin'){
-      //   return res.status(token.status).json({ token: token.data, role: scope ,user: userJsonVisistor , categoryWalletId: null});
-      // }
+      if (roles[0] == 'ROLE_VISITOR') return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
+      if (roles[0] == 'ROLE_SUPER_ADMIN') return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
       else {
         // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /** ************************ */
@@ -302,7 +274,6 @@ module.exports = function(gatewayExpressApp) {
           util.setError(500, 'Internal Server wallet Error', status_code.CODE_ERROR.SERVER);
           return util.send(res);
         }
-        // console.log("serviceResult",serviceResult.data.data)
         let serviceData = [];
         if (serviceResult.data) {
         if (serviceResult.data.data) {
@@ -328,8 +299,6 @@ module.exports = function(gatewayExpressApp) {
           return util.send(res);
         }
         /** ******************************************************************************************** */
-        // console.log("data",data)
-        console.log('*********************************');
         let dataCategory;
         if (data.data) {
           if (data.data.data) {
@@ -410,9 +379,6 @@ module.exports = function(gatewayExpressApp) {
           util.setError(500, 'error', status_code.CODE_ERROR.SERVER);
           return util.send(res);
         }
-        logger.info('Getting token');
-        console.log('token.status', token.status);
-        console.log('token.data', token.data);
         console.log('scope', scope);
         console.log('myUser', myUser);
         return res.status(token.status).json({token: token.data, role: roles, user: myUser, services: serviceData});
