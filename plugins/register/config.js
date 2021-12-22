@@ -17,6 +17,8 @@ module.exports = {
         ALREADY_REFUSED: 2013,
         HAS_NO_ROLE: 2014,
         CODE_INCORRECT: 2015,
+        SPECIFY_RAISON: 2016,
+
 
         OTHER: 2020,
 

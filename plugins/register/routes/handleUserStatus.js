@@ -211,6 +211,11 @@ module.exports = function(gatewayExpressApp) {
       util.setError(200, 'Set code 1 to desactivate or 0 to activate a user', status_code.CODE_ERROR.CODE_INCORRECT);
       return util.send(res);
     }
+    if (!req.body.raison && code == 1) {
+        logger.error('You should specify a raison if you want to reject a demand'); // demand is already accepted
+        return res.status(200).json({status: 'error', message: 'You should specify a raison', code: status_code.CODE_ERROR.SPECIFY_RAISON});
+    }
+
     // ////////////////////////////Get user///////////////////////////////////
     const myUser = await services.user.find(req.params.id);
     if (myUser == false) {
@@ -235,6 +240,7 @@ module.exports = function(gatewayExpressApp) {
           const updateBody = {
             demand: '2',
             deleted: 1,
+            rejectedDemandRaison: req.body.raison,
           };
           logger.info(`update${ getProfiled.data.data.id}`);
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.id, res);
