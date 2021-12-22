@@ -2,6 +2,7 @@
 const services = require('express-gateway/lib/services/');
 const util = require('../helpers/utils');
 const user_service = require('../../../services/user/user.service');
+const env = require('../../../config/env.config');
 
 const validate = require('../middleware/validation');
 const {patchTeamSchema} = require('../schemaValidation/register');
@@ -30,8 +31,8 @@ const corsOptions = {
 };
 
 module.exports = function(gatewayExpressApp) {
-  gatewayExpressApp.use(bodyParser.json({limit: '50mb', extended: true}));
-  gatewayExpressApp.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+  gatewayExpressApp.use(bodyParser.json({limit: env.LIMIT, extended: true}));
+  gatewayExpressApp.use(bodyParser.urlencoded({limit: env.LIMIT, extended: true}));
   gatewayExpressApp.use(cors(corsOptions));
   gatewayExpressApp.use(device.capture());
 

@@ -2,6 +2,7 @@ const services = require('express-gateway/lib/services/');
 const user_service = require('../../../services/user/user.service');
 const device = require('express-device');
 const cors = require('cors');
+const env = require('../../../config/env.config');
 
 
 const status_code = require('../config');
@@ -12,8 +13,8 @@ const corsOptions = {
 };
 
 module.exports = function(gatewayExpressApp) {
-  gatewayExpressApp.use(bodyParser.json({limit: '50mb', extended: true}));
-  gatewayExpressApp.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+  gatewayExpressApp.use(bodyParser.json({limit: env.LIMIT, extended: true}));
+  gatewayExpressApp.use(bodyParser.urlencoded({limit: env.LIMIT, extended: true}));
 
   gatewayExpressApp.use(cors(corsOptions));
   gatewayExpressApp.use(device.capture());

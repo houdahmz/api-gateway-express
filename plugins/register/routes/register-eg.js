@@ -5,16 +5,11 @@ const mail = require('../../../services/emails/emailProvider');
 const mailSimple = require('./mailer.config.js');
 const util = require('../helpers/utils');
 const env = require('../../../config/env.config');
-const user_service = require('../../../services/user/user.service');
 
 const validate = require('../middleware/validation');
 const {schema, teamSchema, adminSchema} = require('../schemaValidation/register');
 const {profileSchema} = require('../schemaValidation/profile');
 const {schemaCompany} = require('../schemaValidation/company');
-const {
-  verifyBody,
-} = require('./middleware');
-
 const logger = require('../../../config/Logger');
 
 const device = require('express-device');
@@ -28,7 +23,7 @@ const {
 } = require('../../Services/function');
 
 const {
-  verifyTokenSuperAdmin,verifyTokenSuperAdminOrAdmin,verifyTokenCommercial,
+  verifyTokenSuperAdmin,verifyTokenSuperAdminOrAdmin,verifyTokenCommercial,verifyBody,
 } = require('./middleware');
 
 // const bodyParser = require("body-parser");
@@ -39,26 +34,19 @@ const corsOptions = {
 };
 
 module.exports = function(gatewayExpressApp) {
-  gatewayExpressApp.use(bodyParser.json({limit: '50mb', extended: true}));
-  gatewayExpressApp.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+  gatewayExpressApp.use(bodyParser.json({limit: env.LIMIT, extended: true}));
+  gatewayExpressApp.use(bodyParser.urlencoded({limit: env.LIMIT, extended: true}));
   gatewayExpressApp.use(cors(corsOptions));
   gatewayExpressApp.use(device.capture());
 
   // ////////////////////////////////////////////////////////////////////////////////
-  gatewayExpressApp.post('/register', [validate(schema),
+  gatewayExpressApp.post('/register',verifyBody, [validate(schema),
 validate(profileSchema),
 validate(schemaCompany)], async (req, res, next) => { 
     try {
       const {firstname, username, lastname, email, phone} = req.body;
       const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity, canals, location_x, location_y, imei, id_commercial} = req.body;
       let {fromWeb} = req.body;
-      console.log('fromWeb',fromWeb);
-      const findByUsername = await services.user.findByUsernameOrId(username);
-      console.log('findByUsername---------------',findByUsername);
-      if (findByUsername) {
-        return res.status(200).json({status: 'Error', error: 'username already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
-      }
-
       // ///////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
       if (!email) {
         util.setError(200, 'email is required', status_code.CODE_ERROR.EMPTY);
@@ -68,28 +56,10 @@ validate(schemaCompany)], async (req, res, next) => {
         util.setError(200, 'phone is required', status_code.CODE_ERROR.EMPTY);
         return util.send(res);
       }
-      // /////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////////
-      const findByEmail = await user_service.findByEmail(email);
-      console.log('findByEmail---------------',findByEmail);
-      if (findByEmail) {
-        return res.status(200).json({status: 'Error', error: 'Email already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
-      }
-
-      const findByPhone = await user_service.findByPhone(phone);
-      console.log('findByEmail---------------',findByPhone);
-      if (findByPhone) {
-        return res.status(200).json({status: 'Error', error: 'Phone already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
-      }
       // ///////////////////////////generate random password/////////////////////////////////////////////////////
       const randomPassword = Math.random().toString(36).slice(-8);
       console.log('randomPassword', randomPassword);
-      console.log('randomPassword', env.JWT_TIME);
-      console.log('randomPassword', env.JWT_SUBJECT);
-      console.log('randomPassword', env.ALGORITHM);
-
       const myUserJwt = await createJwt(username,randomPassword);
-      console.log('myUserJwt aaaaa',myUserJwt);
-      console.log('myUserJwt', `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`);
       // /////////////////////////////create user/////////////////////////////////////////////////////
       const bodyUser = {
           isActive: false,
@@ -128,7 +98,6 @@ validate(schemaCompany)], async (req, res, next) => {
       const {origin} = req.headers;
       console.log('req.headers.origin ', req.headers.origin);
       if (origin == env.URL) fromWeb = true;
-      console.log('fromWeb ici ',fromWeb);
 
       const body = {
         fromWeb: fromWeb,
@@ -152,7 +121,7 @@ validate(schemaCompany)], async (req, res, next) => {
 
 
       };
-      console.log('fromWebbody  ici ',body);
+      console.log('body',body);
 
       const userProfile = await creteProfile(myUser, body, dataType, res);
       if (!userProfile.data) {
@@ -186,25 +155,18 @@ validate(schemaCompany)], async (req, res, next) => {
       return res.status(201).json({etat: 'Success', message: `Check your email : ${ email}`});
     } catch (err) {
       logger.error(`Error :${ err.message}`);
-      util.setError(422, err.message); // code
+      util.setError(500, err.message); // code
       return util.send(res);
     }
   });
 
-  gatewayExpressApp.post('/pdv-by-commercial',verifyTokenCommercial, [validate(schema),
+  gatewayExpressApp.post('/pdv-by-commercial',verifyTokenCommercial,verifyBody, [validate(schema),
     validate(profileSchema),
     validate(schemaCompany)], async (req, res, next) => { 
         try {
           const {firstname, username, lastname, email, phone} = req.body;
           const {image, patent, photo, pos, cin, commercial_register, city, zip_code, adresse, activity,location_x,location_y, imei, canals} = req.body;
           let {fromWeb} = req.body;
-          console.log('fromWeb',fromWeb);
-          const findByUsername = await services.user.findByUsernameOrId(username);
-          console.log('findByUsername---------------',findByUsername);
-          if (findByUsername) {
-            return res.status(200).json({status: 'Error', error: 'username already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
-          }
-    
           // ///////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
           if (!email) {
             util.setError(200, 'email is required', status_code.CODE_ERROR.EMPTY);
@@ -214,28 +176,11 @@ validate(schemaCompany)], async (req, res, next) => {
             util.setError(200, 'phone is required', status_code.CODE_ERROR.EMPTY);
             return util.send(res);
           }
-          // /////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////////
-          const findByEmail = await user_service.findByEmail(email);
-          console.log('findByEmail---------------',findByEmail);
-          if (findByEmail) {
-            return res.status(200).json({status: 'Error', error: 'Email already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
-          }
-    
-          const findByPhone = await user_service.findByPhone(phone);
-          console.log('findByEmail---------------',findByPhone);
-          if (findByPhone) {
-            return res.status(200).json({status: 'Error', error: 'Phone already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
-          }
           // ///////////////////////////generate random password/////////////////////////////////////////////////////
           const randomPassword = Math.random().toString(36).slice(-8);
           console.log('randomPassword', randomPassword);
-          console.log('randomPassword', env.JWT_TIME);
-          console.log('randomPassword', env.JWT_SUBJECT);
-          console.log('randomPassword', env.ALGORITHM);
-    
+   
           const myUserJwt = await createJwt(username,randomPassword);
-          console.log('myUserJwt aaaaa',myUserJwt);
-          console.log('myUserJwt', `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`);
           // /////////////////////////////create user/////////////////////////////////////////////////////
           const bodyUser = {
               isActive: false,
@@ -275,13 +220,12 @@ validate(schemaCompany)], async (req, res, next) => {
           console.log('req.headers.origin ', req.headers.origin);
           if (origin == env.URL) fromWeb = true;
           fromWeb = false;
-          console.log('fromWeb ici ',fromWeb);
           const getProfileCommercial = await getProfile(req.body.created_by, res);
 
 
           const id_commercial = getProfileCommercial.data.data.id;
-          console.log('id_commercial ici ',id_commercial);
-          console.log('req.body ici ',req.body);
+          console.log('id_commercial',id_commercial);
+          console.log('req.body',req.body);
 
 
           const body = {
@@ -422,7 +366,7 @@ validate(schemaCompany)], async (req, res, next) => {
     }
   });
 
-  gatewayExpressApp.post('/team-register', validate(teamSchema), async (req, res, next) => { // incomplete {add send mail with url /change_password} 
+  gatewayExpressApp.post('/team-register',verifyBody,validate(teamSchema), async (req, res, next) => { // incomplete {add send mail with url /change_password} 
     try {
       const {firstname, username, lastname, email, phone, type_userId, role} = req.body;
       // ///////////////////////////Check existance of email/phone/typeId/////////////////////////////////////////////////////
@@ -441,35 +385,10 @@ validate(schemaCompany)], async (req, res, next) => {
       if (!role) {
         return res.status(400).json({status: 'Error', error: 'role is required', code: status_code.CODE_ERROR.REQUIRED});
       }
-
-      // /////////////////////////////////Check email/phone unique or not/////////////////////////////////////////////////////
-      const scope_all = await services.credential.getAllScopes();
-      console.log('scope_all',scope_all);
-      const scope_exist = await services.credential.existsScope(role);
-      console.log('scope_exist',scope_exist);
-      if (!scope_exist) {
-        return res.status(400).json({status: 'Error', error: 'role does not exist', code: status_code.CODE_ERROR.NOT_EXIST});
-      }
-      const findByUsername = await services.user.findByUsernameOrId(username);
-      console.log('findByUsername---------------',findByUsername);
-      if (findByUsername) {
-        return res.status(200).json({status: 'Error', error: 'username already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
-      }
-      const findByEmail = await user_service.findByEmail(email);
-      console.log('findByEmail---------------',findByEmail);
-      if (findByEmail) {
-        return res.status(200).json({status: 'Error', error: 'Email already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
-      }
-
-      const findByPhone = await user_service.findByPhone(phone);
-      if (findByPhone) {
-        return res.status(200).json({status: 'Error', error: 'Phone already exist', code: status_code.CODE_ERROR.ALREADY_EXIST});
-      }
       // ///////////////////////////generate random password/////////////////////////////////////////////////////
       const randomPassword = Math.random().toString(36).slice(-8);
       console.log('randomPassword', randomPassword);
       const myUserJwt = await createJwt(username,randomPassword);
-      console.log('myUserJwt', `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/type-user/by_code/`);
       const dataType = await getTypeById(type_userId, res);
       console.log('dataType.data.data', dataType.data);
       if (!dataType.data.data) {
@@ -514,23 +433,6 @@ validate(schemaCompany)], async (req, res, next) => {
       const creteProfile = async (myUser) => {
         try {
           console.log('myUser',myUser);
-          console.log('profile', {
-            id_user: myUser.id,
-            first_name: myUser.firstname,
-            last_name: myUser.lastname,
-            phone: myUser.phone,
-            typeId: type,
-            created_by: myUser.id,
-
-            team: true,
-            isActive: true,
-            confirmMail: false,
-            profilCompleted: true,
-            username: username,
-            email: email,
-            role: code,
-
-          });
           logger.info('Call postProfile: ' + `${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`);
           return await axios.post(`${env.baseURL}:${env.HTTP_PORT_API_MANAGEMENT}/api-management/user-management/profile`, {
             id_user: myUser.id,
@@ -602,7 +504,7 @@ validate(schemaCompany)], async (req, res, next) => {
     }
   });
 
-  gatewayExpressApp.post('/admin-register', validate(adminSchema), verifyTokenSuperAdmin,async (req, res, next) => {
+  gatewayExpressApp.post('/admin-register',verifyBody, validate(adminSchema), verifyTokenSuperAdmin,async (req, res, next) => {
     try {
       console.log('/api/admin-register');
       const {firstname, username, lastname, email, phone} = req.body;
