@@ -417,7 +417,7 @@ apiEndpoints:
         - admin
         - super_admin
     - host: '*'
-      paths: '/voucher/transaction/by_user/:id'
+      paths: '/voucher/transaction/by_user'
       methods:
         - GET
       scopes:
