@@ -158,6 +158,7 @@ apiEndpoints:
       methods:
         - GET
       scopes:
+        - commercial
         - admin
         - super_admin
     - host: '*'
