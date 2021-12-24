@@ -162,7 +162,7 @@ apiEndpoints:
         - admin
         - super_admin
     - host: '*'
-      paths: /user-management/profile/demand
+      paths: /user-management/profile/all
       methods:
         - GET
       scopes:
