@@ -102,10 +102,6 @@ module.exports = function(gatewayExpressApp) {
     const userFinded = await services.user.findByUsernameOrId(myUser.id);
     console.log('user', userFinded);
     console.log('Date.now()', Date.now());
-    const userUpdated = await services.user.update(userFinded.id,{
-      loginAttempts: 10,
-      isBlocked: 'false',
-    });
 
     if (userFinded.loginAttempts == 0 || !userFinded.loginAttempts) { // First loginAttempts
     userFinded.loginAttempts = 1;
@@ -223,7 +219,7 @@ module.exports = function(gatewayExpressApp) {
       });
       console.log('roles', roles);
       if (roles[0] == 'ROLE_VISITOR') return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
-      if (roles[0] == 'super_admin') return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
+      if (roles[0] == 'ROLE_SUPER_ADMIN') return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
       else {
         // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /** ************************ */
