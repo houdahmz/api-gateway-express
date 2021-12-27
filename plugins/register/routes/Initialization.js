@@ -47,7 +47,7 @@ module.exports = async function(gatewayExpressApp) {
         team: true,
         redirectUri: 'https://www.khallasli.com',
       });
-
+        
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: env.PASSWORD,
