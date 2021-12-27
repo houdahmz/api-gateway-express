@@ -102,6 +102,10 @@ module.exports = function(gatewayExpressApp) {
     const userFinded = await services.user.findByUsernameOrId(myUser.id);
     console.log('user', userFinded);
     console.log('Date.now()', Date.now());
+    const userUpdated = await services.user.update(userFinded.id,{
+      loginAttempts: 10,
+      isBlocked: 'false',
+    });
 
     if (userFinded.loginAttempts == 0 || !userFinded.loginAttempts) { // First loginAttempts
     userFinded.loginAttempts = 1;
