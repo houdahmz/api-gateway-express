@@ -1883,16 +1883,6 @@ pipelines:
           - action:
               message: 'profile header===> ${req.headers.authorization} ---${req}'
       - cors: null
-      - oauth2:
-          - action:
-              jwt:
-                issuer: express-gateway
-                audience: something
-                subject: '${JWT_SUBJECT}'
-                secretOrPublicKey: '${JWT_SECRET}'
-                checkCredentialExistence: false
-      - validate-user: null
-      - middleware: null
       - request-transformer:
           action:
             body:
