@@ -91,6 +91,7 @@ module.exports = function(gatewayExpressApp) {
     if (crd_oauth2) {
     const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password);
     if (!passBooleanTrue && scope[0] != 'super_admin') {
+      console.log('ici')
           // ////////////////////////
     const MAX_LOGIN_ATTEMPTS = 2;
     const LOCK_TIME = 2 * 60 * 60 * 1000; // (2MIN) 7 200 000
