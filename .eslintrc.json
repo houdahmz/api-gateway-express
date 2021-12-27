@@ -6,9 +6,7 @@
         "node": true,
         "es2021": true
     },
-    "extends": [
-        "google"
-    ],
+    "extends": ["airbnb-base", "plugin:prettier/recommended"],
     "parserOptions": {
         "ecmaVersion": 13
     },

@@ -1,5 +1,5 @@
 require('dotenv/config');
-require('./../server');
+require('../server.js');
 
 const HTTP_PORT = process.env.HTTP_PORT || 8080;
 const {JWT_SECRET} = process.env;

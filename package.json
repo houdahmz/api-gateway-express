@@ -5,10 +5,14 @@
   "license": "UNLICENSED",
   "version": "1.0.0",
   "main": "server.js",
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
+  "scripts": {
+    "start": "node ./server/bin/www",
+    "transpile": "babel ./plugins --out-dir dist-server",
+    "clean": "rimraf dist-server",
+    "build": "npm-run-all clean transpile",
+    "dev": "NODE_ENV=development npm-run-all build server",
+    "prod": "NODE_ENV=production npm-run-all build server",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@babel/cli": "^7.16.0",
@@ -31,6 +35,7 @@
     "mobile-detect": "^1.4.5",
     "node-iplocate": "^1.0.2",
     "nodemailer": "^6.4.16",
+    "npm-run-all": "^4.1.5",
     "password-validator": "^5.1.1",
     "path": "^0.12.7",
     "public-ip": "^4.0.4",
@@ -44,8 +49,13 @@
     "@babel/core": "^7.16.5",
     "@babel/node": "^7.12.6",
     "@babel/preset-env": "^7.16.5",
-    "eslint": "^8.3.0",
-    "eslint-config-google": "^0.14.0"
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1"
   },
   "engines": {
     "node": "14.15.4",
