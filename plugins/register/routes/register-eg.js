@@ -155,6 +155,7 @@ validate(schemaCompany)], async (req, res, next) => {
       return res.status(201).json({etat: 'Success', message: `Check your email : ${ email}`});
     } catch (err) {
       logger.error(`Error :${ err.message}`);
+      
       util.setError(500, err.message); // code
       return util.send(res);
     }
