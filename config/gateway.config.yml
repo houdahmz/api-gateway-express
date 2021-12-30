@@ -1822,7 +1822,7 @@ pipelines:
       - log:
           - action:
               message: 'topupKh header===> ${req.headers.authorization} ---${req}'
-      - cors: null
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -1852,7 +1852,7 @@ pipelines:
       - log:
           - action:
               message: 'stock header===> ${req.headers.authorization} ---${req}'
-      - cors: null
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -1883,6 +1883,14 @@ pipelines:
           - action:
               message: 'profile header===> ${req.headers.authorization} ---${req}'
       - cors:
+      - oauth2:
+          - action:
+              jwt:
+                issuer: express-gateway
+                audience: something
+                subject: '${JWT_SUBJECT}'
+                secretOrPublicKey: '${JWT_SECRET}'
+                checkCredentialExistence: false
       - validate-user:
       - middleware:
       - request-transformer:
@@ -1906,7 +1914,7 @@ pipelines:
               message: >-
                 topup header===> ${req.headers.authorization}
                 ---${req.originalUrl}  ${req.url}
-      - cors: null
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -1937,7 +1945,7 @@ pipelines:
               message: >-
                 paymee header===> ${req.headers.authorization}
                 ---${req.originalUrl}  ${req.url}
-      - cors: null
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -1968,7 +1976,7 @@ pipelines:
               message: >-
                 home header===> ${req.headers.authorization}
                 ---${req.originalUrl}  ${req.url}
-      - cors: null
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -2000,7 +2008,7 @@ pipelines:
               message: >-
                 open header===> ${req.headers.authorization}
                 ---${req.originalUrl}  ${req.url}
-      - cors: null
+      - cors:
       - log:
           - action:
               message: '${res.statusCode}-${req.method} ${req.originalUrl}  ${req.url}'
@@ -2017,7 +2025,7 @@ pipelines:
               message: >-
                 api admin header===> ${req.headers.authorization}
                 ${req.originalUrl}  ${req.url}
-      - cors: null
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -2046,7 +2054,7 @@ pipelines:
       - log:
           - action:
               message: 'header===> ${req.headers.authorization} ---${req}'
-      - cors: null
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -2076,7 +2084,7 @@ pipelines:
       - log:
           - action:
               message: 'topnet header===> ${req.headers.authorization} ---${req}'
-      - cors: null
+      - cors:
       - oauth2:
           - action:
               jwt:
@@ -2106,7 +2114,7 @@ pipelines:
       - log:
           - action:
               message: 'wallet header===> ${req.headers.authorization} ---${req}'
-      - cors: null
+      - cors:
       - oauth2:
           - action:
               jwt:
