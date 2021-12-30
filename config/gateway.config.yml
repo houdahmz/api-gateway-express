@@ -1792,7 +1792,7 @@ pipelines:
               message: >-
                 voucher header===> ${req.headers.authorization}
                 ---${req.originalUrl}  url: ${req.url} user: ${req.user}
-      - cors: null
+      - cors: 
       - oauth2:
           - action:
               jwt:
@@ -1882,7 +1882,9 @@ pipelines:
       - log:
           - action:
               message: 'profile header===> ${req.headers.authorization} ---${req}'
-      - cors: null
+      - cors:
+      - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
