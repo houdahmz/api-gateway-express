@@ -1801,8 +1801,8 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - validate-user: null
-      - middleware: null
+      - validate-user:
+      - middleware:
       - request-transformer:
           - action:
               body:
@@ -1831,8 +1831,8 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - validate-user: null
-      - middleware: null
+      - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
@@ -1861,8 +1861,8 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - validate-user: null
-      - middleware: null
+      - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
@@ -1913,7 +1913,7 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - validate-user: null
+      - validate-user:
       - request-transformer:
           action:
             body:
@@ -1944,7 +1944,7 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - validate-user: null
+      - validate-user:
       - request-transformer:
           action:
             body:
@@ -1975,8 +1975,8 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - validate-user: null
-      - middleware: null
+      - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
@@ -2024,7 +2024,7 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - validate-user: null
+      - validate-user:
       - request-transformer:
           action:
             body:
@@ -2053,8 +2053,8 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - validate-user: null
-      - middleware: null
+      - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
@@ -2083,8 +2083,8 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - validate-user: null
-      - middleware: null
+      - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
@@ -2113,8 +2113,8 @@ pipelines:
                 subject: '${JWT_SUBJECT}'
                 secretOrPublicKey: '${JWT_SECRET}'
                 checkCredentialExistence: false
-      - validate-user: null
-      - middleware: null
+      - validate-user:
+      - middleware:
       - request-transformer:
           action:
             body:
