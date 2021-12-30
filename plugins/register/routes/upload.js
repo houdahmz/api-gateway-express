@@ -69,7 +69,7 @@ module.exports = function(gatewayExpressApp) {
         });
       }, 10000);
 
-      return res.status(200).json({status: 'success', path: env.URL + filePath, code: status_code.CODE_SUCCESS.SUCCESS});
+      return res.status(200).json({status: 'success', path: `${env.URL }/${ filePath}`, code: status_code.CODE_SUCCESS.SUCCESS});
       } catch (error) {
       console.log('error',error);
       return res.status(200).json({status: 'error', path: null, error: error, code: status_code.CODE_ERROR.ALREADY_EXIST});
