@@ -10,6 +10,7 @@ const {JWT_SUBJECT} = process.env;
 const {JWT_TIME} = process.env;
 const {baseURL} = process.env;
 const {URL} = process.env;
+const {urlUpload} = process.env;
 
 
 const {USERADMIN} = process.env;
@@ -37,5 +38,6 @@ module.exports = {
     HTTP_PORT_API_MANAGEMENT: HTTP_PORT_API_MANAGEMENT,
     HTTP_PORT_ADMIN: HTTP_PORT_ADMIN,
     baseURL: baseURL,
+    urlUpload: urlUpload,
 
   };
