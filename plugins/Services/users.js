@@ -104,6 +104,8 @@ exports.creteProfile = async (myUser, body, type, res) => {
             canals: body.canals,
             id_commercial: body.id_commercial,
 
+            pos: body.pos,
+
             location_x: body.location_x,
             location_y: body.location_y,
             imei: body.imei,

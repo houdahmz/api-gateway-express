@@ -34,7 +34,7 @@ module.exports = async function(gatewayExpressApp) {
     }
 
     if (myUserExist == false) { // if superAdmin does not exist
-      myUser = await user_service.insert.insert({
+      myUser = await user_service.insert({
         isActive: true,
         confirmMail: true,
         profilCompleted: true,
@@ -43,11 +43,11 @@ module.exports = async function(gatewayExpressApp) {
         username: env.USERADMIN,
         email: env.EMAIL,
         phone: env.PHONE,
-        role: 'ROLE_SUPER_ADMIN',
+        role: 'super_admin',
         team: true,
         redirectUri: 'https://www.khallasli.com',
       });
-
+        
       crd_basic = await services.credential.insertCredential(myUser.id, 'basic-auth', {
         autoGeneratePassword: false,
         password: env.PASSWORD,

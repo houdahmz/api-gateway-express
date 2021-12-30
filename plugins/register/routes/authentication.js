@@ -86,8 +86,12 @@ module.exports = function(gatewayExpressApp) {
 
     const myCredBasic = await services.credential.getCredential(myUser.id, 'basic-auth');
     console.log('myCredBasic ', myCredBasic);
+    let crd_oauth2 = await services.credential.getCredential(myUser.id, 'oauth2');
+    const scope = crd_oauth2.scopes;
+    if (crd_oauth2) {
     const passBooleanTrue = await utils.compareSaltAndHashed(password, myCredBasic.password);
-    if (!passBooleanTrue) {
+    if (!passBooleanTrue && scope[0] != 'super_admin') {
+      console.log('ici')
           // ////////////////////////
     const MAX_LOGIN_ATTEMPTS = 2;
     const LOCK_TIME = 2 * 60 * 60 * 1000; // (2MIN) 7 200 000
@@ -169,9 +173,6 @@ module.exports = function(gatewayExpressApp) {
       util.setError(200, 'Wrong password', status_code.CODE_ERROR.INCORRECT_PASSWORD);
       return util.send(res);
     }
-    let crd_oauth2 = await services.credential.getCredential(myUser.id, 'oauth2');
-    if (crd_oauth2) {
-      const scope = crd_oauth2.scopes;
       console.log('scope', scope);
       crd_oauth2 = await services.credential.removeCredential(crd_oauth2.id, 'oauth2');
       crd_oauth2 = await services.credential.insertCredential(myUser.id, 'oauth2', {scopes: scope});

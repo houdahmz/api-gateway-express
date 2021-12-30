@@ -9,6 +9,8 @@
     "extends": [
         "google"
     ],
+//   "extends": ["airbnb-base", "plugin:prettier/recommended"],
+
     "parserOptions": {
         "ecmaVersion": 13
     },

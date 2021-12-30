@@ -155,6 +155,7 @@ validate(schemaCompany)], async (req, res, next) => {
       return res.status(201).json({etat: 'Success', message: `Check your email : ${ email}`});
     } catch (err) {
       logger.error(`Error :${ err.message}`);
+      
       util.setError(500, err.message); // code
       return util.send(res);
     }
@@ -535,7 +536,7 @@ validate(schemaCompany)], async (req, res, next) => {
       return util.send(res);
       }
       // ///////////////////
-      const dataType = await getType('20', res);
+      const dataType = await getType('30', res);
       if (!dataType.data.data) {
         logger.error('Error Problem in server ');
         return res.status(500).send({status: 'Error', error: 'Internal Server Error', code: status_code.CODE_ERROR.SERVER});

@@ -1,5 +1,4 @@
-module.exports = { 
-
+module.exports = {
     CODE_ERROR: {
         EMPTY: 2000,
         NOT_EXIST: 2001,
@@ -19,25 +18,19 @@ module.exports = {
         CODE_INCORRECT: 2015,
         SPECIFY_RAISON: 2016,
 
-
         OTHER: 2020,
-
-
-    }, 
+    },
     CODE_SUCCESS: {
         SUCCESS: 2202,
         LIST_EMPTY: 2203,
-
-    },   
+    },
     USER: {
         DESACTIVATE: 2007,
-        NOT_EXIST: 01,
-        TYPE: 02,
-        ALREADY_EXIST: 03,
-        REQUIRED: 04,
-        SERVER: 05,
-        INCONNU: 06,
-
+        NOT_EXIST: '01',
+        TYPE: '02',
+        ALREADY_EXIST: '03',
+        REQUIRED: '04',
+        SERVER: '05',
+        INCONNU: '06',
     },
- 
- }; 
+}
