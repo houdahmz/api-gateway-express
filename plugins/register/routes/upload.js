@@ -15,6 +15,9 @@ const bodyParser = require('body-parser');
 const corsOptions = {
   origin: '*',
 };
+const {
+  verifyToken,
+} = require('./middleware');
 
 module.exports = function(gatewayExpressApp) {
   gatewayExpressApp.use(bodyParser.json({limit: env.LIMIT, extended: true}));
@@ -23,7 +26,7 @@ module.exports = function(gatewayExpressApp) {
   gatewayExpressApp.use(cors(corsOptions));
   gatewayExpressApp.use(device.capture());
   gatewayExpressApp.use('/upload', express.static('upload'));
-  gatewayExpressApp.post('/upload', async (req, res, next) => {
+  gatewayExpressApp.post('/upload',verifyToken ,async (req, res, next) => {
       try {
         const {url} = req.body;
         let filePath = `upload/${url.split('/')[3]}`;
