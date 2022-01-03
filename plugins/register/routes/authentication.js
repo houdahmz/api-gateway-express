@@ -219,7 +219,7 @@ module.exports = function(gatewayExpressApp) {
       });
       console.log('roles', roles);
       if (roles[0] == 'ROLE_VISITOR') return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
-      if (roles[0] == 'ROLE_SUPER_ADMIN') return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null});
+      if (roles[0] == 'ROLE_SUPER_ADMIN') return res.status(token.status).json({token: token.data, role: roles, user: userJsonVisistor, categoryWalletId: null, code: status_code.CODE_SUCCESS.SUCCESS});
       else {
         // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /** ************************ */
@@ -370,10 +370,10 @@ module.exports = function(gatewayExpressApp) {
               logger.info('Succes in getting token.');
               if (dataCategory) {
                 if (dataCategory.data.data) {
-                  return res.status(token.status).json({token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0], services: serviceData});
+                  return res.status(token.status).json({token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: dataCategory.data.data.items[0], services: serviceData, code: status_code.CODE_SUCCESS.SUCCESS});
                 }
               }
-              return res.status(token.status).json({token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: null, services: serviceData});
+              return res.status(token.status).json({token: token.data, role: roles, user: userJson, profile: data.data.data, categoryWalletId: null, services: serviceData, code: status_code.CODE_SUCCESS.SUCCESS});
             }
           }
         } else {
@@ -383,7 +383,7 @@ module.exports = function(gatewayExpressApp) {
         }
         console.log('scope', scope);
         console.log('myUser', myUser);
-        return res.status(token.status).json({token: token.data, role: roles, user: myUser, services: serviceData});
+        return res.status(token.status).json({token: token.data, role: roles, user: myUser, services: serviceData, code: status_code.CODE_SUCCESS.SUCCESS});
       }
     } else {
       util.setError(200, 'User has no role', status_code.CODE_ERROR.HAS_NO_ROLE);
