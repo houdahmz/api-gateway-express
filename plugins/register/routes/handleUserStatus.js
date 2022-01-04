@@ -241,6 +241,8 @@ module.exports = function(gatewayExpressApp) {
             demand: '2',
             deleted: 1,
             rejectedDemandRaison: req.body.raison,
+            rejectedBy: req.body.userId,
+
           };
           logger.info(`update${ getProfiled.data.data.id}`);
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.id, res);
@@ -260,6 +262,8 @@ module.exports = function(gatewayExpressApp) {
           const updateBody = {
             isActive: true,
             demand: '3',
+            approvedBy: req.body.userId,
+
           };
           logger.info(`update${ getProfiled.data.data.id}`);
           const userProfile = await updateprofile(updateBody, getProfiled.data.data.id, res);
