@@ -9,7 +9,7 @@ exports.checkIfFileIsTooBig = (value) => {
   //         2 MB = 2000000 Bytes (in decimal)
   //         2 MB = 2097152 Bytes (in binary)
   if (!valueMB) return true; // photo is optional
-  return valueMB <= 2;
+  return valueMB <= 20;
 };
 exports.checkIfFileIsCorrectType = (value) => {
   if (!value) return true;
@@ -25,7 +25,7 @@ exports.checkIfFilesAreTooBig = (files) => {
       const buffer = Buffer.from(file.substring(file.indexOf(',') + 1));
       const size = buffer.length / 1e+6;
       console.log('size', size);
-      if (size > 2) {
+      if (size > 20) {
         valid = false;
       }
     });
