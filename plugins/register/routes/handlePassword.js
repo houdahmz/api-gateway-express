@@ -91,6 +91,7 @@ module.exports = function(gatewayExpressApp) {
           logger.error('Error wrong confirmation token');
           return res.status(403).json({status: 'Error', error: 'wrong confirmation token'});
         } else {
+          console.log('decoded',decoded)
           if (user.username != decoded.username) {
             console.debug('wrong confirmation token');
             logger.error('Error wrong confirmation token');

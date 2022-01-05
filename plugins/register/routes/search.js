@@ -25,6 +25,7 @@ module.exports = function(gatewayExpressApp) {
     let myUser = false; // false  does not 
     if (username) {
       myUser = await services.user.findByUsernameOrId(username);
+      console.log('myUser user',myUser);
       if (myUser) myUser = true;
       else myUser = false;
       console.log('myUser',myUser);
@@ -32,6 +33,8 @@ module.exports = function(gatewayExpressApp) {
     let findByEmail = false;
     if (email) {
       findByEmail = await user_service.findByEmail(decodeURIComponent(email));
+      console.log('findByEmail user',findByEmail);
+
       if (findByEmail) findByEmail = true;
       else findByEmail = false;
       console.log('findByEmail',findByEmail);
@@ -39,6 +42,7 @@ module.exports = function(gatewayExpressApp) {
     let findByPhone = false;
     if (phone) {
       findByPhone = await user_service.findByPhone(phone);
+      console.log('findByPhone user',findByPhone);
       if (findByPhone) findByPhone = true;
       else findByPhone = false;
       console.log('findByPhone',findByPhone);

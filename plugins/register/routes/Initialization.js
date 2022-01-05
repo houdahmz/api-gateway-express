@@ -59,4 +59,11 @@ module.exports = async function(gatewayExpressApp) {
     } else {
       console.log('SuperAdmin already exist.');
     }
+    // test scopes existe or not 
+
+    if (!await services.credential.existsScope('admin')) await services.credential.insertScopes(['admin']);
+    if (!await services.credential.existsScope('comptable')) await services.credential.insertScopes(['comptable']);
+    if (!await services.credential.existsScope('support')) await services.credential.insertScopes(['support']);
+    if (!await services.credential.existsScope('commercial')) await services.credential.insertScopes(['commercial']);
+    if (!await services.credential.existsScope('user')) await services.credential.insertScopes(['user']);
 };
